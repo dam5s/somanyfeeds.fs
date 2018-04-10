@@ -3,12 +3,12 @@ module somanyfeeds.App
 open System
 open System.IO
 open Microsoft.AspNetCore.Builder
-open Microsoft.AspNetCore.Cors.Infrastructure
 open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
 open Giraffe
 open somanyfeeds
+open somanyfeeds.Articles
 
 
 module Views =
@@ -30,7 +30,7 @@ let webApp =
     choose [
         GET >=>
             choose [
-                route "/" >=> Articles.Handlers.listHandler Views.layout
+                route "/" >=> Articles.listHandler Views.layout
             ]
         setStatusCode 404 >=> text "Not Found"
     ]
@@ -50,8 +50,11 @@ let configureApp (app : IApplicationBuilder) =
         .UseGiraffe(webApp)
 
 
-let configureServices (services : IServiceCollection) =
-    services.AddGiraffe() |> ignore
+let configureServices (services : IServiceCollection) = 
+    services
+        .AddGiraffe()
+        .AddSingleton<IRepository>(Articles.Repository())
+        |> ignore
 
 
 let configureLogging (builder : ILoggingBuilder) =
