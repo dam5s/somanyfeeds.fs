@@ -11,20 +11,11 @@ type Record =
     }
 
 
-module Repository =
-    let private allRecords : Record list =
-        [ { Title = (Some "Hello World")
-          ; Link = None
-          ; Content = "wassup?"
-          ; Date = None
-          ; Source = "social"
-          }
-          { Title = None
-          ; Link = None
-          ; Content = "writing some f#"
-          ; Date = (Some DateTime.Now)
-          ; Source = "code"
-          }
-        ]
+let mutable private allRecords : Record list = []
 
-    let findAll (_: unit) = allRecords
+
+module Repository =
+
+    let findAll (): Record list = allRecords
+
+    let updateAll (newRecords: Record list) = allRecords <- newRecords

@@ -1,4 +1,4 @@
-module SoManyFeeds.Articles
+module SoManyFeeds.ArticlesHandlers
 
 open Giraffe
 open GiraffeViewEngine
@@ -43,7 +43,7 @@ let private present (record: Record): ViewModel =
     }
 
 
-let listHandler layout findAllRecords : HttpHandler =
+let list layout findAllRecords : HttpHandler =
     let listView =
         findAllRecords()
             |> List.map present

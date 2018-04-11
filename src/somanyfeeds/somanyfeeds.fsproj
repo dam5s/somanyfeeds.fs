@@ -21,8 +21,10 @@
     <PackageReference Include="Giraffe" Version="1.1.*" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Feeds.fs" />
     <Compile Include="ArticlesData.fs" />
-    <Compile Include="Articles.fs" />
+    <Compile Include="ArticlesProcessing.fs" />
+    <Compile Include="ArticlesHandlers.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>

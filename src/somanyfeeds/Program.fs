@@ -16,50 +16,48 @@ module Views =
     let layout (content: XmlNode list) =
         html [] [
             head [] [
-                title []  [ encodedText "SoManyFeeds" ]
+                title [] [ encodedText "SoManyFeeds" ]
                 link [ _rel  "stylesheet"
                        _type "text/css"
                        _href "/main.css" ]
             ]
             body [] content
         ]
-        
-
-let articlesListHandler =
-    Articles.listHandler Views.layout ArticlesData.Repository.findAll
 
 
-let webApp =
-    choose [
-        GET >=>
-            choose [
-                route "/" >=> articlesListHandler
-            ]
-        setStatusCode 404 >=> text "Not Found"
-    ]
+module Web =
+    let private articlesListHandler =
+        ArticlesHandlers.list Views.layout ArticlesData.Repository.findAll
 
 
-let errorHandler (ex : Exception) (logger : ILogger) =
+    let app =
+        choose [
+            GET >=>
+                choose [
+                    route "/" >=> articlesListHandler
+                ]
+            setStatusCode 404 >=> text "Not Found"
+        ]
+
+
+let errorHandler (ex : Exception) (logger : ILogger) : HttpHandler =
     logger.LogError(EventId(), ex, "An unhandled exception has occurred while executing the request.")
     clearResponse >=> setStatusCode 500 >=> text ex.Message
 
 
 let configureApp (app : IApplicationBuilder) =
-    let env = app.ApplicationServices.GetService<IHostingEnvironment>()
-    (match env.IsDevelopment() with
-    | true  -> app.UseDeveloperExceptionPage()
-    | false -> app.UseGiraffeErrorHandler errorHandler)
+    (app.UseGiraffeErrorHandler errorHandler)
         .UseStaticFiles()
-        .UseGiraffe(webApp)
+        .UseGiraffe(Web.app)
 
 
-let configureServices (services : IServiceCollection) = 
+let configureServices (services : IServiceCollection) =
     services.AddGiraffe() |> ignore
 
 
 let configureLogging (builder : ILoggingBuilder) =
     let filter (l : LogLevel) = l.Equals LogLevel.Error
-    
+
     builder.AddFilter(filter).AddConsole().AddDebug() |> ignore
 
 
