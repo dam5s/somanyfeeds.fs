@@ -1,4 +1,4 @@
-module somanyfeeds.App
+module SoManyFeeds.App
 
 open System
 open System.IO
@@ -7,8 +7,7 @@ open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
 open Giraffe
-open somanyfeeds
-open somanyfeeds.Articles
+open SoManyFeeds
 
 
 module Views =
@@ -17,20 +16,24 @@ module Views =
     let layout (content: XmlNode list) =
         html [] [
             head [] [
-                title []  [ encodedText "somanyfeeds" ]
+                title []  [ encodedText "SoManyFeeds" ]
                 link [ _rel  "stylesheet"
                        _type "text/css"
                        _href "/main.css" ]
             ]
             body [] content
         ]
+        
+
+let articlesListHandler =
+    Articles.listHandler Views.layout ArticlesData.Repository.findAll
 
 
 let webApp =
     choose [
         GET >=>
             choose [
-                route "/" >=> Articles.listHandler Views.layout
+                route "/" >=> articlesListHandler
             ]
         setStatusCode 404 >=> text "Not Found"
     ]
@@ -51,14 +54,12 @@ let configureApp (app : IApplicationBuilder) =
 
 
 let configureServices (services : IServiceCollection) = 
-    services
-        .AddGiraffe()
-        .AddSingleton<IRepository>(Articles.Repository())
-        |> ignore
+    services.AddGiraffe() |> ignore
 
 
 let configureLogging (builder : ILoggingBuilder) =
     let filter (l : LogLevel) = l.Equals LogLevel.Error
+    
     builder.AddFilter(filter).AddConsole().AddDebug() |> ignore
 
 
@@ -66,6 +67,7 @@ let configureLogging (builder : ILoggingBuilder) =
 let main _ =
     let contentRoot = Directory.GetCurrentDirectory()
     let webRoot     = Path.Combine(contentRoot, "WebRoot")
+
     WebHostBuilder()
         .UseKestrel()
         .UseContentRoot(contentRoot)
