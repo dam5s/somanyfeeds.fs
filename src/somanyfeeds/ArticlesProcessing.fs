@@ -25,10 +25,10 @@ let private feedToResults (processors: Processor list) (feed: Feed) : Processing
 let processFeeds
     (updateAll : Record list -> unit)
     (processors : Processor list)
-    (feeds : Feed list) =
+    (findAllFeeds : unit -> Feed list) =
 
     let newRecords =
-        feeds
+        (findAllFeeds())
             |> List.collect (feedToResults processors)
             |> List.collect resultToList
 

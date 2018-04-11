@@ -25,12 +25,29 @@ module Views =
         ]
 
 
-module Web =
+module App =
+    let processFeeds =
+        ArticlesProcessing.processFeeds
+            ArticlesData.Repository.updateAll
+            [ Processors.Rss.processFeed ]
+            Feeds.Repository.findAll
+
+
+    let backgroundProcessing =
+        let tenMinutes = 10 * 60 * 1000
+
+        async {
+            while true do
+                processFeeds
+                do! Async.Sleep tenMinutes
+        }
+
+
     let private articlesListHandler =
         ArticlesHandlers.list Views.layout ArticlesData.Repository.findAll
 
 
-    let app =
+    let handler =
         choose [
             GET >=>
                 choose [
@@ -48,7 +65,7 @@ let errorHandler (ex : Exception) (logger : ILogger) : HttpHandler =
 let configureApp (app : IApplicationBuilder) =
     (app.UseGiraffeErrorHandler errorHandler)
         .UseStaticFiles()
-        .UseGiraffe(Web.app)
+        .UseGiraffe(App.handler)
 
 
 let configureServices (services : IServiceCollection) =
@@ -56,15 +73,20 @@ let configureServices (services : IServiceCollection) =
 
 
 let configureLogging (builder : ILoggingBuilder) =
-    let filter (l : LogLevel) = l.Equals LogLevel.Error
+    let filter (l : LogLevel) = l.Equals LogLevel.Warning
 
-    builder.AddFilter(filter).AddConsole().AddDebug() |> ignore
+    builder
+        .AddFilter(filter)
+        .AddConsole()
+        .AddDebug() |> ignore
 
 
 [<EntryPoint>]
 let main _ =
     let contentRoot = Directory.GetCurrentDirectory()
     let webRoot     = Path.Combine(contentRoot, "WebRoot")
+
+    Async.Start App.backgroundProcessing
 
     WebHostBuilder()
         .UseKestrel()
@@ -76,4 +98,5 @@ let main _ =
         .ConfigureLogging(configureLogging)
         .Build()
         .Run()
+
     0

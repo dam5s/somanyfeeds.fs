@@ -24,6 +24,7 @@
     <Compile Include="Feeds.fs" />
     <Compile Include="ArticlesData.fs" />
     <Compile Include="ArticlesProcessing.fs" />
+    <Compile Include="Processors/Rss.fs" />
     <Compile Include="ArticlesHandlers.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
