@@ -3,10 +3,7 @@ open SoManyFeeds.ArticlesData
 open SoManyFeeds.Feeds
 
 
-type ProcessingResult =
-    | Ok of Record list
-    | CannotProcess
-    | ProcessingError of string
+type ProcessingResult = Result<Record list, string>
 
 type Processor = Feed -> ProcessingResult
 
@@ -14,8 +11,7 @@ type Processor = Feed -> ProcessingResult
 let private resultToList (result: ProcessingResult): Record list =
     match result with
     | Ok records -> records
-    | CannotProcess -> []
-    | ProcessingError _ -> []
+    | Error _ -> []
 
 
 let private feedToResults (processors: Processor list) (feed: Feed) : ProcessingResult list =
