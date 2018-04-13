@@ -1,8 +1,8 @@
-module SoManyFeeds.ArticlesHandlers
+module Server.ArticlesHandlers
 
 open Giraffe
 open GiraffeViewEngine
-open SoManyFeeds.ArticlesData
+open Server.ArticlesData
 open System
 
 

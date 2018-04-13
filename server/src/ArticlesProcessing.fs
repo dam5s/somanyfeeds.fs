@@ -1,6 +1,7 @@
-module SoManyFeeds.ArticlesProcessing
-open SoManyFeeds.ArticlesData
-open SoManyFeeds.Feeds
+module Server.ArticlesProcessing
+
+open Server.ArticlesData
+open Server.Feeds
 
 
 type ProcessingResult = Result<Record list, string>

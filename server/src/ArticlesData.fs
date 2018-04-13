@@ -1,4 +1,5 @@
-module SoManyFeeds.ArticlesData
+module Server.ArticlesData
+
 open System
 
 

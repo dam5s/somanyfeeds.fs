@@ -1,4 +1,4 @@
-module SoManyFeeds.App
+module Server.Program
 
 open System
 open System.IO
@@ -7,7 +7,6 @@ open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
 open Giraffe
-open SoManyFeeds
 
 
 module Views =

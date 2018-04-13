@@ -1,8 +1,8 @@
-module SoManyFeeds.Processors.Rss
+module Server.Processors.Rss
 
-open SoManyFeeds.ArticlesProcessing
-open SoManyFeeds.ArticlesData
-open SoManyFeeds.Feeds
+open Server.ArticlesProcessing
+open Server.ArticlesData
+open Server.Feeds
 open FSharp.Data
 open System.Xml
 open System

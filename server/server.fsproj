@@ -2,12 +2,13 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <DebugType>portable</DebugType>
-    <AssemblyName>somanyfeeds</AssemblyName>
+    <AssemblyName>server</AssemblyName>
     <OutputType>Exe</OutputType>
     <RuntimeFrameworkVersion>2.0.0</RuntimeFrameworkVersion>
     <EnableDefaultContentItems>false</EnableDefaultContentItems>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="FSharp.Data" Version="2.4.6" />
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.0.*" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.0.*" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="2.0.*" />
@@ -19,15 +20,15 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.0.*" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.0.*" />
     <PackageReference Include="Giraffe" Version="1.1.*" />
+
+    <Compile Include="src/Feeds.fs" />
+    <Compile Include="src/ArticlesData.fs" />
+    <Compile Include="src/ArticlesProcessing.fs" />
+    <Compile Include="src/Processors/Rss.fs" />
+    <Compile Include="src/ArticlesHandlers.fs" />
+    <Compile Include="src/Program.fs" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Feeds.fs" />
-    <Compile Include="ArticlesData.fs" />
-    <Compile Include="ArticlesProcessing.fs" />
-    <Compile Include="Processors/Rss.fs" />
-    <Compile Include="ArticlesHandlers.fs" />
-    <Compile Include="Program.fs" />
-  </ItemGroup>
+
   <ItemGroup>
     <None Include="web.config" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="WebRoot\**\*">

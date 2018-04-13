@@ -1,4 +1,4 @@
-module SoManyFeeds.Feeds
+module Server.Feeds
 
 type FeedType =
     | Rss
