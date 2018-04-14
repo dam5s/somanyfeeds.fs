@@ -7,6 +7,7 @@ open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
 open Giraffe
+open FSharp.Data
 
 
 module Views =
@@ -25,10 +26,13 @@ module Views =
 
 
 module App =
-    let processFeeds =
+    let private downloadFunction (url: string) : string =
+        Http.RequestString url
+
+    let private processFeeds =
         ArticlesProcessing.processFeeds
             ArticlesData.Repository.updateAll
-            [ Processors.Rss.processFeed ]
+            [ (Processors.Rss.processFeed downloadFunction) ]
             Feeds.Repository.findAll
 
 

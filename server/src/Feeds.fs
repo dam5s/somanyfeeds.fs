@@ -10,7 +10,7 @@ type Feed =
     { Name : string
     ; Slug : string
     ; Info : string
-    ; Type: FeedType
+    ; Type : FeedType
     }
 
 module Repository =

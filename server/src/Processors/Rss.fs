@@ -40,9 +40,9 @@ let private buildRecord (nsManager: XmlNamespaceManager) (feed: Feed) (node : Xm
       Source = feed.Slug }
 
 
-let private fetchAndProcessRssFeed (feed : Feed) : ProcessingResult =
+let private fetchAndProcessRssFeed (downloadFunction: string -> string) (feed : Feed) : ProcessingResult =
     try
-        let rssXml = Http.RequestString(feed.Info)
+        let rssXml = downloadFunction feed.Info
         let doc = new XmlDocument()
         doc.LoadXml rssXml
 
@@ -60,7 +60,7 @@ let private fetchAndProcessRssFeed (feed : Feed) : ProcessingResult =
         ProcessingResult.Error (ex.ToString())
 
 
-let processFeed (feed : Feed) : ProcessingResult =
+let processFeed (downloadFunction: string -> string) (feed : Feed) : ProcessingResult =
     match feed.Type with
-    | Rss -> fetchAndProcessRssFeed feed
+    | Rss -> fetchAndProcessRssFeed downloadFunction feed
     | _  -> ProcessingResult.Ok []

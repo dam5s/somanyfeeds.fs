@@ -2,12 +2,37 @@ module ``Rss Processor Tests``
 
     open NUnit.Framework
     open FsUnit
-
-    let GetSumOfMultiplesOf3And5 max =
-        seq{3..max-1} |> Seq.fold(fun acc number ->
-                            (if (number % 3 = 0 || number % 5 = 0) then
-                                acc + number else acc)) 0
+    open System
+    open System.IO
+    open Server.Feeds
+    open Server
+    open ArticlesData
 
     [<Test>]
-    let ``When getting sum of multiples of 3 and 5 to a max number of 10 it should return a sum of 23`` () =
-        GetSumOfMultiplesOf3And5(10) |> should equal 23
+    let ``processFeed with standard medium xml`` () =
+        let downloadFunction (url: string) : string =
+            url |> should equal "http://example.com/medium/rss"
+            File.ReadAllText("../../../resources/medium.rss.xml")
+
+        let medium: Feed = { Name = "Medium"
+                             Slug = "social"
+                             Info = "http://example.com/medium/rss"
+                             Type = FeedType.Rss
+                           }
+
+
+        let result = Server.Processors.Rss.processFeed downloadFunction medium
+
+
+        match result with
+        | Error _ -> Assert.Fail("Expected success")
+        | Ok records ->
+            let expectedTimeUtc = new DateTime(2016, 09, 20, 12, 54, 44, DateTimeKind.Utc)
+
+            List.length records |> should equal 5
+            List.head records |> should equal { Title = Some "First title!"
+                                                Link = Some "https://medium.com/@its_damo/first"
+                                                Content = "<p>This is the content</p>"
+                                                Date = Some <| expectedTimeUtc.ToLocalTime()
+                                                Source = "social"
+                                              }
