@@ -25,6 +25,7 @@
     <Compile Include="src/ArticlesData.fs" />
     <Compile Include="src/ArticlesProcessing.fs" />
     <Compile Include="src/Processors/Rss.fs" />
+    <Compile Include="src/Processors/Atom.fs" />
     <Compile Include="src/ArticlesHandlers.fs" />
     <Compile Include="src/Program.fs" />
   </ItemGroup>

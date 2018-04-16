@@ -16,6 +16,7 @@
     <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
     <PackageReference Include="FsUnit" Version="3.1.0" />
 
+    <Compile Include="src/Processors/AtomTests.fs" />
     <Compile Include="src/Processors/RssTests.fs" />
     <Compile Include="src/Program.fs" />
   </ItemGroup>

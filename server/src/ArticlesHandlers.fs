@@ -32,8 +32,8 @@ module private Views =
         section [] <| List.map articleView articles
 
 
-let private present (record: Record): ViewModel =
-    let dateMap (s: DateTime) = s.ToShortDateString()
+let private present (record : Record) : ViewModel =
+    let dateMap (s : DateTime) = s.ToShortDateString()
 
     { Title = record.Title
     ; Link = record.Link

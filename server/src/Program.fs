@@ -13,7 +13,7 @@ open FSharp.Data
 module Views =
     open GiraffeViewEngine
 
-    let layout (content: XmlNode list) =
+    let layout (content : XmlNode list) =
         html [] [
             head [] [
                 meta [ _charset "utf-8" ]
@@ -26,13 +26,15 @@ module Views =
 
 
 module App =
-    let private downloadFunction (url: string) : string =
+    let private downloadFunction (url : string) : string =
         Http.RequestString url
 
     let private processFeeds =
         ArticlesProcessing.processFeeds
             ArticlesData.Repository.updateAll
-            [ (Processors.Rss.processFeed downloadFunction) ]
+            [ Processors.Rss.processFeed downloadFunction
+            ; Processors.Atom.processFeed downloadFunction
+            ]
             Feeds.Repository.findAll
 
 

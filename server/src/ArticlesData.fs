@@ -17,6 +17,6 @@ let mutable private allRecords : Record list = []
 
 module Repository =
 
-    let findAll (): Record list = allRecords
+    let findAll () : Record list = allRecords
 
-    let updateAll (newRecords: Record list) = allRecords <- newRecords
+    let updateAll (newRecords : Record list) = allRecords <- newRecords

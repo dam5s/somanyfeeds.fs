@@ -9,13 +9,13 @@ type ProcessingResult = Result<Record list, string>
 type Processor = Feed -> ProcessingResult
 
 
-let private resultToList (result: ProcessingResult): Record list =
+let private resultToList (result : ProcessingResult) : Record list =
     match result with
     | Ok records -> records
     | Error _ -> []
 
 
-let private feedToResults (processors: Processor list) (feed: Feed) : ProcessingResult list =
+let private feedToResults (processors : Processor list) (feed : Feed) : ProcessingResult list =
     List.map (fun p -> p(feed)) processors
 
 
