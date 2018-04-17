@@ -8,6 +8,9 @@ open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
 open Giraffe
 open FSharp.Data
+open Server.Feeds
+open Server.FeedsProcessing
+open Server.FeedsProcessing.Download
 
 
 module Views =
@@ -26,18 +29,31 @@ module Views =
 
 
 module App =
-    let private downloadFunction (url : string) : Result<string, string> =
+    let private downloadFeed (feed : Feed) : DownloadResult =
         try
-            Result.Ok <| Http.RequestString url
+            feed.Info
+                |> Http.RequestString
+                |> DownloadedFeed
+                |> Result.Ok
         with
         | ex -> Result.Error <| String.Format("There was an error downloading the feed. {0}", ex.ToString())
 
+
+    let private rssProcessor (feed : Feed) : ProcessingResult =
+        Result.bind
+            (FeedsProcessing.Rss.processFeed feed)
+            (downloadFeed feed)
+
+
+    let private atomProcessor (feed : Feed) : ProcessingResult =
+        Result.bind
+            (FeedsProcessing.Atom.processFeed feed)
+            (downloadFeed feed)
+
     let private processFeeds =
-        ArticlesProcessing.processFeeds
+        FeedsProcessing.processFeeds
             ArticlesData.Repository.updateAll
-            [ Processors.Rss.processFeed downloadFunction
-            ; Processors.Atom.processFeed downloadFunction
-            ]
+            [ rssProcessor ; atomProcessor ]
             Feeds.Repository.findAll
 
 

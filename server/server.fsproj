@@ -23,10 +23,14 @@
 
     <Compile Include="src/Feeds.fs" />
     <Compile Include="src/ArticlesData.fs" />
-    <Compile Include="src/ArticlesProcessing.fs" />
-    <Compile Include="src/Processors/Rss.fs" />
-    <Compile Include="src/Processors/Atom.fs" />
     <Compile Include="src/ArticlesHandlers.fs" />
+
+    <Compile Include="src/FeedsProcessing.fs" />
+    <Compile Include="src/FeedsProcessing/Download.fs" />
+    <Compile Include="src/FeedsProcessing/Xml.fs" />
+    <Compile Include="src/FeedsProcessing/Rss.fs" />
+    <Compile Include="src/FeedsProcessing/Atom.fs" />
+
     <Compile Include="src/Program.fs" />
   </ItemGroup>
 

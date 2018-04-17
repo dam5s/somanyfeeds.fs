@@ -4,7 +4,6 @@ type FeedType =
     | Rss
     | Atom
     | Twitter
-    | Custom
 
 type Feed =
     { Name : string

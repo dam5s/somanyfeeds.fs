@@ -1,4 +1,4 @@
-module Server.ArticlesProcessing
+module Server.FeedsProcessing
 
 open Server.ArticlesData
 open Server.Feeds
