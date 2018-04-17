@@ -10,9 +10,9 @@ module ``Atom Processor Tests``
 
     [<Test>]
     let ``processFeed with standard github xml`` () =
-        let downloadFunction (url: string) : string =
+        let downloadFunction (url: string) : Result<string, string> =
             url |> should equal "http://example.com/github/atom"
-            File.ReadAllText("../../../resources/github.atom.xml")
+            File.ReadAllText("../../../resources/github.atom.xml") |> Result.Ok
 
         let github: Feed = { Name = "Github"
                              Slug = "code"

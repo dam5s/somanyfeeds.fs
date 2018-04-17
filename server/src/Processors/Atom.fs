@@ -47,27 +47,36 @@ let private buildRecord (nsManager : XmlNamespaceManager) (feed : Feed) (node : 
       Source = feed.Slug }
 
 
-let private fetchAndProcessAtomFeed downloadFunction feed : ProcessingResult =
+
+let private parseXml xml =
     try
-        let atomXml = downloadFunction feed.Info
         let doc = new XmlDocument()
-        doc.LoadXml atomXml
-
-        let nsManager = new XmlNamespaceManager(doc.NameTable)
-        nsManager.AddNamespace("atom", "http://www.w3.org/2005/Atom")
-
-        doc.SelectNodes("//atom:entry", nsManager)
-            |> Seq.cast<XmlNode>
-            |> Seq.map (buildRecord nsManager feed)
-            |> Seq.toList
-            |> ProcessingResult.Ok
+        doc.LoadXml xml
+        Result.Ok doc
     with
-    | ex ->
-        printfn "Error while processing feed %s" (ex.ToString())
-        ProcessingResult.Error (ex.ToString())
+    | ex -> Result.Error <| String.Format("There was an error parsing the XML. {0}", ex.ToString())
 
 
-let processFeed (downloadFunction : string -> string) (feed : Feed) : ProcessingResult =
+let private namespaceManager (doc : XmlDocument) =
+    let nsManager = new XmlNamespaceManager(doc.NameTable)
+    nsManager.AddNamespace("atom", "http://www.w3.org/2005/Atom")
+    nsManager
+
+let private parseArticles (feed : Feed) (doc : XmlDocument) : Record list =
+    let nsManager = namespaceManager doc
+
+    doc.SelectNodes("//atom:entry", nsManager)
+        |> Seq.cast<XmlNode>
+        |> Seq.map (buildRecord nsManager feed)
+        |> Seq.toList
+
+let private fetchAndProcessAtomFeed (downloadFunction : string -> Result<string, string>) (feed : Feed) : ProcessingResult =
+    downloadFunction feed.Info
+        |> Result.bind parseXml
+        |> Result.map (parseArticles feed)
+
+
+let processFeed (downloadFunction : string -> Result<string, string>) (feed : Feed) : ProcessingResult =
     match feed.Type with
     | Atom -> fetchAndProcessAtomFeed downloadFunction feed
     | _  -> ProcessingResult.Ok []

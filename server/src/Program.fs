@@ -26,8 +26,11 @@ module Views =
 
 
 module App =
-    let private downloadFunction (url : string) : string =
-        Http.RequestString url
+    let private downloadFunction (url : string) : Result<string, string> =
+        try
+            Result.Ok <| Http.RequestString url
+        with
+        | ex -> Result.Error <| String.Format("There was an error downloading the feed. {0}", ex.ToString())
 
     let private processFeeds =
         ArticlesProcessing.processFeeds

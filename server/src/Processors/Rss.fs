@@ -27,7 +27,6 @@ let private parseDate (text : string) : DateTime option =
         None
 
 
-
 let private buildRecord (nsManager : XmlNamespaceManager) (feed : Feed) (node : XmlNode) : Record =
     { Title = getChildText nsManager node "title"
       Link = getChildText nsManager node "link"
@@ -39,27 +38,37 @@ let private buildRecord (nsManager : XmlNamespaceManager) (feed : Feed) (node : 
       Source = feed.Slug }
 
 
-let private fetchAndProcessRssFeed (downloadFunction : string -> string) (feed : Feed) : ProcessingResult =
+let private parseXml xml =
     try
-        let rssXml = downloadFunction feed.Info
         let doc = new XmlDocument()
-        doc.LoadXml rssXml
+        doc.LoadXml xml
+        Result.Ok doc
+    with
+    | ex -> Result.Error <| String.Format("There was an error parsing the XML. {0}", ex.ToString())
 
+
+let private namespaceManager (doc : XmlDocument) =
         let nsManager = new XmlNamespaceManager(doc.NameTable)
         nsManager.AddNamespace("content", "http://purl.org/rss/1.0/modules/content/")
-
-        doc.SelectNodes("//item", nsManager)
-            |> Seq.cast<XmlNode>
-            |> Seq.map (buildRecord nsManager feed)
-            |> Seq.toList
-            |> ProcessingResult.Ok
-    with
-    | ex ->
-        printfn "Error while processing feed %s" (ex.ToString())
-        ProcessingResult.Error (ex.ToString())
+        nsManager
 
 
-let processFeed (downloadFunction : string -> string) (feed : Feed) : ProcessingResult =
+let private parseArticles (feed : Feed) (doc : XmlDocument) : Record list =
+    let nsManager = namespaceManager doc
+
+    doc.SelectNodes("//item", nsManager)
+        |> Seq.cast<XmlNode>
+        |> Seq.map (buildRecord nsManager feed)
+        |> Seq.toList
+
+
+let private fetchAndProcessRssFeed downloadFunction (feed : Feed) : ProcessingResult =
+    downloadFunction feed.Info
+        |> Result.bind parseXml
+        |> Result.map (parseArticles feed)
+
+
+let processFeed (downloadFunction : string -> Result<string, string>) (feed : Feed) : ProcessingResult =
     match feed.Type with
     | Rss -> fetchAndProcessRssFeed downloadFunction feed
     | _  -> ProcessingResult.Ok []

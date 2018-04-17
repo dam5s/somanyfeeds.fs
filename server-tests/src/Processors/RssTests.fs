@@ -10,9 +10,9 @@ module ``Rss Processor Tests``
 
     [<Test>]
     let ``processFeed with standard medium xml`` () =
-        let downloadFunction (url: string) : string =
+        let downloadFunction (url: string) : Result<string, string> =
             url |> should equal "http://example.com/medium/rss"
-            File.ReadAllText("../../../resources/medium.rss.xml")
+            File.ReadAllText("../../../resources/medium.rss.xml") |> Result.Ok
 
         let medium: Feed = { Name = "Medium"
                              Slug = "social"
