@@ -4,7 +4,7 @@ open System.Xml
 open System
 open Server.FeedsProcessing.ProcessingResult
 open Server.FeedsProcessing.Download
-open Server.ArticlesData
+open Server.Articles.Data
 open Server.SourceType
 
 

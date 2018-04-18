@@ -1,4 +1,4 @@
-module Server.ArticlesData
+module Server.Articles.Data
 
 open System
 open Server.SourceType

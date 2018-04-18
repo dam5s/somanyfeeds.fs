@@ -21,19 +21,20 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.0.*" />
     <PackageReference Include="Giraffe" Version="1.1.*" />
 
-    <Compile Include="src/Url.fs" />
     <Compile Include="src/SourceType.fs" />
+    <Compile Include="src/FeedUrl.fs" />
     <Compile Include="src/Feeds.fs" />
-    <Compile Include="src/ArticlesData.fs" />
-    <Compile Include="src/ArticlesHandlers.fs" />
+
+    <Compile Include="src/Articles/Data.fs" />
+    <Compile Include="src/Articles/Handlers.fs" />
 
     <Compile Include="src/FeedsProcessing/ProcessingResult.fs" />
     <Compile Include="src/FeedsProcessing/Download.fs" />
     <Compile Include="src/FeedsProcessing/Xml.fs" />
     <Compile Include="src/FeedsProcessing/Rss.fs" />
     <Compile Include="src/FeedsProcessing/Atom.fs" />
-    <Compile Include="src/FeedsProcessing/Processor.fs" />
 
+    <Compile Include="src/FeedsProcessor.fs" />
     <Compile Include="src/Program.fs" />
   </ItemGroup>
 

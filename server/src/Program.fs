@@ -27,8 +27,8 @@ module Views =
 module App =
 
     let private processFeeds =
-        FeedsProcessing.Processor.processFeeds
-            ArticlesData.Repository.updateAll
+        FeedsProcessor.processFeeds
+            Articles.Data.Repository.updateAll
             Feeds.Repository.findAll
 
 
@@ -43,7 +43,7 @@ module App =
 
 
     let private articlesListHandler =
-        ArticlesHandlers.list Views.layout ArticlesData.Repository.findAll
+        Articles.Handlers.list Views.layout Articles.Data.Repository.findAll
 
 
     let handler =

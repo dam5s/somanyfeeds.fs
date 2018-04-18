@@ -5,7 +5,7 @@ module ``Atom Processor Tests``
     open System
     open System.IO
     
-    open Server.ArticlesData
+    open Server.Articles.Data
     open Server.SourceType
     open Server.FeedsProcessing.Download
     open Server.FeedsProcessing.Atom

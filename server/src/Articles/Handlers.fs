@@ -1,9 +1,9 @@
-module Server.ArticlesHandlers
+module Server.Articles.Handlers
 
 open Giraffe
 open GiraffeViewEngine
 open System
-open Server.ArticlesData
+open Server.Articles.Data
 open Server.SourceType
 
 

@@ -1,19 +1,19 @@
-module Server.FeedsProcessing.Processor
+module Server.FeedsProcessor
 
 open System
 open FSharp.Data
-open Server.ArticlesData
+open Server.Articles.Data
 open Server.Feeds
-open Server.Url
+open Server.FeedUrl
 open Server.FeedsProcessing.ProcessingResult
 open Server.FeedsProcessing.Download
 open Server.FeedsProcessing.Rss
 open Server.FeedsProcessing.Atom
 
 
-let private downloadFeed (url : Url) : DownloadResult =
+let private downloadFeed (url : FeedUrl) : DownloadResult =
     try
-        urlString url
+        feedUrlString url
             |> Http.RequestString
             |> DownloadedFeed
             |> Result.Ok
