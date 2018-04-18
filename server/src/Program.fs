@@ -7,10 +7,6 @@ open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
 open Giraffe
-open FSharp.Data
-open Server.Feeds
-open Server.FeedsProcessing
-open Server.FeedsProcessing.Download
 
 
 module Views =
@@ -29,31 +25,10 @@ module Views =
 
 
 module App =
-    let private downloadFeed (feed : Feed) : DownloadResult =
-        try
-            feed.Info
-                |> Http.RequestString
-                |> DownloadedFeed
-                |> Result.Ok
-        with
-        | ex -> Result.Error <| String.Format("There was an error downloading the feed. {0}", ex.ToString())
-
-
-    let private rssProcessor (feed : Feed) : ProcessingResult =
-        Result.bind
-            (FeedsProcessing.Rss.processFeed feed)
-            (downloadFeed feed)
-
-
-    let private atomProcessor (feed : Feed) : ProcessingResult =
-        Result.bind
-            (FeedsProcessing.Atom.processFeed feed)
-            (downloadFeed feed)
 
     let private processFeeds =
-        FeedsProcessing.processFeeds
+        FeedsProcessing.Processor.processFeeds
             ArticlesData.Repository.updateAll
-            [ rssProcessor ; atomProcessor ]
             Feeds.Repository.findAll
 
 

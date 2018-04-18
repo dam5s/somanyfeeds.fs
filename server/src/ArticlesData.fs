@@ -1,6 +1,7 @@
 module Server.ArticlesData
 
 open System
+open Server.SourceType
 
 
 type Record =
@@ -8,7 +9,7 @@ type Record =
     ; Link : string option
     ; Content : string
     ; Date : DateTime option
-    ; Source : string
+    ; Source : SourceType
     }
 
 

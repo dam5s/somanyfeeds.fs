@@ -4,24 +4,18 @@ module ``Rss Processor Tests``
     open FsUnit
     open System
     open System.IO
-    open Server.Feeds
-    open Server
-    open ArticlesData
+    
+    open Server.ArticlesData
+    open Server.SourceType
+    open Server.FeedsProcessing.Download
+    open Server.FeedsProcessing.Rss
 
     [<Test>]
     let ``processFeed with standard medium xml`` () =
-        let downloadFunction (url: string) : Result<string, string> =
-            url |> should equal "http://example.com/medium/rss"
-            File.ReadAllText("../../../resources/medium.rss.xml") |> Result.Ok
-
-        let medium: Feed = { Name = "Medium"
-                             Slug = "social"
-                             Info = "http://example.com/medium/rss"
-                             Type = FeedType.Rss
-                           }
+        let downloadedFeed = DownloadedFeed (File.ReadAllText("../../../resources/medium.rss.xml"))
 
 
-        let result = Server.Processors.Rss.processFeed downloadFunction medium
+        let result = processRssFeed Blog downloadedFeed
 
 
         match result with
@@ -34,5 +28,5 @@ module ``Rss Processor Tests``
                                                 Link = Some "https://medium.com/@its_damo/first"
                                                 Content = "<p>This is the content</p>"
                                                 Date = Some <| expectedTimeUtc.ToLocalTime()
-                                                Source = "social"
+                                                Source = Blog
                                               }

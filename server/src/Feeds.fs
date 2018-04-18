@@ -1,33 +1,20 @@
 module Server.Feeds
 
-type FeedType =
-    | Rss
-    | Atom
-    | Twitter
+open Server.Url
+open Server.SourceType
+
+type TwitterHandle = TwitterHandle of string
 
 type Feed =
-    { Name : string
-    ; Slug : string
-    ; Info : string
-    ; Type : FeedType
-    }
+    | Rss of SourceType * Url
+    | Atom of SourceType * Url
+    | Twitter of TwitterHandle
+
 
 module Repository =
 
     let findAll (): Feed list = [
-        { Name = "Github"
-          Slug = "code"
-          Info = "https://github.com/dam5s.atom"
-          Type = Atom
-        }
-        { Name = "Medium"
-          Slug = "blog"
-          Info = "https://medium.com/feed/@its_damo"
-          Type = Rss
-        }
-        { Name = "Twitter"
-          Slug = "social"
-          Info = "its_damo"
-          Type = Twitter
-        }
+        Atom (Code, Url "https://github.com/dam5s.atom")
+        Rss (Blog, Url "https://medium.com/feed/@its_damo")
+        Twitter (TwitterHandle "its_damo")
     ]

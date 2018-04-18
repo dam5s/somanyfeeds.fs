@@ -1,18 +1,18 @@
 module Server.FeedsProcessing.Rss
 
-open Server.FeedsProcessing
-open Server.FeedsProcessing.Download
-open Server.ArticlesData
-open Server.Feeds
 open System.Xml
 open System
+open Server.FeedsProcessing.ProcessingResult
+open Server.FeedsProcessing.Download
+open Server.ArticlesData
+open Server.SourceType
 
 let private getChildText (nsManager : XmlNamespaceManager) (node : XmlNode) (name : string) : string option =
     let xpath = String.Format("descendant::{0}/text()", name)
     Xml.getChildXpathValue nsManager node xpath
 
 
-let private buildRecord (nsManager : XmlNamespaceManager) (feed : Feed) (node : XmlNode) : Record =
+let private buildRecord (nsManager : XmlNamespaceManager) (source : SourceType) (node : XmlNode) : Record =
     { Title = getChildText nsManager node "title"
       Link = getChildText nsManager node "link"
       Content = getChildText nsManager node "content:encoded"
@@ -20,7 +20,7 @@ let private buildRecord (nsManager : XmlNamespaceManager) (feed : Feed) (node : 
                 |> Option.defaultValue ""
       Date = getChildText nsManager node "pubDate"
              |> Option.bind Xml.parseDate
-      Source = feed.Slug }
+      Source = source }
 
 
 let private namespaceManager (doc : XmlDocument) =
@@ -29,16 +29,14 @@ let private namespaceManager (doc : XmlDocument) =
     nsManager
 
 
-let private parseArticles (feed : Feed) (doc : XmlDocument) : Record list =
+let private parseArticles (source : SourceType) (doc : XmlDocument) : Record list =
     let nsManager = namespaceManager doc
 
     doc.SelectNodes("//item", nsManager)
         |> Seq.cast<XmlNode>
-        |> Seq.map (buildRecord nsManager feed)
+        |> Seq.map (buildRecord nsManager source)
         |> Seq.toList
 
 
-let processFeed (feed : Feed) (downloadedFeed : DownloadedFeed) : ProcessingResult =
-    match feed.Type with
-    | Rss -> Result.map (parseArticles feed) (Xml.parse downloadedFeed)
-    | _  -> ProcessingResult.Ok []
+let processRssFeed (source : SourceType) (downloadedFeed : DownloadedFeed) : ProcessingResult =
+    Result.map (parseArticles source) (Xml.parse downloadedFeed)

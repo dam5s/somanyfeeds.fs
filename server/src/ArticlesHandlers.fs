@@ -2,8 +2,9 @@ module Server.ArticlesHandlers
 
 open Giraffe
 open GiraffeViewEngine
-open Server.ArticlesData
 open System
+open Server.ArticlesData
+open Server.SourceType
 
 
 type private ViewModel =
@@ -34,12 +35,19 @@ module private Views =
 
 let private present (record : Record) : ViewModel =
     let dateMap (s : DateTime) = s.ToShortDateString()
+    let source =
+        match record.Source with
+        | About -> "About"
+        | Social -> "Social"
+        | Code -> "Code"
+        | Blog -> "Blog"
+
 
     { Title = record.Title
     ; Link = record.Link
     ; Content = record.Content
     ; Date = Option.map dateMap record.Date
-    ; Source = record.Source
+    ; Source = source
     }
 
 

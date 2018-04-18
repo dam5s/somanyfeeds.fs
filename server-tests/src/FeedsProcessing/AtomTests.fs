@@ -4,24 +4,18 @@ module ``Atom Processor Tests``
     open FsUnit
     open System
     open System.IO
-    open Server.Feeds
-    open Server
-    open ArticlesData
+    
+    open Server.ArticlesData
+    open Server.SourceType
+    open Server.FeedsProcessing.Download
+    open Server.FeedsProcessing.Atom
 
     [<Test>]
     let ``processFeed with standard github xml`` () =
-        let downloadFunction (url: string) : Result<string, string> =
-            url |> should equal "http://example.com/github/atom"
-            File.ReadAllText("../../../resources/github.atom.xml") |> Result.Ok
-
-        let github: Feed = { Name = "Github"
-                             Slug = "code"
-                             Info = "http://example.com/github/atom"
-                             Type = FeedType.Atom
-                           }
+        let downloaded = DownloadedFeed (File.ReadAllText("../../../resources/github.atom.xml"))
 
 
-        let result = Server.Processors.Atom.processFeed downloadFunction github
+        let result = processAtomFeed Code downloaded
 
 
         match result with
@@ -34,5 +28,5 @@ module ``Atom Processor Tests``
                                                 Link = Some "https://github.com/dam5s/somanyfeeds.fs"
                                                 Content = "<p>Hello from the content</p>"
                                                 Date = Some <| expectedTimeUtc.ToLocalTime()
-                                                Source = "code"
+                                                Source = Code
                                               }
