@@ -1,24 +1,12 @@
 module Server.FeedsProcessor
 
-open System
-open FSharp.Data
 open Server.Articles.Data
 open Server.Feeds
-open Server.FeedUrl
 open Server.FeedsProcessing.ProcessingResult
-open Server.FeedsProcessing.Download
 open Server.FeedsProcessing.Rss
 open Server.FeedsProcessing.Atom
-
-
-let private downloadFeed (url : FeedUrl) : DownloadResult =
-    try
-        feedUrlString url
-            |> Http.RequestString
-            |> DownloadedFeed
-            |> Result.Ok
-    with
-    | ex -> Result.Error <| String.Format("There was an error downloading the feed. {0}", ex.ToString())
+open Server.DataGateway
+open Server.FeedsProcessing.Twitter
 
 
 let private resultToList (result : ProcessingResult) : Record list =
@@ -31,8 +19,7 @@ let private processFeed (feed : Feed) : ProcessingResult =
     match feed with
     | Rss (source, url) -> Result.bind (processRssFeed source) (downloadFeed url)
     | Atom (source, url) -> Result.bind (processAtomFeed source) (downloadFeed url)
-    | Twitter (_) -> Error "Twitter not supported yet"
-
+    | Twitter (handle) -> Result.bind (processTweets handle) (downloadTwitterTimeline handle)
 
 
 let processFeeds
@@ -40,7 +27,7 @@ let processFeeds
     (findAllFeeds : unit -> Feed list) =
 
     let newRecords =
-        (findAllFeeds())
+        (findAllFeeds ())
             |> List.map processFeed
             |> List.collect resultToList
 

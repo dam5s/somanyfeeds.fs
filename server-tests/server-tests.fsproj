@@ -18,6 +18,7 @@
 
     <Compile Include="src/FeedsProcessing/AtomTests.fs" />
     <Compile Include="src/FeedsProcessing/RssTests.fs" />
+    <Compile Include="src/FeedsProcessing/TwitterTests.fs" />
     <Compile Include="src/Program.fs" />
   </ItemGroup>
 </Project>

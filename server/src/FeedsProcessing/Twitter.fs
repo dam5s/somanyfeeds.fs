@@ -1,0 +1,79 @@
+module Server.FeedsProcessing.Twitter
+
+
+open System
+open FSharp.Data
+
+open Server.SourceType
+open Server.FeedsProcessing.ProcessingResult
+open Server.FeedsProcessing.Download
+open Server.Feeds
+open Server.Articles.Data
+open System.Globalization
+
+
+type private Tweet =
+    { Text : string
+    ; CreatedAt : DateTime option
+    ; IsRetweet : bool
+    ; IsReply : bool
+    }
+
+
+let private parseDate (dateValue : string) : DateTime option =
+    try
+        Some <| DateTime.ParseExact(dateValue, "ddd MMM dd HH:mm:ss zzz yyyy", CultureInfo.InvariantCulture)
+    with
+    | ex ->
+        printfn "There was an error parsing the date. %s" (ex.ToString())
+        None
+
+
+let private parseTweet (jsonValue : JsonValue) : Tweet option =
+    try
+        let createdAtString = jsonValue.GetProperty("created_at").AsString()
+        let replyToScreenName = jsonValue.GetProperty("in_reply_to_screen_name").AsString()
+        let retweetedStatus = jsonValue.TryGetProperty("retweeted_status")
+
+        Some { Text = jsonValue.GetProperty("text").AsString()
+             ; CreatedAt = parseDate createdAtString
+             ; IsRetweet = Option.isSome retweetedStatus
+             ; IsReply = not (String.IsNullOrEmpty replyToScreenName)
+             }
+    with
+    | ex ->
+        printfn "Error while parsing tweet: %s" (ex.ToString())
+        None
+
+
+let private parseTweets (downloaded : DownloadedFeed) : Result<Tweet list, string> =
+    try
+        JsonValue.Parse(downloadedString downloaded).AsArray()
+            |> Array.toList
+            |> List.map parseTweet
+            |> List.filter Option.isSome
+            |> List.map Option.get
+            |> Ok
+    with
+    | ex ->
+        printfn "Could not parse tweets json\n\n%s\n\nGot exception %s" (downloadedString downloaded) (ex.ToString())
+        Error <| String.Format("Could not parse tweets json")
+
+
+let private tweetToArticle (handle : TwitterHandle) (tweet : Tweet) : Record =
+    { Title = None
+    ; Link = Some <| String.Format("https://twitter.com/{0}", twitterHandleValue handle)
+    ; Content = tweet.Text
+    ; Date = tweet.CreatedAt
+    ; Source = Social
+    }
+
+
+let private tweetsToArticles (handle : TwitterHandle) (tweets : Tweet list) : Record list =
+    tweets
+        |> List.filter (fun t -> not t.IsRetweet && not t.IsReply)
+        |> List.map (tweetToArticle handle)
+
+
+let processTweets (handle : TwitterHandle) (downloaded : DownloadedFeed) : ProcessingResult =
+    Result.map (tweetsToArticles handle) (parseTweets downloaded)

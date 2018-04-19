@@ -8,6 +8,7 @@
     <EnableDefaultContentItems>false</EnableDefaultContentItems>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="FSharp.Data.Toolbox.Twitter" Version="0.19.0" />
     <PackageReference Include="FSharp.Data" Version="2.4.6" />
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.0.*" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.0.*" />
@@ -33,7 +34,9 @@
     <Compile Include="src/FeedsProcessing/Xml.fs" />
     <Compile Include="src/FeedsProcessing/Rss.fs" />
     <Compile Include="src/FeedsProcessing/Atom.fs" />
+    <Compile Include="src/FeedsProcessing/Twitter.fs" />
 
+    <Compile Include="src/DataGateway.fs" />
     <Compile Include="src/FeedsProcessor.fs" />
     <Compile Include="src/Program.fs" />
   </ItemGroup>

@@ -5,6 +5,8 @@ open Server.SourceType
 
 type TwitterHandle = TwitterHandle of string
 
+let twitterHandleValue (TwitterHandle s) = s
+
 type Feed =
     | Rss of SourceType * FeedUrl
     | Atom of SourceType * FeedUrl
