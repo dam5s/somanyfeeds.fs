@@ -22,13 +22,7 @@ let private processFeed (feed : Feed) : ProcessingResult =
     | Twitter (handle) -> Result.bind (processTweets handle) (downloadTwitterTimeline handle)
 
 
-let processFeeds
-    (updateAll : Record list -> unit)
-    (findAllFeeds : unit -> Feed list) =
-
-    let newRecords =
-        (findAllFeeds ())
-            |> List.map processFeed
-            |> List.collect resultToList
-
-    updateAll newRecords
+let processFeeds (feeds : Feed list) : Record list =
+    feeds
+        |> List.map processFeed
+        |> List.collect resultToList

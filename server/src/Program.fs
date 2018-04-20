@@ -6,7 +6,10 @@ open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
+open FSharp.Control.AsyncSeqExtensions
 open Giraffe
+open FSharp.Control
+open Server.Articles.Data
 
 
 module Views =
@@ -25,21 +28,19 @@ module Views =
 
 
 module App =
+    let private updatesSequence : AsyncSeq<Record list> =
+        let tenMinutes = 10 * 1000 * 60
 
-    let private processFeeds =
-        FeedsProcessor.processFeeds
-            Articles.Data.Repository.updateAll
-            Feeds.Repository.findAll
+        asyncSeq {
+            while true do
+                yield FeedsProcessor.processFeeds (Feeds.Repository.findAll ())
+                do! Async.Sleep tenMinutes
+        }
 
 
     let backgroundProcessing =
-        let tenMinutes = 10 * 60 * 1000
-
-        async {
-            while true do
-                processFeeds
-                do! Async.Sleep tenMinutes
-        }
+        updatesSequence
+            |> AsyncSeq.iter Articles.Data.Repository.updateAll
 
 
     let private articlesListHandler =
