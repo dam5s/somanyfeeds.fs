@@ -2,6 +2,7 @@ module Server.Articles.Handlers
 
 open Giraffe
 open GiraffeViewEngine
+open Microsoft.AspNetCore.Http
 open System
 open Server.Articles.Data
 open Server.SourceType
@@ -51,10 +52,15 @@ let private present (record : Record) : ViewModel =
     }
 
 
-let list layout findAllRecords : HttpHandler =
-    let listView =
-        findAllRecords()
-            |> List.map present
-            |> Views.listView
+let list
+    (layout : XmlNode list -> XmlNode)
+    (findAllRecords : unit -> Record list) =
 
-    htmlView (layout [ listView ])
+    fun (next : HttpFunc) (ctx : HttpContext) ->
+        task {
+            let records = findAllRecords ()
+            let viewModels = List.map present records
+            let listView = Views.listView viewModels
+
+            return! htmlView (layout [ listView ]) next ctx
+        }

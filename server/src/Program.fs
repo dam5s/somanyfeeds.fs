@@ -44,7 +44,9 @@ module App =
 
 
     let private articlesListHandler =
-        Articles.Handlers.list Views.layout Articles.Data.Repository.findAll
+        Articles.Handlers.list
+            Views.layout
+            Articles.Data.Repository.findAll
 
 
     let handler =
