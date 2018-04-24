@@ -5,6 +5,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "server", "server\server.fsp
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "server-tests", "server-tests\server-tests.fsproj", "{55BB409D-D281-4C3A-A108-5D4517F2E894}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "somanyfeeds", "somanyfeeds.fsproj", "{04DC2919-1C9E-45F3-8A06-E6F47DFF87EF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,5 +41,17 @@ Global
 		{55BB409D-D281-4C3A-A108-5D4517F2E894}.Release|x64.Build.0 = Release|x64
 		{55BB409D-D281-4C3A-A108-5D4517F2E894}.Release|x86.ActiveCfg = Release|x86
 		{55BB409D-D281-4C3A-A108-5D4517F2E894}.Release|x86.Build.0 = Release|x86
+		{04DC2919-1C9E-45F3-8A06-E6F47DFF87EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04DC2919-1C9E-45F3-8A06-E6F47DFF87EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04DC2919-1C9E-45F3-8A06-E6F47DFF87EF}.Debug|x64.ActiveCfg = Debug|x64
+		{04DC2919-1C9E-45F3-8A06-E6F47DFF87EF}.Debug|x64.Build.0 = Debug|x64
+		{04DC2919-1C9E-45F3-8A06-E6F47DFF87EF}.Debug|x86.ActiveCfg = Debug|x86
+		{04DC2919-1C9E-45F3-8A06-E6F47DFF87EF}.Debug|x86.Build.0 = Debug|x86
+		{04DC2919-1C9E-45F3-8A06-E6F47DFF87EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04DC2919-1C9E-45F3-8A06-E6F47DFF87EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04DC2919-1C9E-45F3-8A06-E6F47DFF87EF}.Release|x64.ActiveCfg = Release|x64
+		{04DC2919-1C9E-45F3-8A06-E6F47DFF87EF}.Release|x64.Build.0 = Release|x64
+		{04DC2919-1C9E-45F3-8A06-E6F47DFF87EF}.Release|x86.ActiveCfg = Release|x86
+		{04DC2919-1C9E-45F3-8A06-E6F47DFF87EF}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 EndGlobal
