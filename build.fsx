@@ -34,11 +34,13 @@ Target.create "build" (dotnet "build" "")
 
 Target.create "test" (dotnet "test" "server-tests")
 
+Target.create "publish" (dotnet "publish" "server -c Release")
 
 
 "clean"
     ==> "restore"
     ==> "build"
     ==> "test"
+    ==> "publish"
 
-Target.runOrDefault "test"
+Target.runOrDefault "publish"
