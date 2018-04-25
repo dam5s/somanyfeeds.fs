@@ -26,19 +26,19 @@ let dotnet (command : string) (args : string) = (fun _ ->
 
 
 
-Target.create "Clean" (dotnet "clean" "")
+Target.create "clean" (dotnet "clean" "")
 
-Target.create "Restore" (dotnet "restore" "")
+Target.create "restore" (dotnet "restore" "")
 
-Target.create "Build" (dotnet "build" "")
+Target.create "build" (dotnet "build" "")
 
-Target.create "Test" (dotnet "test" "server-tests")
+Target.create "test" (dotnet "test" "server-tests")
 
 
 
-"Clean"
-    ==> "Restore"
-    ==> "Build"
-    ==> "Test"
+"clean"
+    ==> "restore"
+    ==> "build"
+    ==> "test"
 
-Target.runOrDefault "Test"
+Target.runOrDefault "test"
