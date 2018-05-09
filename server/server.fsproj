@@ -43,8 +43,6 @@
 
   <ItemGroup>
     <None Include="web.config" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="WebRoot\**\*">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="WebRoot/**/*" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

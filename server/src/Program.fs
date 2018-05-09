@@ -21,7 +21,7 @@ module Views =
                 meta [ _charset "utf-8" ]
                 link [ _rel  "stylesheet"
                        _type "text/css"
-                       _href "/main.css" ]
+                       _href "/app.css" ]
             ]
             body [] content
         ]

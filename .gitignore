@@ -4,4 +4,4 @@ obj
 .idea
 .env
 .fake
-*.lock
+server/WebRoot
