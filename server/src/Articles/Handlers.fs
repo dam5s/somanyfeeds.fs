@@ -30,8 +30,10 @@ module private Views =
                 ]
 
 
-    let listView (articles: ViewModel list) =
-        section [] <| List.map articleView articles
+    let listView (articles: ViewModel list) : XmlNode list =
+        [ script [ _src "/app.js" ] []
+          script [] [ rawText "Elm.SoManyFeeds.App.fullscreen({});" ]
+        ]
 
 
 let private present (record : Record) : ViewModel =
@@ -62,5 +64,5 @@ let list
             let viewModels = List.map present records
             let listView = Views.listView viewModels
 
-            return! htmlView (layout [ listView ]) next ctx
+            return! htmlView (layout listView) next ctx
         }
