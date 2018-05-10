@@ -4,7 +4,7 @@ module ``Rss Processor Tests``
     open FsUnit
     open System
     open System.IO
-    
+
     open Server.Articles.Data
     open Server.SourceType
     open Server.FeedsProcessing.Download
