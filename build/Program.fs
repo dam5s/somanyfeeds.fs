@@ -109,15 +109,10 @@ let main (args : string []) =
     Target.create "test" test
     Target.create "publish" publish
 
-    "clean"
-        ==> "buildScss"
-        ==> "buildElm"
-        ==> "copyAssets"
-        ==> "restore"
-        ==> "build"
-        ==> "test"
-        ==> "publish"
-        |> ignore
+
+    "buildScss" ==> "buildElm" ==> "copyAssets" |> ignore
+    "restore" ==> "copyAssets" ==> "build" |> ignore
+    "clean" ==> "build" ==> "test" ==> "publish" |> ignore
 
     Target.runOrDefault "publish"
 
