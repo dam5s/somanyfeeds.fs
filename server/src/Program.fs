@@ -10,6 +10,8 @@ open FSharp.Control.AsyncSeqExtensions
 open Giraffe
 open FSharp.Control
 open Server.Articles.Data
+open Giraffe.Serialization.Json
+open Newtonsoft.Json
 
 
 module Views =
@@ -19,9 +21,7 @@ module Views =
         html [] [
             head [] [
                 meta [ _charset "utf-8" ]
-                link [ _rel  "stylesheet"
-                       _type "text/css"
-                       _href "/app.css" ]
+                link [ _rel  "stylesheet" ; _type "text/css" ; _href "/app.css" ]
             ]
             body [] content
         ]
@@ -71,7 +71,13 @@ let configureApp (app : IApplicationBuilder) =
 
 
 let configureServices (services : IServiceCollection) =
-    services.AddGiraffe() |> ignore
+    let jsonSettings = new JsonSerializerSettings()
+    jsonSettings.Converters.Add (new Json.OptionConverter())
+
+    services
+        .AddGiraffe()
+        .AddSingleton<IJsonSerializer>(NewtonsoftJsonSerializer(jsonSettings))
+        |> ignore
 
 
 let configureLogging (builder : ILoggingBuilder) =
@@ -80,7 +86,8 @@ let configureLogging (builder : ILoggingBuilder) =
     builder
         .AddFilter(filter)
         .AddConsole()
-        .AddDebug() |> ignore
+        .AddDebug()
+        |> ignore
 
 
 [<EntryPoint>]

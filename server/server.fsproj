@@ -38,6 +38,8 @@
 
     <Compile Include="src/DataGateway.fs" />
     <Compile Include="src/FeedsProcessor.fs" />
+
+    <Compile Include="src/Json/OptionConverter.fs" />
     <Compile Include="src/Program.fs" />
   </ItemGroup>
 

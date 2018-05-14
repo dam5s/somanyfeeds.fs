@@ -6,33 +6,22 @@ open Microsoft.AspNetCore.Http
 open System
 open Server.Articles.Data
 open Server.SourceType
+open System
 
 
-type private ViewModel =
-    { Title : string option
-    ; Link : string option
-    ; Content : string
-    ; Date : string option
-    ; Source : string
+type ViewModel =
+    { title : string option
+    ; link : string option
+    ; content : string
+    ; date : string option
+    ; source : string
     }
 
 
 module private Views =
-    let articleView (article: ViewModel) =
-        div [ _class "article" ] <|
-            match article.Title with
-            | Some title ->
-                [ h1 [] [ rawText title ]
-                ; p [] [ rawText article.Content ]
-                ]
-            | None ->
-                [ p [] [ rawText article.Content ]
-                ]
-
-
-    let listView (articles: ViewModel list) : XmlNode list =
+    let listView (articlesJson: string) : XmlNode list =
         [ script [ _src "/app.js" ] []
-          script [] [ rawText "Elm.SoManyFeeds.App.fullscreen({});" ]
+          script [] [ rawText ("Elm.SoManyFeeds.App.fullscreen({\"articles\":" + articlesJson + "});") ]
         ]
 
 
@@ -46,11 +35,11 @@ let private present (record : Record) : ViewModel =
         | Blog -> "Blog"
 
 
-    { Title = record.Title
-    ; Link = record.Link
-    ; Content = record.Content
-    ; Date = Option.map dateMap record.Date
-    ; Source = source
+    { title = record.Title
+    ; link = record.Link
+    ; content = record.Content
+    ; date = Option.map dateMap record.Date
+    ; source = source
     }
 
 
@@ -61,8 +50,13 @@ let list
     fun (next : HttpFunc) (ctx : HttpContext) ->
         task {
             let records = findAllRecords ()
-            let viewModels = List.map present records
-            let listView = Views.listView viewModels
+            let serializer = ctx.GetJsonSerializer()
 
-            return! htmlView (layout listView) next ctx
+            let listView = records
+                            |> List.map present
+                            |> serializer.Serialize
+                            |> Views.listView
+                            |> layout
+
+            return! htmlView listView next ctx
         }

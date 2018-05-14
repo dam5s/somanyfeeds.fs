@@ -6,3 +6,4 @@ obj
 .fake
 server/WebRoot
 elm-stuff
+*.DotSettings.user

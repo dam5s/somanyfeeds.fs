@@ -3,6 +3,7 @@ module SoManyFeeds.App exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Navigation
+import SoManyFeeds.Article as Article exposing (Article)
 import SoManyFeeds.Logo as Logo
 import SoManyFeeds.Route as Route exposing (Route(..))
 import SoManyFeeds.Source as Source exposing (Source)
@@ -10,16 +11,19 @@ import SoManyFeeds.Source as Source exposing (Source)
 
 type alias Model =
     { route : Route
+    , articles : List Article
     }
 
 
 type alias Flags =
-    {}
+    { articles : List Article.Json
+    }
 
 
 init : Flags -> Navigation.Location -> ( Model, Cmd Msg )
 init flags location =
     { route = Route.fromLocation location
+    , articles = List.map Article.fromJson flags.articles
     }
         ! []
 
@@ -39,8 +43,14 @@ view model =
                 ]
             ]
         , Logo.view
-        , section [ id "app-content", class "content" ] []
+        , section [ id "app-content", class "content" ] <|
+            List.map Article.view (articlesToDisplay model)
         ]
+
+
+articlesToDisplay : Model -> List Article
+articlesToDisplay model =
+    model.articles
 
 
 sourceView : Model -> Source -> Html Msg
