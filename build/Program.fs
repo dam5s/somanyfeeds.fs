@@ -36,7 +36,18 @@ let private writeToFile (filePath : string) (content : string) =
     writer.WriteLine(content)
 
 
+let private cleanScss (p : TargetParameter) =
+    File.delete "server/WebRoot/app.css"
+
+
+let private cleanElm (p : TargetParameter) =
+    Directory.delete "frontend/src/elm/elm-stuff/build-artifacts/0.18.0/dam5s"
+
+
 let private clean (p : TargetParameter) =
+    cleanElm p
+    cleanScss p
+
     ["." ; "server" ; "server-tests" ; "frontend"]
         |> List.map (fun p ->
             Path.Combine(p, "bin") |> Directory.delete
@@ -44,15 +55,9 @@ let private clean (p : TargetParameter) =
         )
         |> ignore
 
-    Directory.delete "server/WebRoot"
-    Directory.delete "frontend/src/elm/elm-stuff/build-artifacts/0.18.0/dam5s"
-
 
 let private buildScss (p : TargetParameter) =
-    let scssPath = "frontend/src/scss/app.scss"
-    let cssPath = "server/WebRoot/app.css"
-
-    generateCss scssPath |> writeToFile cssPath
+    generateCss "frontend/src/scss/app.scss" |> writeToFile "server/WebRoot/app.css"
 
 
 let private buildElm (p : TargetParameter) =
@@ -82,7 +87,6 @@ let private test (p : TargetParameter) = dotnet "test" "server-tests"
 let private publish (p : TargetParameter) = dotnet "publish" "server -c Release"
 
 
-
 let private buildFakeExecutionContext (args : string list) =
     let fakeArgs =
         if (List.isEmpty args) then
@@ -110,9 +114,13 @@ let main (args : string []) =
     Target.create "publish" publish
 
 
-    "buildScss" ==> "buildElm" ==> "copyAssets" |> ignore
-    "restore" ==> "copyAssets" ==> "build" |> ignore
-    "clean" ==> "build" ==> "test" ==> "publish" |> ignore
+    "buildElm" ==> "copyAssets" |> ignore
+    "buildScss" ==> "copyAssets" |> ignore
+
+    "copyAssets" ==> "build" |> ignore
+    "restore" ==> "build" |> ignore
+
+    "build" ==> "test" ==> "publish" |> ignore
 
     Target.runOrDefault "publish"
 
