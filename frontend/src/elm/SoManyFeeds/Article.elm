@@ -1,11 +1,11 @@
-module SoManyFeeds.Article exposing (Article, Json, fromJson, view)
+module SoManyFeeds.Article exposing (Article, Json, about, default, fromJson, view)
 
 import Html exposing (Attribute, Html, a, h1, h2, header, section, text)
 import Html.Attributes exposing (class, href)
 import Json.Encode
 import Regex
 import SoManyFeeds.DateFormat as DateFormat
-import SoManyFeeds.Source as Source exposing (Source)
+import SoManyFeeds.Source as Source exposing (Source(..))
 import SoManyFeeds.Tweet as Tweet
 import VirtualDom
 
@@ -98,3 +98,70 @@ compact list =
 innerHtml : String -> Attribute msg
 innerHtml =
     VirtualDom.property "innerHTML" << Json.Encode.string
+
+
+default : Article
+default =
+    { title = Just "Nothing to see here."
+    , link = Just "http://damo.io"
+    , content = defaultContent
+    , date = Nothing
+    , source = About
+    }
+
+
+defaultContent : String
+defaultContent =
+    """
+  <p>
+    You have deselected all the feeds in the menu. There is nothing to show.
+    Feel free to select one or more feeds to display more entries.
+  </p>
+"""
+
+
+about : Article
+about =
+    { title = Just "About"
+    , link = Nothing
+    , content = aboutContent
+    , date = Nothing
+    , source = About
+    }
+
+
+aboutContent : String
+aboutContent =
+    """
+  <p>
+    I'm <strong>Damien Le Berrigaud</strong>, Software Engineer for
+    <a href="https://pivotal.io/">Pivotal Software</a>.
+
+    I like working with
+    <a href="https://kotlinlang.org">Kotlin</a>,
+    <a href="https://fsharp.org">F#</a>,
+    <a href="http://elm-lang.org">Elm</a>,
+    <a href="https://developer.android.com">Android</a>,
+    <a href="https://developer.apple.com/ios">iOS (Swift or Objective-C)</a>,
+    <a href="https://golang.org">Go</a>...
+
+    I've had previous experiences in
+    <a href="https://www.ruby-lang.org">Ruby</a> and
+    <a href="https://www.microsoft.com/net">.NET</a>.
+  </p>
+
+  <p>
+    That's a lot of technologies that I got to work with while working at <em>Pivotal Labs</em> and in my previous
+    jobs.
+    In order to keep up-to-date, I keep rebuilding this website.
+  </p>
+
+  <p>
+    This version is written in <em>F#</em> and <em>Elm</em> on the <em>.NET Core</em> platform.
+    The source code is entirely available <a href="https://github.com/dam5s/somanyfeeds.fs">on my github</a>.
+  </p>
+
+  <p>
+    You can choose to follow multiple of my feeds, on a single page, by using the menu at the top of the page.
+  </p>
+"""

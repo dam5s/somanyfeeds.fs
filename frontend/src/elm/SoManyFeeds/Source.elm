@@ -1,4 +1,4 @@
-module SoManyFeeds.Source exposing (Source, all, fromString, toString)
+module SoManyFeeds.Source exposing (Source(..), all, fromString, toString)
 
 
 type Source

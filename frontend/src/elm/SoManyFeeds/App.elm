@@ -23,7 +23,7 @@ type alias Flags =
 init : Flags -> Navigation.Location -> ( Model, Cmd Msg )
 init flags location =
     { route = Route.fromLocation location
-    , articles = List.map Article.fromJson flags.articles
+    , articles = [ Article.about ] ++ List.map Article.fromJson flags.articles
     }
         ! []
 
@@ -50,7 +50,15 @@ view model =
 
 articlesToDisplay : Model -> List Article
 articlesToDisplay model =
-    model.articles
+    let
+        sources =
+            Route.sources model.route
+    in
+    if List.isEmpty sources then
+        [ Article.default ]
+    else
+        model.articles
+            |> List.filter (\a -> List.member a.source sources)
 
 
 sourceView : Model -> Source -> Html Msg
