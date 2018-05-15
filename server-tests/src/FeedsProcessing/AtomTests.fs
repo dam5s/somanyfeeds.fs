@@ -4,7 +4,7 @@ module ``Atom Processor Tests``
     open FsUnit
     open System
     open System.IO
-    
+
     open Server.Articles.Data
     open Server.SourceType
     open Server.FeedsProcessing.Download
@@ -12,7 +12,7 @@ module ``Atom Processor Tests``
 
     [<Test>]
     let ``processFeed with standard github xml`` () =
-        let downloaded = DownloadedFeed (File.ReadAllText("../../../resources/github.atom.xml"))
+        let downloaded = DownloadedFeed <| File.ReadAllText("../../../resources/github.atom.xml")
 
 
         let result = processAtomFeed Code downloaded

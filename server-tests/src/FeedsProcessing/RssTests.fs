@@ -12,7 +12,7 @@ module ``Rss Processor Tests``
 
     [<Test>]
     let ``processFeed with standard medium xml`` () =
-        let downloadedFeed = DownloadedFeed (File.ReadAllText("../../../resources/medium.rss.xml"))
+        let downloadedFeed = DownloadedFeed <| File.ReadAllText("../../../resources/medium.rss.xml")
 
 
         let result = processRssFeed Blog downloadedFeed
