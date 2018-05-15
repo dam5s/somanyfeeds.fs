@@ -4,7 +4,7 @@
     <DebugType>portable</DebugType>
     <AssemblyName>server</AssemblyName>
     <OutputType>Exe</OutputType>
-    <RuntimeFrameworkVersion>2.0.0</RuntimeFrameworkVersion>
+    <RuntimeFrameworkVersion>2.0.6</RuntimeFrameworkVersion>
     <EnableDefaultContentItems>false</EnableDefaultContentItems>
   </PropertyGroup>
   <ItemGroup>

@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+set -e
+cf push somanyfeeds -p server/bin/Release/netcoreapp2.0/publish
