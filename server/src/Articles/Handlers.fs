@@ -6,7 +6,6 @@ open Microsoft.AspNetCore.Http
 open System
 open Server.Articles.Data
 open Server.SourceType
-open System
 
 
 type ViewModel =
@@ -26,7 +25,7 @@ module private Views =
 
 
 let private present (record : Record) : ViewModel =
-    let dateMap (s : DateTime) = s.ToShortDateString()
+    let dateMap (s : DateTime) = s.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'")
     let source =
         match record.Source with
         | About -> "About"
@@ -53,6 +52,7 @@ let list
             let serializer = ctx.GetJsonSerializer()
 
             let listView = records
+                            |> List.sortByDescending (fun r -> Option.defaultValue DateTime.UtcNow r.Date)
                             |> List.map present
                             |> serializer.Serialize
                             |> Views.listView
