@@ -22,6 +22,7 @@ module Views =
             head [] [
                 meta [ _charset "utf-8" ]
                 link [ _rel  "stylesheet" ; _type "text/css" ; _href "/app.css" ]
+                title [] [ rawText "damo.io - Damien Le Berrigaud's feed aggregator." ]
             ]
             body [] content
         ]

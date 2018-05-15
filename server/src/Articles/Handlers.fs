@@ -20,7 +20,10 @@ type ViewModel =
 module private Views =
     let listView (articlesJson: string) : XmlNode list =
         [ script [ _src "/app.js" ] []
-          script [] [ rawText ("Elm.SoManyFeeds.App.fullscreen({\"articles\":" + articlesJson + "});") ]
+          script []
+            [ rawText "if (!window.location.hash) { window.location.hash = '#About,Social,Blog'; }"
+              rawText ("Elm.SoManyFeeds.App.fullscreen({\"articles\":" + articlesJson + "});")
+            ]
         ]
 
 
