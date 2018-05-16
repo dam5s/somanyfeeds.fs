@@ -18,7 +18,14 @@ let private ensureSuccessExitCode (exitCode : int) =
     | _ -> raise BuildException
 
 
-let private dotnet (command : string) (args : string) =
+let private writeToFile (filePath : string) (content : string) =
+    Directory.GetParent(filePath).Create()
+
+    use writer = File.CreateText(filePath)
+    writer.WriteLine(content)
+
+
+let private dotnet (command : string) (args : string) _ =
     let result = DotNet.exec id command args
     ensureSuccessExitCode result.ExitCode
 
@@ -29,24 +36,17 @@ let private generateCss (filePath : string) : string =
     result.Css
 
 
-let private writeToFile (filePath : string) (content : string) =
-    Directory.GetParent(filePath).Create()
-
-    use writer = File.CreateText(filePath)
-    writer.WriteLine(content)
-
-
-let private cleanScss (p : TargetParameter) =
+let private cleanScss _ =
     File.delete "server/WebRoot/app.css"
 
 
-let private cleanElm (p : TargetParameter) =
+let private cleanElm _ =
     Directory.delete "frontend/src/elm/elm-stuff/build-artifacts/0.18.0/dam5s"
 
 
-let private clean (p : TargetParameter) =
-    cleanElm p
-    cleanScss p
+let private clean _ =
+    cleanElm ()
+    cleanScss ()
 
     ["." ; "server" ; "server-tests" ; "frontend"]
         |> List.map (fun p ->
@@ -56,11 +56,11 @@ let private clean (p : TargetParameter) =
         |> ignore
 
 
-let private buildScss (p : TargetParameter) =
+let private buildScss _ =
     generateCss "frontend/src/scss/app.scss" |> writeToFile "server/WebRoot/app.css"
 
 
-let private buildElm (p : TargetParameter) =
+let private buildElm _ =
     let args =
         { Program = "elm-make"
           WorkingDir = "frontend/src/elm"
@@ -70,21 +70,12 @@ let private buildElm (p : TargetParameter) =
     Process.shellExec args |> ensureSuccessExitCode
 
 
-let private copyAssets (p : TargetParameter) =
+let private copyAssets _ =
     Shell.copyDir "server/WebRoot" "frontend/src" (fun f ->
         not (f.Contains "elm")
             && not (f.Contains "scss")
             && not (f.EndsWith ".fs")
     )
-
-
-let private restore (p : TargetParameter) = dotnet "restore" ""
-
-let private build (p : TargetParameter) = dotnet "build" ""
-
-let private test (p : TargetParameter) = dotnet "test" "server-tests"
-
-let private publish (p : TargetParameter) = dotnet "publish" "server -c Release"
 
 
 let private buildFakeExecutionContext (args : string list) =
@@ -108,10 +99,10 @@ let main (args : string []) =
     Target.create "buildScss" buildScss
     Target.create "buildElm" buildElm
     Target.create "copyAssets" copyAssets
-    Target.create "restore" restore
-    Target.create "build" build
-    Target.create "test" test
-    Target.create "publish" publish
+    Target.create "restore" <| dotnet "restore" ""
+    Target.create "build" <| dotnet "build" ""
+    Target.create "test" <| dotnet "test" "server-tests"
+    Target.create "publish" <| dotnet "publish" "server -c Release"
 
 
     "buildElm" ==> "copyAssets" |> ignore
