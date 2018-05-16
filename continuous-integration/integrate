@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -e
+set -v
+
+docker run dam5s/somanyfeeds-ci ./build
+
