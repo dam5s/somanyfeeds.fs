@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <DebugType>portable</DebugType>
+    <AssemblyName>server</AssemblyName>
+    <OutputType>Exe</OutputType>
+    <RuntimeFrameworkVersion>2.0.6</RuntimeFrameworkVersion>
+    <EnableDefaultContentItems>false</EnableDefaultContentItems>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="FSharp.Control.AsyncSeq" Version="2.0.21" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.6" />
+    <PackageReference Include="Giraffe" Version="1.1.*" />
+    <PackageReference Include="dotnet-fake" Version="5.0.0-rc011" />
+    <PackageReference Include="Fake.IO.FileSystem" Version="5.0.0-rc011" />
+    <PackageReference Include="Fake.Core.Process" Version="5.0.0-rc011" />
+    <Compile Include="src\HttpSupport.fs" />
+    <Compile Include="src\Git.fs" />
+    <Compile Include="src\Build.fs" />
+    <Compile Include="src\BuildRespository.fs" />
+    <Compile Include="src\BuildRunner.fs" />
+    <Compile Include="src\BuildHandlers.fs" />
+    <Compile Include="src\Program.fs" />
+    <Content Include="WebRoot/**/*" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="web.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

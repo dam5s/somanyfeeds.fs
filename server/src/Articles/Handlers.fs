@@ -36,7 +36,6 @@ let private present (record : Record) : ViewModel =
         | Code -> "Code"
         | Blog -> "Blog"
 
-
     { title = record.Title
     ; link = record.Link
     ; content = record.Content
