@@ -34,6 +34,7 @@
     <Compile Include="src/FeedsProcessor.fs" />
 
     <Compile Include="src/Json/OptionConverter.fs" />
+    <Compile Include="src/SslHandler.fs" />
     <Compile Include="src/Program.fs" />
   </ItemGroup>
 

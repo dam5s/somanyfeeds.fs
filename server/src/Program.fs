@@ -2,8 +2,10 @@ module Server.Program
 
 open System
 open System.IO
+open System.Threading.Tasks
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
+open Microsoft.AspNetCore.Http
 open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
 open FSharp.Control.AsyncSeqExtensions
@@ -30,6 +32,10 @@ module Views =
 
 
 module App =
+    open FSharp.Data
+    open Microsoft.AspNetCore.Http.Extensions
+    open server
+
     let private updatesSequence : AsyncSeq<Record list> =
         let tenMinutes = 10 * 1000 * 60
 
@@ -51,11 +57,12 @@ module App =
             Articles.Data.Repository.findAll
 
 
-    let handler =
+    let handler : HttpHandler =
         choose [
-            GET >=>
+            SslHandler.enforceSsl
+            route "/" >=>
                 choose [
-                    route "/" >=> articlesListHandler
+                    GET >=> articlesListHandler
                 ]
             setStatusCode 404 >=> text "Not Found"
         ]
@@ -67,9 +74,9 @@ let errorHandler (ex : Exception) (logger : ILogger) : HttpHandler =
 
 
 let configureApp (app : IApplicationBuilder) =
-    (app.UseGiraffeErrorHandler errorHandler)
-        .UseStaticFiles()
-        .UseGiraffe(App.handler)
+    app.UseGiraffeErrorHandler(errorHandler)
+       .UseStaticFiles()
+       .UseGiraffe(App.handler)
 
 
 let configureServices (services : IServiceCollection) =
