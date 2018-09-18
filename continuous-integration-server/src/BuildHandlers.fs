@@ -1,5 +1,6 @@
 module BuildHandlers
 
+open FSharp.Control.Tasks.V2.ContextInsensitive
 open Giraffe
 open GiraffeViewEngine
 open Microsoft.AspNetCore.Http

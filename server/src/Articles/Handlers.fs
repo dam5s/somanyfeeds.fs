@@ -1,5 +1,6 @@
 module Server.Articles.Handlers
 
+open FSharp.Control.Tasks.V2.ContextInsensitive
 open Giraffe
 open GiraffeViewEngine
 open Microsoft.AspNetCore.Http
@@ -56,7 +57,7 @@ let list
             let listView = records
                             |> List.sortByDescending (fun r -> Option.defaultValue DateTime.UtcNow r.Date)
                             |> List.map present
-                            |> serializer.Serialize
+                            |> serializer.SerializeToString
                             |> Views.listView
                             |> layout
 
