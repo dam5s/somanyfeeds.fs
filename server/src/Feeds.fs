@@ -18,5 +18,5 @@ module Repository =
     let findAll (): Feed list = [
         Atom (Code, FeedUrl "https://github.com/dam5s.atom")
         Rss (Blog, FeedUrl "https://medium.com/feed/@its_damo")
-        Twitter (TwitterHandle "its_damo")
+        Twitter (TwitterHandle "dam5s")
     ]
