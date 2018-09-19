@@ -12,7 +12,7 @@ module ``Atom Processor Tests``
 
     [<Test>]
     let ``processFeed with standard github xml`` () =
-        let downloaded = DownloadedFeed <| File.ReadAllText("../../../resources/github.atom.xml")
+        let downloaded = DownloadedFeed <| File.ReadAllText("../../../../server/resources/github.atom.xml")
 
 
         let result = processAtomFeed Code downloaded
@@ -27,6 +27,6 @@ module ``Atom Processor Tests``
             List.head records |> should equal { Title = Some "dam5s pushed to master in dam5s/somanyfeeds.fs"
                                                 Link = Some "https://github.com/dam5s/somanyfeeds.fs"
                                                 Content = "<p>Hello from the content</p>"
-                                                Date = Some <| expectedTimeUtc.ToLocalTime()
+                                                Date = Some expectedTimeUtc
                                                 Source = Code
                                               }

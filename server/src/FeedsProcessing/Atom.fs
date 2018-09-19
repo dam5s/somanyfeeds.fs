@@ -1,47 +1,39 @@
 module Server.FeedsProcessing.Atom
 
-open System.Xml
 open System
+open FSharp.Data
 open Server.FeedsProcessing.ProcessingResult
 open Server.FeedsProcessing.Download
 open Server.Articles.Data
 open Server.SourceType
 
 
-let private getChildAttribute (nsManager : XmlNamespaceManager) (node : XmlNode) (nodeName : string) (attrName : string) : string option =
-    let xpath = String.Format("descendant::atom:{0}/@{1}", nodeName, attrName)
-    Xml.getChildXpathValue nsManager node xpath
+type private AtomProvider = XmlProvider<"../server/resources/github.atom.xml">
 
 
-let private getChildText (nsManager : XmlNamespaceManager) (node : XmlNode) (name : string) : string option =
-    let xpath = String.Format("descendant::atom:{0}/text()", name)
-    Xml.getChildXpathValue nsManager node xpath
+let private parse (xml : string) : Result<AtomProvider.Feed, string> =
+    try
+        Ok <| AtomProvider.Parse(xml)
+    with
+    | ex ->
+        printfn "Could not parse Atom\n\n%s\n\nGot exception %s" xml (ex.ToString())
+        Error <| String.Format("Could not parse Atom")
 
 
-let private buildRecord (nsManager : XmlNamespaceManager) (source : SourceType) (node : XmlNode) : Record =
-    { Title = getChildText nsManager node "title"
-      Link = getChildAttribute nsManager node "link" "href"
-      Content = getChildText nsManager node "content"
-        |> Option.defaultValue ""
-      Date = getChildText nsManager node "published"
-        |> Option.bind Xml.parseDate
-      Source = source }
+let private entryToRecord (source : SourceType) (entry : AtomProvider.Entry) : Record =
+    { Title = Xml.stringToOption entry.Title.Value
+      Link = Xml.stringToOption entry.Link.Href
+      Content = Xml.stringToOption entry.Content.Value |> Option.defaultValue ""
+      Date = Some entry.Published
+      Source = source
+    }
 
 
-let private namespaceManager (doc : XmlDocument) =
-    let nsManager = new XmlNamespaceManager(doc.NameTable)
-    nsManager.AddNamespace("atom", "http://www.w3.org/2005/Atom")
-    nsManager
+let private atomToRecords (source : SourceType) (atom : AtomProvider.Feed) : Record list =
+    atom.Entries
+        |> Array.toList
+        |> List.map (entryToRecord source)
 
 
-let private parseArticles (source : SourceType) (doc : XmlDocument) : Record list =
-    let nsManager = namespaceManager doc
-
-    doc.SelectNodes("//atom:entry", nsManager)
-        |> Seq.cast<XmlNode>
-        |> Seq.map (buildRecord nsManager source)
-        |> Seq.toList
-
-
-let processAtomFeed (source : SourceType) (downloadedFeed : DownloadedFeed) : ProcessingResult =
-    Result.map (parseArticles source) (Xml.parse downloadedFeed)
+let processAtomFeed (source : SourceType) (downloaded : DownloadedFeed) : ProcessingResult =
+    parse (downloadedString downloaded) |> Result.map (atomToRecords source)

@@ -12,7 +12,7 @@ module ``Rss Processor Tests``
 
     [<Test>]
     let ``processFeed with standard medium xml`` () =
-        let downloadedFeed = DownloadedFeed <| File.ReadAllText("../../../resources/medium.rss.xml")
+        let downloadedFeed = DownloadedFeed <| File.ReadAllText("../../../../server/resources/medium.rss.xml")
 
 
         let result = processRssFeed Blog downloadedFeed
@@ -27,6 +27,6 @@ module ``Rss Processor Tests``
             List.head records |> should equal { Title = Some "First title!"
                                                 Link = Some "https://medium.com/@its_damo/first"
                                                 Content = "<p>This is the content</p>"
-                                                Date = Some <| expectedTimeUtc.ToLocalTime()
+                                                Date = Some expectedTimeUtc
                                                 Source = Blog
                                               }

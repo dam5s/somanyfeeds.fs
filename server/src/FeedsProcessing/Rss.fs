@@ -1,42 +1,39 @@
 module Server.FeedsProcessing.Rss
 
-open System.Xml
 open System
+open FSharp.Data
 open Server.FeedsProcessing.ProcessingResult
 open Server.FeedsProcessing.Download
 open Server.Articles.Data
 open Server.SourceType
 
-let private getChildText (nsManager : XmlNamespaceManager) (node : XmlNode) (name : string) : string option =
-    let xpath = String.Format("descendant::{0}/text()", name)
-    Xml.getChildXpathValue nsManager node xpath
+
+type private RssProvider = XmlProvider<"../server/resources/medium.rss.xml">
 
 
-let private buildRecord (nsManager : XmlNamespaceManager) (source : SourceType) (node : XmlNode) : Record =
-    { Title = getChildText nsManager node "title"
-      Link = getChildText nsManager node "link"
-      Content = getChildText nsManager node "content:encoded"
-                |> Option.orElse (getChildText nsManager node "description")
-                |> Option.defaultValue ""
-      Date = getChildText nsManager node "pubDate"
-             |> Option.bind Xml.parseDate
-      Source = source }
+let private parse (xml : string) : Result<RssProvider.Rss, string> =
+    try
+        Ok <| RssProvider.Parse(xml)
+    with
+    | ex ->
+        printfn "Could not parse RSS\n\n%s\n\nGot exception %s" xml (ex.ToString())
+        Error <| String.Format("Could not parse RSS")
 
 
-let private namespaceManager (doc : XmlDocument) =
-    let nsManager = new XmlNamespaceManager(doc.NameTable)
-    nsManager.AddNamespace("content", "http://purl.org/rss/1.0/modules/content/")
-    nsManager
+let private itemToRecord (source : SourceType) (item : RssProvider.Item) : Record =
+    { Title = Xml.stringToOption item.Title
+      Link = Xml.stringToOption item.Link
+      Content = Xml.stringToOption item.Encoded |> Option.defaultValue ""
+      Date = Some item.PubDate
+      Source = source
+    }
 
 
-let private parseArticles (source : SourceType) (doc : XmlDocument) : Record list =
-    let nsManager = namespaceManager doc
-
-    doc.SelectNodes("//item", nsManager)
-        |> Seq.cast<XmlNode>
-        |> Seq.map (buildRecord nsManager source)
-        |> Seq.toList
+let private rssToRecords (source : SourceType) (rss : RssProvider.Rss) : Record list =
+    rss.Channel.Items
+        |> Array.toList
+        |> List.map (itemToRecord source)
 
 
-let processRssFeed (source : SourceType) (downloadedFeed : DownloadedFeed) : ProcessingResult =
-    Result.map (parseArticles source) (Xml.parse downloadedFeed)
+let processRssFeed (source : SourceType) (downloaded : DownloadedFeed) : ProcessingResult =
+    parse (downloadedString downloaded) |> Result.map (rssToRecords source)
