@@ -29,30 +29,29 @@ let private parseDate (dateValue : string) : DateTime option =
         None
 
 
-let private parseTweet (jsonValue : JsonValue) : Tweet option =
-    try
-        let createdAtString = jsonValue.GetProperty("created_at").AsString()
-        let replyToScreenName = jsonValue.GetProperty("in_reply_to_screen_name").AsString()
-        let retweetedStatus = jsonValue.TryGetProperty("retweeted_status")
+type TwitterTimelineProvider = JsonProvider<"../server/resources/twitter-timeline.json">
 
-        Some { Text = jsonValue.GetProperty("text").AsString()
-             ; CreatedAt = parseDate createdAtString
-             ; IsRetweet = Option.isSome retweetedStatus
-             ; IsReply = not (String.IsNullOrEmpty replyToScreenName)
-             }
-    with
-    | ex ->
-        printfn "Error while parsing tweet: %s" (ex.ToString())
-        None
+
+let private mapTweet (json : TwitterTimelineProvider.Root) : Tweet =
+    let createdAtString = json.CreatedAt
+    let replyToScreenName = json.InReplyToScreenName
+    let retweetedStatus = json.RetweetedStatus
+
+    { Text = json.Text
+      CreatedAt = parseDate createdAtString
+      IsRetweet = Option.isSome retweetedStatus
+      IsReply = replyToScreenName
+      |> Option.map String.IsNullOrEmpty
+      |> Option.defaultValue true
+      |> not
+    }
 
 
 let private parseTweets (downloaded : DownloadedFeed) : Result<Tweet list, string> =
     try
-        JsonValue.Parse(downloadedString downloaded).AsArray()
+        TwitterTimelineProvider.Parse(downloadedString downloaded)
             |> Array.toList
-            |> List.map parseTweet
-            |> List.filter Option.isSome
-            |> List.map Option.get
+            |> List.map mapTweet
             |> Ok
     with
     | ex ->

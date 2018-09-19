@@ -13,7 +13,7 @@ module ``Twitter Processor Tests``
 
     [<Test>]
     let ``processFeed twitter timeline`` () =
-        let downloadedFeed = DownloadedFeed <| File.ReadAllText("../../../resources/twitter.timeline.json")
+        let downloadedFeed = DownloadedFeed <| File.ReadAllText("../../../../server/resources/twitter-timeline.json")
 
 
         let result = processTweets (TwitterHandle "its_damo") downloadedFeed
