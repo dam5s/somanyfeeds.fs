@@ -29,7 +29,7 @@ let private parseDate (dateValue : string) : DateTime option =
         None
 
 
-type TwitterTimelineProvider = JsonProvider<"../server/resources/twitter-timeline.json">
+type TwitterTimelineProvider = JsonProvider<"../server/resources/twitter.timeline.json">
 
 
 let private mapTweet (json : TwitterTimelineProvider.Root) : Tweet =
