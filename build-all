@@ -2,5 +2,4 @@
 
 set -e
 dotnet restore build/build.fsproj
-dotnet run -p build -- clean
-dotnet run -p build -- publish
+dotnet run -p build

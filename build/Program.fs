@@ -89,6 +89,8 @@ let private buildFakeExecutionContext (args : string list) =
 
     FakeExecutionContext.Create false "Program.fs" fakeArgs
 
+let dependsOn (tasks : string list) (task : string) = task <== tasks
+let mustRunAfter (otherTask : string) (task : string) = task <=? otherTask |> ignore
 
 [<EntryPoint>]
 let main (args : string []) =
@@ -105,13 +107,17 @@ let main (args : string []) =
     Target.create "publish" <| dotnet "publish" "server -c Release"
 
 
-    "buildElm" ==> "copyAssets" |> ignore
-    "buildScss" ==> "copyAssets" |> ignore
+    "copyAssets" |> dependsOn [ "buildElm" ; "buildScss" ]
 
-    "copyAssets" ==> "build" |> ignore
-    "restore" ==> "build" |> ignore
+    "build" |> dependsOn [ "copyAssets" ; "restore" ]
 
-    "build" ==> "test" ==> "publish" |> ignore
+    "build" |> mustRunAfter "clean"
+    "buildElm" |> mustRunAfter "clean"
+    "buildScss" |> mustRunAfter "clean"
+
+    "test" |> dependsOn [ "build" ]
+
+    "publish" |> dependsOn [ "test" ; "build" ; "clean" ]
 
     Target.runOrDefault "publish"
 
