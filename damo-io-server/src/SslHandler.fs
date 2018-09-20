@@ -12,7 +12,7 @@ let private getUrlAsHttps (request: HttpRequest) : string =
 
 let private shouldRedirectToHttps (ctx : HttpContext) : bool =
     ctx.TryGetRequestHeader "X-Forwarded-Proto"
-        |> Option.map (fun s -> s.ToUpper())
+        |> Option.map (fun s -> s.ToUpper ())
         |> function
             | Some "HTTP" -> true
             | _ -> false

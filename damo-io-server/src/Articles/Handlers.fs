@@ -55,7 +55,7 @@ let list
     fun (next : HttpFunc) (ctx : HttpContext) ->
         task {
             let records = findAllRecords ()
-            let serializer = ctx.GetJsonSerializer()
+            let serializer = ctx.GetJsonSerializer ()
 
             let listView = records
                             |> List.sortByDescending (fun r -> Option.defaultValue DateTime.UtcNow r.Date)

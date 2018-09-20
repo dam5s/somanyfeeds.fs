@@ -69,7 +69,7 @@ module App =
 
 
 let errorHandler (ex : Exception) (logger : ILogger) : HttpHandler =
-    logger.LogError(EventId(), ex, "An unhandled exception has occurred while executing the request.")
+    logger.LogError (EventId(), ex, "An unhandled exception has occurred while executing the request.")
     clearResponse >=> setStatusCode 500 >=> text ex.Message
 
 
@@ -85,7 +85,7 @@ let configureServices (services : IServiceCollection) =
 
     services
         .AddGiraffe()
-        .AddSingleton<IJsonSerializer>(NewtonsoftJsonSerializer(jsonSettings))
+        .AddSingleton<IJsonSerializer>(NewtonsoftJsonSerializer jsonSettings)
         |> ignore
 
 
@@ -101,8 +101,8 @@ let configureLogging (builder : ILoggingBuilder) =
 
 [<EntryPoint>]
 let main _ =
-    let contentRoot = Directory.GetCurrentDirectory()
-    let webRoot     = Path.Combine(contentRoot, "WebRoot")
+    let contentRoot = Directory.GetCurrentDirectory ()
+    let webRoot     = Path.Combine (contentRoot, "WebRoot")
 
     Async.Start App.backgroundProcessing
 

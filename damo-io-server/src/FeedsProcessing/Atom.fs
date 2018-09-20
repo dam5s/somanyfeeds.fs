@@ -13,11 +13,11 @@ type private AtomProvider = XmlProvider<"../damo-io-server/resources/github.atom
 
 let private parse (xml : string) : Result<AtomProvider.Feed, string> =
     try
-        Ok <| AtomProvider.Parse(xml)
+        Ok <| AtomProvider.Parse xml
     with
     | ex ->
-        printfn "Could not parse Atom\n\n%s\n\nGot exception %s" xml (ex.ToString())
-        Error <| String.Format("Could not parse Atom")
+        printfn "Could not parse Atom\n\n%s\n\nGot exception %s" xml (ex.ToString ())
+        Error "Could not parse Atom"
 
 
 let private entryToRecord (source : SourceType) (entry : AtomProvider.Entry) : Record =

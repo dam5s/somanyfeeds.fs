@@ -22,10 +22,10 @@ type private Tweet =
 
 let private parseDate (dateValue : string) : DateTime option =
     try
-        Some <| DateTime.ParseExact(dateValue, "ddd MMM dd HH:mm:ss zzz yyyy", CultureInfo.InvariantCulture)
+        Some <| DateTime.ParseExact (dateValue, "ddd MMM dd HH:mm:ss zzz yyyy", CultureInfo.InvariantCulture)
     with
     | ex ->
-        printfn "There was an error parsing the date. %s" (ex.ToString())
+        printfn "There was an error parsing the date. %s" (ex.ToString ())
         None
 
 
@@ -49,19 +49,20 @@ let private mapTweet (json : TwitterTimelineProvider.Root) : Tweet =
 
 let private parseTweets (downloaded : DownloadedFeed) : Result<Tweet list, string> =
     try
-        TwitterTimelineProvider.Parse(downloadedString downloaded)
+        downloadedString downloaded
+            |> TwitterTimelineProvider.Parse
             |> Array.toList
             |> List.map mapTweet
             |> Ok
     with
     | ex ->
-        printfn "Could not parse tweets json\n\n%s\n\nGot exception %s" (downloadedString downloaded) (ex.ToString())
-        Error <| String.Format("Could not parse tweets json")
+        printfn "Could not parse tweets json\n\n%s\n\nGot exception %s" (downloadedString downloaded) (ex.ToString ())
+        Error "Could not parse tweets json"
 
 
 let private tweetToArticle (handle : TwitterHandle) (tweet : Tweet) : Record =
     { Title = None
-      Link = Some <| String.Format("https://twitter.com/{0}", twitterHandleValue handle)
+      Link = Some <| String.Format ("https://twitter.com/{0}", twitterHandleValue handle)
       Content = tweet.Text
       Date = tweet.CreatedAt
       Source = Social

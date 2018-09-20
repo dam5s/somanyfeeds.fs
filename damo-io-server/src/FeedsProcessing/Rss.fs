@@ -13,10 +13,10 @@ type private RssProvider = XmlProvider<"../damo-io-server/resources/medium.rss.x
 
 let private parse (xml : string) : Result<RssProvider.Rss, string> =
     try
-        Ok <| RssProvider.Parse(xml)
+        Ok <| RssProvider.Parse xml
     with
     | ex ->
-        printfn "Could not parse RSS\n\n%s\n\nGot exception %s" xml (ex.ToString())
+        printfn "Could not parse RSS\n\n%s\n\nGot exception %s" xml (ex.ToString ())
         Error "Could not parse RSS"
 
 
