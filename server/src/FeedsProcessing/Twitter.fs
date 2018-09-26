@@ -14,9 +14,9 @@ open System.Globalization
 
 type private Tweet =
     { Text : string
-    ; CreatedAt : DateTime option
-    ; IsRetweet : bool
-    ; IsReply : bool
+      CreatedAt : DateTime option
+      IsRetweet : bool
+      IsReply : bool
     }
 
 
@@ -61,10 +61,10 @@ let private parseTweets (downloaded : DownloadedFeed) : Result<Tweet list, strin
 
 let private tweetToArticle (handle : TwitterHandle) (tweet : Tweet) : Record =
     { Title = None
-    ; Link = Some <| String.Format("https://twitter.com/{0}", twitterHandleValue handle)
-    ; Content = tweet.Text
-    ; Date = tweet.CreatedAt
-    ; Source = Social
+      Link = Some <| String.Format("https://twitter.com/{0}", twitterHandleValue handle)
+      Content = tweet.Text
+      Date = tweet.CreatedAt
+      Source = Social
     }
 
 

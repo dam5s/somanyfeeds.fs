@@ -6,10 +6,10 @@ open Server.SourceType
 
 type Record =
     { Title : string option
-    ; Link : string option
-    ; Content : string
-    ; Date : DateTime option
-    ; Source : SourceType
+      Link : string option
+      Content : string
+      Date : DateTime option
+      Source : SourceType
     }
 
 
