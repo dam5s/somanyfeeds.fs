@@ -1,34 +1,29 @@
 module SoManyFeeds.DateFormat exposing (parseAndFormat)
 
-import Date
+import DateFormat exposing (..)
+import Time
 
 
-parseAndFormat : String -> String
-parseAndFormat zuluTime =
-    case Date.fromString zuluTime of
-        Ok date ->
-            format date
+parseAndFormat : Maybe Time.Zone -> Time.Posix -> String
+parseAndFormat maybeTimeZone posix =
+    case maybeTimeZone of
+        Just timeZone ->
+            format timeZone posix
 
-        Err message ->
-            zuluTime
-
-
-format : Date.Date -> String
-format date =
-    toString (Date.month date)
-        ++ " "
-        ++ toString (Date.day date)
-        ++ " "
-        ++ toString (Date.year date)
-        ++ " @ "
-        ++ toString (Date.hour date)
-        ++ ":"
-        ++ withZeroPadding (toString (Date.minute date))
+        Nothing ->
+            ""
 
 
-withZeroPadding : String -> String
-withZeroPadding text =
-    if String.length text > 1 then
-        text
-    else
-        "0" ++ text
+format : Time.Zone -> Time.Posix -> String
+format =
+    DateFormat.format
+        [ monthNameFull
+        , text " "
+        , dayOfMonthSuffix
+        , text " '"
+        , yearNumberLastTwo
+        , text " @ "
+        , hourMilitaryNumber
+        , text ":"
+        , minuteFixed
+        ]

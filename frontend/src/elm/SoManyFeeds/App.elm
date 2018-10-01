@@ -1,17 +1,23 @@
-module SoManyFeeds.App exposing (..)
+module SoManyFeeds.App exposing (Flags, Model, Msg(..), articlesToDisplay, init, main, sourceToggleHref, sourceView, update, view)
 
+import Browser
+import Browser.Navigation as Navigation
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Navigation
 import SoManyFeeds.Article as Article exposing (Article)
 import SoManyFeeds.Logo as Logo
 import SoManyFeeds.Route as Route exposing (Route(..))
 import SoManyFeeds.Source as Source exposing (Source)
+import Task
+import Time
+import Url
 
 
 type alias Model =
-    { route : Route
+    { navigationKey : Navigation.Key
+    , route : Route
     , articles : List Article
+    , timeZone : Maybe Time.Zone
     }
 
 
@@ -20,21 +26,27 @@ type alias Flags =
     }
 
 
-init : Flags -> Navigation.Location -> ( Model, Cmd Msg )
-init flags location =
-    { route = Route.fromLocation location
-    , articles = [ Article.about ] ++ List.map Article.fromJson flags.articles
-    }
-        ! []
+init : Flags -> Url.Url -> Navigation.Key -> ( Model, Cmd Msg )
+init flags url navigationKey =
+    ( { navigationKey = navigationKey
+      , route = Route.fromUrl url
+      , articles = [ Article.about ] ++ List.map Article.fromJson flags.articles
+      , timeZone = Nothing
+      }
+    , Task.perform UpdateTimeZone Time.here
+    )
 
 
 type Msg
-    = UrlChange Navigation.Location
+    = OnUrlRequest Browser.UrlRequest
+    | OnUrlChange Url.Url
+    | UpdateTimeZone Time.Zone
 
 
-view : Model -> Html Msg
+view : Model -> Browser.Document Msg
 view model =
-    div []
+    { title = "damo.io - Damien Le Berrigaud's Feed Aggregator"
+    , body =
         [ header [ id "app-header" ]
             [ section [ class "content" ]
                 [ Logo.view
@@ -44,8 +56,9 @@ view model =
             ]
         , Logo.view
         , section [ id "app-content", class "content" ] <|
-            List.map Article.view (articlesToDisplay model)
+            List.map (Article.view model.timeZone) (articlesToDisplay model)
         ]
+    }
 
 
 articlesToDisplay : Model -> List Article
@@ -56,6 +69,7 @@ articlesToDisplay model =
     in
     if List.isEmpty sources then
         [ Article.default ]
+
     else
         model.articles
             |> List.filter (\a -> List.member a.source sources)
@@ -70,6 +84,7 @@ sourceView model source =
         selectedClass =
             if List.member source selectedSources then
                 "selected"
+
             else
                 ""
     in
@@ -89,10 +104,13 @@ sourceToggleHref selectedSources source =
                         if s == source then
                             if List.member s selectedSources then
                                 Nothing
+
                             else
                                 Just <| Source.toString s
+
                         else if List.member s selectedSources then
                             Just <| Source.toString s
+
                         else
                             Nothing
                     )
@@ -103,15 +121,32 @@ sourceToggleHref selectedSources source =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        UrlChange location ->
-            { model | route = Route.fromLocation location } ! []
+        OnUrlRequest urlRequest ->
+            case urlRequest of
+                Browser.Internal url ->
+                    ( model
+                    , Navigation.pushUrl model.navigationKey (Url.toString url)
+                    )
+
+                Browser.External url ->
+                    ( model
+                    , Navigation.load url
+                    )
+
+        OnUrlChange url ->
+            ( { model | route = Route.fromUrl url }, Cmd.none )
+
+        UpdateTimeZone timeZone ->
+            ( { model | timeZone = Just timeZone }, Cmd.none )
 
 
 main : Program Flags Model Msg
 main =
-    Navigation.programWithFlags UrlChange
+    Browser.application
         { init = init
         , view = view
         , update = update
         , subscriptions = \_ -> Sub.none
+        , onUrlRequest = OnUrlRequest
+        , onUrlChange = OnUrlChange
         }

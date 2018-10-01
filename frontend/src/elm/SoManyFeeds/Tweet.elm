@@ -1,20 +1,17 @@
 module SoManyFeeds.Tweet exposing (display)
 
-import Html exposing (Attribute, Html, section)
+import Html exposing (Attribute, Html, section, text)
 import Html.Attributes exposing (class)
-import Json.Encode as Encode
+import Json.Encode
+import Markdown
 import Regex
+import SoManyFeeds.RawHtml as RawHtml
 import VirtualDom
 
 
 display : String -> Html msg
 display content =
-    section [ innerHtml <| createLinks content ] []
-
-
-innerHtml : String -> Attribute msg
-innerHtml =
-    VirtualDom.property "innerHTML" << Encode.string
+    section [] [ RawHtml.fromString <| createLinks content ]
 
 
 createLinks : String -> String
@@ -22,25 +19,25 @@ createLinks =
     createMentionLinks << createSimpleLinks << createHashTagLinks
 
 
-replaceAll =
-    Regex.replace Regex.All
+buildRegex =
+    Regex.fromString >> Maybe.withDefault Regex.never
 
 
 createMentionLinks =
-    replaceAll
-        (Regex.regex "(^|\\s)@([A-Za-z_]+[A-Za-z0-9_]+)")
+    Regex.replace
+        (buildRegex "(^|\\s)@([A-Za-z_]+[A-Za-z0-9_]+)")
         (replaceLink (\s -> "<a href=\"https://twitter.com/" ++ s ++ "\">@" ++ s ++ "</a>"))
 
 
 createSimpleLinks =
-    replaceAll
-        (Regex.regex "(^|\\s)(https?://[^\\s]+)")
+    Regex.replace
+        (buildRegex "(^|\\s)(https?://[^\\s]+)")
         (replaceLink (\s -> "<a href=\"" ++ s ++ "\">" ++ s ++ "</a>"))
 
 
 createHashTagLinks =
-    replaceAll
-        (Regex.regex "(^|\\s)#([A-Za-z_]+[A-Za-z0-9_]+)")
+    Regex.replace
+        (buildRegex "(^|\\s)#([A-Za-z_]+[A-Za-z0-9_]+)")
         (replaceLink (\s -> "<a href=\"https://twitter.com/hashtag/" ++ s ++ "\">#" ++ s ++ "</a>"))
 
 

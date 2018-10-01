@@ -1,8 +1,8 @@
-module SoManyFeeds.Route exposing (Route(..), fromLocation, sources)
+module SoManyFeeds.Route exposing (Route(..), fromUrl, sources)
 
-import Navigation
 import SoManyFeeds.Source as Source exposing (Source)
-import UrlParser exposing (..)
+import Url
+import Url.Parser exposing (..)
 
 
 type Route
@@ -17,19 +17,11 @@ sources route =
         NoSourcesSelectedRoute ->
             []
 
-        SelectedSourcesRoute sources ->
-            sources
+        SelectedSourcesRoute s ->
+            s
 
         NotFoundRoute ->
             []
-
-
-matchers : Parser (Route -> a) a
-matchers =
-    oneOf
-        [ map NoSourcesSelectedRoute (s "")
-        , map (SelectedSourcesRoute << extractSources) string
-        ]
 
 
 extractSources : String -> List Source
@@ -37,6 +29,17 @@ extractSources hash =
     String.split "," hash |> List.map Source.fromString
 
 
-fromLocation : Navigation.Location -> Route
-fromLocation location =
-    parseHash matchers location |> Maybe.withDefault NotFoundRoute
+fromUrl : Url.Url -> Route
+fromUrl url =
+    let
+        selectedSources =
+            url.fragment
+                |> Maybe.withDefault ""
+                |> extractSources
+    in
+    case selectedSources of
+        [] ->
+            NoSourcesSelectedRoute
+
+        s ->
+            SelectedSourcesRoute s

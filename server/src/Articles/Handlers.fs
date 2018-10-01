@@ -11,10 +11,10 @@ open Server.SourceType
 
 type ViewModel =
     { title : string option
-    ; link : string option
-    ; content : string
-    ; date : string option
-    ; source : string
+      link : string option
+      content : string
+      date : int option
+      source : string
     }
 
 
@@ -23,13 +23,14 @@ module private Views =
         [ script [ _src "/app.js" ] []
           script []
             [ rawText "if (!window.location.hash) { window.location.hash = '#About,Social,Blog'; }"
-              rawText ("Elm.SoManyFeeds.App.fullscreen({\"articles\":" + articlesJson + "});")
+              rawText ("Elm.SoManyFeeds.App.init({flags: {articles: " + articlesJson + "}});")
             ]
         ]
 
 
 let private present (record : Record) : ViewModel =
-    let dateMap (s : DateTime) = s.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'")
+    let epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+    let dateMap (s : DateTime) = int <| Math.Floor (s.Subtract(epoch).TotalMilliseconds)
     let source =
         match record.Source with
         | About -> "About"
@@ -38,10 +39,10 @@ let private present (record : Record) : ViewModel =
         | Blog -> "Blog"
 
     { title = record.Title
-    ; link = record.Link
-    ; content = record.Content
-    ; date = Option.map dateMap record.Date
-    ; source = source
+      link = record.Link
+      content = record.Content
+      date = Option.map dateMap record.Date
+      source = source
     }
 
 

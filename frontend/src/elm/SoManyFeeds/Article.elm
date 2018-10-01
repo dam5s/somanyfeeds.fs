@@ -5,8 +5,10 @@ import Html.Attributes exposing (class, href)
 import Json.Encode
 import Regex
 import SoManyFeeds.DateFormat as DateFormat
+import SoManyFeeds.RawHtml as RawHtml
 import SoManyFeeds.Source as Source exposing (Source(..))
 import SoManyFeeds.Tweet as Tweet
+import Time
 import VirtualDom
 
 
@@ -14,7 +16,7 @@ type alias Json =
     { title : Maybe String
     , link : Maybe String
     , content : String
-    , date : Maybe String
+    , date : Maybe Int
     , source : String
     }
 
@@ -23,7 +25,7 @@ type alias Article =
     { title : Maybe String
     , link : Maybe String
     , content : String
-    , date : Maybe String
+    , date : Maybe Time.Posix
     , source : Source
     }
 
@@ -33,40 +35,40 @@ fromJson json =
     { title = json.title
     , link = json.link
     , content = json.content
-    , date = json.date
+    , date = json.date |> Maybe.map Time.millisToPosix
     , source = Source.fromString json.source
     }
 
 
-view : Article -> Html msg
-view article =
+view : Maybe Time.Zone -> Article -> Html msg
+view timeZone article =
     case article.title of
         Just t ->
             Html.article []
-                [ articleHeader article
-                , section [ innerHtml article.content ] []
+                [ articleHeader timeZone article
+                , section [] [ RawHtml.fromString article.content ]
                 ]
 
         Nothing ->
             Html.article [ class "tweet" ]
-                [ articleHeader article
+                [ articleHeader timeZone article
                 , Tweet.display article.content
                 ]
 
 
-articleHeader : Article -> Html msg
-articleHeader article =
+articleHeader : Maybe Time.Zone -> Article -> Html msg
+articleHeader timeZone article =
     header []
         (compact
             [ Maybe.map (articleTitle article) article.title
-            , Maybe.map articleDate article.date
+            , Maybe.map (articleDate timeZone) article.date
             ]
         )
 
 
-articleDate : String -> Html msg
-articleDate date =
-    h2 [ class "date" ] [ text (DateFormat.parseAndFormat date) ]
+articleDate : Maybe Time.Zone -> Time.Posix -> Html msg
+articleDate timeZone date =
+    h2 [ class "date" ] [ text (DateFormat.parseAndFormat timeZone date) ]
 
 
 articleTitle : Article -> String -> Html msg
@@ -85,19 +87,14 @@ titleText : String -> String
 titleText title =
     let
         regex =
-            Regex.regex "\\shttp(s?)://[^\\s]*"
+            Regex.fromString "\\shttp(s?)://[^\\s]*" |> Maybe.withDefault Regex.never
     in
-    Regex.replace Regex.All regex (\_ -> "") title
+    Regex.replace regex (\_ -> "") title
 
 
 compact : List (Maybe a) -> List a
 compact list =
     List.filterMap identity list
-
-
-innerHtml : String -> Attribute msg
-innerHtml =
-    VirtualDom.property "innerHTML" << Json.Encode.string
 
 
 default : Article

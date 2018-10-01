@@ -62,9 +62,9 @@ let private buildScss _ =
 
 let private buildElm _ =
     let args =
-        { Program = "elm-make"
+        { Program = "elm"
           WorkingDir = "frontend/src/elm"
-          CommandLine = "SoManyFeeds/App.elm --output ../../../server/WebRoot/app.js --yes"
+          CommandLine = "make --optimize --output ../../../server/WebRoot/app.js SoManyFeeds/App.elm"
           Args = []
         }
     Process.shellExec args |> ensureSuccessExitCode
