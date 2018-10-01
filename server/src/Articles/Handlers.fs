@@ -13,7 +13,7 @@ type ViewModel =
     { title : string option
       link : string option
       content : string
-      date : int option
+      date : int64 option
       source : string
     }
 
@@ -28,9 +28,11 @@ module private Views =
         ]
 
 
+let private epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+
+
 let private present (record : Record) : ViewModel =
-    let epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
-    let dateMap (s : DateTime) = int <| Math.Floor (s.Subtract(epoch).TotalMilliseconds)
+    let dateMap (d : DateTime) = int64 (d - epoch).TotalMilliseconds
     let source =
         match record.Source with
         | About -> "About"
