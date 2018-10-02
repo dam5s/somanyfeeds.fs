@@ -3,7 +3,6 @@ module SoManyFeeds.Tweet exposing (display)
 import Html exposing (Attribute, Html, section, text)
 import Html.Attributes exposing (class)
 import Json.Encode
-import Markdown
 import Regex
 import SoManyFeeds.RawHtml as RawHtml
 import VirtualDom
