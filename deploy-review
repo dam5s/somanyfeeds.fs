@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+set -e
+cf push somanyfeeds-review -p server/bin/Release/netcoreapp2.1/publish
