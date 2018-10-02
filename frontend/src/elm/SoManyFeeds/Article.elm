@@ -46,7 +46,7 @@ view timeZone article =
         Just t ->
             Html.article []
                 [ articleHeader timeZone article
-                , section [] [ RawHtml.fromString article.content ]
+                , section [] <| RawHtml.fromString article.content
                 ]
 
         Nothing ->

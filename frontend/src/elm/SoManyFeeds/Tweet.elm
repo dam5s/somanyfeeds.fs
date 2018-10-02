@@ -10,7 +10,7 @@ import VirtualDom
 
 display : String -> Html msg
 display content =
-    section [] [ RawHtml.fromString <| createLinks content ]
+    section [] <| RawHtml.fromString (createLinks content)
 
 
 createLinks : String -> String

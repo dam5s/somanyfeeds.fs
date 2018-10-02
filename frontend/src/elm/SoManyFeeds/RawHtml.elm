@@ -6,16 +6,11 @@ import Html.Parser as Parser
 import VirtualDom
 
 
-fromString : String -> Html msg
+fromString : String -> List (Html msg)
 fromString rawString =
     Parser.run rawString
-        |> Result.map parsedNodesToHtml
-        |> Result.withDefault (Html.div [] [])
-
-
-parsedNodesToHtml : List Parser.Node -> Html msg
-parsedNodesToHtml =
-    List.map nodeToHtml >> Html.div []
+        |> Result.map (List.map nodeToHtml)
+        |> Result.withDefault []
 
 
 nodeToHtml : Parser.Node -> Html msg
