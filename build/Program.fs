@@ -41,7 +41,7 @@ let private cleanScss _ =
 
 
 let private cleanElm _ =
-    Directory.delete "frontend/src/elm/elm-stuff/build-artifacts/0.18.0/dam5s"
+    Directory.delete "frontend/src/elm/elm-stuff/0.19.0"
 
 
 let private clean _ =
