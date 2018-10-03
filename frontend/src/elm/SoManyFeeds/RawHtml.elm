@@ -17,7 +17,7 @@ nodeToHtml : Parser.Node -> Html msg
 nodeToHtml node =
     case node of
         Parser.Text text ->
-            Html.text text
+            Html.text (String.replace "&quot;" "\"" text)
 
         Parser.Element name attrs children ->
             VirtualDom.node name
