@@ -17,7 +17,7 @@ let private parse (xml : string) : Result<RssProvider.Rss, string> =
     with
     | ex ->
         printfn "Could not parse RSS\n\n%s\n\nGot exception %s" xml (ex.ToString())
-        Error <| String.Format("Could not parse RSS")
+        Error "Could not parse RSS"
 
 
 let private itemToRecord (source : SourceType) (item : RssProvider.Item) : Record =
@@ -36,4 +36,5 @@ let private rssToRecords (source : SourceType) (rss : RssProvider.Rss) : Record 
 
 
 let processRssFeed (source : SourceType) (downloaded : DownloadedFeed) : ProcessingResult =
-    parse (downloadedString downloaded) |> Result.map (rssToRecords source)
+    parse (downloadedString downloaded)
+        |> Result.map (rssToRecords source)
