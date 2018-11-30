@@ -1,4 +1,4 @@
-module SoManyFeeds.Source exposing (Source(..), all, fromString, toString)
+module DamoIO.Source exposing (Source(..), all, fromString, toString)
 
 
 type Source

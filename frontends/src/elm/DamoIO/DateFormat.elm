@@ -1,4 +1,4 @@
-module SoManyFeeds.DateFormat exposing (parseAndFormat)
+module DamoIO.DateFormat exposing (parseAndFormat)
 
 import DateFormat exposing (..)
 import Time

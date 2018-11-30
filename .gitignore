@@ -4,6 +4,6 @@ obj
 .idea
 .env
 .fake
-server/WebRoot
+damo-io-server/WebRoot
 elm-stuff
 *.DotSettings.user

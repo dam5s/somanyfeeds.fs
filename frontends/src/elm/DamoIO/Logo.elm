@@ -1,4 +1,4 @@
-module SoManyFeeds.Logo exposing (view)
+module DamoIO.Logo exposing (view)
 
 import Html exposing (Html)
 import Svg exposing (..)

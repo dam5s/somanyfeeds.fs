@@ -1,13 +1,13 @@
-module SoManyFeeds.App exposing (Flags, Model, Msg(..), articlesToDisplay, init, main, sourceToggleHref, sourceView, update, view)
+module DamoIO.App exposing (Flags, Model, Msg(..), articlesToDisplay, init, main, sourceToggleHref, sourceView, update, view)
 
 import Browser
 import Browser.Navigation as Navigation
+import DamoIO.Article as Article exposing (Article)
+import DamoIO.Logo as Logo
+import DamoIO.Route as Route exposing (Route(..))
+import DamoIO.Source as Source exposing (Source)
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import SoManyFeeds.Article as Article exposing (Article)
-import SoManyFeeds.Logo as Logo
-import SoManyFeeds.Route as Route exposing (Route(..))
-import SoManyFeeds.Source as Source exposing (Source)
 import Task
 import Time
 import Url

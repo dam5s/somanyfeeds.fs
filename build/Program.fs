@@ -37,18 +37,18 @@ let private generateCss (filePath : string) : string =
 
 
 let private cleanScss _ =
-    File.delete "server/WebRoot/app.css"
+    File.delete "damo-io-server/WebRoot/app.css"
 
 
 let private cleanElm _ =
-    Directory.delete "frontend/src/elm/elm-stuff/0.19.0"
+    Directory.delete "frontends/src/elm/elm-stuff/0.19.0"
 
 
 let private clean _ =
     cleanElm ()
     cleanScss ()
 
-    ["." ; "server" ; "server-tests" ; "frontend"]
+    ["." ; "damo-io-server" ; "damo-io-server-tests" ; "frontends"]
         |> List.map (fun p ->
             Path.Combine(p, "bin") |> Directory.delete
             Path.Combine(p, "obj") |> Directory.delete
@@ -57,21 +57,21 @@ let private clean _ =
 
 
 let private buildScss _ =
-    generateCss "frontend/src/scss/app.scss" |> writeToFile "server/WebRoot/app.css"
+    generateCss "frontends/src/scss/app.scss" |> writeToFile "damo-io-server/WebRoot/app.css"
 
 
 let private buildElm _ =
     let args =
         { Program = "elm"
-          WorkingDir = "frontend/src/elm"
-          CommandLine = "make --optimize --output ../../../server/WebRoot/app.js SoManyFeeds/App.elm"
+          WorkingDir = "frontends/src/elm"
+          CommandLine = "make --optimize --output ../../../damo-io-server/WebRoot/app.js DamoIO/App.elm"
           Args = []
         }
     Process.shellExec args |> ensureSuccessExitCode
 
 
 let private copyAssets _ =
-    Shell.copyDir "server/WebRoot" "frontend/src" (fun f ->
+    Shell.copyDir "damo-io-server/WebRoot" "frontends/src" (fun f ->
         not (f.Contains "elm")
             && not (f.Contains "scss")
             && not (f.EndsWith ".fs")
@@ -103,8 +103,8 @@ let main (args : string []) =
     Target.create "copyAssets" copyAssets
     Target.create "restore" <| dotnet "restore" ""
     Target.create "build" <| dotnet "build" ""
-    Target.create "test" <| dotnet "test" "server-tests"
-    Target.create "publish" <| dotnet "publish" "server -c Release"
+    Target.create "test" <| dotnet "test" "damo-io-server-tests"
+    Target.create "publish" <| dotnet "publish" "damo-io-server -c Release"
 
 
     "copyAssets" |> dependsOn [ "buildElm" ; "buildScss" ]

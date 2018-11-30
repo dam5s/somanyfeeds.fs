@@ -1,6 +1,6 @@
-module SoManyFeeds.Route exposing (Route(..), fromUrl, sources)
+module DamoIO.Route exposing (Route(..), fromUrl, sources)
 
-import SoManyFeeds.Source as Source exposing (Source)
+import DamoIO.Source as Source exposing (Source)
 import Url
 import Url.Parser exposing (..)
 

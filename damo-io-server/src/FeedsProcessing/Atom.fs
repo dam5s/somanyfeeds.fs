@@ -8,7 +8,7 @@ open Server.Articles.Data
 open Server.SourceType
 
 
-type private AtomProvider = XmlProvider<"../server/resources/github.atom.xml">
+type private AtomProvider = XmlProvider<"../damo-io-server/resources/github.atom.xml">
 
 
 let private parse (xml : string) : Result<AtomProvider.Feed, string> =

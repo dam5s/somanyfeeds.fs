@@ -1,10 +1,10 @@
-module SoManyFeeds.Tweet exposing (display)
+module DamoIO.Tweet exposing (display)
 
+import DamoIO.RawHtml as RawHtml
 import Html exposing (Attribute, Html, section, text)
 import Html.Attributes exposing (class)
 import Json.Encode
 import Regex
-import SoManyFeeds.RawHtml as RawHtml
 import VirtualDom
 
 

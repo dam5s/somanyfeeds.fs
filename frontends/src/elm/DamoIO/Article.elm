@@ -1,13 +1,13 @@
-module SoManyFeeds.Article exposing (Article, Json, about, default, fromJson, view)
+module DamoIO.Article exposing (Article, Json, about, default, fromJson, view)
 
+import DamoIO.DateFormat as DateFormat
+import DamoIO.RawHtml as RawHtml
+import DamoIO.Source as Source exposing (Source(..))
+import DamoIO.Tweet as Tweet
 import Html exposing (Attribute, Html, a, h1, h2, header, section, text)
 import Html.Attributes exposing (class, href)
 import Json.Encode
 import Regex
-import SoManyFeeds.DateFormat as DateFormat
-import SoManyFeeds.RawHtml as RawHtml
-import SoManyFeeds.Source as Source exposing (Source(..))
-import SoManyFeeds.Tweet as Tweet
 import Time
 import VirtualDom
 
