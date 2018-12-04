@@ -1,68 +1,51 @@
 module Server.Articles.Handlers
 
-open FSharp.Control.Tasks.V2.ContextInsensitive
-open Giraffe
-open GiraffeViewEngine
-open Microsoft.AspNetCore.Http
+open Suave
+open Suave.DotLiquid
+open Chiron
+open Chiron.Operators
 open System
 open Server.Articles.Data
 open Server.SourceType
 
 
-type ViewModel =
-    { title : string option
-      link : string option
-      content : string
-      date : int64 option
-      source : string
+let private epoch: DateTime =
+    new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+
+
+let private dateMap (d : DateTime): int64 =
+    int64 (d - epoch).TotalMilliseconds
+
+
+let private source (record : Record) : string =
+    match record.Source with
+    | About -> "About"
+    | Social -> "Social"
+    | Code -> "Code"
+    | Blog -> "Blog"
+
+
+let private toJson (record : Record): Json<unit> =
+    Json.write "title" record.Title
+    *> Json.write "link" record.Link
+    *> Json.write "content" record.Content
+    *> Json.write "date" (Option.map dateMap record.Date)
+    *> Json.write "source" (source record)
+
+
+type ArticlesListViewModel =
+    { ArticlesJson : string }
+
+
+let list (findAllRecords : unit -> Record list) (ctx : HttpContext): Async<HttpContext option> =
+    async {
+        let records = findAllRecords ()
+
+        let recordsJson = records
+                        |> List.sortByDescending (fun r -> Option.defaultValue DateTime.UtcNow r.Date)
+                        |> List.map (Json.serializeWith toJson)
+                        |> Json.Array
+                        |> Json.format
+
+        return! page "articles-list.html.liquid" { ArticlesJson = recordsJson } ctx
     }
-
-
-module private Views =
-    let listView (articlesJson: string) : XmlNode list =
-        [ script [ _src "/app.js" ] []
-          script []
-            [ rawText "if (!window.location.hash) { window.location.hash = '#About,Social,Blog'; }"
-              rawText ("Elm.SoManyFeeds.App.init({flags: {articles: " + articlesJson + "}});")
-            ]
-        ]
-
-
-let private epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
-
-
-let private present (record : Record) : ViewModel =
-    let dateMap (d : DateTime) = int64 (d - epoch).TotalMilliseconds
-    let source =
-        match record.Source with
-        | About -> "About"
-        | Social -> "Social"
-        | Code -> "Code"
-        | Blog -> "Blog"
-
-    { title = record.Title
-      link = record.Link
-      content = record.Content
-      date = Option.map dateMap record.Date
-      source = source
-    }
-
-
-let list
-    (layout : XmlNode list -> XmlNode)
-    (findAllRecords : unit -> Record list) =
-
-    fun (next : HttpFunc) (ctx : HttpContext) ->
-        task {
-            let records = findAllRecords ()
-            let serializer = ctx.GetJsonSerializer ()
-
-            let listView = records
-                            |> List.sortByDescending (fun r -> Option.defaultValue DateTime.UtcNow r.Date)
-                            |> List.map present
-                            |> serializer.SerializeToString
-                            |> Views.listView
-                            |> layout
-
-            return! htmlView listView next ctx
-        }

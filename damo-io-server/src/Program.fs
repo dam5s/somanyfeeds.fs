@@ -1,45 +1,23 @@
 module Server.Program
 
-open System
 open System.IO
-open System.Threading.Tasks
-open Microsoft.AspNetCore.Builder
-open Microsoft.AspNetCore.Hosting
-open Microsoft.AspNetCore.Http
-open Microsoft.Extensions.Logging
-open Microsoft.Extensions.DependencyInjection
-open FSharp.Control.AsyncSeqExtensions
-open Giraffe
 open FSharp.Control
+open FSharp.Control.AsyncSeqExtensions
+open FSharp.Data
+open Suave
+open Suave.Filters
+open Suave.Operators
+open Suave.RequestErrors
+open Suave.DotLiquid
 open Server.Articles.Data
-open Giraffe.Serialization.Json
-open Newtonsoft.Json
-
-
-module Views =
-    open GiraffeViewEngine
-
-    let layout (content : XmlNode list) =
-        html [] [
-            head [] [
-                meta [ _charset "utf-8" ]
-                meta [ _name "viewport" ; _content "width=device-width" ]
-                link [ _rel  "stylesheet" ; _type "text/css" ; _href "/app.css" ]
-                title [] [ rawText "damo.io - Damien Le Berrigaud's feed aggregator." ]
-            ]
-            body [] content
-        ]
+open Server.SslHandler
 
 
 module App =
-    open FSharp.Data
-    open Microsoft.AspNetCore.Http.Extensions
-    open server
-
     let private updatesSequence : AsyncSeq<Record list> =
-        let tenMinutes = 10 * 1000 * 60
-
         asyncSeq {
+            let tenMinutes = 10 * 1000 * 60
+
             while true do
                 yield FeedsProcessor.processFeeds (Feeds.Repository.findAll ())
                 do! Async.Sleep tenMinutes
@@ -47,74 +25,38 @@ module App =
 
 
     let backgroundProcessing =
-        updatesSequence
-            |> AsyncSeq.iter Articles.Data.Repository.updateAll
+        AsyncSeq.iter
+            Articles.Data.Repository.updateAll
+            updatesSequence
 
 
-    let private articlesListHandler =
-        Articles.Handlers.list
-            Views.layout
-            Articles.Data.Repository.findAll
+    let private articlesList =
+        Articles.Handlers.list Articles.Data.Repository.findAll
 
 
-    let handler : HttpHandler =
+    let handler =
         choose [
-            SslHandler.enforceSsl
-            route "/" >=>
-                choose [
-                    GET >=> articlesListHandler
-                ]
-            setStatusCode 404 >=> text "Not Found"
+            enforceSsl
+
+            path "/" >=> GET >=> articlesList
+
+            GET >=> Files.browseHome
+            NOT_FOUND "not found"
         ]
-
-
-let errorHandler (ex : Exception) (logger : ILogger) : HttpHandler =
-    logger.LogError (EventId(), ex, "An unhandled exception has occurred while executing the request.")
-    clearResponse >=> setStatusCode 500 >=> text ex.Message
-
-
-let configureApp (app : IApplicationBuilder) =
-    app.UseGiraffeErrorHandler(errorHandler)
-       .UseStaticFiles()
-       .UseGiraffe(App.handler)
-
-
-let configureServices (services : IServiceCollection) =
-    let jsonSettings = new JsonSerializerSettings()
-    jsonSettings.Converters.Add (new Json.OptionConverter())
-
-    services
-        .AddGiraffe()
-        .AddSingleton<IJsonSerializer>(NewtonsoftJsonSerializer jsonSettings)
-        |> ignore
-
-
-let configureLogging (builder : ILoggingBuilder) =
-    let filter (l : LogLevel) = l.Equals LogLevel.Warning
-
-    builder
-        .AddFilter(filter)
-        .AddConsole()
-        .AddDebug()
-        |> ignore
 
 
 [<EntryPoint>]
 let main _ =
-    let contentRoot = Directory.GetCurrentDirectory ()
-    let webRoot     = Path.Combine (contentRoot, "WebRoot")
-
     Async.Start App.backgroundProcessing
 
-    WebHostBuilder()
-        .UseKestrel()
-        .UseContentRoot(contentRoot)
-        .UseIISIntegration()
-        .UseWebRoot(webRoot)
-        .Configure(Action<IApplicationBuilder> configureApp)
-        .ConfigureServices(configureServices)
-        .ConfigureLogging(configureLogging)
-        .Build()
-        .Run()
+    let contentRoot = Directory.GetCurrentDirectory ()
+
+    let templatesFolder = Path.Combine (contentRoot, "templates")
+    setTemplatesDir templatesFolder
+    setCSharpNamingConvention ()
+
+    let publicFolder = Path.Combine (contentRoot, "public")
+    let config = { defaultConfig with homeFolder = Some publicFolder }
+    startWebServer config App.handler
 
     0

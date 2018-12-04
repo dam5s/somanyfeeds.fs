@@ -37,7 +37,7 @@ let private generateCss (filePath : string) : string =
 
 
 let private cleanScss _ =
-    File.delete "damo-io-server/WebRoot/app.css"
+    File.delete "damo-io-server/public/app.css"
 
 
 let private cleanElm _ =
@@ -57,21 +57,21 @@ let private clean _ =
 
 
 let private buildScss _ =
-    generateCss "frontends/src/scss/app.scss" |> writeToFile "damo-io-server/WebRoot/app.css"
+    generateCss "frontends/src/scss/app.scss" |> writeToFile "damo-io-server/public/app.css"
 
 
 let private buildElm _ =
     let args =
         { Program = "elm"
           WorkingDir = "frontends/src/elm"
-          CommandLine = "make --optimize --output ../../../damo-io-server/WebRoot/app.js DamoIO/App.elm"
+          CommandLine = "make --optimize --output ../../../damo-io-server/public/app.js DamoIO/App.elm"
           Args = []
         }
     Process.shellExec args |> ensureSuccessExitCode
 
 
 let private copyAssets _ =
-    Shell.copyDir "damo-io-server/WebRoot" "frontends/src" (fun f ->
+    Shell.copyDir "damo-io-server/public" "frontends/src" (fun f ->
         not (f.Contains "elm")
             && not (f.Contains "scss")
             && not (f.EndsWith ".fs")

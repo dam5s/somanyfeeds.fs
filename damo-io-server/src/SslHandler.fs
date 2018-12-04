@@ -1,24 +1,30 @@
-module server.SslHandler
+module Server.SslHandler
 
-open System.Threading.Tasks
-open Microsoft.AspNetCore.Http
-open Microsoft.AspNetCore.Http.Extensions
-open Giraffe
-
-
-let private getUrlAsHttps (request: HttpRequest) : string =
-    UriHelper.GetEncodedUrl(request).Replace("http://", "https://")
+open Suave
+open Suave.Redirection
+open Suave.Filters
+open Suave.Operators
 
 
-let private shouldRedirectToHttps (ctx : HttpContext) : bool =
-    ctx.TryGetRequestHeader "X-Forwarded-Proto"
-        |> Option.map (fun s -> s.ToUpper ())
-        |> function
-            | Some "HTTP" -> true
-            | _ -> false
+let private httpsUrlOf (request: HttpRequest) : string =
+    request.url.ToString().Replace("http://", "https://")
 
 
-let enforceSsl (next: HttpFunc) (ctx: HttpContext) : HttpFuncResult =
-    if shouldRedirectToHttps ctx
-    then (getUrlAsHttps ctx.Request |> redirectTo false) next ctx
-    else Task.FromResult None
+let private requiresHttps : WebPart =
+    fun ctx ->
+        ctx.request.header "X-Forwarded-Proto"
+            |> Option.ofChoice
+            |> Option.map (fun s -> s.ToUpper ())
+            |> function
+                | Some "HTTP" -> Some ctx
+                | _ -> None
+            |> async.Return
+
+
+let private redirectToHttps : WebPart =
+    fun ctx ->
+        redirect (httpsUrlOf ctx.request) ctx
+
+
+let enforceSsl : WebPart =
+    requiresHttps >=> redirectToHttps
