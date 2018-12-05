@@ -1,5 +1,6 @@
 module Server.Program
 
+open System
 open System.IO
 open FSharp.Control
 open FSharp.Control.AsyncSeqExtensions
@@ -45,18 +46,32 @@ module App =
         ]
 
 
+let private portFromEnv: int =
+    try
+        let envValue = Environment.GetEnvironmentVariable "PORT"
+        int envValue
+    with
+    | _ ->
+        8080
+
+
 [<EntryPoint>]
 let main _ =
     Async.Start App.backgroundProcessing
 
     let contentRoot = Directory.GetCurrentDirectory ()
+    let templatesFolder = Path.Combine (contentRoot, "resources/templates")
+    let publicFolder = Path.Combine (contentRoot, "resources/public")
 
-    let templatesFolder = Path.Combine (contentRoot, "templates")
     setTemplatesDir templatesFolder
     setCSharpNamingConvention ()
 
-    let publicFolder = Path.Combine (contentRoot, "public")
-    let config = { defaultConfig with homeFolder = Some publicFolder }
-    startWebServer config App.handler
+    let binding = Http.HttpBinding.createSimple HTTP "0.0.0.0" portFromEnv
+    let config =
+        { defaultConfig with
+            homeFolder = Some publicFolder
+            bindings = [ binding ]
+        }
 
+    startWebServer config App.handler
     0

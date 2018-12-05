@@ -12,7 +12,7 @@ module ``Atom Processor Tests``
 
     [<Test>]
     let ``processFeed with standard github xml`` () =
-        let downloaded = DownloadedFeed <| File.ReadAllText("../../../../damo-io-server/resources/github.atom.xml")
+        let downloaded = DownloadedFeed <| File.ReadAllText("../../../../damo-io-server/resources/samples/github.atom.sample")
 
 
         let result = processAtomFeed Code downloaded

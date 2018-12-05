@@ -13,7 +13,7 @@ module ``Twitter Processor Tests``
 
     [<Test>]
     let ``processFeed twitter timeline`` () =
-        let downloadedFeed = DownloadedFeed <| File.ReadAllText("../../../../damo-io-server/resources/twitter.timeline.json")
+        let downloadedFeed = DownloadedFeed <| File.ReadAllText("../../../../damo-io-server/resources/samples/twitter.timeline.sample")
 
 
         let result = processTweets (TwitterHandle "its_damo") downloadedFeed

@@ -1,5 +1,6 @@
 module Server.SslHandler
 
+open System
 open Suave
 open Suave.Redirection
 open Suave.Filters
@@ -7,7 +8,11 @@ open Suave.Operators
 
 
 let private httpsUrlOf (request: HttpRequest) : string =
-    request.url.ToString().Replace("http://", "https://")
+    let builder = new UriBuilder ()
+    builder.Scheme <- "https"
+    builder.Host <- request.host
+    builder.Path <- request.path
+    builder.Uri.ToString ()
 
 
 let private requiresHttps : WebPart =

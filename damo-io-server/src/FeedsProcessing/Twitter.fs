@@ -29,7 +29,7 @@ let private parseDate (dateValue : string) : DateTime option =
         None
 
 
-type TwitterTimelineProvider = JsonProvider<"../damo-io-server/resources/twitter.timeline.json">
+type TwitterTimelineProvider = JsonProvider<"../damo-io-server/resources/samples/twitter.timeline.sample">
 
 
 let private mapTweet (json : TwitterTimelineProvider.Root) : Tweet =

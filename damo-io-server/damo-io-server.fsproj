@@ -34,7 +34,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="templates/**/*" />
-    <Content Include="public/**/*" CopyToOutputDirectory="PreserveNewest" />
+    <Resources Include="resources/**" />
   </ItemGroup>
+
+  <Target Name="CopyResources" AfterTargets="Publish">
+    <Copy SourceFiles="@(Resources)"
+          DestinationFiles="@(Resources->'$(PublishDir)/resources/%(RecursiveDir)%(Filename)%(Extension)')"
+    />
+  </Target>
 </Project>

@@ -8,7 +8,7 @@ open Server.Articles.Data
 open Server.SourceType
 
 
-type private RssProvider = XmlProvider<"../damo-io-server/resources/medium.rss.xml">
+type private RssProvider = XmlProvider<"../damo-io-server/resources/samples/medium.rss.sample">
 
 
 let private parse (xml : string) : Result<RssProvider.Rss, string> =
