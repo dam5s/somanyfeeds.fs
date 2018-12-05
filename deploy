@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 
 set -e
-cf push somanyfeeds -p damo-io-server/bin/Release/netcoreapp2.1/publish
+cf push damo-io -p damo-io-server/bin/Release/netcoreapp2.1/publish
