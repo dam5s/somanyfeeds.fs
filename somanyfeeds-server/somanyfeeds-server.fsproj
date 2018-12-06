@@ -13,6 +13,7 @@
     <PackageReference Include="Suave.DotLiquid" Version="2.5.3" />
     <PackageReference Include="Chiron" Version="6.3.1" />
 
+    <Compile Include="SoManyFeedsServer/Authentication.fs" />
     <Compile Include="SoManyFeedsServer/App.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
