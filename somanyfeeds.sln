@@ -1,6 +1,6 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-#
+# 
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "damo-io-server", "damo-io-server\damo-io-server.fsproj", "{A7157346-F377-4B8A-8CF2-1DB962115171}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "damo-io-server-tests", "damo-io-server-tests\damo-io-server-tests.fsproj", "{55BB409D-D281-4C3A-A108-5D4517F2E894}"
@@ -8,6 +8,10 @@ EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "frontends", "frontends\frontends.fsproj", "{3FFF4355-EB86-42A6-9E8E-0EAB5D20615D}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "build", "build\build.fsproj", "{48AB536C-C4D7-4A79-88CD-92DB6CCB3A95}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "somanyfeeds-server", "somanyfeeds-server\somanyfeeds-server.fsproj", "{19E9DC98-AFCE-43CA-8DF2-B0512EB5B3CA}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "somanyfeeds-server-tests", "somanyfeeds-server-tests\somanyfeeds-server-tests.fsproj", "{E437D872-2D9A-4752-9A38-B52078E6D3A5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,5 +71,29 @@ Global
 		{48AB536C-C4D7-4A79-88CD-92DB6CCB3A95}.Release|x64.Build.0 = Release|x64
 		{48AB536C-C4D7-4A79-88CD-92DB6CCB3A95}.Release|x86.ActiveCfg = Release|x86
 		{48AB536C-C4D7-4A79-88CD-92DB6CCB3A95}.Release|x86.Build.0 = Release|x86
+		{19E9DC98-AFCE-43CA-8DF2-B0512EB5B3CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19E9DC98-AFCE-43CA-8DF2-B0512EB5B3CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19E9DC98-AFCE-43CA-8DF2-B0512EB5B3CA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{19E9DC98-AFCE-43CA-8DF2-B0512EB5B3CA}.Debug|x64.Build.0 = Debug|Any CPU
+		{19E9DC98-AFCE-43CA-8DF2-B0512EB5B3CA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{19E9DC98-AFCE-43CA-8DF2-B0512EB5B3CA}.Debug|x86.Build.0 = Debug|Any CPU
+		{19E9DC98-AFCE-43CA-8DF2-B0512EB5B3CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19E9DC98-AFCE-43CA-8DF2-B0512EB5B3CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19E9DC98-AFCE-43CA-8DF2-B0512EB5B3CA}.Release|x64.ActiveCfg = Release|Any CPU
+		{19E9DC98-AFCE-43CA-8DF2-B0512EB5B3CA}.Release|x64.Build.0 = Release|Any CPU
+		{19E9DC98-AFCE-43CA-8DF2-B0512EB5B3CA}.Release|x86.ActiveCfg = Release|Any CPU
+		{19E9DC98-AFCE-43CA-8DF2-B0512EB5B3CA}.Release|x86.Build.0 = Release|Any CPU
+		{E437D872-2D9A-4752-9A38-B52078E6D3A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E437D872-2D9A-4752-9A38-B52078E6D3A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E437D872-2D9A-4752-9A38-B52078E6D3A5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E437D872-2D9A-4752-9A38-B52078E6D3A5}.Debug|x64.Build.0 = Debug|Any CPU
+		{E437D872-2D9A-4752-9A38-B52078E6D3A5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E437D872-2D9A-4752-9A38-B52078E6D3A5}.Debug|x86.Build.0 = Debug|Any CPU
+		{E437D872-2D9A-4752-9A38-B52078E6D3A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E437D872-2D9A-4752-9A38-B52078E6D3A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E437D872-2D9A-4752-9A38-B52078E6D3A5}.Release|x64.ActiveCfg = Release|Any CPU
+		{E437D872-2D9A-4752-9A38-B52078E6D3A5}.Release|x64.Build.0 = Release|Any CPU
+		{E437D872-2D9A-4752-9A38-B52078E6D3A5}.Release|x86.ActiveCfg = Release|Any CPU
+		{E437D872-2D9A-4752-9A38-B52078E6D3A5}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

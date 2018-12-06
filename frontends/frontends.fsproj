@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="src/elm/**" />
-    <Content Include="src/scss/**" />
+    <Content Include="Elm/**" />
+    <Content Include="Scss/**" />
   </ItemGroup>
 </Project>

@@ -37,11 +37,11 @@ let private generateCss (filePath : string) : string =
 
 
 let private cleanScss _ =
-    File.delete "damo-io-server/resources/public/app.css"
+    File.delete "damo-io-server/Resources/public/app.css"
 
 
 let private cleanElm _ =
-    Directory.delete "frontends/src/elm/elm-stuff/0.19.0"
+    Directory.delete "frontends/Elm/elm-stuff/0.19.0"
 
 
 let private clean _ =
@@ -57,25 +57,21 @@ let private clean _ =
 
 
 let private buildScss _ =
-    generateCss "frontends/src/scss/app.scss" |> writeToFile "damo-io-server/resources/public/app.css"
+    generateCss "frontends/Scss/app.scss" |> writeToFile "damo-io-server/Resources/public/app.css"
 
 
 let private buildElm _ =
     let args =
         { Program = "elm"
-          WorkingDir = "frontends/src/elm"
-          CommandLine = "make --optimize --output ../../../damo-io-server/resources/public/app.js DamoIO/App.elm"
+          WorkingDir = "frontends/Elm"
+          CommandLine = "make --optimize --output ../../../damo-io-server/Resources/public/app.js DamoIO/App.elm"
           Args = []
         }
     Process.shellExec args |> ensureSuccessExitCode
 
 
-let private copyAssets _ =
-    Shell.copyDir "damo-io-server/resources/public" "frontends/src" (fun f ->
-        not (f.Contains "elm")
-            && not (f.Contains "scss")
-            && not (f.EndsWith ".fs")
-    )
+let private copyFonts _ =
+    Shell.copyDir "damo-io-server/Resources/public/fonts" "frontends/Fonts" (fun f -> true)
 
 
 let private buildFakeExecutionContext (args : string list) =
@@ -100,23 +96,29 @@ let main (args : string []) =
     Target.create "clean" clean
     Target.create "buildScss" buildScss
     Target.create "buildElm" buildElm
-    Target.create "copyAssets" copyAssets
+    Target.create "copyFonts" copyFonts
     Target.create "restore" <| dotnet "restore" ""
     Target.create "build" <| dotnet "build" ""
-    Target.create "test" <| dotnet "test" "damo-io-server-tests"
-    Target.create "publish" <| dotnet "publish" "damo-io-server -c Release"
+
+    Target.create "test" (fun _ ->
+        dotnet "test" "damo-io-server-tests" ()
+        dotnet "test" "somanyfeeds-server-tests" ()
+    )
+
+    Target.create "publish" (fun _ ->
+        dotnet "publish" "damo-io-server -c Release" ()
+        dotnet "publish" "somanyfeeds-server -c Release" ()
+    )
 
 
-    "copyAssets" |> dependsOn [ "buildElm" ; "buildScss" ]
-
-    "build" |> dependsOn [ "copyAssets" ; "restore" ]
+    "copyFonts" |> dependsOn [ "buildElm" ; "buildScss" ]
+    "build" |> dependsOn [ "copyFonts" ; "restore" ]
 
     "build" |> mustRunAfter "clean"
     "buildElm" |> mustRunAfter "clean"
     "buildScss" |> mustRunAfter "clean"
 
     "test" |> dependsOn [ "build" ]
-
     "publish" |> dependsOn [ "test" ; "build" ; "clean" ]
 
     Target.runOrDefault "publish"
