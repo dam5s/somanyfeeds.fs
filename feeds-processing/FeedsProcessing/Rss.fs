@@ -35,6 +35,5 @@ let private rssToArticles (rss : RssProvider.Rss) : Article list =
         |> List.map itemToArticle
 
 
-let processRssFeed (downloaded : DownloadedFeed) : ProcessingResult =
-    parse (downloadedString downloaded)
-        |> Result.map rssToArticles
+let processRssFeed (DownloadedFeed downloaded) : ProcessingResult =
+    parse downloaded |> Result.map rssToArticles

@@ -60,13 +60,13 @@ let private requestToken (BasicAuthHeader authHeader) : Result<BearerToken, stri
 
 
 
-let private requestTweets (handle : TwitterHandle) (token : BearerToken) : DownloadResult =
+let private requestTweets (TwitterHandle handle) (token : BearerToken) : DownloadResult =
     try
         Http.RequestString
             ( "https://api.twitter.com/1.1/statuses/user_timeline.json",
               httpMethod = "GET",
               query = [
-                  "screen_name", twitterHandleValue handle
+                  "screen_name", handle
                   "count", "60"
               ],
               headers = [ Authorization <| bearerTokenHeader token ]
@@ -85,13 +85,13 @@ let downloadTwitterTimeline (handle : TwitterHandle) : DownloadResult =
     Result.bind (requestTweets handle) (requestToken auth)
 
 
-let downloadFeed (url : FeedUrl) : DownloadResult =
+let downloadFeed (FeedUrl url) : DownloadResult =
     try
-        feedUrlValue url
+        url
             |> Http.RequestString
             |> DownloadedFeed
             |> Result.Ok
     with
     | ex ->
-        printfn "There was an error downloading the feed at url %s" (feedUrlValue url)
+        printfn "There was an error downloading the feed at url %s" url
         Error <| String.Format ("There was an error downloading the feed. {0}", ex.ToString ())

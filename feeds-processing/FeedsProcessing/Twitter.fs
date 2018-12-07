@@ -46,22 +46,22 @@ let private mapTweet (json : TwitterTimelineProvider.Root) : Tweet =
     }
 
 
-let private parseTweets (downloaded : DownloadedFeed) : Result<Tweet list, string> =
+let private parseTweets (DownloadedFeed downloaded) : Result<Tweet list, string> =
     try
-        downloadedString downloaded
+        downloaded
             |> TwitterTimelineProvider.Parse
             |> Array.toList
             |> List.map mapTweet
             |> Ok
     with
     | ex ->
-        printfn "Could not parse tweets json\n\n%s\n\nGot exception %s" (downloadedString downloaded) (ex.ToString ())
+        printfn "Could not parse tweets json\n\n%s\n\nGot exception %s" downloaded (ex.ToString ())
         Error "Could not parse tweets json"
 
 
-let private tweetToArticle (handle : TwitterHandle) (tweet : Tweet) : Article =
+let private tweetToArticle (TwitterHandle handle) (tweet : Tweet) : Article =
     { Title = None
-      Link = Some <| String.Format ("https://twitter.com/{0}", twitterHandleValue handle)
+      Link = Some <| String.Format ("https://twitter.com/{0}", handle)
       Content = tweet.Text
       Date = tweet.CreatedAt |> Option.map (fun d -> new DateTimeOffset(d))
     }

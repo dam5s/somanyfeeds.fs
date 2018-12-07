@@ -35,5 +35,5 @@ let private atomToArticles (atom : AtomProvider.Feed) : Article list =
         |> List.map entryToArticle
 
 
-let processAtomFeed (downloaded : DownloadedFeed) : ProcessingResult =
-    parse (downloadedString downloaded) |> Result.map atomToArticles
+let processAtomFeed (DownloadedFeed downloaded) : ProcessingResult =
+    parse downloaded |> Result.map atomToArticles
