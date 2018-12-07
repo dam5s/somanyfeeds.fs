@@ -14,10 +14,10 @@
     <PackageReference Include="Chiron" Version="6.3.1" />
 
     <ProjectReference Include="../feeds-processing/feeds-processing.fsproj" />
-    <Compile Include="DamoIOServer\Sources.fs" />
 
-    <Compile Include="DamoIOServer/Articles/Data.fs" />
-    <Compile Include="DamoIOServer/Articles/Handlers.fs" />
+    <Compile Include="DamoIOServer/Sources.fs" />
+    <Compile Include="DamoIOServer/ArticlesPersistence.fs" />
+    <Compile Include="DamoIOServer/ArticlesHandler.fs" />
     <Compile Include="DamoIOServer/FeedsProcessor.fs" />
     <Compile Include="DamoIOServer/SslHandler.fs" />
     <Compile Include="DamoIOServer/App.fs" />

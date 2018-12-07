@@ -1,4 +1,4 @@
-module DamoIOServer.Articles.Handlers
+module DamoIOServer.ArticlesHandler
 
 open System
 open Suave
@@ -6,7 +6,7 @@ open Suave.DotLiquid
 open Chiron
 open Chiron.Operators
 open DamoIOServer.Sources
-open DamoIOServer.Articles.Data
+open DamoIOServer.ArticlesPersistence
 
 
 let private epoch: DateTime =
@@ -17,7 +17,7 @@ let private dateMap (d : DateTimeOffset): int64 =
     d.ToUnixTimeMilliseconds ()
 
 
-let private source (record : Record) : string =
+let private source (record : ArticleRecord) : string =
     match record.Source with
     | About -> "About"
     | Social -> "Social"
@@ -25,7 +25,7 @@ let private source (record : Record) : string =
     | Blog -> "Blog"
 
 
-let private toJson (record : Record): Json<unit> =
+let private toJson (record : ArticleRecord): Json<unit> =
     Json.write "title" record.Title
     *> Json.write "link" record.Link
     *> Json.write "content" record.Content
@@ -37,7 +37,7 @@ type ArticlesListViewModel =
     { ArticlesJson : string }
 
 
-let list (findAllRecords : unit -> Record list) (ctx : HttpContext): Async<HttpContext option> =
+let list (findAllRecords : unit -> ArticleRecord list) (ctx : HttpContext): Async<HttpContext option> =
     async {
         let records = findAllRecords ()
 

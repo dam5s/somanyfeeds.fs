@@ -1,6 +1,6 @@
 module DamoIOServer.FeedsProcessor
 
-open DamoIOServer.Articles.Data
+open DamoIOServer.ArticlesPersistence
 open DamoIOServer.Sources
 open FeedsProcessing.Article
 open FeedsProcessing.Feeds
@@ -11,7 +11,7 @@ open FeedsProcessing.DataGateway
 open FeedsProcessing.Twitter
 
 
-let private articleToRecord (sourceType : SourceType) (article : Article) : Record =
+let private articleToRecord (sourceType : SourceType) (article : Article) : ArticleRecord =
     { Title = article.Title
       Link = article.Link
       Content = article.Content
@@ -24,7 +24,7 @@ let private orElse other =
     Result.fold id (fun _ -> other)
 
 
-let private resultToList (sourceType : SourceType) (result : ProcessingResult) : Record list =
+let private resultToList (sourceType : SourceType) (result : ProcessingResult) : ArticleRecord list =
     List.map (articleToRecord sourceType) (orElse [] result)
 
 
@@ -35,7 +35,7 @@ let private processFeed (feed : Feed) : ProcessingResult =
     | Twitter (handle) -> Result.bind (processTweets handle) (downloadTwitterTimeline handle)
 
 
-let processFeeds (sources : Source list) : Record list =
+let processFeeds (sources : Source list) : ArticleRecord list =
     List.collect
         (fun (sourceType, feed) -> processFeed feed |> resultToList sourceType)
         sources

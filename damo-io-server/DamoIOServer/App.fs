@@ -6,11 +6,11 @@ open Suave.Filters
 open Suave.Operators
 open Suave.RequestErrors
 open DamoIOServer.Sources
-open DamoIOServer.Articles.Data
+open DamoIOServer.ArticlesPersistence
 open DamoIOServer.SslHandler
 
 
-let private updatesSequence : AsyncSeq<Record list> =
+let private updatesSequence : AsyncSeq<ArticleRecord list> =
     asyncSeq {
         let tenMinutes = 10 * 1000 * 60
 
@@ -22,19 +22,15 @@ let private updatesSequence : AsyncSeq<Record list> =
 
 let backgroundProcessing =
     AsyncSeq.iter
-        Articles.Data.Repository.updateAll
+        ArticlesPersistence.Repository.updateAll
         updatesSequence
-
-
-let private articlesList =
-    Articles.Handlers.list Articles.Data.Repository.findAll
 
 
 let handler =
     choose [
         enforceSsl
 
-        path "/" >=> GET >=> articlesList
+        path "/" >=> GET >=> ArticlesHandler.list ArticlesPersistence.Repository.findAll
 
         GET >=> Files.browseHome
         NOT_FOUND "not found"
