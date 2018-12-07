@@ -4,6 +4,6 @@ obj
 .idea
 .env
 .fake
-damo-io-server/resources/public
+public
 elm-stuff
 *.DotSettings.user

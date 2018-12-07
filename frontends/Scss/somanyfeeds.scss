@@ -1,0 +1,48 @@
+@import 'reset';
+@import 'fonts';
+
+$light-color: #e6d4a7;
+$dark-color: #825534;
+$contrast-color: #36362c;
+$accent-color: #5d917d;
+$light-accent-color: #a8ad80;
+
+
+html, body {
+    height: 100%;
+    margin: 0;
+    background-color: $light-color;
+    font-size: 16px;
+    font-family: 'Merriweather', 'Georgia', serif;
+    font-weight: 300;
+    color: $dark-color;
+}
+
+h1, h2, h3, h4 {
+    line-height: 130%;
+    color: $contrast-color;
+    font-family: 'Merriweather Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 400;
+    margin: 0 0 1rem;
+}
+
+h1 {
+    font-size: 2rem;
+}
+
+h2 {
+    font-size: 1.3rem;
+}
+
+a:link, a:hover, a:visited, a:active {
+    text-decoration: none;
+    color: $accent-color;
+}
+
+p {
+    margin: 0 0 1rem;
+}
+
+em, strong {
+    font-weight: 700;
+}

@@ -5,21 +5,32 @@ open Suave
 open Suave.Filters
 open Suave.Operators
 open Suave.RequestErrors
+open Suave.Redirection
+open Suave.DotLiquid
 open SoManyFeedsServer
 
 
-let private articlesPage (user : Authentication.User) : WebPart =
-    Successful.OK <| String.Format ("Hello {0}, read your articles here.", user.name)
+type ReadViewModel =
+    { userName : string }
 
 
-let private feedsPage (user : Authentication.User) : WebPart =
-    Successful.OK <| String.Format ("Hello {0}, manage your feeds here.", user.name)
+type ManageViewModel =
+    { userName : string }
+
+
+let private readPage (user : Authentication.User) : WebPart =
+    page "read.html.liquid" { userName = user.name }
+
+
+let private managePage (user : Authentication.User) : WebPart =
+    page "manage.html.liquid" { userName = user.name }
 
 
 let private authenticatedPage (user : Authentication.User) : WebPart =
     choose [
-        path "/feeds" >=> GET >=> feedsPage user
-        path "/" >=> GET >=> articlesPage user
+        GET >=> path "/" >=> redirect "/read"
+        GET >=> path "/read" >=> readPage user
+        GET >=> path "/manage" >=> managePage user
 
         GET >=> Files.browseHome
         NOT_FOUND "not found"

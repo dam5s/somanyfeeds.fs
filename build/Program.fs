@@ -37,7 +37,8 @@ let private generateCss (filePath : string) : string =
 
 
 let private cleanScss _ =
-    File.delete "damo-io-server/Resources/public/app.css"
+    File.delete "damo-io-server/Resources/public/damo-io.css"
+    File.delete "somanyfeeds-server/Resources/public/somanyfeeds.css"
 
 
 let private cleanElm _ =
@@ -48,7 +49,7 @@ let private clean _ =
     cleanElm ()
     cleanScss ()
 
-    ["." ; "damo-io-server" ; "damo-io-server-tests" ; "frontends"]
+    ["." ; "damo-io-server" ; "damo-io-server-tests" ; "somanyfeeds-server" ; "somanyfeeds-server-tests" ; "frontends"]
         |> List.map (fun p ->
             Path.Combine(p, "bin") |> Directory.delete
             Path.Combine(p, "obj") |> Directory.delete
@@ -57,17 +58,23 @@ let private clean _ =
 
 
 let private buildScss _ =
-    generateCss "frontends/Scss/app.scss" |> writeToFile "damo-io-server/Resources/public/app.css"
+    generateCss "frontends/Scss/damo-io.scss" |> writeToFile "damo-io-server/Resources/public/damo-io.css"
+    generateCss "frontends/Scss/somanyfeeds.scss" |> writeToFile "somanyfeeds-server/Resources/public/somanyfeeds.css"
 
 
-let private buildElm _ =
+let private runElm elmArgs =
     let args =
         { Program = "elm"
           WorkingDir = "frontends/Elm"
-          CommandLine = "make --optimize --output ../../../damo-io-server/Resources/public/app.js DamoIO/App.elm"
+          CommandLine = elmArgs
           Args = []
         }
     Process.shellExec args |> ensureSuccessExitCode
+
+
+let private buildElm _ =
+    runElm "make --optimize --output ../../../damo-io-server/Resources/public/damo-io.js DamoIO/App.elm"
+    // runElm "make --optimize --output ../../../somanyfeeds-server/Resources/public/somanyfeeds.js SoManyFeeds/Read.elm SoManyFeeds/Manage.elm"
 
 
 let private copyFonts _ =
