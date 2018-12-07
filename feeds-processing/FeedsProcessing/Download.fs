@@ -1,4 +1,4 @@
-module DamoIOServer.FeedsProcessing.Download
+module FeedsProcessing.Download
 
 
 type DownloadedFeed = DownloadedFeed of string

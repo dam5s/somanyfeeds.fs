@@ -1,4 +1,4 @@
-module DamoIOServer.FeedsProcessing.Xml
+module FeedsProcessing.Xml
 
 open System
 

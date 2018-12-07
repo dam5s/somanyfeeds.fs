@@ -5,17 +5,16 @@ module ``Rss Processor Tests``
     open System
     open System.IO
 
-    open DamoIOServer.Articles.Data
-    open DamoIOServer.SourceType
-    open DamoIOServer.FeedsProcessing.Download
-    open DamoIOServer.FeedsProcessing.Rss
+    open FeedsProcessing.Article
+    open FeedsProcessing.Download
+    open FeedsProcessing.Rss
 
     [<Test>]
     let ``processFeed with standard medium xml`` () =
-        let downloadedFeed = DownloadedFeed <| File.ReadAllText("../../../../damo-io-server/Resources/samples/medium.rss.sample")
+        let downloadedFeed = DownloadedFeed <| File.ReadAllText("../../../../feeds-processing/Resources/samples/medium.rss.sample")
 
 
-        let result = processRssFeed Blog downloadedFeed
+        let result = processRssFeed downloadedFeed
 
 
         match result with
@@ -28,5 +27,4 @@ module ``Rss Processor Tests``
                                                 Link = Some "https://medium.com/@its_damo/first"
                                                 Content = "<p>This is the content</p>"
                                                 Date = Some expectedTimeUtc
-                                                Source = Blog
                                               }

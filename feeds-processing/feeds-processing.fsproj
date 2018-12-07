@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FSharp.Data" Version="3.0.0" />
+
+    <Compile Include="FeedsProcessing/Feeds.fs" />
+    <Compile Include="FeedsProcessing/Article.fs" />
+    <Compile Include="FeedsProcessing/ProcessingResult.fs" />
+    <Compile Include="FeedsProcessing/Download.fs" />
+    <Compile Include="FeedsProcessing/Xml.fs" />
+    <Compile Include="FeedsProcessing/Rss.fs" />
+    <Compile Include="FeedsProcessing/Atom.fs" />
+    <Compile Include="FeedsProcessing/Twitter.fs" />
+    <Compile Include="FeedsProcessing/DataGateway.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resources Include="Resources/**" />
+  </ItemGroup>
+
+  <Target Name="CopyResources" AfterTargets="Publish">
+    <Copy SourceFiles="@(Resources)" DestinationFiles="@(Resources->'$(PublishDir)/Resources/%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target>
+</Project>

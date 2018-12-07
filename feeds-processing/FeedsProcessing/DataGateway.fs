@@ -1,13 +1,12 @@
-module DamoIOServer.DataGateway
+module FeedsProcessing.DataGateway
 
 open System
 open System.Web
 open FSharp.Data
 open FSharp.Data.HttpRequestHeaders
 
-open DamoIOServer.Feeds
-open DamoIOServer.FeedUrl
-open DamoIOServer.FeedsProcessing.Download
+open FeedsProcessing.Feeds
+open FeedsProcessing.Download
 
 
 type private BasicAuthHeader = BasicAuthHeader of string
@@ -88,11 +87,11 @@ let downloadTwitterTimeline (handle : TwitterHandle) : DownloadResult =
 
 let downloadFeed (url : FeedUrl) : DownloadResult =
     try
-        feedUrlString url
+        feedUrlValue url
             |> Http.RequestString
             |> DownloadedFeed
             |> Result.Ok
     with
     | ex ->
-        printfn "There was an error downloading the feed at url %s" (feedUrlString url)
+        printfn "There was an error downloading the feed at url %s" (feedUrlValue url)
         Error <| String.Format ("There was an error downloading the feed. {0}", ex.ToString ())

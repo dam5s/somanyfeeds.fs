@@ -5,15 +5,14 @@ module ``Twitter Processor Tests``
     open System
     open System.IO
 
-    open DamoIOServer.Articles.Data
-    open DamoIOServer.SourceType
-    open DamoIOServer.Feeds
-    open DamoIOServer.FeedsProcessing.Download
-    open DamoIOServer.FeedsProcessing.Twitter
+    open FeedsProcessing.Article
+    open FeedsProcessing.Download
+    open FeedsProcessing.Feeds
+    open FeedsProcessing.Twitter
 
     [<Test>]
     let ``processFeed twitter timeline`` () =
-        let downloadedFeed = DownloadedFeed <| File.ReadAllText("../../../../damo-io-server/Resources/samples/twitter.timeline.sample")
+        let downloadedFeed = DownloadedFeed <| File.ReadAllText("../../../../feeds-processing/Resources/samples/twitter.timeline.sample")
 
 
         let result = processTweets (TwitterHandle "its_damo") downloadedFeed
@@ -29,5 +28,4 @@ module ``Twitter Processor Tests``
                                                 Link = Some "https://twitter.com/its_damo"
                                                 Content = "I'm really liking F# so far."
                                                 Date = Some <| expectedTimeUtc.ToLocalTime()
-                                                Source = Social
                                               }

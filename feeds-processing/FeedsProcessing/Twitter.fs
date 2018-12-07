@@ -1,14 +1,13 @@
-module DamoIOServer.FeedsProcessing.Twitter
+module FeedsProcessing.Twitter
 
 
 open System
 open FSharp.Data
 
-open DamoIOServer.SourceType
-open DamoIOServer.FeedsProcessing.ProcessingResult
-open DamoIOServer.FeedsProcessing.Download
-open DamoIOServer.Feeds
-open DamoIOServer.Articles.Data
+open FeedsProcessing.Article
+open FeedsProcessing.ProcessingResult
+open FeedsProcessing.Download
+open FeedsProcessing.Feeds
 open System.Globalization
 
 
@@ -29,7 +28,7 @@ let private parseDate (dateValue : string) : DateTime option =
         None
 
 
-type TwitterTimelineProvider = JsonProvider<"../damo-io-server/Resources/samples/twitter.timeline.sample">
+type TwitterTimelineProvider = JsonProvider<"../feeds-processing/Resources/samples/twitter.timeline.sample">
 
 
 let private mapTweet (json : TwitterTimelineProvider.Root) : Tweet =
@@ -60,16 +59,15 @@ let private parseTweets (downloaded : DownloadedFeed) : Result<Tweet list, strin
         Error "Could not parse tweets json"
 
 
-let private tweetToArticle (handle : TwitterHandle) (tweet : Tweet) : Record =
+let private tweetToArticle (handle : TwitterHandle) (tweet : Tweet) : Article =
     { Title = None
       Link = Some <| String.Format ("https://twitter.com/{0}", twitterHandleValue handle)
       Content = tweet.Text
       Date = tweet.CreatedAt |> Option.map (fun d -> new DateTimeOffset(d))
-      Source = Social
     }
 
 
-let private tweetsToArticles (handle : TwitterHandle) (tweets : Tweet list) : Record list =
+let private tweetsToArticles (handle : TwitterHandle) (tweets : Tweet list) : Article list =
     tweets
         |> List.filter (fun t -> not t.IsRetweet && not t.IsReply)
         |> List.map (tweetToArticle handle)

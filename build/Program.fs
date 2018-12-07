@@ -49,7 +49,7 @@ let private clean _ =
     cleanElm ()
     cleanScss ()
 
-    ["." ; "damo-io-server" ; "damo-io-server-tests" ; "somanyfeeds-server" ; "somanyfeeds-server-tests" ; "frontends"]
+    ["." ; "damo-io-server" ; "somanyfeeds-server" ; "feeds-processing"; "feeds-processing-tests" ; "frontends"]
         |> List.map (fun p ->
             Path.Combine(p, "bin") |> Directory.delete
             Path.Combine(p, "obj") |> Directory.delete
@@ -92,8 +92,10 @@ let private buildFakeExecutionContext (args : string list) =
 
     FakeExecutionContext.Create false "Program.fs" fakeArgs
 
+
 let dependsOn (tasks : string list) (task : string) = task <== tasks
 let mustRunAfter (otherTask : string) (task : string) = task <=? otherTask |> ignore
+
 
 [<EntryPoint>]
 let main (args : string []) =
@@ -107,10 +109,7 @@ let main (args : string []) =
     Target.create "restore" <| dotnet "restore" ""
     Target.create "build" <| dotnet "build" ""
 
-    Target.create "test" (fun _ ->
-        dotnet "test" "damo-io-server-tests" ()
-        dotnet "test" "somanyfeeds-server-tests" ()
-    )
+    Target.create "test" <| dotnet "test" "feeds-processing-tests"
 
     Target.create "publish" (fun _ ->
         dotnet "publish" "damo-io-server -c Release" ()

@@ -1,7 +1,7 @@
 module DamoIOServer.Articles.Data
 
 open System
-open DamoIOServer.SourceType
+open DamoIOServer.Sources
 
 
 type Record =

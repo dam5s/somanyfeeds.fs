@@ -1,12 +1,12 @@
 module DamoIOServer.Articles.Handlers
 
+open System
 open Suave
 open Suave.DotLiquid
 open Chiron
 open Chiron.Operators
-open System
+open DamoIOServer.Sources
 open DamoIOServer.Articles.Data
-open DamoIOServer.SourceType
 
 
 let private epoch: DateTime =

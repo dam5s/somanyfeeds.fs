@@ -5,6 +5,7 @@ open Suave
 open Suave.Filters
 open Suave.Operators
 open Suave.RequestErrors
+open DamoIOServer.Sources
 open DamoIOServer.Articles.Data
 open DamoIOServer.SslHandler
 
@@ -14,7 +15,7 @@ let private updatesSequence : AsyncSeq<Record list> =
         let tenMinutes = 10 * 1000 * 60
 
         while true do
-            yield FeedsProcessor.processFeeds (Feeds.Repository.findAll ())
+            yield FeedsProcessor.processFeeds (Sources.Repository.findAll ())
             do! Async.Sleep tenMinutes
     }
 

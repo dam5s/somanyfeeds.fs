@@ -5,17 +5,16 @@ module ``Atom Processor Tests``
     open System
     open System.IO
 
-    open DamoIOServer.Articles.Data
-    open DamoIOServer.SourceType
-    open DamoIOServer.FeedsProcessing.Download
-    open DamoIOServer.FeedsProcessing.Atom
+    open FeedsProcessing.Download
+    open FeedsProcessing.Article
+    open FeedsProcessing.Atom
 
     [<Test>]
     let ``processFeed with standard github xml`` () =
-        let downloaded = DownloadedFeed <| File.ReadAllText("../../../../damo-io-server/Resources/samples/github.atom.sample")
+        let downloaded = DownloadedFeed <| File.ReadAllText("../../../../feeds-processing/Resources/samples/github.atom.sample")
 
 
-        let result = processAtomFeed Code downloaded
+        let result = processAtomFeed downloaded
 
 
         match result with
@@ -28,5 +27,4 @@ module ``Atom Processor Tests``
                                                 Link = Some "https://github.com/dam5s/somanyfeeds.fs"
                                                 Content = "<p>Hello from the content</p>"
                                                 Date = Some expectedTimeUtc
-                                                Source = Code
                                               }
