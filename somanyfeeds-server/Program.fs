@@ -33,5 +33,5 @@ let main _ =
             bindings = [ binding ]
         }
 
-    startWebServer config App.handler
+    startWebServer config App.webPart
     0

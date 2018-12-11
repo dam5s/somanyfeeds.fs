@@ -5,8 +5,8 @@ open Suave.Operators
 
 
 type User =
-    { id : int
-      name : string
+    { Id : int
+      Name : string
     }
 
 let private setSessionValue (key : string) (value : obj) : WebPart =
@@ -33,6 +33,6 @@ let tryGetUser (ctx : HttpContext) : User option =
 
 let authenticate (f : User -> WebPart)  : WebPart =
     let user =
-        { id = 1 ; name = "Damien" }
+        { Id = 1 ; Name = "Damo" }
 
     setSessionValue "user" user >=> f user

@@ -8,7 +8,13 @@
 </head>
 <body>
 
-<p>Hello {{ model.userName }}, manage your feeds here.</p>
+<p>Hello {{ model.UserName }}, manage your feeds here.</p>
+
+<ul>
+{% for feed in model.Feeds %}
+    <li>#{{ feed.Id }}. {{ feed.Name }}</li>
+{% endfor %}
+</ul>
 
 </body>
 </html>
