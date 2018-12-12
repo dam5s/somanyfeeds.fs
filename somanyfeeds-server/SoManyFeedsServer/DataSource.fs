@@ -1,5 +1,6 @@
 module SoManyFeedsServer.DataSource
 
+open Npgsql
 open System
 open System.Data
 open System.Data.Common
@@ -12,6 +13,10 @@ type FindResult<'T> =
     | Found of 'T
     | NotFound
     | FindError of string
+
+
+type Binding =
+    Binding of string * obj
 
 
 let private fromOptionResult (result : Result<'T option, string>) : FindResult<'T> =
@@ -31,29 +36,36 @@ let private usingConnection (dataSource : DataSource) (mapping : DbConnection ->
             )
     with
     | ex ->
+        printfn "Data access error: %s" (ex.ToString ())
         Error <| String.Format ("Data access error: {0}", ex.Message)
 
 
-let private readFrom (dataSource : DataSource) (sql : string) (bindings : DbParameterCollection -> DbParameterCollection) (mapping : DbDataReader -> 'T) : Result<'T, string> =
-    usingConnection dataSource (fun connection ->
-        use command = connection.CreateCommand ()
-        command.CommandText <- sql
-        bindings command.Parameters |> ignore
+let private applyBinding (command : DbCommand) (Binding (name, value)) =
+    let p = command.CreateParameter ()
+    p.ParameterName <- name
+    p.Value <- value
 
+    command.Parameters.Add p
+
+
+let private createCommand (connection : DbConnection) (sql : string) (bindings : Binding list) =
+    let command = connection.CreateCommand ()
+    command.CommandText <- sql
+    bindings
+        |> List.map (applyBinding command)
+        |> ignore
+    command
+
+
+let private readFrom (dataSource : DataSource) (sql : string) (bindings : Binding list) (mapping : DbDataReader -> 'T) : Result<'T, string> =
+    usingConnection dataSource (fun connection ->
+        use command = createCommand connection sql bindings
         use reader = command.ExecuteReader ()
         mapping reader
     )
 
 
-let param (name : string) (value : obj) (parameters : DbParameterCollection) : DbParameterCollection  =
-    parameters.Add (name, value) |> ignore
-    parameters
-
-
-let noParams = id
-
-
-let query dataSource sql (bindings : DbParameterCollection -> DbParameterCollection) (mapping : DbDataRecord -> 'T) : Result<'T list, string> =
+let query dataSource sql (bindings : Binding list) (mapping : DbDataRecord -> 'T) : Result<'T list, string> =
     readFrom dataSource sql bindings (fun (reader) ->
         reader
             |> Seq.cast<DbDataRecord>
@@ -62,7 +74,7 @@ let query dataSource sql (bindings : DbParameterCollection -> DbParameterCollect
     )
 
 
-let find dataSource sql (bindings : DbParameterCollection -> DbParameterCollection) (mapping : DbDataRecord -> 'T) : FindResult<'T> =
+let find dataSource sql (bindings : Binding list) (mapping : DbDataRecord -> 'T) : FindResult<'T> =
     fromOptionResult <| readFrom dataSource sql bindings (fun (reader) ->
         reader
             |> Seq.cast<DbDataRecord>
@@ -71,11 +83,8 @@ let find dataSource sql (bindings : DbParameterCollection -> DbParameterCollecti
     )
 
 
-let update dataSource sql (bindings : DbParameterCollection -> DbParameterCollection) : Result<int, string> =
+let update dataSource sql (bindings : Binding list) : Result<int, string> =
     usingConnection dataSource (fun connection ->
-        use command = connection.CreateCommand ()
-        command.CommandText <- sql
-        bindings command.Parameters |> ignore
-
+        use command = createCommand connection sql bindings
         command.ExecuteNonQuery ()
     )

@@ -21,6 +21,7 @@
     <Compile Include="SoManyFeedsServer/ErrorPage.fs" />
     <Compile Include="SoManyFeedsServer/ReadPage.fs" />
     <Compile Include="SoManyFeedsServer/ManagePage.fs" />
+    <Compile Include="SoManyFeedsServer/FeedsApi.fs" />
     <Compile Include="SoManyFeedsServer/App.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>

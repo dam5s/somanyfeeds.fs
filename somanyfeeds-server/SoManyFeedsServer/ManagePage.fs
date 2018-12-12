@@ -24,8 +24,8 @@ let private presentFeed (record : FeedRecord) : FeedViewModel =
     }
 
 
-let page (feedList : unit -> Result<FeedRecord list, string>) (user : Authentication.User) : WebPart =
-    match feedList () with
+let page (listFeeds : int64 -> Result<FeedRecord list, string>) (user : Authentication.User) : WebPart =
+    match listFeeds user.Id with
     | Ok records ->
         let viewModel =
             { UserName = user.Name
