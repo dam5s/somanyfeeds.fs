@@ -53,8 +53,9 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
             FeedsApi.Decoders.feedFields
             (FeedsApi.update <| DataAccess.updateFeed user.Id feedId)
 
-    let deleteFeed =
-        (fun id _ -> DataAccess.deleteFeed user.Id id) >> FeedsApi.delete
+    let deleteFeed feedId =
+        FeedsApi.delete
+            (fun _ -> DataAccess.deleteFeed user.Id feedId)
 
 
     choose [

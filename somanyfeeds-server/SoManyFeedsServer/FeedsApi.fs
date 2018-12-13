@@ -91,4 +91,8 @@ let update (updateFeed : FeedFields -> Result<FeedRecord, string>) (fields : Fee
 
 
 let delete (deleteFeed : unit -> Result<unit, string>) : WebPart =
-    Successful.OK "delete"
+    match deleteFeed () with
+    | Ok _ ->
+        Successful.NO_CONTENT
+    | Error message ->
+        serverError message
