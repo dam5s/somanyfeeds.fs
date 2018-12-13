@@ -8,13 +8,10 @@
 </head>
 <body>
 
-<p>Hello {{ model.UserName }}, manage your feeds here.</p>
-
-<ul>
-{% for feed in model.Feeds %}
-    <li>#{{ feed.Id }}. {{ feed.Name }}</li>
-{% endfor %}
-</ul>
+<script src="/somanyfeeds.js"></script>
+<script>
+    Elm.SoManyFeeds.Manage.init({flags: {userName: "{{model.UserName}}" }});
+</script>
 
 </body>
 </html>

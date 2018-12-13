@@ -1,4 +1,4 @@
-module DamoIO.App exposing (Flags, Model, Msg(..), articlesToDisplay, init, main, sourceToggleHref, sourceView, update, view)
+module DamoIO.App exposing (main)
 
 import Browser
 import Browser.Navigation as Navigation

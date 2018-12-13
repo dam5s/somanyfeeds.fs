@@ -8,7 +8,10 @@
 </head>
 <body>
 
-<p>Hello {{ model.UserName }}, your articles will show up here. But first let's <a href="/manage">follow some feeds</a>.</p>
+<script src="/somanyfeeds.js"></script>
+<script>
+    Elm.SoManyFeeds.Read.init({flags: {userName: "{{model.UserName}}" }});
+</script>
 
 </body>
 </html>
