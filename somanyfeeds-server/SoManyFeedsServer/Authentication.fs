@@ -31,7 +31,7 @@ let tryGetUser (ctx : HttpContext) : User option =
         |> Option.bind tryCast
 
 
-let authenticate (f : User -> WebPart)  : WebPart =
+let authenticate (f : User -> WebPart) (_ : HttpRequest) : WebPart =
     let user =
         { Id = int64 1 ; Name = "Damo" }
 

@@ -34,7 +34,13 @@ module private DataAccess =
 
 
 let private authenticatedPage (user : Authentication.User) : WebPart =
-    let listFeeds =
+    let readPage _ =
+        ReadPage.page user
+
+    let managePage _ =
+        ManagePage.page DataAccess.listFeeds user
+
+    let listFeeds _ =
         FeedsApi.list (fun _ -> DataAccess.listFeeds user.Id)
 
     let createFeed =
@@ -53,10 +59,10 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
 
     choose [
         GET >=> path "/" >=> redirect "/read"
-        GET >=> path "/read" >=> ReadPage.page user
-        GET >=> path "/manage" >=> ManagePage.page DataAccess.listFeeds user
+        GET >=> path "/read" >=> request readPage
+        GET >=> path "/manage" >=> request managePage
 
-        GET >=> path "/api/feeds" >=> listFeeds
+        GET >=> path "/api/feeds" >=> request listFeeds
         POST >=> path "/api/feeds" >=> createFeed
         PUT >=> pathScan "/api/feeds/%d" updateFeed
         DELETE >=> pathScan "/api/feeds/%d" deleteFeed
@@ -68,6 +74,6 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
 
 let webPart =
     choose [
-        Authentication.authenticate authenticatedPage
+        request <| Authentication.authenticate authenticatedPage
         UNAUTHORIZED "unauthorized"
     ]

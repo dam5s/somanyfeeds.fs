@@ -62,8 +62,9 @@ let listFeeds (dataSource: DataSource) (userId : int64) : Result<FeedRecord list
 
 let findFeed (dataSource: DataSource) (userId : int64) (feedId : int64) : FindResult<FeedRecord> =
     let bindings =
-        [ Binding ("@UserId" , userId)
-          Binding ("@FeedId" , feedId)
+        [
+        Binding ("@UserId" , userId)
+        Binding ("@FeedId" , feedId)
         ]
 
     find dataSource
