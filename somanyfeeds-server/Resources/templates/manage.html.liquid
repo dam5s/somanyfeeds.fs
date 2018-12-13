@@ -10,7 +10,10 @@
 
 <script src="/somanyfeeds.js"></script>
 <script>
-    Elm.SoManyFeeds.Manage.init({flags: {userName: "{{model.UserName}}" }});
+    Elm.SoManyFeeds.Manage.init({ flags: {
+        userName: "{{ model.UserName }}",
+        feeds: {{ model.FeedsJson }}
+    }});
 </script>
 
 </body>

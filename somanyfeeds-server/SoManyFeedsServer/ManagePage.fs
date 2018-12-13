@@ -6,21 +6,9 @@ open SoManyFeedsServer
 open SoManyFeedsServer.FeedsPersistence
 
 
-type FeedViewModel =
-    { Id : int64
-      Name : string
-    }
-
-
 type ManageViewModel =
     { UserName : string
-      Feeds : FeedViewModel list
-    }
-
-
-let private presentFeed (record : FeedRecord) : FeedViewModel =
-    { Id = record.Id
-      Name = record.Name
+      FeedsJson : string
     }
 
 
@@ -29,7 +17,7 @@ let page (listFeeds : int64 -> Result<FeedRecord list, string>) (user : Authenti
     | Ok records ->
         let viewModel =
             { UserName = user.Name
-              Feeds = List.map presentFeed records
+              FeedsJson = Json.serializeList FeedsApi.Encoders.feed records
             }
         page "manage.html.liquid" viewModel
     | Error message ->

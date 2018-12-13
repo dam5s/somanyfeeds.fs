@@ -8,7 +8,7 @@ open SoManyFeedsServer.Json
 open SoManyFeedsServer.FeedsPersistence
 
 
-module private Encoders =
+module Encoders =
     open Chiron
     open Chiron.Operators
 
@@ -21,7 +21,7 @@ module private Encoders =
 
     let feed (record : FeedRecord) : Json<unit> =
         Json.write "id" record.Id
-        *> Json.write "type" (feedTypeToString record.FeedType)
+        *> Json.write "feedType" (feedTypeToString record.FeedType)
         *> Json.write "name" record.Name
         *> Json.write "url" record.Url
 
@@ -47,7 +47,7 @@ module Decoders =
 
         let decoder =
             constructor
-                <!> Json.read "type"
+                <!> Json.read "feedType"
                 <*> Json.read "name"
                 <*> Json.read "url"
 

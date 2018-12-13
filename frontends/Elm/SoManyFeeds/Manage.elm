@@ -1,17 +1,20 @@
 module SoManyFeeds.Manage exposing (main)
 
 import Browser exposing (Document)
-import Html exposing (Html, a, div, p, text)
+import Html exposing (Html, a, div, li, p, text, ul)
 import Html.Attributes exposing (href)
+import SoManyFeeds.Feed as Feed exposing (Feed)
 
 
 type alias Flags =
     { userName : String
+    , feeds : List Feed.Json
     }
 
 
 type alias Model =
     { userName : String
+    , feeds : List Feed
     }
 
 
@@ -21,7 +24,16 @@ type Msg
 
 init : Flags -> ( Model, Cmd Msg )
 init flags =
-    ( { userName = flags.userName }, Cmd.none )
+    ( { userName = flags.userName
+      , feeds = List.map Feed.fromJson flags.feeds
+      }
+    , Cmd.none
+    )
+
+
+feedView : Feed -> Html Msg
+feedView feed =
+    li [] [ text feed.name ]
 
 
 view : Model -> Document Msg
@@ -33,6 +45,7 @@ view model =
             , text model.userName
             , text ", manage your feeds here."
             ]
+        , ul [] <| List.map feedView model.feeds
         ]
     }
 
