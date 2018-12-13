@@ -42,8 +42,8 @@ module Decoders =
 
 
     let feedFields (json : Json) : JsonResult<FeedFields> * Json =
-        let constructor f n u =
-            { FeedType = feedTypeFromString f ; Name = n ; Url = u }
+        let constructor feedType name url =
+            { FeedType = feedTypeFromString feedType ; Name = name ; Url = url }
 
         let decoder =
             constructor
@@ -80,8 +80,14 @@ let create (createFeed : FeedFields -> Result<FeedRecord, string>) (fields : Fee
         serverError message
 
 
-let update (updateFeed : FeedFields -> Result<FeedRecord, string>) : WebPart =
-    Successful.OK "update"
+let update (updateFeed : FeedFields -> Result<FeedRecord, string>) (fields : FeedFields) : WebPart =
+    match updateFeed fields with
+    | Ok feed ->
+        feed
+            |> serializeObject Encoders.feed
+            |> jsonResponse HTTP_200
+    | Error message ->
+        serverError message
 
 
 let delete (deleteFeed : unit -> Result<unit, string>) : WebPart =

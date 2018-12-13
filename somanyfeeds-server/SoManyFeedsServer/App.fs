@@ -42,8 +42,10 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
             FeedsApi.Decoders.feedFields
             (FeedsApi.create <| DataAccess.createFeed user.Id)
 
-    let updateFeed =
-        DataAccess.updateFeed user.Id >> FeedsApi.update
+    let updateFeed feedId =
+        deserializeBody
+            FeedsApi.Decoders.feedFields
+            (FeedsApi.update <| DataAccess.updateFeed user.Id feedId)
 
     let deleteFeed =
         (fun id _ -> DataAccess.deleteFeed user.Id id) >> FeedsApi.delete
