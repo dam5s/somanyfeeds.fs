@@ -1,5 +1,4 @@
 drop table if exists feeds;
-drop type if exists feed_type;
 drop table if exists users;
 
 create table users (
@@ -7,12 +6,10 @@ create table users (
   name text
 );
 
-create type feed_type as enum ('Rss', 'Atom');
-
 create table feeds (
   id        bigserial primary key not null,
   user_id   bigint references users (id) not null,
-  feed_type feed_type not null,
+  feed_type text not null check (feed_type in ('Rss', 'Atom')),
   name      text not null,
   url       text not null
 );

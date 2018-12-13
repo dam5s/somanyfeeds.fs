@@ -31,10 +31,33 @@ module private Encoders =
         *> Json.write "message" message
 
 
+module Decoders =
+    open Chiron
+    open Chiron.Operators
+
+    let private feedTypeFromString (value : string) : FeedRecordType =
+        match value with
+        | "Atom" -> Atom
+        | _ -> Rss
+
+
+    let feedFields (json : Json) : JsonResult<FeedFields> * Json =
+        let constructor f n u =
+            { FeedType = feedTypeFromString f ; Name = n ; Url = u }
+
+        let decoder =
+            constructor
+                <!> Json.read "type"
+                <*> Json.read "name"
+                <*> Json.read "url"
+
+        decoder json
+
+
 let private serverError (message : string) =
     message
         |> serializeObject Encoders.error
-        |> INTERNAL_ERROR
+        |> jsonResponse HTTP_500
 
 
 let list (listFeeds : unit -> Result<FeedRecord list, string>) : WebPart =
@@ -42,13 +65,19 @@ let list (listFeeds : unit -> Result<FeedRecord list, string>) : WebPart =
     | Ok feeds ->
         feeds
             |> serializeList Encoders.feed
-            |> Successful.OK
+            |> jsonResponse HTTP_200
     | Error message ->
         serverError message
 
 
-let create (createFeed : FeedFields -> Result<FeedRecord, string>) : WebPart =
-    Successful.OK "create"
+let create (createFeed : FeedFields -> Result<FeedRecord, string>) (fields : FeedFields) : WebPart =
+    match createFeed fields with
+    | Ok feed ->
+        feed
+            |> serializeObject Encoders.feed
+            |> jsonResponse HTTP_201
+    | Error message ->
+        serverError message
 
 
 let update (updateFeed : FeedFields -> Result<FeedRecord, string>) : WebPart =

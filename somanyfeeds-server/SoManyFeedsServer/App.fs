@@ -9,6 +9,7 @@ open Suave.Operators
 open Suave.RequestErrors
 open Suave.Redirection
 open SoManyFeedsServer
+open SoManyFeedsServer.Json
 open SoManyFeedsServer.DataSource
 
 
@@ -33,15 +34,30 @@ module private DataAccess =
 
 
 let private authenticatedPage (user : Authentication.User) : WebPart =
+    let listFeeds =
+        FeedsApi.list (fun _ -> DataAccess.listFeeds user.Id)
+
+    let createFeed =
+        deserializeBody
+            FeedsApi.Decoders.feedFields
+            (FeedsApi.create <| DataAccess.createFeed user.Id)
+
+    let updateFeed =
+        DataAccess.updateFeed user.Id >> FeedsApi.update
+
+    let deleteFeed =
+        (fun id _ -> DataAccess.deleteFeed user.Id id) >> FeedsApi.delete
+
+
     choose [
         GET >=> path "/" >=> redirect "/read"
         GET >=> path "/read" >=> ReadPage.page user
         GET >=> path "/manage" >=> ManagePage.page DataAccess.listFeeds user
 
-        GET >=> path "/api/feeds" >=> FeedsApi.list (fun _ -> DataAccess.listFeeds user.Id)
-        POST >=> path "/api/feeds" >=> FeedsApi.create (DataAccess.createFeed user.Id)
-        PUT >=> pathScan "/api/feeds/%d" (DataAccess.updateFeed user.Id >> FeedsApi.update)
-        DELETE >=> pathScan "/api/feeds/%d" ((fun id _ -> DataAccess.deleteFeed user.Id id) >> FeedsApi.delete)
+        GET >=> path "/api/feeds" >=> listFeeds
+        POST >=> path "/api/feeds" >=> createFeed
+        PUT >=> pathScan "/api/feeds/%d" updateFeed
+        DELETE >=> pathScan "/api/feeds/%d" deleteFeed
 
         GET >=> Files.browseHome
         NOT_FOUND "not found"

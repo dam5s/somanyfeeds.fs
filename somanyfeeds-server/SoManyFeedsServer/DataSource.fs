@@ -1,6 +1,5 @@
 module SoManyFeedsServer.DataSource
 
-open Npgsql
 open System
 open System.Data
 open System.Data.Common
