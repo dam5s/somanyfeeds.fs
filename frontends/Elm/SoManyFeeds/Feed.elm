@@ -1,4 +1,4 @@
-module SoManyFeeds.Feed exposing (Feed, FeedType, Json, fromJson)
+module SoManyFeeds.Feed exposing (Feed, FeedType, Json, typeToString, fromJson)
 
 
 type alias Json =
@@ -25,17 +25,27 @@ type alias Feed =
 fromJson : Json -> Feed
 fromJson json =
     { id = json.id
-    , feedType = feedTypeFromString json.feedType
+    , feedType = typeFromString json.feedType
     , name = json.name
     , url = json.url
     }
 
 
-feedTypeFromString : String -> FeedType
-feedTypeFromString value =
+typeFromString : String -> FeedType
+typeFromString value =
     case value of
         "Atom" ->
             Atom
 
         _ ->
             Rss
+
+
+typeToString : FeedType -> String
+typeToString value =
+    case value of
+        Atom ->
+            "Atom"
+
+        Rss ->
+            "Rss"

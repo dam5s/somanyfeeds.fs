@@ -79,6 +79,7 @@ let private buildElm _ =
 
 let private copyFonts _ =
     Shell.copyDir "damo-io-server/Resources/public/fonts" "frontends/Fonts" (fun f -> true)
+    Shell.copyDir "somanyfeeds-server/Resources/public/fonts" "frontends/Fonts" (fun f -> true)
 
 
 let private buildFakeExecutionContext (args : string list) =

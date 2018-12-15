@@ -1,37 +1,98 @@
 @import 'reset';
 @import 'fonts';
 
-$light-color: #e6d4a7;
-$dark-color: #825534;
-$contrast-color: #36362c;
-$accent-color: #5d917d;
-$light-accent-color: #a8ad80;
+$light-color: #efecca;
+$mid-color: #e6e2af;
+$dark-color: #a7a37e;
+$accent-color: #046380;
+$contrast-color: #002f2f;
+$text-color: #222;
+$inverted-text-color: #fff;
 
+$serif-fonts: 'Merriweather', 'Georgia', serif;
+$serif-normal: 300;
+$serif-bold: 700;
+$sans-serif-fonts: 'Merriweather Sans', 'Helvetica Neue', sans-serif;
+$sans-serif-normal: 400;
 
 html, body {
     height: 100%;
     margin: 0;
-    background-color: $light-color;
+    background-color: $mid-color;
     font-size: 16px;
-    font-family: 'Merriweather', 'Georgia', serif;
-    font-weight: 300;
-    color: $dark-color;
+    font-family: $serif-fonts;
+    font-weight: $serif-normal;
+    line-height: 1.4;
+    color: $text-color;
+}
+
+header, section {
+    padding: 0 1rem;
+}
+
+header {
+    background-color: $contrast-color;
+    padding: .5rem 1rem;
+    box-shadow: 0 3px 2px rgba(0,0,0,0.3);
+    position: relative;
+
+    h1 {
+        color: $inverted-text-color;
+        margin: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+header + h2 {
+    background-color: $accent-color;
+    color: $contrast-color;
+    margin: 0;
+    padding: 1rem 1rem 0;
+    text-transform: uppercase;
+}
+
+header + h2 + h1 {
+    background-color: $accent-color;
+    color: $inverted-text-color;
+    margin: -.8rem 0 0;
+    padding: 0 1rem 3rem;
+}
+
+header + h2 + h1 + * {
+    margin-top: -2.5rem;
+}
+
+section {
+    margin-bottom: 2rem;
+}
+
+nav {
+    text-align: right;
 }
 
 h1, h2, h3, h4 {
     line-height: 130%;
-    color: $contrast-color;
-    font-family: 'Merriweather Sans', 'Helvetica Neue', sans-serif;
-    font-weight: 400;
+    color: $accent-color;
+    font-family: $sans-serif-fonts;
+    font-weight: $sans-serif-normal;
     margin: 0 0 1rem;
 }
 
 h1 {
-    font-size: 2rem;
+    font-family: $serif-fonts;
+    font-weight: $serif-bold;
+    font-size: 3rem;
 }
 
 h2 {
     font-size: 1.3rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    color: $text-color;
 }
 
 a:link, a:hover, a:visited, a:active {
@@ -44,5 +105,111 @@ p {
 }
 
 em, strong {
-    font-weight: 700;
+    font-weight: $serif-bold;
+}
+
+label {
+    display: block;
+    margin-bottom: 1rem;
+
+    font-family: $sans-serif-fonts;
+    font-weight: $sans-serif-normal;
+}
+
+input[type="text"] {
+    background-color: $inverted-text-color;
+    color: $text-color;
+    border: none;
+    border-radius: 2px;
+    display: block;
+    padding: .5rem;
+    width: 100%;
+    box-sizing: border-box;
+
+    font-family: $serif-fonts;
+    font-weight: $serif-normal;
+}
+
+.button {
+    background-color: $dark-color;
+    color: $inverted-text-color;
+    border: 2px solid $dark-color;
+    border-radius: 2px;
+    padding: .5rem 1rem;
+    cursor: pointer;
+    display: inline-block;
+
+    font-family: $sans-serif-fonts;
+    font-weight: $sans-serif-normal;
+    text-transform: uppercase;
+    position: relative;
+
+    &:active {
+        top: 1px;
+    }
+}
+
+.button.primary {
+    background-color: $accent-color;
+    border-color: $accent-color;
+    color: $inverted-text-color;
+}
+
+.button.secondary {
+    background-color: rgba(0,0,0,0.02);
+    border-color: $dark-color;
+    color: $dark-color;
+}
+
+dl {
+    margin-bottom: 1rem;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+dt {
+    font-family: $sans-serif-fonts;
+    font-weight: $sans-serif-normal;
+    color: $accent-color;
+}
+
+.card {
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.3);
+    border-left: 1px solid rgba(0,0,0,0.05);
+    border-top: 1px solid rgba(0,0,0,0.05);
+    border-radius: 4px;
+    padding: 1rem;
+    background-color: $light-color;
+}
+
+.card-list {
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.3);
+    border-radius: 4px;
+    background-color: $light-color;
+
+    .card {
+        border-radius: 0;
+        box-shadow: none;
+
+        &:nth-of-type(even) {
+            background-color: rgba(0,0,0,0.02);
+        }
+    }
+
+    > :first-child {
+        border-radius: 4px 4px 0 0;
+    }
+
+    > :last-child {
+        border-radius: 0 0 4px 4px;
+    }
+
+    h3 {
+        margin: 0;
+        padding: .5rem 1rem;
+        background-color: $dark-color;
+        color: $inverted-text-color;
+    }
 }
