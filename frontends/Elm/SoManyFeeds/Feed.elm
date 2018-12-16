@@ -1,4 +1,4 @@
-module SoManyFeeds.Feed exposing (Feed, FeedType(..), Fields, Json, createRequest, emptyFields, fromJson, typeFromString, typeToString)
+module SoManyFeeds.Feed exposing (Feed, FeedType(..), Fields, Json, createRequest, deleteRequest, emptyFields, fromJson, typeFromString, typeToString)
 
 import Http
 import Json.Decode as Decode
@@ -96,3 +96,16 @@ createRequest fields =
             Http.jsonBody <| fieldsEncoder fields
     in
     Http.post "/api/feeds" body decoder
+
+
+deleteRequest : Feed -> Http.Request String
+deleteRequest feed =
+    Http.request
+        { method = "DELETE"
+        , headers = []
+        , url = "/api/feeds/" ++ String.fromInt feed.id
+        , body = Http.emptyBody
+        , expect = Http.expectString
+        , timeout = Nothing
+        , withCredentials = False
+        }

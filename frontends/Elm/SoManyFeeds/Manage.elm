@@ -7,6 +7,7 @@ import Html.Events exposing (on, onClick, onInput, onSubmit, targetValue)
 import Http
 import Json.Decode
 import Keyboard
+import List.Extra
 import Result
 import SoManyFeeds.Feed as Feed exposing (Feed)
 
@@ -27,8 +28,9 @@ type alias Model =
     { userName : String
     , feeds : List Feed
     , form : Feed.Fields
-    , formSubmitted : Bool
+    , creationInProgress : Bool
     , deleteDialog : Dialog Feed
+    , deletionInProgress : Bool
     }
 
 
@@ -41,6 +43,8 @@ type Msg
     | OpenDeleteDialog Feed
     | CloseDeleteDialog
     | KeyPressed Keyboard.RawKey
+    | DeleteFeed
+    | DeleteFeedResult Feed (Result Http.Error String)
 
 
 init : Flags -> ( Model, Cmd Msg )
@@ -52,8 +56,9 @@ init flags =
                 |> List.sortBy .id
                 |> List.reverse
       , form = Feed.emptyFields
-      , formSubmitted = False
+      , creationInProgress = False
       , deleteDialog = Initial
+      , deletionInProgress = False
       }
     , Cmd.none
     )
@@ -119,7 +124,7 @@ newFeedForm model =
             , label []
                 [ text "Type"
                 , div [ class "styled-select" ]
-                    [ select [ onSelect UpdateFormType, disabled model.formSubmitted ]
+                    [ select [ onSelect UpdateFormType, disabled model.creationInProgress ]
                         [ feedTypeOption Feed.Rss
                         , feedTypeOption Feed.Atom
                         ]
@@ -127,19 +132,20 @@ newFeedForm model =
                 ]
             , label []
                 [ text "Name"
-                , input [ type_ "text", value name, onInput UpdateFormName, disabled model.formSubmitted ] []
+                , input [ type_ "text", value name, onInput UpdateFormName, disabled model.creationInProgress ] []
                 ]
             , label []
                 [ text "Url"
-                , input [ type_ "text", value url, onInput UpdateFormUrl, disabled model.formSubmitted ] []
+                , input [ type_ "text", value url, onInput UpdateFormUrl, disabled model.creationInProgress ] []
                 ]
             , nav []
-                [ button [ class "button primary", disabled model.formSubmitted ] [ text "Subscribe" ]
+                [ button [ class "button primary", disabled model.creationInProgress ] [ text "Subscribe" ]
                 ]
             ]
         ]
 
 
+overlay : Model -> Html Msg
 overlay model =
     case model.deleteDialog of
         Initial ->
@@ -152,6 +158,7 @@ overlay model =
             div [ class "overlay closed" ] []
 
 
+deleteDialog : Model -> Html Msg
 deleteDialog model =
     case model.deleteDialog of
         Opened feed ->
@@ -159,8 +166,8 @@ deleteDialog model =
                 [ h3 [] [ text "Unsubscribe" ]
                 , p [] [ text <| "Are you sure you want to unsubscribe from \"" ++ feed.name ++ "\"?" ]
                 , nav []
-                    [ button [ class "button primary" ] [ text "Yes, unsubscribe" ]
-                    , button [ class "button secondary", onClick CloseDeleteDialog ] [ text "No, cancel" ]
+                    [ button [ class "button primary", disabled model.deletionInProgress, onClick DeleteFeed ] [ text "Yes, unsubscribe" ]
+                    , button [ class "button secondary", disabled model.deletionInProgress, onClick CloseDeleteDialog ] [ text "No, cancel" ]
                     ]
                 ]
 
@@ -190,7 +197,7 @@ feedCreated model json =
             Feed.fromJson json
     in
     { model
-        | formSubmitted = False
+        | creationInProgress = False
         , form = Feed.emptyFields
         , feeds = [ feed ] ++ model.feeds
     }
@@ -203,6 +210,15 @@ isKey key rawKey =
 
 isEscape =
     isKey Keyboard.Escape
+
+
+removeFeed : Feed -> Model -> Model
+removeFeed feed model =
+    { model
+        | deletionInProgress = False
+        , deleteDialog = Closed
+        , feeds = List.Extra.filterNot (\f -> f.id == feed.id) model.feeds
+    }
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -225,12 +241,12 @@ update msg model =
             ( updateForm { form | url = value }, Cmd.none )
 
         CreateFeed ->
-            ( { model | formSubmitted = True }
+            ( { model | creationInProgress = True }
             , Http.send CreateFeedResult <| Feed.createRequest form
             )
 
         CreateFeedResult (Result.Err err) ->
-            ( { model | formSubmitted = False }, Cmd.none )
+            ( { model | creationInProgress = False }, Cmd.none )
 
         CreateFeedResult (Result.Ok feedJson) ->
             ( feedCreated model feedJson, Cmd.none )
@@ -247,6 +263,22 @@ update msg model =
 
             else
                 ( model, Cmd.none )
+
+        DeleteFeed ->
+            case model.deleteDialog of
+                Opened feed ->
+                    ( { model | deletionInProgress = True }
+                    , Http.send (DeleteFeedResult feed) <| Feed.deleteRequest feed
+                    )
+
+                _ ->
+                    ( model, Cmd.none )
+
+        DeleteFeedResult feed (Ok _) ->
+            ( removeFeed feed model, Cmd.none )
+
+        DeleteFeedResult feed (Err _) ->
+            ( { model | deletionInProgress = False }, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg
