@@ -70,6 +70,10 @@ section {
 
 nav {
   text-align: right;
+
+  .button {
+    margin-left: 1rem;
+  }
 }
 
 h1, h2, h3, h4 {
@@ -131,7 +135,7 @@ input[type="text"] {
   font-weight: $serif-normal;
 
   &:disabled {
-    opacity: 50%;
+    opacity: 0.5;
   }
 }
 
@@ -156,7 +160,7 @@ input[type="text"] {
     border: none;
 
     &:disabled {
-      opacity: 50%;
+      opacity: 0.5;
     }
   }
 }
@@ -180,7 +184,7 @@ input[type="text"] {
   }
 
   &:disabled {
-    opacity: 50%;
+    opacity: 0.5;
   }
 }
 
@@ -210,13 +214,24 @@ dt {
   color: $accent-color;
 }
 
-.card {
+.card, .dialog {
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
   border-left: 1px solid rgba(0, 0, 0, 0.05);
   border-top: 1px solid rgba(0, 0, 0, 0.05);
   border-radius: 4px;
   padding: 1rem;
   background-color: $light-color;
+}
+
+.dialog {
+  width: 30rem;
+  padding: 1rem;
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  margin-left: -15rem;
+  z-index: 3;
+  background-color: $inverted-text-color;
 }
 
 .card-list {
@@ -246,5 +261,49 @@ dt {
     padding: .5rem 1rem;
     background-color: $dark-color;
     color: $inverted-text-color;
+  }
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+
+  z-index: 2;
+  background-color: transparentize($light-color, 0.3);
+  opacity: 0.5;
+
+  animation-name: fadeIn;
+  animation-duration: .25s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards;
+
+  &.closed {
+    opacity: 0;
+    animation-name: fadeOut;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    visibility: hidden;
+  }
+  100% {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    visibility: visible;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
   }
 }

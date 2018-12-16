@@ -3,9 +3,10 @@ module SoManyFeeds.Manage exposing (main)
 import Browser exposing (Document)
 import Html exposing (Attribute, Html, a, button, dd, div, dl, dt, form, h1, h2, h3, header, input, label, li, nav, option, p, section, select, text, ul)
 import Html.Attributes exposing (class, disabled, href, selected, target, type_, value)
-import Html.Events exposing (on, onInput, onSubmit, targetValue)
+import Html.Events exposing (on, onClick, onInput, onSubmit, targetValue)
 import Http
 import Json.Decode
+import Keyboard
 import Result
 import SoManyFeeds.Feed as Feed exposing (Feed)
 
@@ -16,11 +17,18 @@ type alias Flags =
     }
 
 
+type Dialog a
+    = Initial
+    | Opened a
+    | Closed
+
+
 type alias Model =
     { userName : String
     , feeds : List Feed
     , form : Feed.Fields
     , formSubmitted : Bool
+    , deleteDialog : Dialog Feed
     }
 
 
@@ -30,14 +38,22 @@ type Msg
     | UpdateFormUrl String
     | CreateFeed
     | CreateFeedResult (Result Http.Error Feed.Json)
+    | OpenDeleteDialog Feed
+    | CloseDeleteDialog
+    | KeyPressed Keyboard.RawKey
 
 
 init : Flags -> ( Model, Cmd Msg )
 init flags =
     ( { userName = flags.userName
-      , feeds = List.map Feed.fromJson flags.feeds
+      , feeds =
+            flags.feeds
+                |> List.map Feed.fromJson
+                |> List.sortBy .id
+                |> List.reverse
       , form = Feed.emptyFields
       , formSubmitted = False
+      , deleteDialog = Initial
       }
     , Cmd.none
     )
@@ -61,7 +77,7 @@ feedView feed =
                 ]
             ]
         , nav []
-            [ button [ class "button secondary" ] [ text "Unsubscribe" ]
+            [ button [ class "button secondary", onClick <| OpenDeleteDialog feed ] [ text "Unsubscribe" ]
             ]
         ]
 
@@ -124,6 +140,34 @@ newFeedForm model =
         ]
 
 
+overlay model =
+    case model.deleteDialog of
+        Initial ->
+            div [] []
+
+        Opened _ ->
+            div [ class "overlay", onClick CloseDeleteDialog ] []
+
+        Closed ->
+            div [ class "overlay closed" ] []
+
+
+deleteDialog model =
+    case model.deleteDialog of
+        Opened feed ->
+            div [ class "dialog" ]
+                [ h3 [] [ text "Unsubscribe" ]
+                , p [] [ text <| "Are you sure you want to unsubscribe from \"" ++ feed.name ++ "\"?" ]
+                , nav []
+                    [ button [ class "button primary" ] [ text "Yes, unsubscribe" ]
+                    , button [ class "button secondary", onClick CloseDeleteDialog ] [ text "No, cancel" ]
+                    ]
+                ]
+
+        _ ->
+            div [] []
+
+
 view : Model -> Document Msg
 view model =
     { title = "SoManyFeeds - A feed aggregator by Damien Le Berrigaud"
@@ -133,6 +177,8 @@ view model =
         , h1 [] [ text "Manage your subscriptions" ]
         , newFeedForm model
         , feedList model
+        , overlay model
+        , deleteDialog model
         ]
     }
 
@@ -148,6 +194,15 @@ feedCreated model json =
         , form = Feed.emptyFields
         , feeds = [ feed ] ++ model.feeds
     }
+
+
+isKey : Keyboard.Key -> Keyboard.RawKey -> Bool
+isKey key rawKey =
+    Maybe.withDefault False <| Maybe.map ((==) key) (Keyboard.anyKey rawKey)
+
+
+isEscape =
+    isKey Keyboard.Escape
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -180,6 +235,24 @@ update msg model =
         CreateFeedResult (Result.Ok feedJson) ->
             ( feedCreated model feedJson, Cmd.none )
 
+        OpenDeleteDialog feed ->
+            ( { model | deleteDialog = Opened feed }, Cmd.none )
+
+        CloseDeleteDialog ->
+            ( { model | deleteDialog = Closed }, Cmd.none )
+
+        KeyPressed key ->
+            if isEscape key then
+                ( { model | deleteDialog = Closed }, Cmd.none )
+
+            else
+                ( model, Cmd.none )
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Keyboard.ups KeyPressed
+
 
 main : Program Flags Model Msg
 main =
@@ -187,5 +260,5 @@ main =
         { init = init
         , view = view
         , update = update
-        , subscriptions = always Sub.none
+        , subscriptions = subscriptions
         }
