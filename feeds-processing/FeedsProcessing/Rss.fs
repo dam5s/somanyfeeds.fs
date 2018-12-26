@@ -6,7 +6,6 @@ open FSharp.Data
 open FeedsProcessing.Article
 open FeedsProcessing.ProcessingResult
 open FeedsProcessing.Download
-open FeedsProcessing.Feeds
 
 
 type private RssProvider = XmlProvider<"../feeds-processing/Resources/samples/medium.rss.sample">

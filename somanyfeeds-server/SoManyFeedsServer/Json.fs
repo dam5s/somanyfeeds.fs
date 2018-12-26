@@ -3,7 +3,6 @@ module SoManyFeedsServer.Json
 open Chiron
 open Chiron.Operators
 open Suave
-open Suave
 open Suave.Writers
 open Suave.Operators
 open Suave.Response

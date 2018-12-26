@@ -3,7 +3,6 @@ module DamoIOServer.SslHandler
 open System
 open Suave
 open Suave.Redirection
-open Suave.Filters
 open Suave.Operators
 
 

@@ -1,6 +1,5 @@
 module SoManyFeedsServer.FeedsPersistence
 
-open FeedsProcessing
 open System.Data.Common
 open SoManyFeedsServer.DataSource
 

@@ -1,7 +1,6 @@
 module SoManyFeedsServer.ErrorPage
 
 open Suave
-open Suave.ServerErrors
 open Suave.DotLiquid
 
 

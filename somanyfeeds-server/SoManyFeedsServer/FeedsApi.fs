@@ -1,8 +1,6 @@
 module SoManyFeedsServer.FeedsApi
 
-open System
 open Suave
-open Suave.ServerErrors
 open Chiron.Operators
 open SoManyFeedsServer.Json
 open SoManyFeedsServer.FeedsPersistence
@@ -10,7 +8,6 @@ open SoManyFeedsServer.FeedsPersistence
 
 module Encoders =
     open Chiron
-    open Chiron.Operators
 
 
     let private feedTypeToString (value : FeedRecordType) : string =
@@ -33,7 +30,6 @@ module Encoders =
 
 module Decoders =
     open Chiron
-    open Chiron.Operators
 
     let private feedTypeFromString (value : string) : FeedRecordType =
         match value with
@@ -43,7 +39,7 @@ module Decoders =
 
     let feedFields (json : Json) : JsonResult<FeedFields> * Json =
         let constructor feedType name url =
-            { FeedType = feedTypeFromString feedType ; Name = name ; Url = url }
+            { FeedType = feedTypeFromString feedType; Name = name; Url = url }
 
         let decoder =
             constructor
@@ -61,7 +57,7 @@ let private serverError (message : string) =
 
 
 let list (listFeeds : unit -> Result<FeedRecord list, string>) : WebPart =
-    match listFeeds () with
+    match listFeeds() with
     | Ok feeds ->
         feeds
             |> serializeList Encoders.feed
@@ -91,7 +87,7 @@ let update (updateFeed : FeedFields -> Result<FeedRecord, string>) (fields : Fee
 
 
 let delete (deleteFeed : unit -> Result<unit, string>) : WebPart =
-    match deleteFeed () with
+    match deleteFeed() with
     | Ok _ ->
         Successful.NO_CONTENT
     | Error message ->

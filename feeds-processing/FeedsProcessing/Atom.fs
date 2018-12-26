@@ -3,7 +3,6 @@ module FeedsProcessing.Atom
 open System
 open FSharp.Data
 open FeedsProcessing
-open FeedsProcessing.Feeds
 open FeedsProcessing.ProcessingResult
 open FeedsProcessing.Download
 open FeedsProcessing.Article

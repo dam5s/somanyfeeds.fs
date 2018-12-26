@@ -1,7 +1,6 @@
 module FeedsProcessing.Article
 
 open System
-open FeedsProcessing.Feeds
 
 
 type Article =

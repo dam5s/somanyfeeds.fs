@@ -5,7 +5,6 @@ open Suave
 open Suave.Filters
 open Suave.Operators
 open Suave.RequestErrors
-open DamoIOServer.Sources
 open DamoIOServer.ArticlesPersistence
 open DamoIOServer.SslHandler
 
