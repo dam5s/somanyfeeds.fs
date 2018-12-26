@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-#
+# 
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "damo-io-server", "damo-io-server\damo-io-server.fsproj", "{A7157346-F377-4B8A-8CF2-1DB962115171}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "frontends", "frontends\frontends.fsproj", "{3FFF4355-EB86-42A6-9E8E-0EAB5D20615D}"
@@ -12,6 +12,8 @@ EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "feeds-processing", "feeds-processing\feeds-processing.fsproj", "{B4BC8FCB-9682-43BA-8676-680224209DA5}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "feeds-processing-tests", "feeds-processing-tests\feeds-processing-tests.fsproj", "{55BB409D-D281-4C3A-A108-5D4517F2E894}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "somanyfeeds-server-integration-tests", "somanyfeeds-server-integration-tests\somanyfeeds-server-integration-tests.fsproj", "{A6573A90-30DE-4889-99E0-445094C09318}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -107,5 +109,17 @@ Global
 		{B4BC8FCB-9682-43BA-8676-680224209DA5}.Release|x64.Build.0 = Release|Any CPU
 		{B4BC8FCB-9682-43BA-8676-680224209DA5}.Release|x86.ActiveCfg = Release|Any CPU
 		{B4BC8FCB-9682-43BA-8676-680224209DA5}.Release|x86.Build.0 = Release|Any CPU
+		{A6573A90-30DE-4889-99E0-445094C09318}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6573A90-30DE-4889-99E0-445094C09318}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6573A90-30DE-4889-99E0-445094C09318}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A6573A90-30DE-4889-99E0-445094C09318}.Debug|x64.Build.0 = Debug|Any CPU
+		{A6573A90-30DE-4889-99E0-445094C09318}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A6573A90-30DE-4889-99E0-445094C09318}.Debug|x86.Build.0 = Debug|Any CPU
+		{A6573A90-30DE-4889-99E0-445094C09318}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6573A90-30DE-4889-99E0-445094C09318}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6573A90-30DE-4889-99E0-445094C09318}.Release|x64.ActiveCfg = Release|Any CPU
+		{A6573A90-30DE-4889-99E0-445094C09318}.Release|x64.Build.0 = Release|Any CPU
+		{A6573A90-30DE-4889-99E0-445094C09318}.Release|x86.ActiveCfg = Release|Any CPU
+		{A6573A90-30DE-4889-99E0-445094C09318}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
