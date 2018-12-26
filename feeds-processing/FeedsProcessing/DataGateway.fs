@@ -16,11 +16,11 @@ let private consumerKey = Environment.GetEnvironmentVariable "TWITTER_CONSUMER_A
 let private consumerSecret = Environment.GetEnvironmentVariable "TWITTER_CONSUMER_SECRET"
 let private urlEncode (value : string) : string = HttpUtility.UrlEncode value
 let private base64encode (value : string) : string = Convert.ToBase64String (Text.Encoding.UTF8.GetBytes value)
-let private bearerTokenHeader (BearerToken s) : string = String.Format ("Bearer {0}", s)
+let private bearerTokenHeader (BearerToken s) : string = sprintf "Bearer %s" s
 
 let private basicAuthHeader (username : string) (password : string) : BasicAuthHeader =
-    let credentials = String.Format ("{0}:{1}",  username, password)
-    BasicAuthHeader <| String.Format ("Basic {0}", base64encode credentials)
+    let credentials = sprintf "%s:%s"  username password
+    BasicAuthHeader <| sprintf "Basic %s" (base64encode credentials)
 
 
 let private parseToken (jsonString : string) : Result<BearerToken, string> =
@@ -31,7 +31,7 @@ let private parseToken (jsonString : string) : Result<BearerToken, string> =
 
         match accessTokenOption with
         | None ->
-            Error <| String.Format ("Could not parse access_token from json {0}", jsonString)
+            Error <| sprintf "Could not parse access_token from json %s" jsonString
         | Some accessToken ->
             Ok <| BearerToken accessToken
     with
@@ -56,7 +56,7 @@ let private requestToken (BasicAuthHeader authHeader) : Result<BearerToken, stri
     with
     | ex ->
         printfn "There was an error requesting the token. %s" (ex.ToString ())
-        Error <| String.Format ("There was an error requesting the token. {0}", ex.ToString ())
+        Error <| sprintf "There was an error requesting the token. %s" (ex.ToString ())
 
 
 
@@ -77,7 +77,7 @@ let private requestTweets (TwitterHandle handle) (token : BearerToken) : Downloa
     with
     | ex ->
         printfn "There was an error requesting the token. %s" (ex.ToString ())
-        Error <| String.Format ("There was an error requesting the token. {0}", ex.ToString ())
+        Error <| sprintf "There was an error requesting the token. %s" ex.Message
 
 
 let downloadTwitterTimeline (handle : TwitterHandle) : DownloadResult =
@@ -94,4 +94,4 @@ let downloadFeed (FeedUrl url) : DownloadResult =
     with
     | ex ->
         printfn "There was an error downloading the feed at url %s" url
-        Error <| String.Format ("There was an error downloading the feed. {0}", ex.ToString ())
+        Error <| sprintf "There was an error downloading the feed. %s" ex.Message

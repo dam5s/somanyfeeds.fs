@@ -35,7 +35,7 @@ let private usingConnection (dataSource : DataSource) (mapping : DbConnection ->
     with
     | ex ->
         printfn "Data access error: %s" (ex.ToString ())
-        Error <| String.Format ("Data access error: {0}", ex.Message)
+        Error <| sprintf "Data access error: %s" ex.Message
 
 
 let private applyBinding (command : DbCommand) (Binding (name, value)) =

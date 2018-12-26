@@ -24,7 +24,7 @@ module private DataAccess =
                 Ok (new NpgsqlConnection (connectionString) :> DbConnection)
             with
             | ex ->
-                Error <| String.Format("Connection error: {0}", ex.Message)
+                Error <| sprintf "Connection error: %s" ex.Message
 
 
     let listFeeds = FeedsPersistence.listFeeds dataSource
