@@ -1,12 +1,14 @@
 ﻿module SoManyFeedsIntegrationTests
 
 open IntegrationTests
+open OpenQA.Selenium.Chrome
 open Suave
 open System
 open System.Threading
 open canopy
 open canopy.runner.classic
 open canopy.classic
+open canopy.types
 open configuration
 
 
@@ -15,6 +17,11 @@ let private homeDir : string =
 
 let mutable private tokenSource : CancellationTokenSource option =
     None
+
+let private chromeOptions =
+    let chromeOptions = new ChromeOptions ()
+    chromeOptions.AddArguments ("--headless", "--disable-gpu", "--disable-ipv6")
+    chromeOptions
 
 
 once (fun () ->
@@ -42,7 +49,7 @@ lastly (fun () ->
 [<EntryPoint>]
 let main (_) =
     chromeDir <- sprintf "%s/dev/chromedriver-2.44" homeDir
-    start chrome
+    start <| ChromeWithOptionsAndTimeSpan (chromeOptions, TimeSpan.FromSeconds 20.0)
 
     Feeds.all ()
 
