@@ -1,7 +1,6 @@
 module SoManyFeedsServer.App
 
 open Npgsql
-open System
 open System.Data.Common
 open Suave
 open Suave.Filters
@@ -14,8 +13,6 @@ open SoManyFeedsServer.DataSource
 
 
 module private DataAccess =
-    open SoManyFeedsServer.Authentication
-
     let private connectionString = "Host=localhost;Username=somanyfeeds;Password=secret;Database=somanyfeeds_dev"
 
     let private dataSource : DataSource =

@@ -1,5 +1,4 @@
 ﻿open SharpScss
-open System
 open System.IO
 open Fake.Core
 open Fake.Core.Context
@@ -84,14 +83,21 @@ let private copyFonts _ =
 
 let private buildFakeExecutionContext (args : string list) =
     let fakeArgs =
-        if (List.isEmpty args) then
+        if List.isEmpty args then
             []
         else
             [ "--target"
-              (List.head args)
+              List.head args
             ]
 
     FakeExecutionContext.Create false "Program.fs" fakeArgs
+
+
+let private somanyfeedsServerIntegrationTests _ =
+    Environment.setEnvironVar "PORT" "9090"
+    Environment.setEnvironVar "CONTENT_ROOT" (Path.GetFullPath "somanyfeeds-server")
+    dotnet "run" "-p somanyfeeds-server-integration-tests" ()
+    ()
 
 
 let dependsOn (tasks : string list) (task : string) = task <== tasks
@@ -111,6 +117,7 @@ let main (args : string []) =
     Target.create "build" <| dotnet "build" ""
 
     Target.create "test" <| dotnet "test" "feeds-processing-tests"
+    Target.create "integration-tests" <| somanyfeedsServerIntegrationTests
 
     Target.create "publish" (fun _ ->
         dotnet "publish" "damo-io-server -c Release" ()
@@ -126,7 +133,8 @@ let main (args : string []) =
     "buildScss" |> mustRunAfter "clean"
 
     "test" |> dependsOn [ "build" ]
-    "publish" |> dependsOn [ "test" ; "build" ; "clean" ]
+    "integration-tests" |> dependsOn [ "build" ]
+    "publish" |> dependsOn [ "test" ; "integration-tests" ; "build" ; "clean" ]
 
     Target.runOrDefault "publish"
 

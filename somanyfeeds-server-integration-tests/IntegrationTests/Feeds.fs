@@ -3,11 +3,12 @@ module IntegrationTests.Feeds
 open Assertions
 open canopy.runner.classic
 open canopy.classic
+open SoManyFeedsServer
 
 
 let all () =
     "test feeds CRUD" &&& fun _ ->
-        url "http://localhost:8080"
+        url <| sprintf "http://localhost:%d" Config.port
 
         click "follow some feeds"
 

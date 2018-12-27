@@ -9,6 +9,8 @@
     <PackageReference Include="canopy" Version="2.1.0" />
     <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="2.45.0" />
 
+    <ProjectReference Include="../somanyfeeds-server/somanyfeeds-server.fsproj" />
+
     <Compile Include="Assertions.fs" />
     <Compile Include="IntegrationTests\Feeds.fs" />
     <Compile Include="Program.fs" />
