@@ -21,8 +21,8 @@ type FeedFields =
 let private mapFeed (record : DbDataRecord) : FeedRecord =
     { Id = record.GetInt64 (0)
       UserId = record.GetInt64 (1)
-      Name = record.GetString (3)
-      Url = record.GetString (4)
+      Name = record.GetString (2)
+      Url = record.GetString (3)
     }
 
 

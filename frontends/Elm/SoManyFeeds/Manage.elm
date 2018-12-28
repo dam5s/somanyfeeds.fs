@@ -2,7 +2,7 @@ module SoManyFeeds.Manage exposing (main)
 
 import Browser exposing (Document)
 import Html exposing (Attribute, Html, a, button, dd, div, dl, dt, form, h1, h2, h3, header, input, label, li, nav, option, p, section, select, text, ul)
-import Html.Attributes exposing (class, disabled, href, selected, target, type_, value)
+import Html.Attributes exposing (class, disabled, href, name, selected, target, type_, value)
 import Html.Events exposing (on, onClick, onInput, onSubmit, targetValue)
 import Http
 import Json.Decode
@@ -98,10 +98,10 @@ onSelect msg =
 newFeedForm : Model -> Html Msg
 newFeedForm model =
     let
-        name =
+        nameValue =
             model.form.name
 
-        url =
+        urlValue =
             model.form.url
     in
     section []
@@ -109,11 +109,11 @@ newFeedForm model =
             [ h3 [] [ text "Add a feed" ]
             , label []
                 [ text "Name"
-                , input [ type_ "text", value name, onInput UpdateFormName, disabled model.creationInProgress ] []
+                , input [ type_ "text", name "name", value nameValue, onInput UpdateFormName, disabled model.creationInProgress ] []
                 ]
             , label []
                 [ text "Url"
-                , input [ type_ "text", value url, onInput UpdateFormUrl, disabled model.creationInProgress ] []
+                , input [ type_ "text", name "url", value urlValue, onInput UpdateFormUrl, disabled model.creationInProgress ] []
                 ]
             , nav []
                 [ button [ class "button primary", disabled model.creationInProgress ] [ text "Subscribe" ]

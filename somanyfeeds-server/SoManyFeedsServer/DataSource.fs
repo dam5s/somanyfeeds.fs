@@ -1,6 +1,5 @@
 module SoManyFeedsServer.DataSource
 
-open System
 open System.Data.Common
 
 

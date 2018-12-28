@@ -12,10 +12,10 @@ open SoManyFeedsServer.Json
 open SoManyFeedsServer.DataSource
 
 
-module private DataAccess =
+module DataAccess =
     let private connectionString = "Host=localhost;Username=somanyfeeds;Password=secret;Database=somanyfeeds_dev"
 
-    let private dataSource : DataSource =
+    let dataSource : DataSource =
         fun _ ->
             try
                 Ok (new NpgsqlConnection (connectionString) :> DbConnection)

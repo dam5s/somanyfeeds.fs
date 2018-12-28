@@ -11,8 +11,9 @@
 
     <ProjectReference Include="../somanyfeeds-server/somanyfeeds-server.fsproj" />
 
+    <Compile Include="DatabaseSupport.fs" />
     <Compile Include="Assertions.fs" />
-    <Compile Include="IntegrationTests\Feeds.fs" />
+    <Compile Include="IntegrationTests/Feeds.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 </Project>
