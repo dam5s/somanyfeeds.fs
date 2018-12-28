@@ -26,6 +26,15 @@ let private mapFeed (record : DbDataRecord) : FeedRecord =
     }
 
 
+let listAllFeeds (dataSource: DataSource) (_ : unit) : Result<FeedRecord list, string> =
+    query dataSource
+        """ select id, user_id, name, url
+            from feeds
+        """
+        []
+        mapFeed
+
+
 let listFeeds (dataSource: DataSource) (userId : int64) : Result<FeedRecord list, string> =
     let bindings =
         [ Binding ("@UserId", userId) ]

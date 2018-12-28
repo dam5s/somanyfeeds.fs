@@ -3,22 +3,23 @@ module SoManyFeedsServer.Config
 open Suave
 open DotLiquid
 open System.IO
-open System
 
 
-let private contentRoot =
+let private contentRoot : string =
     Env.varDefault "CONTENT_ROOT" Directory.GetCurrentDirectory
 
-let private templatesFolder = Path.Combine (contentRoot, "Resources/templates")
-let private publicFolder = Path.Combine (contentRoot, "Resources/public")
+let private templatesFolder : string =
+    Path.Combine (contentRoot, "Resources/templates")
+
+let private publicFolder : string =
+    Path.Combine (contentRoot, "Resources/public")
+
+let private defaultPort _ : string =
+    "8080"
 
 
-let port: int =
-    try
-        int <| Environment.GetEnvironmentVariable "PORT"
-    with
-    | _ ->
-        8080
+let port : int =
+    Env.varDefaultParse int "PORT" defaultPort
 
 
 let create : SuaveConfig =

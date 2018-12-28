@@ -6,5 +6,7 @@ open SoManyFeedsServer
 
 [<EntryPoint>]
 let main _ =
-    startWebServer Config.create App.webPart
+    Async.Start FeedsProcessor.backgroundProcessing
+
+    startWebServer Config.create WebApp.webPart
     0
