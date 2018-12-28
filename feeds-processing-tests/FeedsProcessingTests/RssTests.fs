@@ -7,14 +7,14 @@ module ``Rss Processor Tests``
 
     open FeedsProcessing.Article
     open FeedsProcessing.Download
-    open FeedsProcessing.Rss
+    open FeedsProcessing.Xml
 
     [<Test>]
     let ``processFeed with standard medium xml`` () =
         let downloadedFeed = DownloadedFeed <| File.ReadAllText("../../../../feeds-processing/Resources/samples/medium.rss.sample")
 
 
-        let result = processRssFeed downloadedFeed
+        let result = processXmlFeed downloadedFeed
 
 
         match result with

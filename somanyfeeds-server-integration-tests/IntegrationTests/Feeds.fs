@@ -7,7 +7,7 @@ open SoManyFeedsServer
 
 
 let all () =
-    "test feeds CRUD" &&& fun _ ->
+    "Feeds CRUD" &&& fun _ ->
         url <| sprintf "http://localhost:%d" Config.port
 
         click "follow some feeds"

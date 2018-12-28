@@ -12,8 +12,6 @@
     <Compile Include="FeedsProcessing/ProcessingResult.fs" />
     <Compile Include="FeedsProcessing/Download.fs" />
     <Compile Include="FeedsProcessing/Xml.fs" />
-    <Compile Include="FeedsProcessing/Rss.fs" />
-    <Compile Include="FeedsProcessing/Atom.fs" />
     <Compile Include="FeedsProcessing/Twitter.fs" />
     <Compile Include="FeedsProcessing/DataGateway.fs" />
   </ItemGroup>

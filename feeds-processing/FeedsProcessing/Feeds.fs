@@ -8,6 +8,5 @@ type FeedUrl = FeedUrl of string
 type TwitterHandle = TwitterHandle of string
 
 type Feed =
-    | Rss of FeedName * FeedUrl
-    | Atom of FeedName * FeedUrl
+    | Xml of FeedName * FeedUrl
     | Twitter of TwitterHandle

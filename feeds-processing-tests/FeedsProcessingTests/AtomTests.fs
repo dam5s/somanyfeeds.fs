@@ -7,14 +7,14 @@ module ``Atom Processor Tests``
 
     open FeedsProcessing.Download
     open FeedsProcessing.Article
-    open FeedsProcessing.Atom
+    open FeedsProcessing.Xml
 
     [<Test>]
     let ``processFeed with standard github xml`` () =
         let downloaded = DownloadedFeed <| File.ReadAllText("../../../../feeds-processing/Resources/samples/github.atom.sample")
 
 
-        let result = processAtomFeed downloaded
+        let result = processXmlFeed downloaded
 
 
         match result with
