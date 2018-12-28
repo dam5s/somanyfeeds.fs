@@ -16,6 +16,7 @@ let all () =
         click "follow some feeds"
 
         expectToFind "h1" "Manage your subscriptions"
+        expectToFind "p" "You have not subscribed to any feeds yet."
         count ".card-list .card" 0
 
         "input[name='name']" << "My Test Feed"

@@ -85,8 +85,14 @@ feedList : Model -> Html Msg
 feedList model =
     section []
         [ div [ class "card-list" ] <|
-            [ h3 [] [ text "Your feeds" ] ]
-                ++ List.map feedView model.feeds
+            if List.isEmpty model.feeds then
+                [ h3 [] [ text "Your feeds" ]
+                , p [ class "message" ] [ text "You have not subscribed to any feeds yet." ]
+                ]
+
+            else
+                [ h3 [] [ text "Your feeds" ] ]
+                    ++ List.map feedView model.feeds
         ]
 
 
