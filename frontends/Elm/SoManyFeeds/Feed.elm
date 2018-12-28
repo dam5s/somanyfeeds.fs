@@ -1,81 +1,35 @@
-module SoManyFeeds.Feed exposing (Feed, FeedType(..), Fields, Json, createRequest, deleteRequest, emptyFields, fromJson, typeFromString, typeToString)
+module SoManyFeeds.Feed exposing (Feed, Fields, createRequest, deleteRequest, emptyFields)
 
 import Http
 import Json.Decode as Decode
 import Json.Encode as Encode
 
 
-type alias Json =
-    { id : Int
-    , feedType : String
-    , name : String
-    , url : String
-    }
-
-
-type FeedType
-    = Rss
-    | Atom
-
-
 type alias Feed =
     { id : Int
-    , feedType : FeedType
     , name : String
     , url : String
     }
 
 
 type alias Fields =
-    { feedType : FeedType
-    , name : String
+    { name : String
     , url : String
     }
 
 
-fromJson : Json -> Feed
-fromJson json =
-    { id = json.id
-    , feedType = typeFromString json.feedType
-    , name = json.name
-    , url = json.url
-    }
-
-
-typeFromString : String -> FeedType
-typeFromString value =
-    case value of
-        "Atom" ->
-            Atom
-
-        _ ->
-            Rss
-
-
-typeToString : FeedType -> String
-typeToString value =
-    case value of
-        Atom ->
-            "Atom"
-
-        Rss ->
-            "Rss"
-
-
 emptyFields : Fields
 emptyFields =
-    { feedType = Rss
-    , name = ""
+    { name = ""
     , url = ""
     }
 
 
-decoder : Decode.Decoder Json
+decoder : Decode.Decoder Feed
 decoder =
-    Decode.map4
-        Json
+    Decode.map3
+        Feed
         (Decode.field "id" Decode.int)
-        (Decode.field "feedType" Decode.string)
         (Decode.field "name" Decode.string)
         (Decode.field "url" Decode.string)
 
@@ -83,13 +37,12 @@ decoder =
 fieldsEncoder : Fields -> Encode.Value
 fieldsEncoder fields =
     Encode.object
-        [ ( "feedType", Encode.string <| typeToString fields.feedType )
-        , ( "name", Encode.string fields.name )
+        [ ( "name", Encode.string fields.name )
         , ( "url", Encode.string fields.url )
         ]
 
 
-createRequest : Fields -> Http.Request Json
+createRequest : Fields -> Http.Request Feed
 createRequest fields =
     let
         body =

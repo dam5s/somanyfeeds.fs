@@ -14,7 +14,7 @@ import SoManyFeeds.Feed as Feed exposing (Feed)
 
 type alias Flags =
     { userName : String
-    , feeds : List Feed.Json
+    , feeds : List Feed
     }
 
 
@@ -35,11 +35,10 @@ type alias Model =
 
 
 type Msg
-    = UpdateFormType String
-    | UpdateFormName String
+    = UpdateFormName String
     | UpdateFormUrl String
     | CreateFeed
-    | CreateFeedResult (Result Http.Error Feed.Json)
+    | CreateFeedResult (Result Http.Error Feed)
     | OpenDeleteDialog Feed
     | CloseDeleteDialog
     | KeyPressed Keyboard.RawKey
@@ -52,7 +51,6 @@ init flags =
     ( { userName = flags.userName
       , feeds =
             flags.feeds
-                |> List.map Feed.fromJson
                 |> List.sortBy .id
                 |> List.reverse
       , form = Feed.emptyFields
@@ -70,10 +68,6 @@ feedView feed =
         [ dl []
             [ dt [] [ text "Name" ]
             , dd [] [ text feed.name ]
-            ]
-        , dl []
-            [ dt [] [ text "Type" ]
-            , dd [] [ text <| Feed.typeToString feed.feedType ]
             ]
         , dl []
             [ dt [] [ text "Url" ]
@@ -104,32 +98,15 @@ onSelect msg =
 newFeedForm : Model -> Html Msg
 newFeedForm model =
     let
-        feedType =
-            model.form.feedType
-
         name =
             model.form.name
 
         url =
             model.form.url
-
-        feedTypeOption t =
-            option
-                [ value <| Feed.typeToString t, selected <| feedType == t ]
-                [ text <| Feed.typeToString t ]
     in
     section []
         [ form [ class "card", onSubmit CreateFeed ]
             [ h3 [] [ text "Add a feed" ]
-            , label []
-                [ text "Type"
-                , div [ class "styled-select" ]
-                    [ select [ onSelect UpdateFormType, disabled model.creationInProgress ]
-                        [ feedTypeOption Feed.Rss
-                        , feedTypeOption Feed.Atom
-                        ]
-                    ]
-                ]
             , label []
                 [ text "Name"
                 , input [ type_ "text", value name, onInput UpdateFormName, disabled model.creationInProgress ] []
@@ -190,12 +167,8 @@ view model =
     }
 
 
-feedCreated : Model -> Feed.Json -> Model
-feedCreated model json =
-    let
-        feed =
-            Feed.fromJson json
-    in
+feedCreated : Model -> Feed -> Model
+feedCreated model feed =
     { model
         | creationInProgress = False
         , form = Feed.emptyFields
@@ -231,9 +204,6 @@ update msg model =
             { model | form = f }
     in
     case msg of
-        UpdateFormType value ->
-            ( updateForm { form | feedType = Feed.typeFromString value }, Cmd.none )
-
         UpdateFormName value ->
             ( updateForm { form | name = value }, Cmd.none )
 

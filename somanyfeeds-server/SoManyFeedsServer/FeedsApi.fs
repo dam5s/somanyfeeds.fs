@@ -10,15 +10,8 @@ module Encoders =
     open Chiron
 
 
-    let private feedTypeToString (value : FeedRecordType) : string =
-        match value with
-        | Atom -> "Atom"
-        | Rss -> "Rss"
-
-
     let feed (record : FeedRecord) : Json<unit> =
         Json.write "id" record.Id
-        *> Json.write "feedType" (feedTypeToString record.FeedType)
         *> Json.write "name" record.Name
         *> Json.write "url" record.Url
 
@@ -31,20 +24,13 @@ module Encoders =
 module Decoders =
     open Chiron
 
-    let private feedTypeFromString (value : string) : FeedRecordType =
-        match value with
-        | "Atom" -> Atom
-        | _ -> Rss
-
-
     let feedFields (json : Json) : JsonResult<FeedFields> * Json =
-        let constructor feedType name url =
-            { FeedType = feedTypeFromString feedType; Name = name; Url = url }
+        let constructor name url =
+            { Name = name; Url = url }
 
         let decoder =
             constructor
-                <!> Json.read "feedType"
-                <*> Json.read "name"
+                <!> Json.read "name"
                 <*> Json.read "url"
 
         decoder json
