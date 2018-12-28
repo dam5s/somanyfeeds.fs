@@ -1,3 +1,4 @@
+[<AutoOpen>]
 module DatabaseSupport
 
 open SoManyFeedsServer.DataSource

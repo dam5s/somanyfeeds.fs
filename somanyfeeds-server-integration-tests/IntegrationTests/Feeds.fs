@@ -1,7 +1,5 @@
 module IntegrationTests.Feeds
 
-open Assertions
-open DatabaseSupport
 open canopy.runner.classic
 open canopy.classic
 open SoManyFeedsServer

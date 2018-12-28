@@ -7,10 +7,7 @@ open System
 
 
 let private contentRoot =
-    match Environment.GetEnvironmentVariable "CONTENT_ROOT" with
-    | null
-    | "" -> Directory.GetCurrentDirectory ()
-    | path -> path
+    Env.varDefault "CONTENT_ROOT" Directory.GetCurrentDirectory
 
 let private templatesFolder = Path.Combine (contentRoot, "Resources/templates")
 let private publicFolder = Path.Combine (contentRoot, "Resources/public")

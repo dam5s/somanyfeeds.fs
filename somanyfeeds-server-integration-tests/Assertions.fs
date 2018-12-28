@@ -1,3 +1,4 @@
+[<AutoOpen>]
 module Assertions
 
 open canopy.classic

@@ -12,8 +12,6 @@ open FeedsProcessing.Download
 type private BasicAuthHeader = BasicAuthHeader of string
 type private BearerToken = BearerToken of string
 
-let private consumerKey = Environment.GetEnvironmentVariable "TWITTER_CONSUMER_API_KEY"
-let private consumerSecret = Environment.GetEnvironmentVariable "TWITTER_CONSUMER_SECRET"
 let private urlEncode (value : string) : string = HttpUtility.UrlEncode value
 let private base64encode (value : string) : string = Convert.ToBase64String (Text.Encoding.UTF8.GetBytes value)
 let private bearerTokenHeader (BearerToken s) : string = sprintf "Bearer %s" s
@@ -80,7 +78,7 @@ let private requestTweets (TwitterHandle handle) (token : BearerToken) : Downloa
         Error <| sprintf "There was an error requesting the token. %s" ex.Message
 
 
-let downloadTwitterTimeline (handle : TwitterHandle) : DownloadResult =
+let downloadTwitterTimeline (consumerKey : string) (consumerSecret : string) (handle : TwitterHandle) : DownloadResult =
     let auth = basicAuthHeader (urlEncode consumerKey) (urlEncode consumerSecret)
     Result.bind (requestTweets handle) (requestToken auth)
 

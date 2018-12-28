@@ -96,6 +96,7 @@ let private buildFakeExecutionContext (args : string list) =
 let private somanyfeedsServerIntegrationTests _ =
     Environment.setEnvironVar "PORT" "9090"
     Environment.setEnvironVar "CONTENT_ROOT" (Path.GetFullPath "somanyfeeds-server")
+    Environment.setEnvironVar "DB_CONNECTION" "Host=localhost;Username=somanyfeeds;Password=secret;Database=somanyfeeds_integration_tests"
     dotnet "run" "-p somanyfeeds-server-integration-tests" ()
     ()
 
