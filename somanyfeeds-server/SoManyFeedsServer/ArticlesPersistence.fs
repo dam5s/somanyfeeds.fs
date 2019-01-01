@@ -1,10 +1,20 @@
 module SoManyFeedsServer.ArticlesPersistence
 
 open System
+open System.Data.Common
 open SoManyFeedsServer.DataSource
 
 
 type ArticleRecord =
+    { Id : int64
+      Url : string
+      FeedUrl : string
+      Content : string
+      Date : DateTimeOffset option
+    }
+
+
+type ArticleFields =
     { Url : string
       FeedUrl : string
       Content : string
@@ -12,30 +22,41 @@ type ArticleRecord =
     }
 
 
-let createArticle (dataSource : DataSource) (record : ArticleRecord) : Result<ArticleRecord, string> =
+let createArticle (dataSource : DataSource) (fields : ArticleFields) : Result<ArticleRecord, string> =
     let bindings =
         [
-        Binding("@Url", record.Url)
-        Binding("@FeedUrl", record.FeedUrl)
-        Binding("@Content", record.Content)
-        optionBinding ("@Date", record.Date)
+        Binding("@Url", fields.Url)
+        Binding("@FeedUrl", fields.FeedUrl)
+        Binding("@Content", fields.Content)
+        optionBinding ("@Date", fields.Date)
         ]
 
-    update dataSource
+    let mapping =
+        fun (record : DbDataRecord) ->
+            { Id = record.GetInt64(0)
+              Url = fields.Url
+              FeedUrl = fields.FeedUrl
+              Content = fields.Content
+              Date = fields.Date
+            }
+
+    query dataSource
         """ insert into articles (url, feed_url, content, date)
             values (@Url, @FeedUrl, @Content, @Date)
         """
         bindings
-        |> Result.map (fun _ -> record)
+        mapping
+        |> Result.map (List.first >> Option.get)
 
 
-let deleteArticle (dataSource : DataSource) (url : string) : Result<unit, string> =
+let deleteArticle (dataSource : DataSource) (url : string) (feedUrl : string) : Result<unit, string> =
     let bindings =
         [
         Binding("@Url", url)
+        Binding("@FeedUrl", feedUrl)
         ]
 
     update dataSource
-        "delete from articles where url = @Url"
+        "delete from articles where url = @Url and feed_url = @FeedUrl"
         bindings
         |> Result.map (fun _ -> ())

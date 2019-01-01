@@ -37,7 +37,7 @@ let private logArticleError (url : string) (msg : string) : string =
     msg
 
 
-let private articleToRecord (FeedUrl feedUrl) (article : Article) : ArticleRecord =
+let private articleToFields (FeedUrl feedUrl) (article : Article) : ArticleFields =
     { Url = article.Link |> Option.orDefault (fun _ -> "")
       FeedUrl = feedUrl
       Content = article.Content
@@ -45,16 +45,16 @@ let private articleToRecord (FeedUrl feedUrl) (article : Article) : ArticleRecor
     }
 
 
-let private persistArticle (article : ArticleRecord) : Async<unit> =
+let private persistArticle (fields : ArticleFields) : Async<unit> =
     async {
-        deleteArticle dataSource article.Url
-        |> Result.bind (fun _ -> createArticle dataSource article)
-        |> Result.mapError (logArticleError article.Url)
+        deleteArticle dataSource fields.Url fields.FeedUrl
+        |> Result.bind (fun _ -> createArticle dataSource fields)
+        |> Result.mapError (logArticleError fields.Url)
         |> ignore
     }
 
 
-let private processFeed (feedUrl : FeedUrl) : ArticleRecord seq =
+let private processFeed (feedUrl : FeedUrl) : ArticleFields seq =
     printfn "Processing feed %A" feedUrl
     let articles = downloadFeed feedUrl
                    |> Result.bind Xml.processXmlFeed
@@ -63,7 +63,7 @@ let private processFeed (feedUrl : FeedUrl) : ArticleRecord seq =
 
     articles
     |> List.toSeq
-    |> Seq.map (articleToRecord feedUrl)
+    |> Seq.map (articleToFields feedUrl)
 
 
 let backgroundProcessing : Async<unit> =

@@ -24,12 +24,16 @@ create index feeds_url on feeds (url);
 
 create table articles
 (
-  url      text primary key not null,
-  feed_url text             not null,
-  content  text             not null,
-  date     timestamp        null
+  id       bigserial primary key not null,
+  url      text                  not null,
+  feed_url text                  not null,
+  content  text                  not null,
+  date     timestamp             null,
+
+  unique (url, feed_url)
 );
 
+create index articles_urls on articles (url, feed_url);
 create index articles_feed_url on articles (feed_url);
 
 
