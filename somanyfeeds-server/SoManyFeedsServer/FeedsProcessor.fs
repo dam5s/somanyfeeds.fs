@@ -1,51 +1,73 @@
 module SoManyFeedsServer.FeedsProcessor
 
-open SoManyFeedsServer.FeedsPersistence
 open DataAccess
 open FSharp.Control
 open FeedsProcessing
 open FeedsProcessing.Article
 open FeedsProcessing.DataGateway
 open FeedsProcessing.Feeds
+open SoManyFeedsServer.ArticlesPersistence
 
 
-let private sequence : AsyncSeq<FeedRecord> =
+let private sequence : AsyncSeq<FeedUrl> =
     asyncSeq {
         let oneMinute = 1000 * 60
-        let listAllFeeds = FeedsPersistence.listAllFeeds dataSource
+        let listUrls = FeedsPersistence.listUrls dataSource
 
         while true do
-            let feeds =
-                match listAllFeeds () with
-                | Ok feeds -> feeds
-                | Error _ -> []
+            let feedUrls =
+                listUrls()
+                |> Result.map (List.map FeedUrl)
+                |> Result.fold id (fun _ -> [])
 
-            for feed in feeds do
-                yield feed
+            for url in feedUrls do
+                yield url
 
-            do! Async.Sleep (oneMinute / 2)
+            do! Async.Sleep(oneMinute * 10)
     }
 
 
-let private persistArticles (articles : Article list) : Result<unit, string> =
-    Error "not implemented"
+let private logError (FeedUrl url) (msg : string) : string =
+    eprintfn "There was an error while processing the feed with url %s: %s" url msg
+    msg
 
 
-let private logError (feed : FeedRecord) (msg : string) : unit =
-    eprintfn "There was an error while processing the feed with url %s: %s" feed.Url msg
+let private logArticleError (url : string) (msg : string) : string =
+    eprintfn "There was an error while persisting the article with url %s: %s" url msg
+    msg
 
 
-let private processFeed (feed : FeedRecord) : Async<unit> =
+let private articleToRecord (FeedUrl feedUrl) (article : Article) : ArticleRecord =
+    { Url = article.Link |> Option.orDefault (fun _ -> "")
+      FeedUrl = feedUrl
+      Content = article.Content
+      Date = article.Date
+    }
+
+
+let private persistArticle (article : ArticleRecord) : Async<unit> =
     async {
-        downloadFeed (FeedUrl feed.Url)
-            |> Result.bind Xml.processXmlFeed
-            |> Result.bind persistArticles
-            |> Result.mapError (logError feed)
-            |> ignore
+        deleteArticle dataSource article.Url
+        |> Result.bind (fun _ -> createArticle dataSource article)
+        |> Result.mapError (logArticleError article.Url)
+        |> ignore
     }
+
+
+let private processFeed (feedUrl : FeedUrl) : ArticleRecord seq =
+    printfn "Processing feed %A" feedUrl
+    let articles = downloadFeed feedUrl
+                   |> Result.bind Xml.processXmlFeed
+                   |> Result.mapError (logError feedUrl)
+                   |> Result.fold id (fun _ -> [])
+
+    articles
+    |> List.toSeq
+    |> Seq.map (articleToRecord feedUrl)
 
 
 let backgroundProcessing : Async<unit> =
-    AsyncSeq.iterAsyncParallel
-        processFeed
-        sequence
+    sequence
+    |> AsyncSeq.map processFeed
+    |> AsyncSeq.concatSeq
+    |> AsyncSeq.iterAsyncParallel persistArticle

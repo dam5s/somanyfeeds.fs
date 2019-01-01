@@ -1,12 +1,8 @@
 [<AutoOpen>]
 module DatabaseSupport
 
-open SoManyFeedsServer.DataSource
-open SoManyFeedsServer.App
-
-
-let private dataSource = DataAccess.dataSource
+open SoManyFeedsServer
 
 
 let executeSql (sql : string) =
-    update dataSource sql [] |> ignore
+    DataSource.update DataAccess.dataSource sql [] |> ignore

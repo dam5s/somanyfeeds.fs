@@ -26,7 +26,7 @@ let private chromeOptions =
 
 once (fun () ->
     let config = SoManyFeedsServer.Config.create
-    let webPart = SoManyFeedsServer.App.webPart
+    let webPart = SoManyFeedsServer.WebApp.webPart
 
     let listening, server = startWebServerAsync config webPart
     let tokenSource = new CancellationTokenSource()

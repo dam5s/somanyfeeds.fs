@@ -17,7 +17,7 @@ let private base64encode (value : string) : string = Convert.ToBase64String (Tex
 let private bearerTokenHeader (BearerToken s) : string = sprintf "Bearer %s" s
 
 let private basicAuthHeader (username : string) (password : string) : BasicAuthHeader =
-    let credentials = sprintf "%s:%s"  username password
+    let credentials = sprintf "%s:%s" username password
     BasicAuthHeader <| sprintf "Basic %s" (base64encode credentials)
 
 

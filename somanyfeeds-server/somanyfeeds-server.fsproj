@@ -18,6 +18,7 @@
     <Compile Include="SoManyFeedsServer/Json.fs" />
     <Compile Include="SoManyFeedsServer/DataSource.fs" />
     <Compile Include="SoManyFeedsServer/FeedsPersistence.fs" />
+    <Compile Include="SoManyFeedsServer/ArticlesPersistence.fs" />
     <Compile Include="SoManyFeedsServer/Authentication.fs" />
     <Compile Include="SoManyFeedsServer/FeedsApi.fs" />
     <Compile Include="SoManyFeedsServer/ErrorPage.fs" />
