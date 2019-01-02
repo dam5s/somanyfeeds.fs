@@ -4,6 +4,7 @@ import Browser exposing (Document)
 import Html exposing (Html, a, article, div, h1, h2, h3, h4, header, li, nav, p, section, text, ul)
 import Html.Attributes exposing (class, href, target)
 import SoManyFeeds.Article as Article exposing (Article)
+import SoManyFeeds.Logo as Logo
 import Support.RawHtml as RawHtml
 import Task
 import Time
@@ -57,7 +58,7 @@ view model =
     { title = "SoManyFeeds - A feed aggregator by Damien Le Berrigaud"
     , body =
         [ header []
-            [ h1 [] [ text "SoManyFeeds" ]
+            [ Logo.view
             , nav []
                 [ a [ href "/read", class "current" ] [ text "Read" ]
                 , a [ href "/manage" ] [ text "Manage" ]

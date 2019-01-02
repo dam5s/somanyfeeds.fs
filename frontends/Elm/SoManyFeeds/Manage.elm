@@ -10,6 +10,7 @@ import Keyboard
 import List.Extra
 import Result
 import SoManyFeeds.Feed as Feed exposing (Feed)
+import SoManyFeeds.Logo as Logo
 
 
 type alias Flags =
@@ -163,7 +164,7 @@ view model =
     { title = "SoManyFeeds - A feed aggregator by Damien Le Berrigaud"
     , body =
         [ header []
-            [ h1 [] [ text "SoManyFeeds" ]
+            [ Logo.view
             , nav []
                 [ a [ href "/read" ] [ text "Read" ]
                 , a [ href "/manage", class "current" ] [ text "Manage" ]

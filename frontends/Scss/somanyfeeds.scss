@@ -36,15 +36,12 @@ header, section {
 
 header {
   background-color: $contrast-color;
-  padding: .5rem 1rem;
+  padding: 1rem;
   box-shadow: 0 3px 2px rgba(0, 0, 0, 0.3);
   position: relative;
 
-  h1 {
-    color: $bg-color;
-    margin: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  svg {
+    height: 3rem;
   }
 
   nav {
@@ -66,7 +63,7 @@ header {
     }
 
     a:hover {
-      background-color: rgba(0, 0, 0, 0.1);
+      background-color: rgba(0, 0, 0, 0.2);
     }
 
     a.current {
@@ -232,6 +229,10 @@ input[type="text"] {
   text-transform: uppercase;
   position: relative;
 
+  &:hover {
+    background-color: lighten($dark-color, 10%);
+  }
+
   &:active {
     top: 1px;
   }
@@ -245,12 +246,20 @@ input[type="text"] {
   background-color: $accent-color;
   border-color: $accent-color;
   color: $bg-color;
+
+  &:hover {
+    background-color: lighten($accent-color, 5%);
+  }
 }
 
 .button.secondary {
   background-color: rgba(0, 0, 0, 0.02);
   border-color: $dark-color;
   color: $dark-color;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
 }
 
 dl {
