@@ -25,12 +25,15 @@ let private bindOperation (operation : unit -> Result<'T, string>) : Result<'T, 
 
 module private Rss =
 
-    type private RssProvider = XmlProvider<"../feeds-processing/Resources/samples/medium.rss.sample">
+    type private RssProvider = XmlProvider<"../feeds-processing/Resources/samples/rss.sample">
 
     let private itemToArticle (item : RssProvider.Item) : Article =
         { Title = stringToOption item.Title
           Link = stringToOption item.Link
-          Content = stringToOption item.Encoded |> Option.defaultValue ""
+          Content = item.Encoded
+                    |> Option.bind stringToOption
+                    |> Option.orElse item.Description
+                    |> Option.defaultValue ""
           Date = Some item.PubDate
         }
 

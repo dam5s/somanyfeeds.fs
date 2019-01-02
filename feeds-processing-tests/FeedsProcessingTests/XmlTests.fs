@@ -46,8 +46,8 @@ module ``Xml Processor Tests``
 
 
     [<Test>]
-    let ``with medium RSS XML``() =
-        let downloadedFeed = DownloadedFeed <| File.ReadAllText("../../../../feeds-processing/Resources/samples/medium.rss.sample")
+    let ``with RSS XML``() =
+        let downloadedFeed = DownloadedFeed <| File.ReadAllText("../../../../feeds-processing/Resources/samples/rss.sample")
 
 
         let result = processXmlFeed downloadedFeed
@@ -58,12 +58,17 @@ module ``Xml Processor Tests``
         | Ok records ->
             let expectedTimeUtc = new DateTimeOffset(2016, 09, 20, 12, 54, 44, TimeSpan.Zero)
 
-            List.length records |> should equal 5
+            List.length records |> should equal 6
             List.head records |> should equal { Title = Some "First title!"
                                                 Link = Some "https://medium.com/@its_damo/first"
-                                                Content = "<p>This is the content</p>"
+                                                Content = "<p>This is the content in encoded tag</p>"
                                                 Date = Some expectedTimeUtc
                                               }
+            List.item 1 records |> should equal { Title = Some "Second title!"
+                                                  Link = Some "https://medium.com/@its_damo/second"
+                                                  Content = "<p>This is the content in description tag</p>"
+                                                  Date = Some expectedTimeUtc
+                                                }
 
 
     [<Test>]

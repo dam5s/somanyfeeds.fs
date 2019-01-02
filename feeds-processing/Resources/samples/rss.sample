@@ -22,7 +22,16 @@
             <dc:creator><![CDATA[Damien Le Berrigaud]]></dc:creator>
             <pubDate>Tue, 20 Sep 2016 12:54:44 GMT</pubDate>
             <atom:updated>2016-09-20T12:54:44.561Z</atom:updated>
-            <content:encoded><![CDATA[<p>This is the content</p>]]></content:encoded>
+            <content:encoded><![CDATA[<p>This is the content in encoded tag</p>]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[Second title!]]></title>
+            <link>https://medium.com/@its_damo/second</link>
+            <guid isPermaLink="false">https://medium.com/p/second</guid>
+            <dc:creator><![CDATA[Damien Le Berrigaud]]></dc:creator>
+            <pubDate>Tue, 20 Sep 2016 12:54:44 GMT</pubDate>
+            <atom:updated>2016-09-20T12:54:44.561Z</atom:updated>
+            <description><![CDATA[<p>This is the content in description tag</p>]]></description>
         </item>
         <atom:link href="http://medium.superfeedr.com" rel="hub"/>
         <item>
