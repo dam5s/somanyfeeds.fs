@@ -1,10 +1,10 @@
 module DamoIO.Tweet exposing (display)
 
-import DamoIO.RawHtml as RawHtml
 import Html exposing (Attribute, Html, section, text)
 import Html.Attributes exposing (class)
 import Json.Encode
 import Regex
+import Support.RawHtml as RawHtml
 import VirtualDom
 
 
@@ -15,7 +15,7 @@ display content =
 
 createLinks : String -> String
 createLinks =
-    createMentionLinks << createSimpleLinks << createHashTagLinks
+    createMentionLinks >> createSimpleLinks >> createHashTagLinks
 
 
 buildRegex =

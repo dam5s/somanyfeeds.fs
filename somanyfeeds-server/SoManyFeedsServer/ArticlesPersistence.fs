@@ -8,6 +8,7 @@ open SoManyFeedsServer.DataSource
 type ArticleRecord =
     { Id : int64
       Url : string
+      Title : string
       FeedUrl : string
       Content : string
       Date : DateTimeOffset option
@@ -16,6 +17,7 @@ type ArticleRecord =
 
 type ArticleFields =
     { Url : string
+      Title : string
       FeedUrl : string
       Content : string
       Date : DateTimeOffset option
@@ -23,16 +25,17 @@ type ArticleFields =
 
 
 let private mapArticle (record : DbDataRecord) : ArticleRecord =
-    let date =
-        match Convert.IsDBNull(4) with
+    let date index =
+        match Convert.IsDBNull(index) with
         | true -> None
-        | false -> Some <| new DateTimeOffset(record.GetDateTime(4))
+        | false -> Some <| new DateTimeOffset(record.GetDateTime(index))
 
     { Id = record.GetInt64(0)
       Url = record.GetString(1)
-      FeedUrl = record.GetString(2)
-      Content = record.GetString(3)
-      Date = date
+      Title = record.GetString(2)
+      FeedUrl = record.GetString(3)
+      Content = record.GetString(4)
+      Date = date 5
     }
 
 
@@ -40,6 +43,7 @@ let createArticle (dataSource : DataSource) (fields : ArticleFields) : Result<Ar
     let bindings =
         [
         Binding("@Url", fields.Url)
+        Binding("@Title", fields.Title)
         Binding("@FeedUrl", fields.FeedUrl)
         Binding("@Content", fields.Content)
         optionBinding ("@Date", fields.Date)
@@ -49,14 +53,15 @@ let createArticle (dataSource : DataSource) (fields : ArticleFields) : Result<Ar
         fun (record : DbDataRecord) ->
             { Id = record.GetInt64(0)
               Url = fields.Url
+              Title = fields.Title
               FeedUrl = fields.FeedUrl
               Content = fields.Content
               Date = fields.Date
             }
 
     query dataSource
-        """ insert into articles (url, feed_url, content, date)
-            values (@Url, @FeedUrl, @Content, @Date)
+        """ insert into articles (url, title, feed_url, content, date)
+            values (@Url, @Title, @FeedUrl, @Content, @Date)
             returning id
         """
         bindings
@@ -84,7 +89,7 @@ let listRecentArticles (dataSource : DataSource) (feedUrls : string list) : Resu
         let urlArgs, bindings = inBindings "@FeedUrl" urls
         let sql =
             sprintf
-                """ select id, url, feed_url, content, date
+                """ select id, url, title, feed_url, content, date
                     from articles
                     where feed_url in (%s)
                     order by date desc

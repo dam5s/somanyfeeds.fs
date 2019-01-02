@@ -19,7 +19,7 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
 
 
     let readPage _ =
-        ReadPage.page user
+        ReadPage.page listRecentArticles user
 
     let managePage _ =
         ManagePage.page listFeeds user

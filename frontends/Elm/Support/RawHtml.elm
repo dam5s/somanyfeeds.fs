@@ -1,4 +1,4 @@
-module DamoIO.RawHtml exposing (fromString)
+module Support.RawHtml exposing (fromString)
 
 import Html exposing (Attribute, Html)
 import Html.Attributes

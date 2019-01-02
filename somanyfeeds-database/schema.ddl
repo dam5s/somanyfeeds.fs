@@ -26,6 +26,7 @@ create table articles
 (
   id       bigserial primary key not null,
   url      text                  not null,
+  title    text                  not null,
   feed_url text                  not null,
   content  text                  not null,
   date     timestamp             null,
@@ -33,9 +34,9 @@ create table articles
   unique (url, feed_url)
 );
 
+
 create index articles_urls on articles (url, feed_url);
 create index articles_feed_url on articles (feed_url);
-
 
 insert into users (id, name)
 values (1, 'Damo');

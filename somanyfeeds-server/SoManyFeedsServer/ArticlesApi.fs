@@ -19,8 +19,9 @@ module Encoders =
 
     let article (feed : FeedRecord, article : ArticleRecord) : Json<unit> =
         Json.write "feedName" feed.Name
-        *> Json.write "feedUrl" feed.Url
         *> Json.write "url" article.Url
+        *> Json.write "title" article.Title
+        *> Json.write "feedUrl" article.FeedUrl
         *> Json.write "content" article.Content
         *> Json.write "date" (Option.map dateMap article.Date)
 

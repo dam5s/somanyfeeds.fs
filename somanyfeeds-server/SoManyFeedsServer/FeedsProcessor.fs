@@ -39,6 +39,7 @@ let private logArticleError (url : string) (msg : string) : string =
 
 let private articleToFields (FeedUrl feedUrl) (article : Article) : ArticleFields =
     { Url = article.Link |> Option.orDefault (fun _ -> "")
+      Title = article.Title |> Option.orDefault (fun _ -> "")
       FeedUrl = feedUrl
       Content = article.Content
       Date = article.Date

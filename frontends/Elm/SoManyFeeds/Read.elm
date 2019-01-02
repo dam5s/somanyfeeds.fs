@@ -1,17 +1,20 @@
 module SoManyFeeds.Read exposing (main)
 
 import Browser exposing (Document)
-import Html exposing (Html, a, div, p, text)
+import Html exposing (Html, a, div, li, p, text, ul)
 import Html.Attributes exposing (href)
+import SoManyFeeds.Article as Article exposing (Article)
 
 
 type alias Flags =
     { userName : String
+    , articles : List Article.Json
     }
 
 
 type alias Model =
     { userName : String
+    , articles : List Article
     }
 
 
@@ -21,7 +24,16 @@ type Msg
 
 init : Flags -> ( Model, Cmd Msg )
 init flags =
-    ( { userName = flags.userName }, Cmd.none )
+    ( { userName = flags.userName
+      , articles = List.map Article.fromJson flags.articles
+      }
+    , Cmd.none
+    )
+
+
+articleView : Article -> Html Msg
+articleView article =
+    li [] [ text article.title ]
 
 
 view : Model -> Document Msg
@@ -35,6 +47,7 @@ view model =
             , a [ href "/manage" ] [ text "follow some feeds" ]
             , text "."
             ]
+        , ul [] <| List.map articleView model.articles
         ]
     }
 

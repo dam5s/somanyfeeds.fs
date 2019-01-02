@@ -1,4 +1,4 @@
-module DamoIO.DateFormat exposing (parseAndFormat)
+module Support.DateFormat exposing (parseAndFormat)
 
 import DateFormat exposing (..)
 import Time

@@ -11,7 +11,8 @@
 <script src="/somanyfeeds.js"></script>
 <script>
     Elm.SoManyFeeds.Read.init({flags: {
-        userName: "{{ model.UserName }}"
+        userName: "{{ model.UserName }}",
+        articles: {{ model.ArticlesJson }}
     }});
 </script>
 
