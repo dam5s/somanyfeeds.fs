@@ -1,8 +1,8 @@
 module SoManyFeeds.Read exposing (main)
 
 import Browser exposing (Document)
-import Html exposing (Html, a, article, div, h1, h2, h3, header, li, p, section, text, ul)
-import Html.Attributes exposing (class, href)
+import Html exposing (Html, a, article, div, h1, h2, h3, h4, header, li, nav, p, section, text, ul)
+import Html.Attributes exposing (class, href, target)
 import SoManyFeeds.Article as Article exposing (Article)
 import Support.RawHtml as RawHtml
 import Task
@@ -38,26 +38,31 @@ init flags =
 
 articleView : Article -> Html Msg
 articleView record =
-    section []
-        [ article [ class "card" ]
-            [ h3 []
-                [ a [ href record.url ] [ text record.title ]
-                ]
-            , div [ class "content" ] <| RawHtml.fromString record.content
+    article [ class "card" ]
+        [ h4 [] [ text record.feedName ]
+        , h3 []
+            [ a [ href record.url, target "_blank" ] [ text record.title ]
             ]
+        , div [ class "content" ] <| RawHtml.fromString record.content
         ]
 
 
 articleList : Model -> Html Msg
 articleList model =
-    div [] <| List.map articleView model.articles
+    section [] <| List.map articleView model.articles
 
 
 view : Model -> Document Msg
 view model =
     { title = "SoManyFeeds - A feed aggregator by Damien Le Berrigaud"
     , body =
-        [ header [] [ h1 [] [ text "SoManyFeeds" ] ]
+        [ header []
+            [ h1 [] [ text "SoManyFeeds" ]
+            , nav []
+                [ a [ href "/read", class "current" ] [ text "Read" ]
+                , a [ href "/manage" ] [ text "Manage" ]
+                ]
+            ]
         , h2 [] [ text "Articles" ]
         , h1 [] [ text "Most recent" ]
         , articleList model

@@ -26,6 +26,10 @@ html, body {
   color: $fg-color;
 }
 
+body {
+  overflow-y: scroll;
+}
+
 header, section {
   padding: 0 1rem;
 }
@@ -41,6 +45,35 @@ header {
     margin: 0;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  nav {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+
+    a:link, a:hover, a:visited, a:active {
+      display: inline-block;
+      padding: .5rem 1rem;
+      margin-right: 1rem;
+      border-radius: 2px 2px 0 0;
+      color: $bg-color;
+    }
+
+    a:active {
+      position: relative;
+      top: 1px;
+    }
+
+    a:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    a.current {
+      background-color: $accent-color;
+      border-bottom: 5px solid $accent-color;
+      margin-bottom: -5px;
+    }
   }
 }
 
@@ -63,7 +96,7 @@ header + h2 + h1 + * {
   margin-top: -2rem;
 }
 
-section {
+section, article {
   margin-bottom: 2rem;
 }
 
@@ -95,8 +128,14 @@ h2 {
 
 h3 {
   font-size: 1.5rem;
+  color: $fg-color;
+}
+
+h4 {
+  font-size: 1.1rem;
   text-transform: uppercase;
   color: $fg-color;
+  margin-bottom: 0;
 }
 
 a:link, a:hover, a:visited, a:active {
@@ -326,4 +365,6 @@ dt {
 
 // Customizations for feeds
 
-.share_submission { display: none; }
+.share_submission {
+  display: none;
+}

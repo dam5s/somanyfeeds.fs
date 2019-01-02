@@ -162,7 +162,13 @@ view : Model -> Document Msg
 view model =
     { title = "SoManyFeeds - A feed aggregator by Damien Le Berrigaud"
     , body =
-        [ header [] [ h1 [] [ text "SoManyFeeds" ] ]
+        [ header []
+            [ h1 [] [ text "SoManyFeeds" ]
+            , nav []
+                [ a [ href "/read" ] [ text "Read" ]
+                , a [ href "/manage", class "current" ] [ text "Manage" ]
+                ]
+            ]
         , h2 [] [ text "Feeds" ]
         , h1 [] [ text "Manage your subscriptions" ]
         , newFeedForm model
