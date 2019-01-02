@@ -10,10 +10,13 @@ open SoManyFeedsServer.Json
 
 
 let private authenticatedPage (user : Authentication.User) : WebPart =
-    let listFeeds = FeedsPersistence.listFeeds DataAccess.dataSource
-    let createFeed = FeedsPersistence.createFeed DataAccess.dataSource
-    let updateFeed = FeedsPersistence.updateFeed DataAccess.dataSource
-    let deleteFeed = FeedsPersistence.deleteFeed DataAccess.dataSource
+
+    let listFeeds _ = FeedsPersistence.listFeeds DataAccess.dataSource user.Id
+    let createFeed = FeedsPersistence.createFeed DataAccess.dataSource user.Id
+    let updateFeed = FeedsPersistence.updateFeed DataAccess.dataSource user.Id
+    let deleteFeed = FeedsPersistence.deleteFeed DataAccess.dataSource user.Id
+    let listRecentArticles _ = UserArticlesService.listRecent DataAccess.dataSource user
+
 
     let readPage _ =
         ReadPage.page user
@@ -21,22 +24,25 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
     let managePage _ =
         ManagePage.page listFeeds user
 
-    let listFeeds _ =
-        FeedsApi.list (fun _ -> listFeeds user.Id)
+    let listFeedsApi _ =
+        FeedsApi.list listFeeds
 
-    let createFeed =
+    let createFeedApi =
         deserializeBody
             FeedsApi.Decoders.feedFields
-            (FeedsApi.create <| createFeed user.Id)
+            (FeedsApi.create createFeed)
 
-    let updateFeed feedId =
+    let updateFeedApi feedId =
         deserializeBody
             FeedsApi.Decoders.feedFields
-            (FeedsApi.update <| updateFeed user.Id feedId)
+            (FeedsApi.update <| updateFeed feedId)
 
-    let deleteFeed feedId =
+    let deleteFeedApi feedId =
         FeedsApi.delete
-            (fun _ -> deleteFeed user.Id feedId)
+            (fun _ -> deleteFeed feedId)
+
+    let listRecentArticlesApi _ =
+        ArticlesApi.list listRecentArticles
 
 
     choose [
@@ -44,10 +50,12 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
         GET >=> path "/read" >=> request readPage
         GET >=> path "/manage" >=> request managePage
 
-        GET >=> path "/api/feeds" >=> request listFeeds
-        POST >=> path "/api/feeds" >=> createFeed
-        PUT >=> pathScan "/api/feeds/%d" updateFeed
-        DELETE >=> pathScan "/api/feeds/%d" deleteFeed
+        GET >=> path "/api/feeds" >=> request listFeedsApi
+        POST >=> path "/api/feeds" >=> createFeedApi
+        PUT >=> pathScan "/api/feeds/%d" updateFeedApi
+        DELETE >=> pathScan "/api/feeds/%d" deleteFeedApi
+
+        GET >=> path "/api/articles/recent" >=> request listRecentArticlesApi
 
         GET >=> Files.browseHome
         NOT_FOUND "not found"

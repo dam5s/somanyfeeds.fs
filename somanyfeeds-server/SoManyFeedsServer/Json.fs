@@ -51,3 +51,14 @@ let deserializeBody (decoder : Json -> JsonResult<'a> * Json) (next : 'a -> WebP
             |> function | Ok value -> next value
                         | Result.Error msg -> jsonResponse HTTP_400 (deserializationErrorJson msg)
     )
+
+
+let private jsonError (message : string) : Json<unit> =
+    Json.write "error" "An error occured"
+    *> Json.write "message" message
+
+
+let serverError (message : string) =
+    message
+        |> serializeObject jsonError
+        |> jsonResponse HTTP_500

@@ -12,8 +12,8 @@ type ManageViewModel =
     }
 
 
-let page (listFeeds : int64 -> Result<FeedRecord list, string>) (user : Authentication.User) : WebPart =
-    match listFeeds user.Id with
+let page (listFeeds : unit -> Result<FeedRecord list, string>) (user : Authentication.User) : WebPart =
+    match listFeeds () with
     | Ok records ->
         let viewModel =
             { UserName = user.Name

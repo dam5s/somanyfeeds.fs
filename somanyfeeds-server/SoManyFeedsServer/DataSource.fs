@@ -22,6 +22,21 @@ let optionBinding (name : string, option : 'T option) =
     | None -> Binding(name, null)
 
 
+let inBindings (prefix : string) (values : 'T list) : (string * Binding list) =
+    let args =
+        values
+        |> List.mapi (fun index value ->
+            sprintf "%s%d" prefix index
+        )
+        |> String.concat ","
+
+    let bindings =
+        values
+        |> List.mapi (fun index value -> Binding(sprintf "%s%d" prefix index, value))
+
+    args, bindings
+
+
 let private fromOptionResult (result : Result<'T option, string>) : FindResult<'T> =
     match result with
     | Ok(Some value) -> Found value

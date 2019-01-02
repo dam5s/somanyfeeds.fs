@@ -9,16 +9,10 @@ open SoManyFeedsServer.FeedsPersistence
 module Encoders =
     open Chiron
 
-
     let feed (record : FeedRecord) : Json<unit> =
         Json.write "id" record.Id
         *> Json.write "name" record.Name
         *> Json.write "url" record.Url
-
-
-    let error (message : string) : Json<unit> =
-        Json.write "error" "An error occured"
-        *> Json.write "message" message
 
 
 module Decoders =
@@ -36,14 +30,8 @@ module Decoders =
         decoder json
 
 
-let private serverError (message : string) =
-    message
-        |> serializeObject Encoders.error
-        |> jsonResponse HTTP_500
-
-
 let list (listFeeds : unit -> Result<FeedRecord list, string>) : WebPart =
-    match listFeeds() with
+    match listFeeds () with
     | Ok feeds ->
         feeds
             |> serializeList Encoders.feed

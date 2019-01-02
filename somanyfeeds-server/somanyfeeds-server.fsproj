@@ -20,7 +20,9 @@
     <Compile Include="SoManyFeedsServer/FeedsPersistence.fs" />
     <Compile Include="SoManyFeedsServer/ArticlesPersistence.fs" />
     <Compile Include="SoManyFeedsServer/Authentication.fs" />
+    <Compile Include="SoManyFeedsServer/UserArticlesService.fs" />
     <Compile Include="SoManyFeedsServer/FeedsApi.fs" />
+    <Compile Include="SoManyFeedsServer/ArticlesApi.fs" />
     <Compile Include="SoManyFeedsServer/ErrorPage.fs" />
     <Compile Include="SoManyFeedsServer/ReadPage.fs" />
     <Compile Include="SoManyFeedsServer/ManagePage.fs" />
