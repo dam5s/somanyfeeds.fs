@@ -19,23 +19,23 @@ module ``Xml Processor Tests``
 
 
         match result with
-        | Ok _ -> Assert.Fail("Expected failure")
+        | Ok _ -> Assert.Fail "Expected failure"
         | Error msg ->
             String.length msg |> shouldBeGreaterThan 0
 
 
     [<Test>]
     let ``with github Atom XML``() =
-        let downloaded = DownloadedFeed <| File.ReadAllText("../../../../feeds-processing/Resources/samples/github.atom.sample")
+        let downloaded = DownloadedFeed <| File.ReadAllText "../../../../feeds-processing/Resources/samples/github.atom.sample"
 
 
         let result = processXmlFeed downloaded
 
 
         match result with
-        | Error _ -> Assert.Fail("Expected success")
+        | Error _ -> Assert.Fail "Expected success"
         | Ok records ->
-            let expectedTimeUtc = new DateTimeOffset(2018, 04, 14, 21, 30, 17, TimeSpan.Zero)
+            let expectedTimeUtc = new DateTimeOffset (2018, 04, 14, 21, 30, 17, TimeSpan.Zero)
 
             List.length records |> should equal 7
             List.head records |> should equal { Title = Some "dam5s pushed to master in dam5s/somanyfeeds.fs"
@@ -47,16 +47,16 @@ module ``Xml Processor Tests``
 
     [<Test>]
     let ``with RSS XML``() =
-        let downloadedFeed = DownloadedFeed <| File.ReadAllText("../../../../feeds-processing/Resources/samples/rss.sample")
+        let downloadedFeed = DownloadedFeed <| File.ReadAllText "../../../../feeds-processing/Resources/samples/rss.sample"
 
 
         let result = processXmlFeed downloadedFeed
 
 
         match result with
-        | Error _ -> Assert.Fail("Expected success")
+        | Error _ -> Assert.Fail "Expected success"
         | Ok records ->
-            let expectedTimeUtc = new DateTimeOffset(2016, 09, 20, 12, 54, 44, TimeSpan.Zero)
+            let expectedTimeUtc = new DateTimeOffset (2016, 09, 20, 12, 54, 44, TimeSpan.Zero)
 
             List.length records |> should equal 6
             List.head records |> should equal { Title = Some "First title!"
@@ -73,16 +73,16 @@ module ``Xml Processor Tests``
 
     [<Test>]
     let ``processFeed with slashdot RDF XML``() =
-        let downloadedFeed = DownloadedFeed <| File.ReadAllText("../../../../feeds-processing/Resources/samples/slashdot.rdf.sample")
+        let downloadedFeed = DownloadedFeed <| File.ReadAllText "../../../../feeds-processing/Resources/samples/slashdot.rdf.sample"
 
 
         let result = processXmlFeed downloadedFeed
 
 
         match result with
-        | Error _ -> Assert.Fail("Expected success")
+        | Error _ -> Assert.Fail "Expected success"
         | Ok records ->
-            let expectedTimeUtc = new DateTimeOffset(2018, 12, 28, 20, 55, 0, TimeSpan.Zero)
+            let expectedTimeUtc = new DateTimeOffset (2018, 12, 28, 20, 55, 0, TimeSpan.Zero)
             List.length records |> should equal 15
             List.head records |> should equal { Title = Some "Netflix Permanently Pulls iTunes Billing For New and Returning Users"
                                                 Link = Some "https://news.slashdot.org/story/18/12/28/2054254/netflix-permanently-pulls-itunes-billing-for-new-and-returning-users?utm_source=rss1.0mainlinkanon&utm_medium=feed"

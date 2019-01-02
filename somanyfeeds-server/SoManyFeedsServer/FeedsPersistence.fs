@@ -19,10 +19,10 @@ type FeedFields =
 
 
 let private mapFeed (record : DbDataRecord) : FeedRecord =
-    { Id = record.GetInt64(0)
-      UserId = record.GetInt64(1)
-      Name = record.GetString(2)
-      Url = record.GetString(3)
+    { Id = record.GetInt64 0
+      UserId = record.GetInt64 1
+      Name = record.GetString 2
+      Url = record.GetString 3
     }
 
 
@@ -32,12 +32,12 @@ let listUrls (dataSource : DataSource) (_ : unit) : Result<string list, string> 
             from feeds
         """
         []
-        (fun record -> record.GetString(0))
+        (fun record -> record.GetString 0)
 
 
 let listFeeds (dataSource : DataSource) (userId : int64) : Result<FeedRecord list, string> =
     let bindings =
-        [ Binding("@UserId", userId) ]
+        [ Binding ("@UserId", userId) ]
 
     query dataSource
         """ select id, user_id, name, url
@@ -51,8 +51,8 @@ let listFeeds (dataSource : DataSource) (userId : int64) : Result<FeedRecord lis
 let findFeed (dataSource : DataSource) (userId : int64) (feedId : int64) : FindResult<FeedRecord> =
     let bindings =
         [
-        Binding("@UserId", userId)
-        Binding("@FeedId", feedId)
+        Binding ("@UserId", userId)
+        Binding ("@FeedId", feedId)
         ]
 
     find dataSource
@@ -68,9 +68,9 @@ let findFeed (dataSource : DataSource) (userId : int64) (feedId : int64) : FindR
 let createFeed (dataSource : DataSource) (userId : int64) (fields : FeedFields) : Result<FeedRecord, string> =
     let bindings =
         [
-        Binding("@UserId", userId)
-        Binding("@Name", fields.Name)
-        Binding("@Url", fields.Url)
+        Binding ("@UserId", userId)
+        Binding ("@Name", fields.Name)
+        Binding ("@Url", fields.Url)
         ]
 
     let mapping =
@@ -94,10 +94,10 @@ let createFeed (dataSource : DataSource) (userId : int64) (fields : FeedFields) 
 let updateFeed (dataSource : DataSource) (userId : int64) (feedId : int64) (fields : FeedFields) : Result<FeedRecord, string> =
     let bindings =
         [
-        Binding("@FeedId", feedId)
-        Binding("@UserId", userId)
-        Binding("@Name", fields.Name)
-        Binding("@Url", fields.Url)
+        Binding ("@FeedId", feedId)
+        Binding ("@UserId", userId)
+        Binding ("@Name", fields.Name)
+        Binding ("@Url", fields.Url)
         ]
 
     let updatedRecord =
@@ -119,8 +119,8 @@ let updateFeed (dataSource : DataSource) (userId : int64) (feedId : int64) (fiel
 let deleteFeed (dataSource : DataSource) (userId : int64) (feedId : int64) : Result<unit, string> =
     let bindings =
         [
-        Binding("@FeedId", feedId)
-        Binding("@UserId", userId)
+        Binding ("@FeedId", feedId)
+        Binding ("@UserId", userId)
         ]
 
     update dataSource

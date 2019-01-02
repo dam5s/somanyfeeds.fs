@@ -17,12 +17,11 @@ let private httpsUrlOf (request: HttpRequest) : string =
 let private requiresHttps : WebPart =
     fun ctx ->
         ctx.request.header "X-Forwarded-Proto"
-            |> Option.ofChoice
-            |> Option.map (fun s -> s.ToUpper ())
-            |> function
-                | Some "HTTP" -> Some ctx
-                | _ -> None
-            |> async.Return
+        |> Option.ofChoice
+        |> Option.map (fun s -> s.ToUpper ())
+        |> function | Some "HTTP" -> Some ctx
+                    | _ -> None
+        |> async.Return
 
 
 let private redirectToHttps : WebPart =

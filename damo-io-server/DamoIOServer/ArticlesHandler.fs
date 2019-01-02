@@ -10,7 +10,7 @@ open DamoIOServer.ArticlesPersistence
 
 
 let private epoch: DateTime =
-    new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+    new DateTime (1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
 
 
 let private dateMap (d : DateTimeOffset): int64 =
@@ -39,13 +39,12 @@ type ArticlesListViewModel =
 
 let list (findAllRecords : unit -> ArticleRecord list) (ctx : HttpContext): Async<HttpContext option> =
     async {
-        let records = findAllRecords ()
-
-        let recordsJson = records
-                        |> List.sortByDescending (fun r -> Option.defaultValue DateTimeOffset.UtcNow r.Date)
-                        |> List.map (Json.serializeWith toJson)
-                        |> Json.Array
-                        |> Json.format
+        let recordsJson =
+            findAllRecords ()
+            |> List.sortByDescending (fun r -> Option.defaultValue DateTimeOffset.UtcNow r.Date)
+            |> List.map (Json.serializeWith toJson)
+            |> Json.Array
+            |> Json.format
 
         return! page "articles-list.html.liquid" { ArticlesJson = recordsJson } ctx
     }

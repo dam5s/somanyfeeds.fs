@@ -16,14 +16,14 @@ let private sequence : AsyncSeq<FeedUrl> =
 
         while true do
             let feedUrls =
-                listUrls()
+                listUrls ()
                 |> Result.map (List.map FeedUrl)
                 |> Result.fold id (fun _ -> [])
 
             for url in feedUrls do
                 yield url
 
-            do! Async.Sleep(oneMinute * 10)
+            do! Async.Sleep (oneMinute * 10)
     }
 
 

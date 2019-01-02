@@ -34,8 +34,8 @@ let list (listFeeds : unit -> Result<FeedRecord list, string>) : WebPart =
     match listFeeds () with
     | Ok feeds ->
         feeds
-            |> serializeList Encoders.feed
-            |> jsonResponse HTTP_200
+        |> serializeList Encoders.feed
+        |> jsonResponse HTTP_200
     | Error message ->
         serverError message
 
@@ -44,8 +44,8 @@ let create (createFeed : FeedFields -> Result<FeedRecord, string>) (fields : Fee
     match createFeed fields with
     | Ok feed ->
         feed
-            |> serializeObject Encoders.feed
-            |> jsonResponse HTTP_201
+        |> serializeObject Encoders.feed
+        |> jsonResponse HTTP_201
     | Error message ->
         serverError message
 
@@ -54,14 +54,14 @@ let update (updateFeed : FeedFields -> Result<FeedRecord, string>) (fields : Fee
     match updateFeed fields with
     | Ok feed ->
         feed
-            |> serializeObject Encoders.feed
-            |> jsonResponse HTTP_200
+        |> serializeObject Encoders.feed
+        |> jsonResponse HTTP_200
     | Error message ->
         serverError message
 
 
 let delete (deleteFeed : unit -> Result<unit, string>) : WebPart =
-    match deleteFeed() with
+    match deleteFeed () with
     | Ok _ ->
         Successful.NO_CONTENT
     | Error message ->

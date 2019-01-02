@@ -26,15 +26,15 @@ type ArticleFields =
 
 let private mapArticle (record : DbDataRecord) : ArticleRecord =
     let date index =
-        match Convert.IsDBNull(index) with
+        match Convert.IsDBNull index with
         | true -> None
-        | false -> Some <| new DateTimeOffset(record.GetDateTime(index))
+        | false -> Some <| new DateTimeOffset (record.GetDateTime index)
 
-    { Id = record.GetInt64(0)
-      Url = record.GetString(1)
-      Title = record.GetString(2)
-      FeedUrl = record.GetString(3)
-      Content = record.GetString(4)
+    { Id = record.GetInt64 0
+      Url = record.GetString 1
+      Title = record.GetString 2
+      FeedUrl = record.GetString 3
+      Content = record.GetString 4
       Date = date 5
     }
 
@@ -42,10 +42,10 @@ let private mapArticle (record : DbDataRecord) : ArticleRecord =
 let createArticle (dataSource : DataSource) (fields : ArticleFields) : Result<ArticleRecord, string> =
     let bindings =
         [
-        Binding("@Url", fields.Url)
-        Binding("@Title", fields.Title)
-        Binding("@FeedUrl", fields.FeedUrl)
-        Binding("@Content", fields.Content)
+        Binding ("@Url", fields.Url)
+        Binding ("@Title", fields.Title)
+        Binding ("@FeedUrl", fields.FeedUrl)
+        Binding ("@Content", fields.Content)
         optionBinding ("@Date", fields.Date)
         ]
 
@@ -72,8 +72,8 @@ let createArticle (dataSource : DataSource) (fields : ArticleFields) : Result<Ar
 let deleteArticle (dataSource : DataSource) (url : string) (feedUrl : string) : Result<unit, string> =
     let bindings =
         [
-        Binding("@Url", url)
-        Binding("@FeedUrl", feedUrl)
+        Binding ("@Url", url)
+        Binding ("@FeedUrl", feedUrl)
         ]
 
     update dataSource

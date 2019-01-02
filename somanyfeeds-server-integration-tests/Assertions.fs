@@ -8,6 +8,6 @@ let expectToFind (cssSelector : string) (containingText : string) =
 
     waitFor2 message (fun () ->
         elementsWithText cssSelector containingText
-            |> List.isEmpty
-            |> not
+        |> List.isEmpty
+        |> not
     )

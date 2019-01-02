@@ -27,8 +27,8 @@ let private tryCast (o : obj) : 'T option =
 
 let tryGetUser (ctx : HttpContext) : User option =
     ctx.userState
-        |> Map.tryFind "user"
-        |> Option.bind tryCast
+    |> Map.tryFind "user"
+    |> Option.bind tryCast
 
 
 let authenticate (f : User -> WebPart) (_ : HttpRequest) : WebPart =

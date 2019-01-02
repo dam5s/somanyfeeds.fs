@@ -14,13 +14,13 @@ let private stringToOption text =
 
 
 let private tryOperation (operation : unit -> 'T) : Result<'T, string> =
-    try Ok <| operation()
-    with ex -> Error <| ex.Message.Trim()
+    try Ok <| operation ()
+    with ex -> Error <| ex.Message.Trim ()
 
 
 let private bindOperation (operation : unit -> Result<'T, string>) : Result<'T, string> =
-    try operation()
-    with ex -> Error <| ex.Message.Trim()
+    try operation ()
+    with ex -> Error <| ex.Message.Trim ()
 
 
 module private Rss =
@@ -30,10 +30,11 @@ module private Rss =
     let private itemToArticle (item : RssProvider.Item) : Article =
         { Title = stringToOption item.Title
           Link = stringToOption item.Link
-          Content = item.Encoded
-                    |> Option.bind stringToOption
-                    |> Option.orElse item.Description
-                    |> Option.defaultValue ""
+          Content =
+              item.Encoded
+              |> Option.bind stringToOption
+              |> Option.orElse item.Description
+              |> Option.defaultValue ""
           Date = Some item.PubDate
         }
 
@@ -117,7 +118,7 @@ let private applyProcessor (downloaded : DownloadedFeed) (result : ProcessingRes
     | Error msg ->
         match processor downloaded with
         | Ok articles -> Ok articles
-        | Error nextMsg -> Error(sprintf "%s, %s" msg nextMsg)
+        | Error nextMsg -> Error (sprintf "%s, %s" msg nextMsg)
 
 
 let processXmlFeed (downloaded : DownloadedFeed) : ProcessingResult =
@@ -126,5 +127,5 @@ let processXmlFeed (downloaded : DownloadedFeed) : ProcessingResult =
         Atom.processAtom
         Rdf.processRdf
     ]
-        |> List.fold (applyProcessor downloaded) (Error "")
-        |> Result.mapError (sprintf "Failed all the parsers: %s")
+    |> List.fold (applyProcessor downloaded) (Error "")
+    |> Result.mapError (sprintf "Failed all the parsers: %s")

@@ -20,8 +20,8 @@ let private ensureSuccessExitCode (exitCode : int) =
 let private writeToFile (filePath : string) (content : string) =
     Directory.GetParent(filePath).Create()
 
-    use writer = File.CreateText(filePath)
-    writer.WriteLine(content)
+    use writer = File.CreateText filePath
+    writer.WriteLine content
 
 
 let private dotnet (command : string) (args : string) _ =
@@ -31,7 +31,7 @@ let private dotnet (command : string) (args : string) _ =
 
 let private generateCss (filePath : string) : string =
     let scssOptions = new ScssOptions (OutputStyle = ScssOutputStyle.Compressed)
-    let result = Scss.ConvertFileToCss(filePath, scssOptions)
+    let result = Scss.ConvertFileToCss (filePath, scssOptions)
     result.Css
 
 
@@ -49,11 +49,11 @@ let private clean _ =
     cleanScss ()
 
     ["." ; "damo-io-server" ; "somanyfeeds-server" ; "feeds-processing"; "feeds-processing-tests" ; "frontends"]
-        |> List.map (fun p ->
-            Path.Combine(p, "bin") |> Directory.delete
-            Path.Combine(p, "obj") |> Directory.delete
-        )
-        |> ignore
+    |> List.map (fun p ->
+        Path.Combine (p, "bin") |> Directory.delete
+        Path.Combine (p, "obj") |> Directory.delete
+    )
+    |> ignore
 
 
 let private buildScss _ =

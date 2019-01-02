@@ -29,20 +29,20 @@ once (fun () ->
     let webPart = SoManyFeedsServer.WebApp.webPart
 
     let listening, server = startWebServerAsync config webPart
-    let tokenSource = new CancellationTokenSource()
+    let tokenSource = new CancellationTokenSource ()
 
-    Async.Start(server, tokenSource.Token)
+    Async.Start (server, tokenSource.Token)
 
     listening
-        |> Async.RunSynchronously
-        |> ignore
+    |> Async.RunSynchronously
+    |> ignore
 )
 
 
 lastly (fun () ->
     tokenSource
-        |> Option.map (fun src -> src.Cancel ())
-        |> ignore
+    |> Option.map (fun src -> src.Cancel ())
+    |> ignore
 )
 
 
@@ -53,7 +53,7 @@ let main (_) =
 
     Feeds.all ()
 
-    run()
-    quit()
+    run ()
+    quit ()
 
     failedCount

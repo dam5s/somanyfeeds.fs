@@ -40,19 +40,19 @@ let private mapTweet (json : TwitterTimelineProvider.Root) : Tweet =
       CreatedAt = parseDate createdAtString
       IsRetweet = Option.isSome retweetedStatus
       IsReply = replyToScreenName
-      |> Option.map String.IsNullOrEmpty
-      |> Option.defaultValue true
-      |> not
+                |> Option.map String.IsNullOrEmpty
+                |> Option.defaultValue true
+                |> not
     }
 
 
 let private parseTweets (DownloadedFeed downloaded) : Result<Tweet list, string> =
     try
         downloaded
-            |> TwitterTimelineProvider.Parse
-            |> Array.toList
-            |> List.map mapTweet
-            |> Ok
+        |> TwitterTimelineProvider.Parse
+        |> Array.toList
+        |> List.map mapTweet
+        |> Ok
     with
     | ex ->
         printfn "Could not parse tweets json\n\n%s\n\nGot exception %s" downloaded (ex.ToString ())
@@ -63,14 +63,14 @@ let private tweetToArticle (TwitterHandle handle) (tweet : Tweet) : Article =
     { Title = None
       Link = Some <| sprintf "https://twitter.com/%s" handle
       Content = tweet.Text
-      Date = tweet.CreatedAt |> Option.map (fun d -> new DateTimeOffset(d))
+      Date = tweet.CreatedAt |> Option.map (fun d -> new DateTimeOffset (d))
     }
 
 
 let private tweetsToArticles (handle : TwitterHandle) (tweets : Tweet list) : Article list =
     tweets
-        |> List.filter (fun t -> not t.IsRetweet && not t.IsReply)
-        |> List.map (tweetToArticle handle)
+    |> List.filter (fun t -> not t.IsRetweet && not t.IsReply)
+    |> List.map (tweetToArticle handle)
 
 
 let processTweets (handle : TwitterHandle) (downloaded : DownloadedFeed) : ProcessingResult =

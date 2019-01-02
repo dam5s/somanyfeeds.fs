@@ -24,8 +24,9 @@ let private basicAuthHeader (username : string) (password : string) : BasicAuthH
 let private parseToken (jsonString : string) : Result<BearerToken, string> =
     try
         let responseJson = JsonValue.Parse jsonString
-        let accessTokenOption = responseJson.TryGetProperty "access_token"
-                                    |> Option.map (fun p -> p.AsString ())
+        let accessTokenOption =
+            responseJson.TryGetProperty "access_token"
+            |> Option.map (fun p -> p.AsString ())
 
         match accessTokenOption with
         | None ->
@@ -86,9 +87,9 @@ let downloadTwitterTimeline (consumerKey : string) (consumerSecret : string) (ha
 let downloadFeed (FeedUrl url) : DownloadResult =
     try
         url
-            |> Http.RequestString
-            |> DownloadedFeed
-            |> Result.Ok
+        |> Http.RequestString
+        |> DownloadedFeed
+        |> Result.Ok
     with
     | ex ->
         printfn "There was an error downloading the feed at url %s" url

@@ -12,7 +12,7 @@ module Encoders =
     open Chiron.Operators
 
     let private epoch: DateTime =
-        new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+        new DateTime (1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
 
     let private dateMap (d : DateTimeOffset): int64 =
         d.ToUnixTimeMilliseconds ()
@@ -30,7 +30,7 @@ let list (listArticles : unit -> Result<(FeedRecord * ArticleRecord) list, strin
     match listArticles () with
     | Ok articles ->
         articles
-            |> serializeList Encoders.article
-            |> jsonResponse HTTP_200
+        |> serializeList Encoders.article
+        |> jsonResponse HTTP_200
     | Error message ->
         serverError message
