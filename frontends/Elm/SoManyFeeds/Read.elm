@@ -1,9 +1,12 @@
 module SoManyFeeds.Read exposing (main)
 
 import Browser exposing (Document)
-import Html exposing (Html, a, div, li, p, text, ul)
-import Html.Attributes exposing (href)
+import Html exposing (Html, a, article, div, h1, h2, h3, header, li, p, section, text, ul)
+import Html.Attributes exposing (class, href)
 import SoManyFeeds.Article as Article exposing (Article)
+import Support.RawHtml as RawHtml
+import Task
+import Time
 
 
 type alias Flags =
@@ -15,39 +18,49 @@ type alias Flags =
 type alias Model =
     { userName : String
     , articles : List Article
+    , timeZone : Maybe Time.Zone
     }
 
 
 type Msg
-    = None
+    = UpdateTimeZone Time.Zone
 
 
 init : Flags -> ( Model, Cmd Msg )
 init flags =
     ( { userName = flags.userName
       , articles = List.map Article.fromJson flags.articles
+      , timeZone = Nothing
       }
-    , Cmd.none
+    , Task.perform UpdateTimeZone Time.here
     )
 
 
 articleView : Article -> Html Msg
-articleView article =
-    li [] [ text article.title ]
+articleView record =
+    section []
+        [ article [ class "card" ]
+            [ h3 []
+                [ a [ href record.url ] [ text record.title ]
+                ]
+            , div [ class "content" ] <| RawHtml.fromString record.content
+            ]
+        ]
+
+
+articleList : Model -> Html Msg
+articleList model =
+    div [] <| List.map articleView model.articles
 
 
 view : Model -> Document Msg
 view model =
     { title = "SoManyFeeds - A feed aggregator by Damien Le Berrigaud"
     , body =
-        [ p []
-            [ text "Hello "
-            , text model.userName
-            , text ", your articles will show up here. But first let's "
-            , a [ href "/manage" ] [ text "follow some feeds" ]
-            , text "."
-            ]
-        , ul [] <| List.map articleView model.articles
+        [ header [] [ h1 [] [ text "SoManyFeeds" ] ]
+        , h2 [] [ text "Articles" ]
+        , h1 [] [ text "Most recent" ]
+        , articleList model
         ]
     }
 
@@ -55,8 +68,8 @@ view model =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        None ->
-            ( model, Cmd.none )
+        UpdateTimeZone timeZone ->
+            ( { model | timeZone = Just timeZone }, Cmd.none )
 
 
 main : Program Flags Model Msg

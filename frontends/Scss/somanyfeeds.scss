@@ -118,6 +118,15 @@ em, strong {
   font-weight: $serif-bold;
 }
 
+article > * {
+  max-width: 50rem;
+}
+
+article > .content {
+  line-height: 1.6;
+}
+
+
 label {
   display: block;
   margin-bottom: 1rem;
@@ -314,3 +323,7 @@ dt {
     visibility: hidden;
   }
 }
+
+// Customizations for feeds
+
+.share_submission { display: none; }
