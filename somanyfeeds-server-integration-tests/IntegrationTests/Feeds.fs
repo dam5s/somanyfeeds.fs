@@ -13,8 +13,7 @@ let all () =
     "Feeds CRUD" &&& fun _ ->
         url <| sprintf "http://localhost:%d" Config.port
 
-        click "follow some feeds"
-
+        click "Manage"
         expectToFind "h1" "Manage your subscriptions"
         expectToFind "p" "You have not subscribed to any feeds yet."
         count ".card-list .card" 0
@@ -36,6 +35,8 @@ let all () =
         expectToFind ".card dd" "http://example.com/my/test/feed-2.rss"
 
         click "Unsubscribe"
+        expectToFind "h3" "Unsubscribe"
+
         click "Yes, unsubscribe"
         count ".card-list .card" 1
         expectToFind ".card dd" "My Test Feed"
