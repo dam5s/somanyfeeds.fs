@@ -14,6 +14,7 @@ $serif-normal: 300;
 $serif-bold: 700;
 $sans-serif-fonts: 'Merriweather Sans', 'Helvetica Neue', sans-serif;
 $sans-serif-normal: 400;
+$small-screen-width: 600px;
 
 html, body {
   height: 100%;
@@ -42,6 +43,11 @@ header {
 
   svg {
     height: 3rem;
+    margin-bottom: 1.7rem;
+
+    @media (min-width: $small-screen-width) {
+      margin-bottom: -.3rem;
+    }
   }
 
   nav {
@@ -85,8 +91,12 @@ header + h2 {
 header + h2 + h1 {
   background-color: $accent-color;
   color: $bg-color;
-  margin: -.8rem 0 0;
   padding: 0 1rem 3rem;
+  margin: -.6rem 0 0;
+
+  @media (min-width: $small-screen-width) {
+    margin: -.8rem 0 0;
+  }
 }
 
 header + h2 + h1 + * {
@@ -116,7 +126,11 @@ h1, h2, h3, h4 {
 h1 {
   font-family: $serif-fonts;
   font-weight: $serif-bold;
-  font-size: 3rem;
+  font-size: 2.4rem;
+
+  @media (min-width: $small-screen-width) {
+    font-size: 3rem;
+  }
 }
 
 h2 {
