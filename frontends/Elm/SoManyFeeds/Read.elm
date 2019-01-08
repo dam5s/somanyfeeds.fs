@@ -42,8 +42,7 @@ articleView record =
     article [ class "card" ]
         [ h4 [] [ text record.feedName ]
         , h3 []
-            [ a [ href record.url, target "_blank" ] [ text record.title ]
-            ]
+            [ a [ href record.url, target "_blank" ] <| RawHtml.fromString record.title ]
         , div [ class "content" ] <| RawHtml.fromString record.content
         ]
 
