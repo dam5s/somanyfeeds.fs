@@ -2,7 +2,6 @@ module SoManyFeedsServer.Config
 
 open Suave
 open DotLiquid
-open Newtonsoft.Json
 open System.IO
 
 
@@ -10,11 +9,14 @@ type private JsonCookieSerialiser () =
     interface CookieSerialiser with
 
         member x.serialise (map: Map<string, obj>) : byte[] =
-          UTF8.bytes (JsonConvert.SerializeObject map)
+            map
+            |> Json.serializeSimpleMap
+            |> UTF8.bytes
 
         member x.deserialise bytes =
-          JsonConvert.DeserializeObject<Map<string, obj>> (UTF8.toString bytes)
-
+            bytes
+            |> UTF8.toString
+            |> Json.deserializeSimpleMap
 
 
 let private contentRoot : string =

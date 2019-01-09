@@ -20,16 +20,11 @@ module private User =
 
     open Option.Operators
 
-    let private tryCast (o : obj) : 'T option =
-        try
-            Some (o :?> 'T)
-        with _ ->
-            None
-
     let private cookieStoreError : WebPart =
         response HTTP_500 (UTF8.bytes "Cookie store error")
 
-    let private constructor id name = { Id = id ; Name = name }
+    let private constructor id name =
+        { Id = id ; Name = name }
 
 
     let tryGet (ctx: HttpContext) : User option =

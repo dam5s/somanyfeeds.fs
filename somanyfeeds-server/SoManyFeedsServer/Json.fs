@@ -7,6 +7,43 @@ open Suave.Writers
 open Suave.Operators
 open Suave.Response
 
+let serializeSimpleMap (map : Map<string, obj>) : string =
+    map
+    |> Map.map (fun k (value : obj) ->
+        match value with
+        | null -> Json.Null ()
+        | :? Json as x -> x
+        | :? bool as x -> Json.Bool x
+        | :? int64 as x -> Json.Number (decimal x)
+        | :? string as x -> Json.String x
+        | _ ->
+            eprintfn "Unsupported value for session: %A" value
+            Json.Null ()
+    )
+    |> Json.Object
+    |> Json.format
+
+
+let deserializeSimpleMap (json : string) : Map<string, obj> =
+    let convertJsonMap (map : Map<string, Json>) : Map<string, obj> =
+        map |> Map.map (fun key (value : Json) ->
+            match value with
+            | Json.Null _ -> null
+            | Json.Bool b -> b :> obj
+            | Json.Number n -> int64 n :> obj
+            | Json.String s -> s :> obj
+            | _ ->
+                eprintfn "Unsupported value in session: %A" value
+                null
+        )
+
+    json
+    |> Json.tryParse
+    |> Choice.toResult
+    |> Result.fold id (fun _ -> Json.Object Map.empty)
+    |> function | Json.Object map -> convertJsonMap map
+                | _ -> Map.empty
+
 
 let serializeObject (encoder : 'a -> Json<unit>) (record : 'a) : string =
     record

@@ -24,8 +24,8 @@ module Decoders =
 
         let decoder =
             constructor
-                <!> Json.read "name"
-                <*> Json.read "url"
+            <!> Json.read "name"
+            <*> Json.read "url"
 
         decoder json
 
