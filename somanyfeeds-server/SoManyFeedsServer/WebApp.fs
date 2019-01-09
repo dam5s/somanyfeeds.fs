@@ -57,13 +57,18 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
 
         GET >=> path "/api/articles/recent" >=> request listRecentArticlesApi
 
-        GET >=> Files.browseHome
         NOT_FOUND "not found"
     ]
 
 
 let webPart =
     choose [
-        request <| Authentication.authenticate authenticatedPage
+        GET >=> Files.browseHome
+        GET >=> path "/login" >=> request Authentication.loginPage
+        POST >=> path "/login" >=> request Authentication.doLogin
+        GET >=> path "/logout" >=> request Authentication.doLogout
+
+        request (Authentication.authenticate authenticatedPage)
+
         UNAUTHORIZED "unauthorized"
     ]

@@ -2,7 +2,19 @@ module SoManyFeedsServer.Config
 
 open Suave
 open DotLiquid
+open Newtonsoft.Json
 open System.IO
+
+
+type private JsonCookieSerialiser () =
+    interface CookieSerialiser with
+
+        member x.serialise (map: Map<string, obj>) : byte[] =
+          UTF8.bytes (JsonConvert.SerializeObject map)
+
+        member x.deserialise bytes =
+          JsonConvert.DeserializeObject<Map<string, obj>> (UTF8.toString bytes)
+
 
 
 let private contentRoot : string =
@@ -31,4 +43,6 @@ let create : SuaveConfig =
     { defaultConfig with
         homeFolder = Some publicFolder
         bindings = [ binding ]
+        serverKey = ServerKey.fromBase64 (Env.varRequired "COOKIE_ENCRYPTION_KEY")
+        cookieSerialiser = new JsonCookieSerialiser()
     }
