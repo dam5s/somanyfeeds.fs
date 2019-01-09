@@ -13,8 +13,15 @@ let all () =
     "Feeds CRUD" &&& fun _ ->
         url <| sprintf "http://localhost:%d" Config.port
 
+        expectToFind "h1" "Authentication required"
+        "input[name='email']" << "damo@example.com"
+        "input[name='password']" << "supersecret"
+        click "Sign in"
+
+        expectToFind "h2" "ARTICLES"
+
         click "Manage"
-        expectToFind "h1" "Manage your subscriptions"
+        expectToFind "h2" "FEEDS"
         expectToFind "p" "You have not subscribed to any feeds yet."
         count ".card-list .card" 0
 
