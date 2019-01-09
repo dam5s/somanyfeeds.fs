@@ -95,7 +95,7 @@ let find dataSource sql (bindings : Binding list) (mapping : DbDataRecord -> 'T)
         reader
         |> Seq.cast<DbDataRecord>
         |> Seq.map mapping
-        |> Seq.first
+        |> Seq.tryHead
     )
 
 

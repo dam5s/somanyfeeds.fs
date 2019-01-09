@@ -5,9 +5,13 @@ drop table if exists users;
 
 create table users
 (
-  id   bigserial primary key,
-  name text
+  id            bigserial primary key,
+  email         text unique not null,
+  name          text        not null,
+  password_hash text        not null
 );
+
+create index users_email on users (email);
 
 
 create table feeds
@@ -38,7 +42,7 @@ create table articles
 create index articles_urls on articles (url, feed_url);
 create index articles_feed_url on articles (feed_url);
 
-insert into users (id, name)
-values (1, 'Damo');
+insert into users (id, email, name, password_hash)
+values (1, 'damo@example.com', 'Damo', '$2a$11$ExRbaoOXuZI61PdZhMauouk/PwZXH84ueRixvKnC0QU8l9QUsexeC'); -- supersecret
 
 select setval('users_id_seq', 1);

@@ -62,10 +62,12 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
 
 
 let webPart =
+    let findByEmail = UsersPersistence.findByEmail DataAccess.dataSource
+
     choose [
         GET >=> Files.browseHome
         GET >=> path "/login" >=> request Authentication.loginPage
-        POST >=> path "/login" >=> request Authentication.doLogin
+        POST >=> path "/login" >=> request (Authentication.doLogin findByEmail)
         GET >=> path "/logout" >=> request Authentication.doLogout
 
         request (Authentication.authenticate authenticatedPage)

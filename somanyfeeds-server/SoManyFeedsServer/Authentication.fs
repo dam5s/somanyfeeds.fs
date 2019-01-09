@@ -8,6 +8,8 @@ open Suave.Redirection
 open Suave.DotLiquid
 open Suave.Response
 open Suave.State.CookieStateStore
+open SoManyFeedsServer.DataSource
+open SoManyFeedsServer.UsersPersistence
 
 
 type User =
@@ -49,15 +51,32 @@ module private User =
 let private usingSession : WebPart =
     stateful (CookieLife.MaxAge (TimeSpan.FromDays 2.0)) true
 
+type LoginViewModel =
+    { Error : bool }
+
+let private loginError : WebPart =
+    page "login.html.liquid" { Error = true }
 
 let loginPage (request : HttpRequest) : WebPart =
-    page "login.html.liquid" ()
+    page "login.html.liquid" { Error = false }
 
 
-let doLogin (request : HttpRequest) : WebPart =
-    usingSession
-    >=> User.set { Id = int64 1 ; Name = "Damo" }
-    >=> redirect "/read"
+let doLogin (findByEmail : string -> FindResult<UserRecord>) (request : HttpRequest) : WebPart =
+    let formData name = name
+                        |> request.formData
+                        |> Choice.orDefault (fun _ -> "")
+
+    match findByEmail (formData "email") with
+    | NotFound -> loginError
+    | FindError msg -> ErrorPage.page "There was a database access error, please try again later."
+    | Found user ->
+        if Passwords.verify (formData "password") user.PasswordHash
+        then
+            usingSession
+            >=> User.set { Id = user.Id ; Name = user.Name }
+            >=> redirect "/read"
+        else
+            loginError
 
 
 let doLogout (request : HttpRequest) : WebPart =

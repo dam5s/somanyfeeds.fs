@@ -8,6 +8,7 @@ $accent-color: #046380;
 $contrast-color: #002f2f;
 $fg-color: #222;
 $bg-color: #fff;
+$error-color: #bc0304;
 
 $serif-fonts: 'Merriweather', 'Georgia', serif;
 $serif-normal: 300;
@@ -162,6 +163,10 @@ p {
     text-align: center;
     padding: 1rem;
   }
+
+  &.error {
+    color: $error-color;
+  }
 }
 
 em, strong {
@@ -185,7 +190,7 @@ label {
   font-weight: $sans-serif-normal;
 }
 
-input[type="text"] {
+input[type="text"], input[type="password"] {
   background-color: $bg-color;
   color: $fg-color;
   border: none;

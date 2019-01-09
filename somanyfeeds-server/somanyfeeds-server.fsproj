@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next.StrongName" Version="3.1.2" />
     <PackageReference Include="FSharp.Control.AsyncSeq" Version="2.0.21" />
     <PackageReference Include="DotLiquid" Version="2.0.298" />
     <PackageReference Include="Suave" Version="2.5.3" />
@@ -17,13 +18,15 @@
 
     <Compile Include="SoManyFeedsServer/Json.fs" />
     <Compile Include="SoManyFeedsServer/DataSource.fs" />
+    <Compile Include="SoManyFeedsServer/Passwords.fs" />
     <Compile Include="SoManyFeedsServer/FeedsPersistence.fs" />
     <Compile Include="SoManyFeedsServer/ArticlesPersistence.fs" />
+    <Compile Include="SoManyFeedsServer/UsersPersistence.fs" />
+    <Compile Include="SoManyFeedsServer/ErrorPage.fs" />
     <Compile Include="SoManyFeedsServer/Authentication.fs" />
     <Compile Include="SoManyFeedsServer/UserArticlesService.fs" />
     <Compile Include="SoManyFeedsServer/FeedsApi.fs" />
     <Compile Include="SoManyFeedsServer/ArticlesApi.fs" />
-    <Compile Include="SoManyFeedsServer/ErrorPage.fs" />
     <Compile Include="SoManyFeedsServer/ReadPage.fs" />
     <Compile Include="SoManyFeedsServer/ManagePage.fs" />
     <Compile Include="SoManyFeedsServer/DataAccess.fs" />

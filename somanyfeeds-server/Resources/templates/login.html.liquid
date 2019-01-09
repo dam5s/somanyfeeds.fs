@@ -18,7 +18,18 @@
 
 <section>
     <form method="post" class="card">
-        <button>Login</button>
+        {% if model.Error %}<p class="error message">Authentication failed.</p>{% endif %}
+        <label>
+            Email
+            <input type="text" name="email" placeholder="john@example.com" />
+        </label>
+        <label>
+            Password
+            <input type="password" name="password" placeholder="******************" />
+        </label>
+        <nav>
+            <button class="button primary">Sign in</button>
+        </nav>
     </form>
 </section>
 
