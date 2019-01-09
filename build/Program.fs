@@ -48,7 +48,7 @@ let private clean _ =
     cleanElm ()
     cleanScss ()
 
-    ["." ; "damo-io-server" ; "somanyfeeds-server" ; "feeds-processing"; "feeds-processing-tests" ; "frontends"]
+    ["." ; "prelude" ; "damo-io-server" ; "somanyfeeds-server" ; "feeds-processing"; "feeds-processing-tests" ; "frontends"]
     |> List.map (fun p ->
         Path.Combine (p, "bin") |> Directory.delete
         Path.Combine (p, "obj") |> Directory.delete

@@ -20,12 +20,11 @@ type private Tweet =
 
 
 let private parseDate (dateValue : string) : DateTime option =
-    try
-        Some <| DateTime.ParseExact (dateValue, "ddd MMM dd HH:mm:ss zzz yyyy", CultureInfo.InvariantCulture)
-    with
-    | ex ->
-        printfn "There was an error parsing the date. %s" (ex.ToString ())
-        None
+    tryOperation
+        "Date parsing"
+        (fun _ -> DateTime.ParseExact (dateValue, "ddd MMM dd HH:mm:ss zzz yyyy", CultureInfo.InvariantCulture))
+
+    |> Result.toOption
 
 
 type TwitterTimelineProvider = JsonProvider<"../feeds-processing/Resources/samples/twitter.timeline.sample">
@@ -47,16 +46,12 @@ let private mapTweet (json : TwitterTimelineProvider.Root) : Tweet =
 
 
 let private parseTweets (DownloadedFeed downloaded) : Result<Tweet list, string> =
-    try
+    tryOperation "Parse tweets" (fun _ ->
         downloaded
         |> TwitterTimelineProvider.Parse
         |> Array.toList
         |> List.map mapTweet
-        |> Ok
-    with
-    | ex ->
-        printfn "Could not parse tweets json\n\n%s\n\nGot exception %s" downloaded (ex.ToString ())
-        Error "Could not parse tweets json"
+    )
 
 
 let private tweetToArticle (TwitterHandle handle) (tweet : Tweet) : Article =

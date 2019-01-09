@@ -19,12 +19,8 @@ let private articleToRecord (sourceType : SourceType) (article : Article) : Arti
     }
 
 
-let private orElse other =
-    Result.fold id (fun _ -> other)
-
-
 let private resultToList (sourceType : SourceType) (result : ProcessingResult) : ArticleRecord list =
-    List.map (articleToRecord sourceType) (orElse [] result)
+    List.map (articleToRecord sourceType) (Result.defaultValue [] result)
 
 let private consumerKey =
     Env.varRequired "TWITTER_CONSUMER_API_KEY"

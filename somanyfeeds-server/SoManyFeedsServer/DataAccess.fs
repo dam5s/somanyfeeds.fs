@@ -13,8 +13,6 @@ let private connectionString =
 
 let dataSource : DataSource =
     fun _ ->
-        try
-            Ok (new NpgsqlConnection (connectionString) :> DbConnection)
-        with
-        | ex ->
-            Error <| sprintf "Connection error: %s" ex.Message
+        tryOperation
+            "Database Connection"
+            (fun _ -> new NpgsqlConnection (connectionString) :> DbConnection)

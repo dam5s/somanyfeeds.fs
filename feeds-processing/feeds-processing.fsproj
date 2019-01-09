@@ -7,6 +7,8 @@
   <ItemGroup>
     <PackageReference Include="FSharp.Data" Version="3.0.0" />
 
+    <ProjectReference Include="../prelude/prelude.fsproj" />
+
     <Compile Include="FeedsProcessing/Feeds.fs" />
     <Compile Include="FeedsProcessing/Article.fs" />
     <Compile Include="FeedsProcessing/ProcessingResult.fs" />

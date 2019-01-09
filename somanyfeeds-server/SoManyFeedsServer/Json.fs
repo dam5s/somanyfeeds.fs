@@ -39,8 +39,7 @@ let deserializeSimpleMap (json : string) : Map<string, obj> =
 
     json
     |> Json.tryParse
-    |> Choice.toResult
-    |> Result.fold id (fun _ -> Json.Object Map.empty)
+    |> Choice.defaultValue (Json.Object Map.empty)
     |> function | Json.Object map -> convertJsonMap map
                 | _ -> Map.empty
 
@@ -63,11 +62,11 @@ let jsonResponse (status : HttpCode) (json : string) : WebPart =
         >=> response status (UTF8.bytes json)
 
 
-let private decodeToResult (decoder : Json -> JsonResult<'a> * Json) (json: Json) : Result<'a, string> =
+let private decodeToChoice (decoder : Json -> JsonResult<'a> * Json) (json: Json) : Choice<'a, string> =
     decoder json
     |> fst
-    |> function | Value value -> Ok value
-                | Error msg -> Result.Error msg
+    |> function | Value value -> Choice1Of2 value
+                | Error msg -> Choice2Of2 msg
 
 
 let private deserializationErrorJson (message : string) : string =
@@ -83,10 +82,9 @@ let deserializeBody (decoder : Json -> JsonResult<'a> * Json) (next : 'a -> WebP
         r.rawForm
         |> UTF8.toString
         |> Json.tryParse
-        |> Choice.toResult
-        |> Result.bind (decodeToResult decoder)
-        |> function | Ok value -> next value
-                    | Result.Error msg -> jsonResponse HTTP_400 (deserializationErrorJson msg)
+        |> Choice.bind (decodeToChoice decoder)
+        |> function | Choice1Of2 value -> next value
+                    | Choice2Of2 msg -> jsonResponse HTTP_400 (deserializationErrorJson msg)
     )
 
 

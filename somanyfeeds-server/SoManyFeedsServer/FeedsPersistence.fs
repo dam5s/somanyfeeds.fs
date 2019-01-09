@@ -113,7 +113,7 @@ let updateFeed (dataSource : DataSource) (userId : int64) (feedId : int64) (fiel
             where user_id = @UserId and id = @FeedId
         """
         bindings
-        |> Result.map (fun _ -> updatedRecord)
+        |> Result.map (always updatedRecord)
 
 
 let deleteFeed (dataSource : DataSource) (userId : int64) (feedId : int64) : Result<unit, string> =
@@ -126,4 +126,4 @@ let deleteFeed (dataSource : DataSource) (userId : int64) (feedId : int64) : Res
     update dataSource
         "delete from feeds where user_id = @UserId and id = @FeedId"
         bindings
-        |> Result.map (fun _ -> ())
+        |> Result.map (always ())

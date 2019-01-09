@@ -43,17 +43,15 @@ let private fromOptionResult (result : Result<'T option, string>) : FindResult<'
 
 
 let private usingConnection (dataSource : DataSource) (mapping : DbConnection -> 'T) : Result<'T, string> =
-    try
-        dataSource ()
-        |> Result.map (fun (c : DbConnection) ->
-            use connection = c
-            connection.Open ()
-            mapping connection
+    bindOperation
+        "Data access"
+        (fun _ ->
+            dataSource () |> Result.map (fun (c : DbConnection) ->
+                use connection = c
+                connection.Open ()
+                mapping connection
+            )
         )
-    with
-    | ex ->
-        printfn "Data access error: %s" (ex.ToString ())
-        Error <| sprintf "Data access error: %s" ex.Message
 
 
 let private applyBinding (command : DbCommand) (Binding (name, value)) =

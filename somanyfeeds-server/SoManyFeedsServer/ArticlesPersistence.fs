@@ -79,7 +79,7 @@ let deleteArticle (dataSource : DataSource) (url : string) (feedUrl : string) : 
     update dataSource
         "delete from articles where url = @Url and feed_url = @FeedUrl"
         bindings
-        |> Result.map (fun _ -> ())
+        |> Result.map (always ())
 
 
 let listRecentArticles (dataSource : DataSource) (feedUrls : string list) : Result<ArticleRecord list, string> =

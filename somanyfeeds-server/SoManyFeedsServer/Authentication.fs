@@ -64,7 +64,7 @@ let loginPage (request : HttpRequest) : WebPart =
 let doLogin (findByEmail : string -> FindResult<UserRecord>) (request : HttpRequest) : WebPart =
     let formData name = name
                         |> request.formData
-                        |> Choice.orDefault (fun _ -> "")
+                        |> Choice.defaultValue ""
 
     match findByEmail (formData "email") with
     | NotFound -> loginError

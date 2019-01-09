@@ -18,7 +18,7 @@ let private sequence : AsyncSeq<FeedUrl> =
             let feedUrls =
                 listUrls ()
                 |> Result.map (List.map FeedUrl)
-                |> Result.fold id (fun _ -> [])
+                |> Result.defaultValue []
 
             for url in feedUrls do
                 yield url
@@ -38,8 +38,8 @@ let private logArticleError (url : string) (msg : string) : string =
 
 
 let private articleToFields (FeedUrl feedUrl) (article : Article) : ArticleFields =
-    { Url = article.Link |> Option.orDefault (fun _ -> "")
-      Title = article.Title |> Option.orDefault (fun _ -> "")
+    { Url = article.Link |> Option.defaultValue ""
+      Title = article.Title |> Option.defaultValue ""
       FeedUrl = feedUrl
       Content = article.Content
       Date = article.Date
@@ -49,7 +49,7 @@ let private articleToFields (FeedUrl feedUrl) (article : Article) : ArticleField
 let private persistArticle (fields : ArticleFields) : Async<unit> =
     async {
         deleteArticle dataSource fields.Url fields.FeedUrl
-        |> Result.bind (fun _ -> createArticle dataSource fields)
+        |> Result.bind (always <| createArticle dataSource fields)
         |> Result.mapError (logArticleError fields.Url)
         |> ignore
     }
@@ -60,7 +60,7 @@ let private processFeed (feedUrl : FeedUrl) : ArticleFields seq =
     let articles = downloadFeed feedUrl
                    |> Result.bind Xml.processXmlFeed
                    |> Result.mapError (logError feedUrl)
-                   |> Result.fold id (fun _ -> [])
+                   |> Result.defaultValue []
 
     articles
     |> List.toSeq

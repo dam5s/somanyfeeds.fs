@@ -13,16 +13,6 @@ let private stringToOption text =
     else Some text
 
 
-let private tryOperation (operation : unit -> 'T) : Result<'T, string> =
-    try Ok <| operation ()
-    with ex -> Error <| ex.Message.Trim ()
-
-
-let private bindOperation (operation : unit -> Result<'T, string>) : Result<'T, string> =
-    try operation ()
-    with ex -> Error <| ex.Message.Trim ()
-
-
 module private Rss =
 
     type private RssProvider = XmlProvider<"../feeds-processing/Resources/samples/rss.sample">
@@ -39,14 +29,14 @@ module private Rss =
         }
 
     let private toArticles (rss : RssProvider.Rss) : Result<Article list, string> =
-        tryOperation (fun _ ->
+        tryOperation "Rss to articles" (fun _ ->
             rss.Channel.Items
             |> Seq.map itemToArticle
             |> Seq.toList
         )
 
     let private parse (xml : string) : Result<RssProvider.Rss, string> =
-        tryOperation (fun _ -> RssProvider.Parse xml)
+        tryOperation "Rss parse" (fun _ -> RssProvider.Parse xml)
 
     let processRss (DownloadedFeed downloaded) : ProcessingResult =
         parse downloaded |> Result.bind toArticles
@@ -64,7 +54,7 @@ module private Atom =
         }
 
     let private toArticles (atom : AtomProvider.Feed) : Result<Article list, string> =
-        bindOperation (fun _ ->
+        bindOperation "Atom to articles" (fun _ ->
             match atom.Entries with
             | [||] ->
                 Error "Expected at least one atom entry"
@@ -76,7 +66,7 @@ module private Atom =
         )
 
     let private parse (xml : string) : Result<AtomProvider.Feed, string> =
-        tryOperation (fun _ -> AtomProvider.Parse xml)
+        tryOperation "Atom parse" (fun _ -> AtomProvider.Parse xml)
 
     let processAtom (DownloadedFeed downloaded) : ProcessingResult =
         parse downloaded |> Result.bind toArticles
@@ -94,7 +84,7 @@ module private Rdf =
         }
 
     let private toArticles (rdf : RdfProvider.Rdf) : Result<Article list, string> =
-        bindOperation (fun _ ->
+        bindOperation "Rdf to articles" (fun _ ->
             match rdf.Items with
             | [||] ->
                 Error "Expected at least one rdf item"
@@ -106,7 +96,7 @@ module private Rdf =
         )
 
     let private parse (xml : string) : Result<RdfProvider.Rdf, string> =
-        tryOperation (fun _ -> RdfProvider.Parse xml)
+        tryOperation "Rdf parse" (fun _ -> RdfProvider.Parse xml)
 
     let processRdf (DownloadedFeed downloaded) : ProcessingResult =
         parse downloaded |> Result.bind toArticles

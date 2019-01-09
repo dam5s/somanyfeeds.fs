@@ -14,6 +14,7 @@
     <PackageReference Include="Chiron" Version="6.3.1" />
     <PackageReference Include="Npgsql" Version="4.0.4" />
 
+    <ProjectReference Include="../prelude/prelude.fsproj" />
     <ProjectReference Include="../feeds-processing/feeds-processing.fsproj" />
 
     <Compile Include="SoManyFeedsServer/Json.fs" />
