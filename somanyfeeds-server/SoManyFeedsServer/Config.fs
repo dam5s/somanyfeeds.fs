@@ -28,12 +28,9 @@ let private templatesFolder : string =
 let private publicFolder : string =
     Path.Combine (contentRoot, "Resources/public")
 
-let private defaultPort _ : string =
-    "8080"
-
 
 let port : int =
-    Env.varDefaultParse int "PORT" defaultPort
+    Env.varDefaultParse int "PORT" <| always "8080"
 
 
 let create : SuaveConfig =

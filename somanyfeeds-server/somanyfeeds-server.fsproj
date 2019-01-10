@@ -42,6 +42,6 @@
   </ItemGroup>
 
   <Target Name="CopyResources" AfterTargets="Publish">
-    <Copy SourceFiles="@(Resources)" DestinationFiles="@(Resources->'$(PublishDir)/resources/%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(Resources)" DestinationFiles="@(Resources->'$(PublishDir)/Resources/%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>
 </Project>
