@@ -1,7 +1,7 @@
 module SoManyFeeds.Read exposing (main)
 
 import Browser exposing (Document)
-import Html exposing (Html, a, article, div, h1, h2, h3, h4, header, li, nav, p, section, text, ul)
+import Html exposing (Html, a, article, div, h1, h2, h3, h4, header, nav, section, text)
 import Html.Attributes exposing (class, href, target)
 import SoManyFeeds.Article as Article exposing (Article)
 import SoManyFeeds.Logo as Logo
@@ -56,16 +56,20 @@ view : Model -> Document Msg
 view model =
     { title = "SoManyFeeds - A feed aggregator by Damien Le Berrigaud"
     , body =
-        [ header []
-            [ Logo.view
-            , nav []
-                [ a [ href "/read", class "current" ] [ text "Read" ]
-                , a [ href "/manage" ] [ text "Manage" ]
+        [ header [ class "app-header" ]
+            [ div []
+                [ Logo.view
+                , nav []
+                    [ a [ href "/read", class "current" ] [ text "Read" ]
+                    , a [ href "/manage" ] [ text "Manage" ]
+                    ]
                 ]
             ]
-        , h2 [] [ text "Articles" ]
-        , h1 [] [ text "Most recent" ]
-        , articleList model
+        , header [ class "page" ]
+            [ h2 [] [ text "Articles" ]
+            , h1 [] [ text "Most recent" ]
+            ]
+        , div [ class "main" ] [ articleList model ]
         ]
     }
 

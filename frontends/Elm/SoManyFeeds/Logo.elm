@@ -1,6 +1,6 @@
 module SoManyFeeds.Logo exposing (view)
 
-import Html exposing (Html, a, div)
+import Html exposing (Html, a)
 import Html.Attributes exposing (href)
 import Svg exposing (g, path, svg)
 import Svg.Attributes exposing (d, style, transform, viewBox)

@@ -1,11 +1,10 @@
 module SoManyFeeds.Manage exposing (main)
 
 import Browser exposing (Document)
-import Html exposing (Attribute, Html, a, button, dd, div, dl, dt, form, h1, h2, h3, header, input, label, li, nav, option, p, section, select, text, ul)
-import Html.Attributes exposing (class, disabled, href, name, selected, target, type_, value)
-import Html.Events exposing (on, onClick, onInput, onSubmit, targetValue)
+import Html exposing (Attribute, Html, a, button, dd, div, dl, dt, form, h1, h2, h3, header, input, label, nav, p, section, text)
+import Html.Attributes exposing (class, disabled, href, name, target, type_, value)
+import Html.Events exposing (onClick, onInput, onSubmit)
 import Http
-import Json.Decode
 import Keyboard
 import List.Extra
 import Result
@@ -97,11 +96,6 @@ feedList model =
         ]
 
 
-onSelect : (String -> msg) -> Attribute msg
-onSelect msg =
-    on "change" (Json.Decode.map msg targetValue)
-
-
 newFeedForm : Model -> Html Msg
 newFeedForm model =
     let
@@ -163,19 +157,25 @@ view : Model -> Document Msg
 view model =
     { title = "SoManyFeeds - A feed aggregator by Damien Le Berrigaud"
     , body =
-        [ header []
-            [ Logo.view
-            , nav []
-                [ a [ href "/read" ] [ text "Read" ]
-                , a [ href "/manage", class "current" ] [ text "Manage" ]
+        [ header [ class "app-header" ]
+            [ div []
+                [ Logo.view
+                , nav []
+                    [ a [ href "/read" ] [ text "Read" ]
+                    , a [ href "/manage", class "current" ] [ text "Manage" ]
+                    ]
                 ]
             ]
-        , h2 [] [ text "Feeds" ]
-        , h1 [] [ text "Manage your subscriptions" ]
-        , newFeedForm model
-        , feedList model
-        , overlay model
-        , deleteDialog model
+        , header [ class "page" ]
+            [ h2 [] [ text "Feeds" ]
+            , h1 [] [ text "Manage your subscriptions" ]
+            ]
+        , div [ class "main" ]
+            [ newFeedForm model
+            , feedList model
+            , overlay model
+            , deleteDialog model
+            ]
         ]
     }
 
@@ -228,7 +228,7 @@ update msg model =
             , Http.send CreateFeedResult <| Feed.createRequest form
             )
 
-        CreateFeedResult (Result.Err err) ->
+        CreateFeedResult (Result.Err _) ->
             ( { model | creationInProgress = False }, Cmd.none )
 
         CreateFeedResult (Result.Ok feedJson) ->
