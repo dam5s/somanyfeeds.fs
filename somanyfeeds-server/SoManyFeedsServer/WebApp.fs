@@ -4,7 +4,6 @@ open Suave
 open Suave.Filters
 open Suave.Operators
 open Suave.RequestErrors
-open Suave.Redirection
 open SoManyFeedsServer
 open SoManyFeedsServer.Json
 
@@ -46,7 +45,6 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
 
 
     choose [
-        GET >=> path "/" >=> redirect "/read"
         GET >=> path "/read" >=> request readPage
         GET >=> path "/manage" >=> request managePage
 
@@ -63,8 +61,10 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
 
 let webPart =
     let findByEmail = UsersPersistence.findByEmail DataAccess.dataSource
+    let homePage = DotLiquid.page "home.html.liquid" ()
 
     choose [
+        GET >=> path "/" >=> homePage
         GET >=> Files.browseHome
         GET >=> path "/login" >=> request Authentication.loginPage
         POST >=> path "/login" >=> request (Authentication.doLogin findByEmail)

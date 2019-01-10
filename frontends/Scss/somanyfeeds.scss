@@ -155,6 +155,10 @@ a:link, a:hover, a:visited, a:active {
   color: $accent-color;
 }
 
+em, strong {
+  font-weight: $serif-bold;
+}
+
 p {
   margin: 0 0 1rem;
 
@@ -164,13 +168,25 @@ p {
     padding: 1rem;
   }
 
+  &.big-message {
+    font-size: 1.6rem;
+    text-align: center;
+    color: transparentize($fg-color, 0.5);
+    margin-bottom: 2rem;
+
+    strong {
+      font-weight: $serif-normal;
+      color: $fg-color;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
   &.error {
     color: $error-color;
   }
-}
-
-em, strong {
-  font-weight: $serif-bold;
 }
 
 article > * {

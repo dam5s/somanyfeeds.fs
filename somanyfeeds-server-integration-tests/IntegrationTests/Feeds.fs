@@ -13,6 +13,9 @@ let all () =
     "Feeds CRUD" &&& fun _ ->
         url <| sprintf "http://localhost:%d" Config.port
 
+        expectToFind "h1" "Welcome"
+        click "Read"
+
         expectToFind "h1" "Authentication required"
         "input[name='email']" << "damo@example.com"
         "input[name='password']" << "supersecret"
