@@ -38,7 +38,7 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
 
     let deleteFeedApi feedId =
         FeedsApi.delete
-            (always <| deleteFeed feedId)
+            (fun _ -> deleteFeed feedId)
 
     let listRecentArticlesApi _ =
         ArticlesApi.list listRecentArticles
