@@ -1,7 +1,7 @@
 module Support.RawHtml exposing (fromString)
 
 import Html exposing (Attribute, Html)
-import Html.Attributes
+import Html.Attributes exposing (target)
 import Html.Parser as Parser
 import VirtualDom
 
@@ -18,6 +18,11 @@ nodeToHtml node =
     case node of
         Parser.Text text ->
             Html.text (String.replace "&quot;" "\"" text)
+
+        Parser.Element "a" attrs children ->
+            Html.a
+                (List.map attributeToHtml attrs ++ [ target "_blank" ])
+                (List.map nodeToHtml children)
 
         Parser.Element "iframe" attrs children ->
             Html.div [] []
