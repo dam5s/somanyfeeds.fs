@@ -1,11 +1,8 @@
 module DamoIO.Tweet exposing (display)
 
-import Html exposing (Attribute, Html, section, text)
-import Html.Attributes exposing (class)
-import Json.Encode
+import Html exposing (Attribute, Html, section)
 import Regex
 import Support.RawHtml as RawHtml
-import VirtualDom
 
 
 display : String -> Html msg
@@ -48,8 +45,8 @@ replaceLink linkBuilder match =
                 Nothing ->
                     match.match
 
-                Just submatch ->
-                    Maybe.withDefault "" maybeLeading ++ linkBuilder submatch
+                Just subMatch ->
+                    Maybe.withDefault "" maybeLeading ++ linkBuilder subMatch
 
         _ ->
             match.match

@@ -2,7 +2,6 @@ module DamoIO.Route exposing (Route(..), fromUrl, sources)
 
 import DamoIO.Source as Source exposing (Source)
 import Url
-import Url.Parser exposing (..)
 
 
 type Route

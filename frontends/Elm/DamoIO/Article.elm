@@ -4,12 +4,10 @@ import DamoIO.Source as Source exposing (Source(..))
 import DamoIO.Tweet as Tweet
 import Html exposing (Attribute, Html, a, h1, h2, header, section, text)
 import Html.Attributes exposing (class, href)
-import Json.Encode
 import Regex
 import Support.DateFormat as DateFormat
 import Support.RawHtml as RawHtml
 import Time
-import VirtualDom
 
 
 type alias Json =

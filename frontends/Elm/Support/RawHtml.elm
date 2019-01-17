@@ -24,13 +24,13 @@ nodeToHtml node =
                 (List.map attributeToHtml attrs ++ [ target "_blank" ])
                 (List.map nodeToHtml children)
 
-        Parser.Element "iframe" attrs children ->
+        Parser.Element "iframe" _ _ ->
             Html.div [] []
 
-        Parser.Element "embed" attrs children ->
+        Parser.Element "embed" _ _ ->
             Html.div [] []
 
-        Parser.Element "object" attrs children ->
+        Parser.Element "object" _ _ ->
             Html.div [] []
 
         Parser.Element name attrs children ->
