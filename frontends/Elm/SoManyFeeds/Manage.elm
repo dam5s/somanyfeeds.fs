@@ -171,10 +171,10 @@ view model =
             , h1 [] [ text "Manage your subscriptions" ]
             ]
         , div [ class "main" ]
-            [ newFeedForm model
-            , feedList model
-            , overlay model
+            [ overlay model
             , deleteDialog model
+            , newFeedForm model
+            , feedList model
             ]
         ]
     }
