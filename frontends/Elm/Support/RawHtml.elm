@@ -27,6 +27,12 @@ nodeToHtml node =
         Parser.Element "iframe" attrs children ->
             Html.div [] []
 
+        Parser.Element "embed" attrs children ->
+            Html.div [] []
+
+        Parser.Element "object" attrs children ->
+            Html.div [] []
+
         Parser.Element name attrs children ->
             VirtualDom.node name
                 (List.map attributeToHtml attrs)
