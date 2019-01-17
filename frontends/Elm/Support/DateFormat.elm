@@ -1,11 +1,11 @@
-module Support.DateFormat exposing (parseAndFormat)
+module Support.DateFormat exposing (tryFormat)
 
 import DateFormat exposing (..)
 import Time
 
 
-parseAndFormat : Maybe Time.Zone -> Time.Posix -> String
-parseAndFormat maybeTimeZone posix =
+tryFormat : Maybe Time.Zone -> Time.Posix -> String
+tryFormat maybeTimeZone posix =
     case maybeTimeZone of
         Just timeZone ->
             format timeZone posix

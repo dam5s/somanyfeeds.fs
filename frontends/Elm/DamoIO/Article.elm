@@ -68,7 +68,7 @@ articleHeader timeZone article =
 
 articleDate : Maybe Time.Zone -> Time.Posix -> Html msg
 articleDate timeZone date =
-    h2 [ class "date" ] [ text (DateFormat.parseAndFormat timeZone date) ]
+    h2 [ class "date" ] [ text (DateFormat.tryFormat timeZone date) ]
 
 
 articleTitle : Article -> String -> Html msg

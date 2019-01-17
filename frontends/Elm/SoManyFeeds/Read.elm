@@ -1,10 +1,11 @@
 module SoManyFeeds.Read exposing (main)
 
 import Browser exposing (Document)
-import Html exposing (Html, a, article, div, h1, h2, h3, h4, header, nav, section, text)
+import Html exposing (Html, a, article, div, h1, h2, h3, h4, header, nav, p, section, text)
 import Html.Attributes exposing (class, href, target)
 import SoManyFeeds.Article as Article exposing (Article)
 import SoManyFeeds.Logo as Logo
+import Support.DateFormat as DateFormat
 import Support.RawHtml as RawHtml
 import Task
 import Time
@@ -37,19 +38,20 @@ init flags =
     )
 
 
-articleView : Article -> Html Msg
-articleView record =
+articleView : Model -> Article -> Html Msg
+articleView model record =
     article [ class "card" ]
         [ h4 [] [ text record.feedName ]
         , h3 []
             [ a [ href record.url, target "_blank" ] <| RawHtml.fromString record.title ]
+        , p [ class "date" ] [ text <| DateFormat.tryFormat model.timeZone record.date ]
         , div [ class "content" ] <| RawHtml.fromString record.content
         ]
 
 
 articleList : Model -> Html Msg
 articleList model =
-    section [] <| List.map articleView model.articles
+    section [] <| List.map (articleView model) model.articles
 
 
 view : Model -> Document Msg
