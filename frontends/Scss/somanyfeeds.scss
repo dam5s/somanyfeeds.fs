@@ -47,7 +47,7 @@ header.app-header {
   box-shadow: 0 3px 2px rgba(0, 0, 0, 0.3);
   position: relative;
 
-  &> div {
+  & > div {
     position: relative;
     padding: 1rem;
   }
@@ -120,7 +120,7 @@ section, article {
   margin-bottom: 2rem;
 }
 
-nav {
+nav, .actions {
   text-align: right;
 
   .button {
@@ -378,9 +378,19 @@ dt {
     padding: .5rem 1rem;
     background-color: $dark-color;
     color: $bg-color;
+  }
 
-    @media (min-width: $small-screen-width) {
+  @media (min-width: $small-screen-width) {
+    h3 {
       padding: .5rem 2rem;
+    }
+
+    .card {
+      display: flex;
+    }
+
+    dl, nav {
+      flex: 1;
     }
   }
 }

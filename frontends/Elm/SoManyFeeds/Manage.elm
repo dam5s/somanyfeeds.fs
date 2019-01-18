@@ -75,8 +75,11 @@ feedView feed =
                 [ a [ href feed.url, target "_blank" ] [ text feed.url ]
                 ]
             ]
-        , nav []
-            [ button [ class "button secondary", onClick <| OpenDeleteDialog feed ] [ text "Unsubscribe" ]
+        , dl []
+            [ dt [] []
+            , dd [ class "actions" ]
+                [ button [ class "button secondary", onClick <| OpenDeleteDialog feed ] [ text "Unsubscribe" ]
+                ]
             ]
         ]
 
