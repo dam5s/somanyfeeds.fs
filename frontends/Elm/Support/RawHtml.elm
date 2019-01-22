@@ -8,7 +8,9 @@ import VirtualDom
 
 fromString : String -> List (Html msg)
 fromString rawString =
-    Parser.run rawString
+    rawString
+        |> String.replace "</img>" ""
+        |> Parser.run
         |> Result.map (List.map nodeToHtml)
         |> Result.withDefault []
 
