@@ -9,10 +9,6 @@ open DamoIOServer.Sources
 open DamoIOServer.ArticlesPersistence
 
 
-let private epoch: DateTime =
-    new DateTime (1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
-
-
 let private dateMap (d : DateTimeOffset): int64 =
     d.ToUnixTimeMilliseconds ()
 

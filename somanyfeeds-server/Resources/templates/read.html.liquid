@@ -3,7 +3,7 @@
 {% include "_head.html.liquid" %}
 <body>
 
-<script src="/somanyfeeds.js"></script>
+<script src="/somanyfeeds.js?v={%  include "_assets_version.html.liquid" %}"></script>
 <script>
     Elm.SoManyFeeds.Read.init({flags: {
         userName: "{{ model.UserName }}",

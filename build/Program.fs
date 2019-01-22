@@ -1,4 +1,5 @@
-﻿open SharpScss
+﻿open System
+open SharpScss
 open System.IO
 open Fake.Core
 open Fake.Core.Context
@@ -101,6 +102,13 @@ let private somanyfeedsServerIntegrationTests _ =
     ()
 
 
+let private setupCacheBustingLinks _ =
+    let timestamp = (new DateTimeOffset()).ToUnixTimeSeconds().ToString()
+    let timestampPath = "somanyfeeds-server/bin/Release/netcoreapp2.1/publish/Resources/templates/_assets_version.html.liquid"
+    File.write false timestampPath [timestamp]
+    ()
+
+
 let dependsOn (tasks : string list) (task : string) = task <== tasks
 let mustRunAfter (otherTask : string) (task : string) = task <=? otherTask |> ignore
 
@@ -123,6 +131,7 @@ let main (args : string []) =
     Target.create "publish" (fun _ ->
         dotnet "publish" "damo-io-server -c Release" ()
         dotnet "publish" "somanyfeeds-server -c Release" ()
+        setupCacheBustingLinks ()
     )
 
 
