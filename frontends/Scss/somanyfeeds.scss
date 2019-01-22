@@ -40,6 +40,10 @@ figure {
   margin: 0;
 }
 
+img {
+  max-width: 100%;
+}
+
 header.app-header > div, div.main {
   max-width: 1200px;
   margin: 0 auto;
