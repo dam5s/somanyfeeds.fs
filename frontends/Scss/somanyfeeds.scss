@@ -36,6 +36,10 @@ section {
   padding: 0 1rem;
 }
 
+figure {
+  margin: 0;
+}
+
 header.app-header > div, div.main {
   max-width: 1200px;
   margin: 0 auto;
@@ -437,10 +441,4 @@ dt {
     opacity: 0;
     visibility: hidden;
   }
-}
-
-// Customizations for feeds
-
-.feedflare, .share_submission {
-  display: none;
 }
