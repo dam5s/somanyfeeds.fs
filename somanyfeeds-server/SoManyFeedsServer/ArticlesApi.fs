@@ -26,11 +26,14 @@ module Encoders =
         *> Json.write "date" (Option.map dateMap article.Date)
 
 
-let list (listArticles : unit -> Result<(FeedRecord * ArticleRecord) list, string>) : WebPart =
-    match listArticles () with
-    | Ok articles ->
-        articles
-        |> serializeList Encoders.article
-        |> jsonResponse HTTP_200
-    | Error message ->
-        serverError message
+let list (listArticles : AsyncResult<(FeedRecord * ArticleRecord) list>) : WebPart =
+    fun ctx -> async {
+        match! listArticles with
+        | Ok articles ->
+            return! articles
+            |> serializeList Encoders.article
+            |> jsonResponse HTTP_200
+            |> fun wp -> wp ctx
+        | Error message ->
+            return! serverError message ctx
+    }

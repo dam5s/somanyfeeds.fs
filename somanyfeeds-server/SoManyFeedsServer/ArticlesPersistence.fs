@@ -3,6 +3,7 @@ module SoManyFeedsServer.ArticlesPersistence
 open System
 open System.Data.Common
 open SoManyFeedsServer.DataSource
+open AsyncResult.Operators
 
 
 type ArticleRecord =
@@ -39,7 +40,7 @@ let private mapArticle (record : DbDataRecord) : ArticleRecord =
     }
 
 
-let createArticle (dataSource : DataSource) (fields : ArticleFields) : Result<ArticleRecord, string> =
+let createArticle (dataSource : DataSource) (fields : ArticleFields) : AsyncResult<ArticleRecord> =
     let bindings =
         [
         Binding ("@Url", fields.Url)
@@ -66,10 +67,10 @@ let createArticle (dataSource : DataSource) (fields : ArticleFields) : Result<Ar
         """
         bindings
         mapping
-        |> Result.map (List.first >> Option.get)
+        <!> (List.first >> Option.get)
 
 
-let deleteArticle (dataSource : DataSource) (url : string) (feedUrl : string) : Result<unit, string> =
+let deleteArticle (dataSource : DataSource) (url : string) (feedUrl : string) : AsyncResult<unit> =
     let bindings =
         [
         Binding ("@Url", url)
@@ -79,12 +80,12 @@ let deleteArticle (dataSource : DataSource) (url : string) (feedUrl : string) : 
     update dataSource
         "delete from articles where url = @Url and feed_url = @FeedUrl"
         bindings
-        |> Result.map (always ())
+        <!> always ()
 
 
-let listRecentArticles (dataSource : DataSource) (feedUrls : string list) : Result<ArticleRecord list, string> =
+let listRecentArticles (dataSource : DataSource) (feedUrls : string list) : AsyncResult<ArticleRecord list> =
     match feedUrls with
-    | [] -> Ok []
+    | [] -> AsyncResult.result []
     | urls ->
         let urlArgs, bindings = inBindings "@FeedUrl" urls
         let sql =

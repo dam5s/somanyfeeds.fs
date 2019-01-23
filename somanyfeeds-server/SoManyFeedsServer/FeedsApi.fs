@@ -30,39 +30,51 @@ module Decoders =
         decoder json
 
 
-let list (listFeeds : unit -> Result<FeedRecord list, string>) : WebPart =
-    match listFeeds () with
-    | Ok feeds ->
-        feeds
-        |> serializeList Encoders.feed
-        |> jsonResponse HTTP_200
-    | Error message ->
-        serverError message
+let list (listFeeds : AsyncResult<FeedRecord list>) : WebPart =
+    fun ctx -> async {
+        match! listFeeds with
+        | Ok feeds ->
+            return! feeds
+            |> serializeList Encoders.feed
+            |> jsonResponse HTTP_200
+            |> fun wp -> wp ctx
+
+        | Error message ->
+            return! serverError message ctx
+    }
 
 
-let create (createFeed : FeedFields -> Result<FeedRecord, string>) (fields : FeedFields) : WebPart =
-    match createFeed fields with
-    | Ok feed ->
-        feed
-        |> serializeObject Encoders.feed
-        |> jsonResponse HTTP_201
-    | Error message ->
-        serverError message
+let create (createFeed : FeedFields -> AsyncResult<FeedRecord>) (fields : FeedFields) : WebPart =
+    fun ctx -> async {
+        match! createFeed fields with
+        | Ok feed ->
+            return! feed
+            |> serializeObject Encoders.feed
+            |> jsonResponse HTTP_201
+            |> fun wp -> wp ctx
+        | Error message ->
+            return! serverError message ctx
+    }
 
 
-let update (updateFeed : FeedFields -> Result<FeedRecord, string>) (fields : FeedFields) : WebPart =
-    match updateFeed fields with
-    | Ok feed ->
-        feed
-        |> serializeObject Encoders.feed
-        |> jsonResponse HTTP_200
-    | Error message ->
-        serverError message
+let update (updateFeed : FeedFields -> AsyncResult<FeedRecord>) (fields : FeedFields) : WebPart =
+    fun ctx -> async {
+        match! updateFeed fields with
+        | Ok feed ->
+            return! feed
+            |> serializeObject Encoders.feed
+            |> jsonResponse HTTP_200
+            |> fun wp -> wp ctx
+        | Error message ->
+            return! serverError message ctx
+    }
 
 
-let delete (deleteFeed : unit -> Result<unit, string>) : WebPart =
-    match deleteFeed () with
-    | Ok _ ->
-        Successful.NO_CONTENT
-    | Error message ->
-        serverError message
+let delete (deleteFeed : unit -> AsyncResult<unit>) : WebPart =
+    fun ctx -> async {
+        match! deleteFeed () with
+        | Ok _ ->
+            return! Successful.NO_CONTENT ctx
+        | Error message ->
+            return! serverError message ctx
+    }

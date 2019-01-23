@@ -12,13 +12,15 @@ type ReadViewModel =
     }
 
 
-let page (listArticles : unit -> Result<(FeedRecord * ArticleRecord) list, string>) (user : Authentication.User) : WebPart =
-    match listArticles () with
-    | Ok records ->
-        let viewModel =
-            { UserName = user.Name
-              ArticlesJson = Json.serializeList ArticlesApi.Encoders.article records
-            }
-        page "read.html.liquid" viewModel
-    | Error message ->
-        ErrorPage.page message
+let page (listArticles : AsyncResult<(FeedRecord * ArticleRecord) list>) (user : Authentication.User) : WebPart =
+    fun ctx -> async {
+        match! listArticles with
+        | Ok records ->
+            let viewModel =
+                { UserName = user.Name
+                  ArticlesJson = Json.serializeList ArticlesApi.Encoders.article records
+                }
+            return! page "read.html.liquid" viewModel ctx
+        | Error message ->
+            return! ErrorPage.page message ctx
+    }

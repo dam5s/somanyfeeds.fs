@@ -61,22 +61,27 @@ let loginPage (request : HttpRequest) : WebPart =
     page "login.html.liquid" { Error = false }
 
 
-let doLogin (findByEmail : string -> FindResult<UserRecord>) (request : HttpRequest) : WebPart =
-    let formData name = name
-                        |> request.formData
-                        |> Choice.defaultValue ""
+let doLogin (findByEmail : string -> Async<FindResult<UserRecord>>) (request : HttpRequest) : WebPart =
+    fun ctx -> async {
+        let formData name = name
+                            |> request.formData
+                            |> Choice.defaultValue ""
 
-    match findByEmail (formData "email") with
-    | NotFound -> loginError
-    | FindError msg -> ErrorPage.page "There was a database access error, please try again later."
-    | Found user ->
-        if Passwords.verify (formData "password") user.PasswordHash
-        then
-            usingSession
-            >=> User.set { Id = user.Id ; Name = user.Name }
-            >=> redirect "/read"
-        else
-            loginError
+        match! findByEmail (formData "email") with
+        | NotFound ->
+            return! loginError ctx
+        | FindError msg ->
+            return! ErrorPage.page "There was a database access error, please try again later." ctx
+        | Found user ->
+            if Passwords.verify (formData "password") user.PasswordHash
+            then
+                return! usingSession
+                        >=> User.set { Id = user.Id ; Name = user.Name }
+                        >=> redirect "/read"
+                        |> fun wp -> wp ctx
+            else
+                return! loginError ctx
+    }
 
 
 let doLogout (request : HttpRequest) : WebPart =

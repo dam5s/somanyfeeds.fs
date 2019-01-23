@@ -3,7 +3,7 @@ module SoManyFeedsServer.DataSource
 open System.Data.Common
 
 
-type DataSource = unit -> Result<DbConnection, string>
+type DataSource = unit -> AsyncResult<DbConnection>
 
 
 type FindResult<'T> =
@@ -35,23 +35,29 @@ let inBindings (prefix : string) (values : 'T list) : (string * Binding list) =
     args, bindings
 
 
-let private fromOptionResult (result : Result<'T option, string>) : FindResult<'T> =
-    match result with
-    | Ok (Some value) -> Found value
-    | Ok None -> NotFound
-    | Error message -> FindError message
+let private fromOptionResult (result : AsyncResult<'T option>) : Async<FindResult<'T>> =
+    async {
+        match! result with
+        | Ok (Some value) ->
+            return Found value
+        | Ok None ->
+            return NotFound
+        | Error message ->
+            return FindError message
+    }
 
 
-let private usingConnection (dataSource : DataSource) (mapping : DbConnection -> 'T) : Result<'T, string> =
-    bindOperation
-        "Data access"
-        (fun _ ->
-            dataSource () |> Result.map (fun (c : DbConnection) ->
-                use connection = c
-                connection.Open ()
-                mapping connection
-            )
-        )
+let private usingConnection (dataSource : DataSource) (mapping : DbConnection -> 'T) : AsyncResult<'T> =
+   asyncResult {
+       let! connection = dataSource ()
+
+       return! unsafeOperation "Data access" { return fun _ ->
+           eprintfn "Accessing connection"
+           use c = connection
+           c.Open ()
+           mapping c
+       }
+   }
 
 
 let private applyBinding (command : DbCommand) (Binding (name, value)) =
@@ -71,7 +77,7 @@ let private createCommand (connection : DbConnection) (sql : string) (bindings :
     command
 
 
-let private readFrom (dataSource : DataSource) (sql : string) (bindings : Binding list) (mapping : DbDataReader -> 'T) : Result<'T, string> =
+let private readFrom (dataSource : DataSource) (sql : string) (bindings : Binding list) (mapping : DbDataReader -> 'T) : AsyncResult<'T> =
     usingConnection dataSource (fun connection ->
         use command = createCommand connection sql bindings
         use reader = command.ExecuteReader ()
@@ -79,7 +85,7 @@ let private readFrom (dataSource : DataSource) (sql : string) (bindings : Bindin
     )
 
 
-let query dataSource sql (bindings : Binding list) (mapping : DbDataRecord -> 'T) : Result<'T list, string> =
+let query dataSource sql (bindings : Binding list) (mapping : DbDataRecord -> 'T) : AsyncResult<'T list> =
     readFrom dataSource sql bindings (fun reader ->
         reader
         |> Seq.cast<DbDataRecord>
@@ -88,7 +94,7 @@ let query dataSource sql (bindings : Binding list) (mapping : DbDataRecord -> 'T
     )
 
 
-let find dataSource sql (bindings : Binding list) (mapping : DbDataRecord -> 'T) : FindResult<'T> =
+let find dataSource sql (bindings : Binding list) (mapping : DbDataRecord -> 'T) : Async<FindResult<'T>> =
     fromOptionResult <| readFrom dataSource sql bindings (fun reader ->
         reader
         |> Seq.cast<DbDataRecord>
@@ -97,7 +103,7 @@ let find dataSource sql (bindings : Binding list) (mapping : DbDataRecord -> 'T)
     )
 
 
-let update dataSource sql (bindings : Binding list) : Result<int, string> =
+let update dataSource sql (bindings : Binding list) : AsyncResult<int> =
     usingConnection dataSource (fun connection ->
         use command = createCommand connection sql bindings
         command.ExecuteNonQuery ()

@@ -21,7 +21,7 @@ let private mapUser (record : DbDataRecord) : UserRecord =
     }
 
 
-let findByEmail (dataSource : DataSource) (email : string) : FindResult<UserRecord> =
+let findByEmail (dataSource : DataSource) (email : string) : Async<FindResult<UserRecord>> =
     find dataSource
         """ select id, email, name, password_hash
             from users

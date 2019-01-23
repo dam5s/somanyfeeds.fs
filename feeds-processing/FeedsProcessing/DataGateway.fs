@@ -22,54 +22,46 @@ let private basicAuthHeader (username : string) (password : string) : BasicAuthH
 
 
 let private parseToken (jsonString : string) : Result<BearerToken, string> =
-    bindOperation
-        "Parse token json"
-        (fun _ ->
-            let responseJson = JsonValue.Parse jsonString
-            let accessTokenOption =
-                responseJson.TryGetProperty "access_token"
-                |> Option.map (fun p -> p.AsString ())
+    unsafeOperation "Parse token json" { return! fun _ ->
+        let responseJson = JsonValue.Parse jsonString
+        let accessTokenOption =
+            responseJson.TryGetProperty "access_token"
+            |> Option.map (fun p -> p.AsString ())
 
-            match accessTokenOption with
-            | None ->
-                Error <| sprintf "Could not parse access_token from json %s" jsonString
-            | Some accessToken ->
-                Ok <| BearerToken accessToken
-        )
+        match accessTokenOption with
+        | None -> Error <| sprintf "Could not parse access_token from json %s" jsonString
+        | Some accessToken -> Ok <| BearerToken accessToken
+    }
 
 
 let private requestToken (BasicAuthHeader authHeader) : Result<BearerToken, string> =
-    bindOperation
-        "Request token"
-        (fun _ ->
-            let responseString = Http.RequestString
-                                    ( "https://api.twitter.com/oauth2/token",
-                                      httpMethod = "POST",
-                                      body = HttpRequestBody.TextRequest "grant_type=client_credentials",
-                                      headers = [
-                                          Authorization authHeader
-                                          ContentType "application/x-www-form-urlencoded;charset=UTF-8"
-                                      ]
-                                    )
-            parseToken responseString
-        )
+    unsafeOperation "Request token" { return! fun _ ->
+        let responseString = Http.RequestString
+                                ( "https://api.twitter.com/oauth2/token",
+                                  httpMethod = "POST",
+                                  body = HttpRequestBody.TextRequest "grant_type=client_credentials",
+                                  headers = [
+                                      Authorization authHeader
+                                      ContentType "application/x-www-form-urlencoded;charset=UTF-8"
+                                  ]
+                                )
+        parseToken responseString
+    }
 
 
 let private requestTweets (TwitterHandle handle) (token : BearerToken) : DownloadResult =
-    tryOperation
-        "Request tweets"
-        (fun _ ->
-            Http.RequestString
-                ( "https://api.twitter.com/1.1/statuses/user_timeline.json",
-                  httpMethod = "GET",
-                  query = [
-                      "screen_name", handle
-                      "count", "60"
-                  ],
-                  headers = [ Authorization <| bearerTokenHeader token ]
-                )
-                |> DownloadedFeed
-        )
+    unsafeOperation "Request tweets" { return fun _ ->
+        Http.RequestString
+            ( "https://api.twitter.com/1.1/statuses/user_timeline.json",
+              httpMethod = "GET",
+              query = [
+                  "screen_name", handle
+                  "count", "60"
+              ],
+              headers = [ Authorization <| bearerTokenHeader token ]
+            )
+            |> DownloadedFeed
+    }
 
 
 let downloadTwitterTimeline (consumerKey : string) (consumerSecret : string) (handle : TwitterHandle) : DownloadResult =
@@ -78,10 +70,8 @@ let downloadTwitterTimeline (consumerKey : string) (consumerSecret : string) (ha
 
 
 let downloadFeed (FeedUrl url) : DownloadResult =
-    tryOperation
-        "Download feed"
-        (fun _ ->
-            url
-            |> Http.RequestString
-            |> DownloadedFeed
-        )
+    unsafeOperation "Download feed" { return fun _ ->
+         url
+         |> Http.RequestString
+         |> DownloadedFeed
+    }

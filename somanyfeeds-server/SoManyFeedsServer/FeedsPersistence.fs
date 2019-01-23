@@ -2,6 +2,7 @@ module SoManyFeedsServer.FeedsPersistence
 
 open System.Data.Common
 open SoManyFeedsServer.DataSource
+open AsyncResult.Operators
 
 
 type FeedRecord =
@@ -26,7 +27,7 @@ let private mapFeed (record : DbDataRecord) : FeedRecord =
     }
 
 
-let listUrls (dataSource : DataSource) (_ : unit) : Result<string list, string> =
+let listUrls (dataSource : DataSource) (_ : unit) : AsyncResult<string list> =
     query dataSource
         """ select distinct url
             from feeds
@@ -35,7 +36,7 @@ let listUrls (dataSource : DataSource) (_ : unit) : Result<string list, string> 
         (fun record -> record.GetString 0)
 
 
-let listFeeds (dataSource : DataSource) (userId : int64) : Result<FeedRecord list, string> =
+let listFeeds (dataSource : DataSource) (userId : int64) : AsyncResult<FeedRecord list> =
     let bindings =
         [ Binding ("@UserId", userId) ]
 
@@ -48,7 +49,7 @@ let listFeeds (dataSource : DataSource) (userId : int64) : Result<FeedRecord lis
         mapFeed
 
 
-let findFeed (dataSource : DataSource) (userId : int64) (feedId : int64) : FindResult<FeedRecord> =
+let findFeed (dataSource : DataSource) (userId : int64) (feedId : int64) : Async<FindResult<FeedRecord>> =
     let bindings =
         [
         Binding ("@UserId", userId)
@@ -65,7 +66,7 @@ let findFeed (dataSource : DataSource) (userId : int64) (feedId : int64) : FindR
         mapFeed
 
 
-let createFeed (dataSource : DataSource) (userId : int64) (fields : FeedFields) : Result<FeedRecord, string> =
+let createFeed (dataSource : DataSource) (userId : int64) (fields : FeedFields) : AsyncResult<FeedRecord> =
     let bindings =
         [
         Binding ("@UserId", userId)
@@ -88,10 +89,10 @@ let createFeed (dataSource : DataSource) (userId : int64) (fields : FeedFields) 
         """
         bindings
         mapping
-        |> Result.map (List.first >> Option.get)
+        <!> (List.first >> Option.get)
 
 
-let updateFeed (dataSource : DataSource) (userId : int64) (feedId : int64) (fields : FeedFields) : Result<FeedRecord, string> =
+let updateFeed (dataSource : DataSource) (userId : int64) (feedId : int64) (fields : FeedFields) : AsyncResult<FeedRecord> =
     let bindings =
         [
         Binding ("@FeedId", feedId)
@@ -113,10 +114,10 @@ let updateFeed (dataSource : DataSource) (userId : int64) (feedId : int64) (fiel
             where user_id = @UserId and id = @FeedId
         """
         bindings
-        |> Result.map (always updatedRecord)
+        <!> always updatedRecord
 
 
-let deleteFeed (dataSource : DataSource) (userId : int64) (feedId : int64) : Result<unit, string> =
+let deleteFeed (dataSource : DataSource) (userId : int64) (feedId : int64) : AsyncResult<unit> =
     let bindings =
         [
         Binding ("@FeedId", feedId)
@@ -126,4 +127,4 @@ let deleteFeed (dataSource : DataSource) (userId : int64) (feedId : int64) : Res
     update dataSource
         "delete from feeds where user_id = @UserId and id = @FeedId"
         bindings
-        |> Result.map (always ())
+        <!> always ()

@@ -29,14 +29,14 @@ module private Rss =
         }
 
     let private toArticles (rss : RssProvider.Rss) : Result<Article list, string> =
-        tryOperation "Rss to articles" (fun _ ->
+        unsafeOperation "Rss to articles" { return fun _ ->
             rss.Channel.Items
             |> Seq.map itemToArticle
             |> Seq.toList
-        )
+        }
 
     let private parse (xml : string) : Result<RssProvider.Rss, string> =
-        tryOperation "Rss parse" (fun _ -> RssProvider.Parse xml)
+        unsafeOperation "Rss parse" { return fun _ -> RssProvider.Parse xml }
 
     let processRss (DownloadedFeed downloaded) : ProcessingResult =
         parse downloaded |> Result.bind toArticles
@@ -54,7 +54,7 @@ module private Atom =
         }
 
     let private toArticles (atom : AtomProvider.Feed) : Result<Article list, string> =
-        bindOperation "Atom to articles" (fun _ ->
+        unsafeOperation "Atom to articles" { return! fun _ ->
             match atom.Entries with
             | [||] ->
                 Error "Expected at least one atom entry"
@@ -63,10 +63,10 @@ module private Atom =
                 |> Seq.map entryToArticle
                 |> Seq.toList
                 |> Ok
-        )
+        }
 
     let private parse (xml : string) : Result<AtomProvider.Feed, string> =
-        tryOperation "Atom parse" (fun _ -> AtomProvider.Parse xml)
+        unsafeOperation "Atom parse" { return fun _ -> AtomProvider.Parse xml }
 
     let processAtom (DownloadedFeed downloaded) : ProcessingResult =
         parse downloaded |> Result.bind toArticles
@@ -84,7 +84,7 @@ module private Rdf =
         }
 
     let private toArticles (rdf : RdfProvider.Rdf) : Result<Article list, string> =
-        bindOperation "Rdf to articles" (fun _ ->
+        unsafeOperation "Rdf to articles" { return! fun _ ->
             match rdf.Items with
             | [||] ->
                 Error "Expected at least one rdf item"
@@ -93,10 +93,10 @@ module private Rdf =
                 |> Seq.map itemToArticle
                 |> Seq.toList
                 |> Ok
-        )
+        }
 
     let private parse (xml : string) : Result<RdfProvider.Rdf, string> =
-        tryOperation "Rdf parse" (fun _ -> RdfProvider.Parse xml)
+        unsafeOperation "Rdf parse" { return fun _ -> RdfProvider.Parse xml }
 
     let processRdf (DownloadedFeed downloaded) : ProcessingResult =
         parse downloaded |> Result.bind toArticles

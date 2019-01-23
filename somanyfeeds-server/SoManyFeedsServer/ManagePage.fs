@@ -12,13 +12,15 @@ type ManageViewModel =
     }
 
 
-let page (listFeeds : unit -> Result<FeedRecord list, string>) (user : Authentication.User) : WebPart =
-    match listFeeds () with
-    | Ok records ->
-        let viewModel =
-            { UserName = user.Name
-              FeedsJson = Json.serializeList FeedsApi.Encoders.feed records
-            }
-        page "manage.html.liquid" viewModel
-    | Error message ->
-        ErrorPage.page message
+let page (listFeeds : AsyncResult<FeedRecord list>) (user : Authentication.User) : WebPart =
+    fun ctx -> async {
+        match! listFeeds with
+        | Ok records ->
+            let viewModel =
+                { UserName = user.Name
+                  FeedsJson = Json.serializeList FeedsApi.Encoders.feed records
+                }
+            return! page "manage.html.liquid" viewModel ctx
+        | Error message ->
+            return! ErrorPage.page message ctx
+    }

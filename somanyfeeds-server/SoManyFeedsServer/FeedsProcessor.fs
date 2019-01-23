@@ -15,10 +15,10 @@ let private sequence : AsyncSeq<FeedUrl> =
         let listUrls = FeedsPersistence.listUrls dataSource
 
         while true do
-            let feedUrls =
+            let! feedUrls =
                 listUrls ()
-                |> Result.map (List.map FeedUrl)
-                |> Result.defaultValue []
+                |> AsyncResult.map (List.map FeedUrl)
+                |> AsyncResult.defaultValue []
 
             for url in feedUrls do
                 yield url
@@ -49,8 +49,8 @@ let private articleToFields (FeedUrl feedUrl) (article : Article) : ArticleField
 let private persistArticle (fields : ArticleFields) : Async<unit> =
     async {
         deleteArticle dataSource fields.Url fields.FeedUrl
-        |> Result.bind (fun _ -> createArticle dataSource fields)
-        |> Result.mapError (logArticleError fields.Url)
+        |> AsyncResult.bind (fun _ -> createArticle dataSource fields)
+        |> AsyncResult.mapError (logArticleError fields.Url)
         |> ignore
     }
 

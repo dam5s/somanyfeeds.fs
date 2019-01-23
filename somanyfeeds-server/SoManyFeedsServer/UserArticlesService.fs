@@ -6,7 +6,7 @@ open SoManyFeedsServer.FeedsPersistence
 open SoManyFeedsServer.DataSource
 
 
-let private recentArticlesForFeeds (dataSource : DataSource) (feeds : FeedRecord list) : Result<ArticleRecord list, string> =
+let private recentArticlesForFeeds (dataSource : DataSource) (feeds : FeedRecord list) : AsyncResult<ArticleRecord list> =
     feeds
     |> List.map (fun feed -> feed.Url)
     |> ArticlesPersistence.listRecentArticles dataSource
@@ -23,9 +23,9 @@ let private articlesWithFeeds (feeds : FeedRecord list) (articles : ArticleRecor
     )
 
 
-let listRecent (dataSource : DataSource) (user : User) : Result<(FeedRecord * ArticleRecord) list, string> =
-    FeedsPersistence.listFeeds dataSource user.Id
-    |> Result.bind (fun feeds ->
-        recentArticlesForFeeds dataSource feeds
-        |> Result.map (articlesWithFeeds feeds)
-    )
+let listRecent (dataSource : DataSource) (user : User) : AsyncResult<(FeedRecord * ArticleRecord) list> =
+    asyncResult {
+        let! feeds = FeedsPersistence.listFeeds dataSource user.Id
+        let! articles = recentArticlesForFeeds dataSource feeds
+        return articlesWithFeeds feeds articles
+    }

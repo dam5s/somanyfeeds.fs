@@ -10,11 +10,11 @@ open SoManyFeedsServer.Json
 
 let private authenticatedPage (user : Authentication.User) : WebPart =
 
-    let listFeeds _ = FeedsPersistence.listFeeds DataAccess.dataSource user.Id
+    let listFeeds = FeedsPersistence.listFeeds DataAccess.dataSource user.Id
     let createFeed = FeedsPersistence.createFeed DataAccess.dataSource user.Id
     let updateFeed = FeedsPersistence.updateFeed DataAccess.dataSource user.Id
     let deleteFeed = FeedsPersistence.deleteFeed DataAccess.dataSource user.Id
-    let listRecentArticles _ = UserArticlesService.listRecent DataAccess.dataSource user
+    let listRecentArticles = UserArticlesService.listRecent DataAccess.dataSource user
 
 
     let readPage _ =

@@ -5,7 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Prelude/Prelude.fs" />
+    <Compile Include="Prelude\Support.fs" />
+    <Compile Include="Prelude\AsyncResult.fs" />
+    <Compile Include="Prelude\UnsafeOperation.fs" />
   </ItemGroup>
 
 </Project>
