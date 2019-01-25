@@ -5,4 +5,6 @@ open SoManyFeedsServer
 
 
 let executeSql (sql : string) =
-    DataSource.update DataAccess.dataSource sql [] |> ignore
+    DataSource.update DataAccess.dataSource sql []
+    |> Async.RunSynchronously
+    |> ignore
