@@ -1,6 +1,6 @@
 module Support.RawHtml exposing (fromString)
 
-import Html exposing (Html)
+import Html exposing (Html, p)
 import Html.Attributes exposing (target)
 import Html.Parser as Parser
 import VirtualDom
@@ -11,21 +11,31 @@ fromString rawString =
     rawString
         |> String.replace "</img>" ""
         |> Parser.run
-        |> Result.map (List.map nodeToHtml)
+        |> Result.map (List.concatMap nodeToHtml)
         |> Result.withDefault []
 
 
-nodeToHtml : Parser.Node -> Html msg
+nodeToHtml : Parser.Node -> List (Html msg)
 nodeToHtml node =
     case node of
         Parser.Text text ->
-            Html.text (String.replace "&quot;" "\"" text)
+            let
+                cleanedText =
+                    String.replace "&quot;" "\"" text
+            in
+            if String.contains "\n\n" cleanedText then
+                cleanedText
+                    |> String.split "\n\n"
+                    |> List.map (\t -> Html.p [] [ Html.text t ])
+
+            else
+                [ Html.text cleanedText ]
 
         Parser.Element name attrs children ->
-            elementToHtml name attrs children
+            [ elementToHtml name attrs children ]
 
         Parser.Comment _ ->
-            emptyDiv
+            [ emptyDiv ]
 
 
 type alias ParserAttribute =
@@ -43,13 +53,13 @@ elementToHtml name attrs children =
                 "a" ->
                     Html.a
                         (List.map attributeToHtml attrs ++ [ target "_blank" ])
-                        (List.map nodeToHtml children)
+                        (List.concatMap nodeToHtml children)
 
                 _ ->
                     VirtualDom.node
                         name
                         (List.map attributeToHtml attrs)
-                        (List.map nodeToHtml children)
+                        (List.concatMap nodeToHtml children)
 
 
 excludedTags =
