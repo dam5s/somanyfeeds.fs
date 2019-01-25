@@ -3,7 +3,7 @@ module SoManyFeedsServer.DataSource
 open System.Data.Common
 
 
-type DataSource = unit -> AsyncResult<DbConnection>
+type DataSource = AsyncResult<DbConnection>
 
 
 type FindResult<'T> =
@@ -49,10 +49,9 @@ let private fromOptionResult (result : AsyncResult<'T option>) : Async<FindResul
 
 let private usingConnection (dataSource : DataSource) (mapping : DbConnection -> 'T) : AsyncResult<'T> =
    asyncResult {
-       let! connection = dataSource ()
+       let! connection = dataSource
 
        return! unsafeOperation "Data access" { return fun _ ->
-           eprintfn "Accessing connection"
            use c = connection
            c.Open ()
            mapping c
