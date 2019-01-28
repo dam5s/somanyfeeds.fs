@@ -48,9 +48,8 @@ let private articleToFields (FeedUrl feedUrl) (article : Article) : ArticleField
 
 let private persistArticle (fields : ArticleFields) : Async<unit> =
     async {
-        let! result = deleteArticle dataSource fields.Url fields.FeedUrl
-                        |> AsyncResult.bind (fun _ -> createArticle dataSource fields)
-                        |> AsyncResult.mapError (logArticleError fields.Url)
+        let! result = createOrUpdateArticle dataSource fields
+                      |> AsyncResult.mapError (logArticleError fields.Url)
 
         result |> ignore
     }

@@ -40,7 +40,7 @@ let private mapArticle (record : DbDataRecord) : ArticleRecord =
     }
 
 
-let createArticle (dataSource : DataSource) (fields : ArticleFields) : AsyncResult<ArticleRecord> =
+let createOrUpdateArticle (dataSource : DataSource) (fields : ArticleFields) : AsyncResult<ArticleRecord> =
     let bindings =
         [
         Binding ("@Url", fields.Url)
@@ -63,24 +63,15 @@ let createArticle (dataSource : DataSource) (fields : ArticleFields) : AsyncResu
     query dataSource
         """ insert into articles (url, title, feed_url, content, date)
             values (@Url, @Title, @FeedUrl, @Content, @Date)
+            on conflict (url, feed_url) do update set
+                title = excluded.title,
+                content = excluded.content,
+                date = excluded.date
             returning id
         """
         bindings
         mapping
         <!> (List.first >> Option.get)
-
-
-let deleteArticle (dataSource : DataSource) (url : string) (feedUrl : string) : AsyncResult<unit> =
-    let bindings =
-        [
-        Binding ("@Url", url)
-        Binding ("@FeedUrl", feedUrl)
-        ]
-
-    update dataSource
-        "delete from articles where url = @Url and feed_url = @FeedUrl"
-        bindings
-        <!> always ()
 
 
 let listRecentArticles (dataSource : DataSource) (feedUrls : string list) : AsyncResult<ArticleRecord list> =
