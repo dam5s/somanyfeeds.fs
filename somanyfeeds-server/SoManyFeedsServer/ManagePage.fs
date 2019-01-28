@@ -3,7 +3,7 @@ module SoManyFeedsServer.ManagePage
 open Suave
 open Suave.DotLiquid
 open SoManyFeedsServer
-open SoManyFeedsServer.FeedsPersistence
+open SoManyFeedsServer.FeedsDataGateway
 
 
 type ManageViewModel =

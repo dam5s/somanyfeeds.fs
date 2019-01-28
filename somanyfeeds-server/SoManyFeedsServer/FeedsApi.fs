@@ -3,7 +3,7 @@ module SoManyFeedsServer.FeedsApi
 open Suave
 open Chiron.Operators
 open SoManyFeedsServer.Json
-open SoManyFeedsServer.FeedsPersistence
+open SoManyFeedsServer.FeedsDataGateway
 
 
 module Encoders =

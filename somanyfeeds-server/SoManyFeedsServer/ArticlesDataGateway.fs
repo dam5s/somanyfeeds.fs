@@ -1,4 +1,4 @@
-module SoManyFeedsServer.ArticlesPersistence
+module SoManyFeedsServer.ArticlesDataGateway
 
 open System
 open System.Data.Common

@@ -6,7 +6,7 @@ open Suave.DotLiquid
 open Chiron
 open Chiron.Operators
 open DamoIOServer.Sources
-open DamoIOServer.ArticlesPersistence
+open DamoIOServer.ArticlesDataGateway
 
 
 let private dateMap (d : DateTimeOffset): int64 =

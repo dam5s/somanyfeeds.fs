@@ -1,7 +1,7 @@
 module SoManyFeedsServer.ArticlesApi
 
-open SoManyFeedsServer.ArticlesPersistence
-open SoManyFeedsServer.FeedsPersistence
+open SoManyFeedsServer.ArticlesDataGateway
+open SoManyFeedsServer.FeedsDataGateway
 open SoManyFeedsServer.Json
 open Suave
 

@@ -10,10 +10,10 @@ open SoManyFeedsServer.Json
 
 let private authenticatedPage (user : Authentication.User) : WebPart =
 
-    let listFeeds = FeedsPersistence.listFeeds DataAccess.dataSource user.Id
-    let createFeed = FeedsPersistence.createFeed DataAccess.dataSource user.Id
-    let updateFeed = FeedsPersistence.updateFeed DataAccess.dataSource user.Id
-    let deleteFeed = FeedsPersistence.deleteFeed DataAccess.dataSource user.Id
+    let listFeeds = FeedsDataGateway.listFeeds DataAccess.dataSource user.Id
+    let createFeed = FeedsDataGateway.createFeed DataAccess.dataSource user.Id
+    let updateFeed = FeedsDataGateway.updateFeed DataAccess.dataSource user.Id
+    let deleteFeed = FeedsDataGateway.deleteFeed DataAccess.dataSource user.Id
     let listRecentArticles = UserArticlesService.listRecent DataAccess.dataSource user
 
 
@@ -60,7 +60,7 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
 
 
 let webPart =
-    let findByEmail = UsersPersistence.findByEmail DataAccess.dataSource
+    let findByEmail = UsersDataGateway.findByEmail DataAccess.dataSource
     let homePage = DotLiquid.page "home.html.liquid" ()
 
     choose [

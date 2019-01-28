@@ -1,15 +1,15 @@
 module SoManyFeedsServer.UserArticlesService
 
-open SoManyFeedsServer.ArticlesPersistence
+open SoManyFeedsServer.ArticlesDataGateway
 open SoManyFeedsServer.Authentication
-open SoManyFeedsServer.FeedsPersistence
+open SoManyFeedsServer.FeedsDataGateway
 open SoManyFeedsServer.DataSource
 
 
 let private recentArticlesForFeeds (dataSource : DataSource) (feeds : FeedRecord list) : AsyncResult<ArticleRecord list> =
     feeds
     |> List.map (fun feed -> feed.Url)
-    |> ArticlesPersistence.listRecentArticles dataSource
+    |> ArticlesDataGateway.listRecentArticles dataSource
 
 
 let private articlesWithFeeds (feeds : FeedRecord list) (articles : ArticleRecord list) : (FeedRecord * ArticleRecord) list =
@@ -25,7 +25,7 @@ let private articlesWithFeeds (feeds : FeedRecord list) (articles : ArticleRecor
 
 let listRecent (dataSource : DataSource) (user : User) : AsyncResult<(FeedRecord * ArticleRecord) list> =
     asyncResult {
-        let! feeds = FeedsPersistence.listFeeds dataSource user.Id
+        let! feeds = FeedsDataGateway.listFeeds dataSource user.Id
         let! articles = recentArticlesForFeeds dataSource feeds
         return articlesWithFeeds feeds articles
     }

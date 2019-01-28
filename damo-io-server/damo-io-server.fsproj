@@ -17,7 +17,7 @@
     <ProjectReference Include="../feeds-processing/feeds-processing.fsproj" />
 
     <Compile Include="DamoIOServer/Sources.fs" />
-    <Compile Include="DamoIOServer/ArticlesPersistence.fs" />
+    <Compile Include="DamoIOServer/ArticlesDataGateway.fs" />
     <Compile Include="DamoIOServer/ArticlesHandler.fs" />
     <Compile Include="DamoIOServer/FeedsProcessor.fs" />
     <Compile Include="DamoIOServer/SslHandler.fs" />

@@ -1,6 +1,6 @@
 module DamoIOServer.FeedsProcessor
 
-open DamoIOServer.ArticlesPersistence
+open DamoIOServer.ArticlesDataGateway
 open DamoIOServer.Sources
 open FeedsProcessing.Article
 open FeedsProcessing.Feeds

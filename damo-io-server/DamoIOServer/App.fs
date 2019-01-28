@@ -5,7 +5,7 @@ open Suave
 open Suave.Filters
 open Suave.Operators
 open Suave.RequestErrors
-open DamoIOServer.ArticlesPersistence
+open DamoIOServer.ArticlesDataGateway
 open DamoIOServer.SslHandler
 
 
@@ -21,7 +21,7 @@ let private updatesSequence : AsyncSeq<ArticleRecord list> =
 
 let backgroundProcessing =
     AsyncSeq.iter
-        ArticlesPersistence.Repository.updateAll
+        ArticlesDataGateway.Repository.updateAll
         updatesSequence
 
 
@@ -29,7 +29,7 @@ let handler =
     choose [
         enforceSsl
 
-        path "/" >=> GET >=> ArticlesHandler.list ArticlesPersistence.Repository.findAll
+        path "/" >=> GET >=> ArticlesHandler.list ArticlesDataGateway.Repository.findAll
 
         GET >=> Files.browseHome
         NOT_FOUND "not found"

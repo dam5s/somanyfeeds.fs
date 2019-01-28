@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -20,9 +20,9 @@
     <Compile Include="SoManyFeedsServer/Json.fs" />
     <Compile Include="SoManyFeedsServer/DataSource.fs" />
     <Compile Include="SoManyFeedsServer/Passwords.fs" />
-    <Compile Include="SoManyFeedsServer/FeedsPersistence.fs" />
-    <Compile Include="SoManyFeedsServer/ArticlesPersistence.fs" />
-    <Compile Include="SoManyFeedsServer/UsersPersistence.fs" />
+    <Compile Include="SoManyFeedsServer/FeedsDataGateway.fs" />
+    <Compile Include="SoManyFeedsServer/ArticlesDataGateway.fs" />
+    <Compile Include="SoManyFeedsServer\UsersDataGateway.fs" />
     <Compile Include="SoManyFeedsServer/ErrorPage.fs" />
     <Compile Include="SoManyFeedsServer/Authentication.fs" />
     <Compile Include="SoManyFeedsServer/UserArticlesService.fs" />

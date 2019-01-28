@@ -6,13 +6,13 @@ open FeedsProcessing
 open FeedsProcessing.Article
 open FeedsProcessing.DataGateway
 open FeedsProcessing.Feeds
-open SoManyFeedsServer.ArticlesPersistence
+open SoManyFeedsServer.ArticlesDataGateway
 
 
 let private sequence : AsyncSeq<FeedUrl> =
     asyncSeq {
         let oneMinute = 1000 * 60
-        let listUrls = FeedsPersistence.listUrls dataSource
+        let listUrls = FeedsDataGateway.listUrls dataSource
 
         while true do
             let! feedUrls =

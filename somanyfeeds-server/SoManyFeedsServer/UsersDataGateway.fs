@@ -1,4 +1,4 @@
-module SoManyFeedsServer.UsersPersistence
+module SoManyFeedsServer.UsersDataGateway
 
 open System.Data.Common
 open SoManyFeedsServer.Passwords

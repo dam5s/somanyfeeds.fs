@@ -1,4 +1,4 @@
-module SoManyFeedsServer.FeedsPersistence
+module SoManyFeedsServer.FeedsDataGateway
 
 open System.Data.Common
 open SoManyFeedsServer.DataSource

@@ -1,4 +1,4 @@
-module DamoIOServer.ArticlesPersistence
+module DamoIOServer.ArticlesDataGateway
 
 open System
 open DamoIOServer.Sources

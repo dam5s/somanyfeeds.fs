@@ -9,7 +9,7 @@ open Suave.DotLiquid
 open Suave.Response
 open Suave.State.CookieStateStore
 open SoManyFeedsServer.DataSource
-open SoManyFeedsServer.UsersPersistence
+open SoManyFeedsServer.UsersDataGateway
 
 
 type User =
