@@ -42,6 +42,19 @@ create table articles
 create index articles_urls on articles (url, feed_url);
 create index articles_feed_url on articles (feed_url);
 
+
+create table read_articles
+(
+  user_id bigint references users (id)    not null,
+  article_id      bigint references articles (id) not null,
+
+  primary key (user_id, article_id)
+);
+
+create index read_articles_user_id on read_articles (user_id);
+create index read_articles_article_id on read_articles (article_id);
+
+
 insert into users (id, email, name, password_hash)
 values (1, 'damo@example.com', 'Damo', '$2a$11$ExRbaoOXuZI61PdZhMauouk/PwZXH84ueRixvKnC0QU8l9QUsexeC'); -- supersecret
 

@@ -25,7 +25,7 @@ type ArticleFields =
     }
 
 
-let private mapArticle (record : DbDataRecord) : ArticleRecord =
+let mapArticle (record : DbDataRecord) : ArticleRecord =
     let date index =
         match Convert.IsDBNull index with
         | true -> None
@@ -72,21 +72,3 @@ let createOrUpdateArticle (dataSource : DataSource) (fields : ArticleFields) : A
         bindings
         mapping
         <!> (List.first >> Option.get)
-
-
-let listRecentArticles (dataSource : DataSource) (feedUrls : string list) : AsyncResult<ArticleRecord list> =
-    match feedUrls with
-    | [] -> AsyncResult.result []
-    | urls ->
-        let urlArgs, bindings = inBindings "@FeedUrl" urls
-        let sql =
-            sprintf
-                """ select id, url, title, feed_url, content, date
-                    from articles
-                    where feed_url in (%s)
-                    order by date desc
-                    limit 100
-                """
-                urlArgs
-
-        query dataSource sql bindings mapArticle
