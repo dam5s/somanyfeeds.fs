@@ -1,8 +1,10 @@
 module SoManyFeeds.Read exposing (main)
 
 import Browser exposing (Document)
-import Html exposing (Html, a, article, div, h1, h2, h3, h4, header, nav, p, section, text)
-import Html.Attributes exposing (class, href, target)
+import Html exposing (Html, a, article, button, div, h1, h2, h3, h4, header, nav, p, section, text)
+import Html.Attributes exposing (class, href, target, type_)
+import Html.Events exposing (onClick)
+import Http
 import SoManyFeeds.Article as Article exposing (Article)
 import SoManyFeeds.Logo as Logo
 import Support.DateFormat as DateFormat
@@ -26,6 +28,8 @@ type alias Model =
 
 type Msg
     = UpdateTimeZone Time.Zone
+    | MarkRead Article
+    | MarkReadResult Article (Result Http.Error String)
 
 
 init : Flags -> ( Model, Cmd Msg )
@@ -46,6 +50,9 @@ articleView model record =
             [ a [ href record.url, target "_blank" ] <| RawHtml.fromString record.title ]
         , p [ class "date" ] [ text <| DateFormat.tryFormat model.timeZone record.date ]
         , div [ class "content" ] <| RawHtml.fromString record.content
+        , nav []
+            [ button [ onClick (MarkRead record), type_ "button", class "button secondary mark-read" ] [ text "Mark read" ]
+            ]
         ]
 
 
@@ -76,11 +83,30 @@ view model =
     }
 
 
+removeArticle : Article -> Model -> Model
+removeArticle record model =
+    { model
+        | articles =
+            List.filter (\a -> a /= record) model.articles
+    }
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         UpdateTimeZone timeZone ->
             ( { model | timeZone = Just timeZone }, Cmd.none )
+
+        MarkRead record ->
+            ( model
+            , Http.send (MarkReadResult record) (Article.markReadRequest record)
+            )
+
+        MarkReadResult record (Ok _) ->
+            ( removeArticle record model, Cmd.none )
+
+        MarkReadResult record (Err _) ->
+            ( model, Cmd.none )
 
 
 main : Program Flags Model Msg

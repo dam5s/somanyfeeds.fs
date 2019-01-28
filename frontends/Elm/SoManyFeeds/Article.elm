@@ -1,5 +1,6 @@
-module SoManyFeeds.Article exposing (Article, Json, fromJson)
+module SoManyFeeds.Article exposing (Article, Json, fromJson, markReadRequest)
 
+import Http
 import Time
 
 
@@ -35,3 +36,16 @@ fromJson json =
     , date = Time.millisToPosix json.date
     , markReadUrl = json.markReadUrl
     }
+
+
+markReadRequest : Article -> Http.Request String
+markReadRequest article =
+    Http.request
+        { method = "PUT"
+        , headers = []
+        , url = article.markReadUrl
+        , body = Http.emptyBody
+        , expect = Http.expectString
+        , timeout = Nothing
+        , withCredentials = False
+        }
