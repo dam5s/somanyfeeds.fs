@@ -17,21 +17,37 @@ module Encoders =
     let private dateMap (d : DateTimeOffset): int64 =
         d.ToUnixTimeMilliseconds ()
 
-    let article (feed : FeedRecord, article : ArticleRecord) : Json<unit> =
-        Json.write "feedName" feed.Name
+    let article (feedOption : FeedRecord option, article : ArticleRecord) : Json<unit> =
+        let feedName = feedOption
+                       |> Option.map (fun f -> f.Name)
+                       |> Option.defaultValue ""
+
+        Json.write "feedName" feedName
         *> Json.write "url" article.Url
         *> Json.write "title" article.Title
         *> Json.write "feedUrl" article.FeedUrl
         *> Json.write "content" article.Content
         *> Json.write "date" (Option.map dateMap article.Date)
+        *> Json.write "markReadUrl" (sprintf "/api/articles/%d/mark-read" article.Id)
 
 
-let list (listArticles : AsyncResult<(FeedRecord * ArticleRecord) list>) : WebPart =
+let list (listArticles : AsyncResult<(FeedRecord option * ArticleRecord) list>) : WebPart =
     fun ctx -> async {
         match! listArticles with
         | Ok articles ->
             return! articles
             |> serializeList Encoders.article
+            |> jsonResponse HTTP_200
+            |> fun wp -> wp ctx
+        | Error message ->
+            return! serverError message ctx
+    }
+
+let update (updateOperation : AsyncResult<unit>) : WebPart =
+    fun ctx -> async {
+        match! updateOperation with
+        | Ok _ ->
+            return! ""
             |> jsonResponse HTTP_200
             |> fun wp -> wp ctx
         | Error message ->

@@ -21,3 +21,20 @@ let listRecentUnreadArticles (dataSource : DataSource) (userId : int64) : AsyncR
             """
 
         query dataSource sql bindings mapArticle
+
+
+type ReadArticleRecord =
+    { UserId : int64
+      ArticleId : int64
+    }
+
+
+let createReadArticle (dataSource : DataSource) (record : ReadArticleRecord) : AsyncResult<unit> =
+    let bindings =
+        [
+        Binding ("@UserId", record.UserId)
+        Binding ("@ArticleId", record.ArticleId)
+        ]
+
+    update dataSource "insert into read_articles (user_id, article_id) values (@UserId, @ArticleId)" bindings
+    |> AsyncResult.map (always ())

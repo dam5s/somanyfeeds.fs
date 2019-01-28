@@ -12,7 +12,7 @@ type ReadViewModel =
     }
 
 
-let page (listArticles : AsyncResult<(FeedRecord * ArticleRecord) list>) (user : Authentication.User) : WebPart =
+let page (listArticles : AsyncResult<(FeedRecord option * ArticleRecord) list>) (user : Authentication.User) : WebPart =
     fun ctx -> async {
         match! listArticles with
         | Ok records ->

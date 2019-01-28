@@ -10,6 +10,7 @@ type alias Article =
     , feedUrl : String
     , content : String
     , date : Time.Posix
+    , markReadUrl : String
     }
 
 
@@ -20,6 +21,7 @@ type alias Json =
     , feedUrl : String
     , content : String
     , date : Int
+    , markReadUrl : String
     }
 
 
@@ -31,4 +33,5 @@ fromJson json =
     , feedUrl = json.feedUrl
     , content = json.content
     , date = Time.millisToPosix json.date
+    , markReadUrl = json.markReadUrl
     }
