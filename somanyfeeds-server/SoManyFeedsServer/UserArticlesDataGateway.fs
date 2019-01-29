@@ -38,3 +38,14 @@ let createReadArticle (dataSource : DataSource) (record : ReadArticleRecord) : A
 
     update dataSource "insert into read_articles (user_id, article_id) values (@UserId, @ArticleId)" bindings
     |> AsyncResult.map (always ())
+
+
+let deleteReadArticle (dataSource : DataSource) (record : ReadArticleRecord) : AsyncResult<unit> =
+    let bindings =
+        [
+        Binding ("@UserId", record.UserId)
+        Binding ("@ArticleId", record.ArticleId)
+        ]
+
+    update dataSource "delete from read_articles where user_id = @UserId and article_id = @ArticleId" bindings
+    |> AsyncResult.map (always ())

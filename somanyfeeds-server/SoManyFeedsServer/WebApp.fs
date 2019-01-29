@@ -15,9 +15,14 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
     let updateFeed = FeedsDataGateway.updateFeed DataAccess.dataSource user.Id
     let deleteFeed = FeedsDataGateway.deleteFeed DataAccess.dataSource user.Id
     let listRecentArticles = UserArticlesService.listRecent DataAccess.dataSource user
-    let markArticleRead articleId = UserArticlesDataGateway.createReadArticle
-                                        DataAccess.dataSource
-                                        { UserId = user.Id ; ArticleId = articleId }
+    let markArticleRead articleId =
+        UserArticlesDataGateway.createReadArticle
+            DataAccess.dataSource
+            { UserId = user.Id ; ArticleId = articleId }
+    let markArticleUnread articleId =
+        UserArticlesDataGateway.deleteReadArticle
+            DataAccess.dataSource
+            { UserId = user.Id ; ArticleId = articleId }
 
 
     let readPage _ =
@@ -49,6 +54,9 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
     let markArticleReadApi articleId =
         ArticlesApi.update (markArticleRead articleId)
 
+    let markArticleUnreadApi articleId =
+        ArticlesApi.update (markArticleUnread articleId)
+
 
     choose [
         GET >=> path "/read" >=> request readPage
@@ -61,6 +69,7 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
 
         GET >=> path "/api/articles/recent" >=> request listRecentArticlesApi
         PUT >=> pathScan "/api/articles/%d/mark-read" markArticleReadApi
+        PUT >=> pathScan "/api/articles/%d/mark-unread" markArticleUnreadApi
 
         NOT_FOUND "not found"
     ]
