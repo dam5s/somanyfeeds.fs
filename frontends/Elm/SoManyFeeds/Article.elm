@@ -1,7 +1,12 @@
-module SoManyFeeds.Article exposing (Article, Json, fromJson, markReadRequest)
+module SoManyFeeds.Article exposing (Article, Json, State(..), fromJson, markReadRequest, markUnreadRequest, setState)
 
 import Http
 import Time
+
+
+type State
+    = Unread
+    | Read
 
 
 type alias Article =
@@ -11,7 +16,8 @@ type alias Article =
     , feedUrl : String
     , content : String
     , date : Time.Posix
-    , markReadUrl : String
+    , readUrl : String
+    , state : State
     }
 
 
@@ -22,7 +28,7 @@ type alias Json =
     , feedUrl : String
     , content : String
     , date : Int
-    , markReadUrl : String
+    , readUrl : String
     }
 
 
@@ -34,18 +40,47 @@ fromJson json =
     , feedUrl = json.feedUrl
     , content = json.content
     , date = Time.millisToPosix json.date
-    , markReadUrl = json.markReadUrl
+    , readUrl = json.readUrl
+    , state = Unread
     }
 
 
-markReadRequest : Article -> Http.Request String
-markReadRequest article =
+setState : State -> Article -> List Article -> List Article
+setState newState article =
+    List.map
+        (\a ->
+            if a == article then
+                { a | state = newState }
+
+            else
+                a
+        )
+
+
+simpleRequest : { method : String, url : String } -> Http.Request String
+simpleRequest options =
     Http.request
-        { method = "PUT"
+        { method = options.method
         , headers = []
-        , url = article.markReadUrl
+        , url = options.url
         , body = Http.emptyBody
         , expect = Http.expectString
         , timeout = Nothing
         , withCredentials = False
+        }
+
+
+markReadRequest : Article -> Http.Request String
+markReadRequest article =
+    simpleRequest
+        { method = "POST"
+        , url = article.readUrl
+        }
+
+
+markUnreadRequest : Article -> Http.Request String
+markUnreadRequest article =
+    simpleRequest
+        { method = "DELETE"
+        , url = article.readUrl
         }

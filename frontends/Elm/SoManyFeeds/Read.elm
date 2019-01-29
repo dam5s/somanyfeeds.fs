@@ -30,6 +30,8 @@ type Msg
     = UpdateTimeZone Time.Zone
     | MarkRead Article
     | MarkReadResult Article (Result Http.Error String)
+    | MarkUnread Article
+    | MarkUnreadResult Article (Result Http.Error String)
 
 
 init : Flags -> ( Model, Cmd Msg )
@@ -44,16 +46,24 @@ init flags =
 
 articleView : Model -> Article -> Html Msg
 articleView model record =
-    article [ class "card" ]
-        [ h4 [] [ text record.feedName ]
-        , h3 []
-            [ a [ href record.url, target "_blank" ] <| RawHtml.fromString record.title ]
-        , p [ class "date" ] [ text <| DateFormat.tryFormat model.timeZone record.date ]
-        , div [ class "content" ] <| RawHtml.fromString record.content
-        , nav []
-            [ button [ onClick (MarkRead record), type_ "button", class "button secondary mark-read" ] [ text "Mark read" ]
-            ]
-        ]
+    case record.state of
+        Article.Unread ->
+            article [ class "card" ]
+                [ h4 [] [ text record.feedName ]
+                , h3 []
+                    [ a [ href record.url, target "_blank" ] <| RawHtml.fromString record.title ]
+                , p [ class "date" ] [ text <| DateFormat.tryFormat model.timeZone record.date ]
+                , div [ class "content" ] <| RawHtml.fromString record.content
+                , nav []
+                    [ button [ onClick (MarkRead record), type_ "button", class "button secondary mark-read" ] [ text "Mark read" ]
+                    ]
+                ]
+
+        Article.Read ->
+            article [ class "card row read" ]
+                [ h3 [] <| RawHtml.fromString record.title
+                , button [ onClick (MarkUnread record), type_ "button", class "button secondary undo flex-init" ] [ text "Undo" ]
+                ]
 
 
 articleList : Model -> Html Msg
@@ -83,14 +93,6 @@ view model =
     }
 
 
-removeArticle : Article -> Model -> Model
-removeArticle record model =
-    { model
-        | articles =
-            List.filter (\a -> a /= record) model.articles
-    }
-
-
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -103,9 +105,28 @@ update msg model =
             )
 
         MarkReadResult record (Ok _) ->
-            ( removeArticle record model, Cmd.none )
+            let
+                updatedArticles =
+                    Article.setState Article.Read record model.articles
+            in
+            ( { model | articles = updatedArticles }, Cmd.none )
 
         MarkReadResult record (Err _) ->
+            ( model, Cmd.none )
+
+        MarkUnread record ->
+            ( model
+            , Http.send (MarkUnreadResult record) (Article.markUnreadRequest record)
+            )
+
+        MarkUnreadResult record (Ok _) ->
+            let
+                updatedArticles =
+                    Article.setState Article.Unread record model.articles
+            in
+            ( { model | articles = updatedArticles }, Cmd.none )
+
+        MarkUnreadResult record (Err _) ->
             ( model, Cmd.none )
 
 

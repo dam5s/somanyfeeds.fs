@@ -15,11 +15,11 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
     let updateFeed = FeedsDataGateway.updateFeed DataAccess.dataSource user.Id
     let deleteFeed = FeedsDataGateway.deleteFeed DataAccess.dataSource user.Id
     let listRecentArticles = UserArticlesService.listRecent DataAccess.dataSource user
-    let markArticleRead articleId =
+    let createReadArticle articleId =
         UserArticlesDataGateway.createReadArticle
             DataAccess.dataSource
             { UserId = user.Id ; ArticleId = articleId }
-    let markArticleUnread articleId =
+    let deleteReadArticle articleId =
         UserArticlesDataGateway.deleteReadArticle
             DataAccess.dataSource
             { UserId = user.Id ; ArticleId = articleId }
@@ -51,11 +51,11 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
     let listRecentArticlesApi _ =
         ArticlesApi.list listRecentArticles
 
-    let markArticleReadApi articleId =
-        ArticlesApi.update (markArticleRead articleId)
+    let createReadArticleApi articleId =
+        ArticlesApi.update (createReadArticle articleId)
 
-    let markArticleUnreadApi articleId =
-        ArticlesApi.update (markArticleUnread articleId)
+    let deleteReadArticleApi articleId =
+        ArticlesApi.update (deleteReadArticle articleId)
 
 
     choose [
@@ -68,8 +68,8 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
         DELETE >=> pathScan "/api/feeds/%d" deleteFeedApi
 
         GET >=> path "/api/articles/recent" >=> request listRecentArticlesApi
-        PUT >=> pathScan "/api/articles/%d/mark-read" markArticleReadApi
-        PUT >=> pathScan "/api/articles/%d/mark-unread" markArticleUnreadApi
+        POST >=> pathScan "/api/articles/%d/read" createReadArticleApi
+        DELETE >=> pathScan "/api/articles/%d/read" deleteReadArticleApi
 
         NOT_FOUND "not found"
     ]
