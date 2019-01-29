@@ -86,7 +86,7 @@ view model =
             ]
         , header [ class "page" ]
             [ h2 [] [ text "Articles" ]
-            , h1 [] [ text "Most recent" ]
+            , h1 [] [ text "Your reading list" ]
             ]
         , div [ class "main" ] [ articleList model ]
         ]
