@@ -11,12 +11,12 @@ fromString rawString =
     rawString
         |> String.replace "</img>" ""
         |> Parser.run
-        |> Result.map (List.concatMap nodeToHtml)
+        |> Result.map (List.concatMap (nodeToHtml True))
         |> Result.withDefault []
 
 
-nodeToHtml : Parser.Node -> List (Html msg)
-nodeToHtml node =
+nodeToHtml : Bool -> Parser.Node -> List (Html msg)
+nodeToHtml isTopLevel node =
     case node of
         Parser.Text text ->
             let
@@ -27,6 +27,9 @@ nodeToHtml node =
                 cleanedText
                     |> String.split "\n\n"
                     |> List.map (\t -> Html.p [] [ Html.text t ])
+
+            else if isTopLevel then
+                [ Html.p [] [ Html.text cleanedText ] ]
 
             else
                 [ Html.text cleanedText ]
@@ -53,13 +56,13 @@ elementToHtml name attrs children =
                 "a" ->
                     Html.a
                         (List.map attributeToHtml attrs ++ [ target "_blank" ])
-                        (List.concatMap nodeToHtml children)
+                        (List.concatMap (nodeToHtml False) children)
 
                 _ ->
                     VirtualDom.node
                         name
                         (List.map attributeToHtml attrs)
-                        (List.concatMap nodeToHtml children)
+                        (List.concatMap (nodeToHtml False) children)
 
 
 excludedTags =

@@ -57,7 +57,8 @@ figure {
 }
 
 img {
-  max-width: 100%;
+  width: calc(100% + 4rem);
+  margin: 0 -2rem;
 }
 
 header.app-header > div, div.main {
@@ -224,16 +225,14 @@ p {
   }
 }
 
-article > * {
-  max-width: 50rem;
-}
+article {
+  h3, p {
+    max-width: 50rem;
+  }
 
-article > nav {
-  max-width: none;
-}
-
-article > .content {
-  line-height: 1.6;
+  .content {
+    line-height: 1.6;
+  }
 }
 
 article.read {
