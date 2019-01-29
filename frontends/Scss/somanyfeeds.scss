@@ -88,7 +88,11 @@ header.app-header {
 
   & > div {
     position: relative;
-    padding: 1rem;
+    padding: 1rem 1.5rem;
+
+    @media (min-width: $small-screen-width) {
+      padding: 1rem 2rem;
+    }
   }
 
   svg {
@@ -166,6 +170,12 @@ header.page {
 
 section, article {
   margin-bottom: 2rem;
+}
+
+section {
+  @media (min-width: $small-screen-width) {
+    padding: 0 2rem;
+  }
 }
 
 nav, .actions {
