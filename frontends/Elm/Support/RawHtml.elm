@@ -1,9 +1,22 @@
-module Support.RawHtml exposing (fromString)
+module Support.RawHtml exposing (fromString, parseEntities)
 
 import Html exposing (Html, p)
 import Html.Attributes exposing (target)
 import Html.Parser as Parser
 import VirtualDom
+
+
+parseEntities : String -> List (Html msg)
+parseEntities rawString =
+    let
+        defaultNode =
+            Parser.Text ""
+    in
+    rawString
+        |> Parser.run
+        |> Result.map (List.head >> Maybe.withDefault defaultNode)
+        |> Result.withDefault defaultNode
+        |> nodeToHtml False
 
 
 fromString : String -> List (Html msg)

@@ -51,7 +51,7 @@ articleView model record =
             article [ class "card" ]
                 [ h4 [] [ text record.feedName ]
                 , h3 []
-                    [ a [ href record.url, target "_blank" ] <| RawHtml.fromString record.title ]
+                    [ a [ href record.url, target "_blank" ] <| RawHtml.parseEntities record.title ]
                 , p [ class "date" ] [ text <| DateFormat.tryFormat model.timeZone record.date ]
                 , div [ class "content" ] <| RawHtml.fromString record.content
                 , nav []
@@ -61,7 +61,7 @@ articleView model record =
 
         Article.Read ->
             article [ class "card row read" ]
-                [ h3 [] <| RawHtml.fromString record.title
+                [ h3 [] <| RawHtml.parseEntities record.title
                 , button [ onClick (MarkUnread record), type_ "button", class "button secondary undo flex-init" ] [ text "Undo" ]
                 ]
 
@@ -86,7 +86,11 @@ view model =
             ]
         , header [ class "page" ]
             [ h2 [] [ text "Articles" ]
-            , h1 [] [ text "Your reading list" ]
+            , div [ class "row" ]
+                [ h1 [] [ text "Your reading list" ]
+                , nav [ class "flex-init" ]
+                    []
+                ]
             ]
         , div [ class "main" ] [ articleList model ]
         ]
