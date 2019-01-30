@@ -314,10 +314,15 @@ article.read {
 }
 
 .row {
+  display: flex;
+  justify-content: space-between;
 
-  @media (min-width: $small-screen-width) {
-    display: flex;
-    justify-content: space-between;
+  &.responsive {
+    display: block;
+
+    @media (min-width: $small-screen-width) {
+      display: flex;
+    }
   }
 
   & > * {
