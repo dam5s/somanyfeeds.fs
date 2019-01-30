@@ -5,7 +5,7 @@ module ``Xml Processor Tests``
     open FsUnitTyped
     open System
     open System.IO
-    open FeedsProcessing.Article
+    open FeedsProcessing
     open FeedsProcessing.Download
     open FeedsProcessing.Xml
 
@@ -35,14 +35,15 @@ module ``Xml Processor Tests``
         match result with
         | Error _ -> Assert.Fail "Expected success"
         | Ok records ->
+            List.length records |> should equal 7
+
+            let article = List.head records
             let expectedTimeUtc = new DateTimeOffset (2018, 04, 14, 21, 30, 17, TimeSpan.Zero)
 
-            List.length records |> should equal 7
-            List.head records |> should equal { Title = Some "dam5s pushed to master in dam5s/somanyfeeds.fs"
-                                                Link = Some "https://github.com/dam5s/somanyfeeds.fs"
-                                                Content = "<p>Hello from the content</p>"
-                                                Date = Some expectedTimeUtc
-                                              }
+            Article.title article |> should equal (Some "dam5s pushed to master in dam5s/somanyfeeds.fs")
+            Article.link article |> should equal (Some "https://github.com/dam5s/somanyfeeds.fs")
+            Article.content article |> should equal "<p>Hello from the content</p>"
+            Article.date article |> should equal (Some expectedTimeUtc)
 
 
     [<Test>]
@@ -56,19 +57,20 @@ module ``Xml Processor Tests``
         match result with
         | Error _ -> Assert.Fail "Expected success"
         | Ok records ->
-            let expectedTimeUtc = new DateTimeOffset (2016, 09, 20, 12, 54, 44, TimeSpan.Zero)
-
             List.length records |> should equal 6
-            List.head records |> should equal { Title = Some "First title!"
-                                                Link = Some "https://medium.com/@its_damo/first"
-                                                Content = "<p>This is the content in encoded tag</p>"
-                                                Date = Some expectedTimeUtc
-                                              }
-            List.item 1 records |> should equal { Title = Some "Second title!"
-                                                  Link = Some "https://medium.com/@its_damo/second"
-                                                  Content = "<p>This is the content in description tag</p>"
-                                                  Date = Some expectedTimeUtc
-                                                }
+
+            let firstArticle = List.head records
+            let expectedTimeUtc = new DateTimeOffset (2016, 09, 20, 12, 54, 44, TimeSpan.Zero)
+            Article.title firstArticle |> should equal (Some "First title!")
+            Article.link firstArticle |> should equal (Some "https://medium.com/@its_damo/first")
+            Article.content firstArticle |> should equal "<p>This is the content in encoded tag</p>"
+            Article.date firstArticle |> should equal (Some expectedTimeUtc)
+
+            let secondArticle = List.item 1 records
+            Article.title secondArticle |> should equal (Some "Second title!")
+            Article.link secondArticle |> should equal (Some "https://medium.com/@its_damo/second")
+            Article.content secondArticle |> should equal "<p>This is the content in description tag</p>"
+            Article.date secondArticle |> should equal (Some expectedTimeUtc)
 
 
     [<Test>]
@@ -82,10 +84,12 @@ module ``Xml Processor Tests``
         match result with
         | Error _ -> Assert.Fail "Expected success"
         | Ok records ->
-            let expectedTimeUtc = new DateTimeOffset (2018, 12, 28, 20, 55, 0, TimeSpan.Zero)
             List.length records |> should equal 15
-            List.head records |> should equal { Title = Some "Netflix Permanently Pulls iTunes Billing For New and Returning Users"
-                                                Link = Some "https://news.slashdot.org/story/18/12/28/2054254/netflix-permanently-pulls-itunes-billing-for-new-and-returning-users?utm_source=rss1.0mainlinkanon&utm_medium=feed"
-                                                Content = "An anonymous reader shares a report: Netflix is further distancing itself..."
-                                                Date = Some expectedTimeUtc
-                                              }
+
+            let article = List.head records
+            let expectedTimeUtc = new DateTimeOffset (2018, 12, 28, 20, 55, 0, TimeSpan.Zero)
+
+            Article.title article |> should equal (Some "Netflix Permanently Pulls iTunes Billing For New and Returning Users")
+            Article.link article |> should equal (Some "https://news.slashdot.org/story/18/12/28/2054254/netflix-permanently-pulls-itunes-billing-for-new-and-returning-users?utm_source=rss1.0mainlinkanon&utm_medium=feed")
+            Article.content article |> should equal "An anonymous reader shares a report: Netflix is further distancing itself..."
+            Article.date article |> should equal (Some expectedTimeUtc)

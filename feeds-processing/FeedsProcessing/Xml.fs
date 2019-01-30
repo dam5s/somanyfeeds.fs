@@ -18,15 +18,11 @@ module private Rss =
     type private RssProvider = XmlProvider<"../feeds-processing/Resources/samples/rss.sample">
 
     let private itemToArticle (item : RssProvider.Item) : Article =
-        { Title = stringToOption item.Title
-          Link = stringToOption item.Link
-          Content =
-              item.Encoded
-              |> Option.bind stringToOption
-              |> Option.orElse item.Description
-              |> Option.defaultValue ""
-          Date = Some item.PubDate
-        }
+        Article.create
+          (Some item.Title)
+          item.Link
+          (item.Encoded |> Option.orElse item.Description)
+          (Some item.PubDate)
 
     let private toArticles (rss : RssProvider.Rss) : Result<Article list, string> =
         unsafeOperation "Rss to articles" { return fun _ ->
@@ -47,11 +43,11 @@ module private Atom =
     type private AtomProvider = XmlProvider<"../feeds-processing/Resources/samples/github.atom.sample">
 
     let private entryToArticle (entry : AtomProvider.Entry) : Article =
-        { Title = stringToOption entry.Title.Value
-          Link = stringToOption entry.Link.Href
-          Content = stringToOption entry.Content.Value |> Option.defaultValue ""
-          Date = Some entry.Published
-        }
+        Article.create
+            (Some entry.Title.Value)
+            entry.Link.Href
+            (Some entry.Content.Value)
+            (Some entry.Published)
 
     let private toArticles (atom : AtomProvider.Feed) : Result<Article list, string> =
         unsafeOperation "Atom to articles" { return! fun _ ->
@@ -77,11 +73,11 @@ module private Rdf =
     type private RdfProvider = XmlProvider<"../feeds-processing/Resources/samples/slashdot.rdf.sample">
 
     let private itemToArticle (item : RdfProvider.Item) : Article =
-        { Title = stringToOption item.Title
-          Link = stringToOption item.Link
-          Content = stringToOption item.Description |> Option.defaultValue ""
-          Date = Some item.Date
-        }
+        Article.create
+            (Some item.Title)
+            item.Link
+            (Some item.Description)
+            (Some item.Date)
 
     let private toArticles (rdf : RdfProvider.Rdf) : Result<Article list, string> =
         unsafeOperation "Rdf to articles" { return! fun _ ->

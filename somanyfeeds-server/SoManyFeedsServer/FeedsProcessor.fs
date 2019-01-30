@@ -38,11 +38,11 @@ let private logArticleError (url : string) (msg : string) : string =
 
 
 let private articleToFields (FeedUrl feedUrl) (article : Article) : ArticleFields =
-    { Url = article.Link |> Option.defaultValue ""
-      Title = article.Title |> Option.defaultValue ""
+    { Url = (Article.link article) |> Option.defaultValue ""
+      Title = (Article.title article) |> Option.defaultValue ""
       FeedUrl = feedUrl
-      Content = article.Content
-      Date = article.Date
+      Content = (Article.content article)
+      Date = (Article.date article)
     }
 
 

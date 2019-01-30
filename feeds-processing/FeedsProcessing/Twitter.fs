@@ -54,11 +54,12 @@ let private parseTweets (DownloadedFeed downloaded) : Result<Tweet list, string>
 
 
 let private tweetToArticle (TwitterHandle handle) (tweet : Tweet) : Article =
-    { Title = None
-      Link = Some <| sprintf "https://twitter.com/%s" handle
-      Content = tweet.Text
-      Date = tweet.CreatedAt |> Option.map (fun d -> new DateTimeOffset (d))
-    }
+    Article.create
+        None
+        (sprintf "https://twitter.com/%s" handle)
+        (Some tweet.Text)
+        (tweet.CreatedAt |> Option.map (fun d -> new DateTimeOffset (d)))
+
 
 
 let private tweetsToArticles (handle : TwitterHandle) (tweets : Tweet list) : Article list =

@@ -5,7 +5,7 @@ module ``Twitter Processor Tests``
     open System
     open System.IO
 
-    open FeedsProcessing.Article
+    open FeedsProcessing
     open FeedsProcessing.Download
     open FeedsProcessing.Feeds
     open FeedsProcessing.Twitter
@@ -21,11 +21,11 @@ module ``Twitter Processor Tests``
         match result with
         | Error _ -> Assert.Fail "Expected success"
         | Ok records ->
-            let expectedTimeUtc = new DateTimeOffset (2018, 04, 12, 15, 34, 05, TimeSpan.Zero)
-
             List.length records |> should equal 6
-            List.head records |> should equal { Title = None
-                                                Link = Some "https://twitter.com/its_damo"
-                                                Content = "I'm really liking F# so far."
-                                                Date = Some <| expectedTimeUtc.ToLocalTime ()
-                                              }
+
+            let article = List.head records
+            let expectedTimeUtc = new DateTimeOffset (2018, 04, 12, 15, 34, 05, TimeSpan.Zero)
+            Article.title article |> should equal None
+            Article.link article |> should equal (Some "https://twitter.com/its_damo")
+            Article.content article |> should equal "I'm really liking F# so far."
+            Article.date article |> should equal (Some <| expectedTimeUtc.ToLocalTime ())

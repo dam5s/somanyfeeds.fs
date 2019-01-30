@@ -2,6 +2,7 @@ module DamoIOServer.FeedsProcessor
 
 open DamoIOServer.ArticlesDataGateway
 open DamoIOServer.Sources
+open FeedsProcessing
 open FeedsProcessing.Article
 open FeedsProcessing.Feeds
 open FeedsProcessing.ProcessingResult
@@ -11,10 +12,10 @@ open FeedsProcessing.Twitter
 
 
 let private articleToRecord (sourceType : SourceType) (article : Article) : ArticleRecord =
-    { Title = article.Title
-      Link = article.Link
-      Content = article.Content
-      Date = article.Date
+    { Title = Article.title article
+      Link = Article.link article
+      Content = Article.content article
+      Date = Article.date article
       Source = sourceType
     }
 
