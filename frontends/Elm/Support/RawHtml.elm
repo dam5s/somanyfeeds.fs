@@ -1,6 +1,6 @@
 module Support.RawHtml exposing (fromString, parseEntities)
 
-import Html exposing (Html, p)
+import Html exposing (Html)
 import Html.Attributes exposing (target)
 import Html.Parser as Parser
 import VirtualDom
@@ -78,23 +78,16 @@ elementToHtml name attrs children =
                         (List.concatMap (nodeToHtml False) children)
 
 
-excludedTags =
-    [ "iframe", "embed", "object" ]
-
-
 isExcluded : String -> List ParserAttribute -> Bool
 isExcluded tag attrs =
     let
-        excludedTag =
-            List.member tag excludedTags
-
         excludedArsTechnicaTracker =
             List.member ( "class", "feedflare" ) attrs
 
         slashDotTrackers =
             List.member ( "class", "share_submission" ) attrs
     in
-    excludedTag || excludedArsTechnicaTracker || slashDotTrackers
+    excludedArsTechnicaTracker || slashDotTrackers
 
 
 emptyDiv =
