@@ -5,8 +5,13 @@ open SoManyFeedsServer
 
 
 [<EntryPoint>]
-let main _ =
-    Async.Start FeedsProcessor.backgroundProcessing
+let main args =
+    args
+    |> Array.tryHead
+    |> Option.bind (fun name -> Tasks.run name)
+    |> Option.defaultWith (fun _ ->
+        Async.Start FeedsProcessor.backgroundProcessing
+        startWebServer Config.create WebApp.webPart
+    )
 
-    startWebServer Config.create WebApp.webPart
     0

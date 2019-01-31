@@ -1,5 +1,6 @@
 module FeedsProcessing.Article
 
+open FeedsProcessing
 open System
 
 
@@ -7,18 +8,6 @@ let private stringToOption text =
     if String.IsNullOrWhiteSpace text
     then None
     else Some text
-
-
-module private Html =
-    open Ganss.XSS
-
-    let private sanitizer =
-        let s = new HtmlSanitizer()
-        s.AllowedAttributes.Add("class") |> ignore
-        s
-
-    let sanitize (html : string) : string =
-        sanitizer.Sanitize html
 
 
 type private Fields =
