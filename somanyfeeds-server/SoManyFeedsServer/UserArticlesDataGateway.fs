@@ -17,7 +17,7 @@ let listRecentUnreadArticles (dataSource : DataSource) (userId : int64) : AsyncR
                 where u.id = @UserId
                 and r.article_id is null
                 order by date desc
-                limit 100
+                limit 20
             """
 
         query dataSource sql bindings mapArticle
