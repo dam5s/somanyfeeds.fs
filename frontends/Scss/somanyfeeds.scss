@@ -77,6 +77,24 @@ img {
 
 figcaption { font-size: .8rem; }
 
+table {
+  width: 100%;
+  border: 1px solid $dark-color;
+  margin-bottom: 1rem;
+
+  th, td {
+    padding: .2rem .5rem;
+    text-align: center;
+    border: 1px solid $dark-color;
+  }
+
+  th {
+    color: $accent-color;
+    font-family: $sans-serif-fonts;
+    font-weight: $sans-serif-normal;
+  }
+}
+
 header.app-header > div, div.main {
   max-width: 1200px;
   margin: 0 auto;
