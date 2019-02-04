@@ -49,20 +49,21 @@ articleView model record =
     case record.state of
         Article.Unread ->
             article [ class "card" ]
-                [ h4 [] [ text record.feedName ]
-                , h3 []
-                    [ a [ href record.url, target "_blank" ] <| RawHtml.parseEntities record.title ]
+                [ div [ class "row" ]
+                    [ header []
+                        [ h4 [] [ text record.feedName ]
+                        , h3 [] [ a [ href record.url, target "_blank" ] <| RawHtml.parseEntities record.title ]
+                        ]
+                    , button [ onClick (MarkRead record), type_ "button", class "flex-init button icon-only mark-read" ] [ text "Mark read" ]
+                    ]
                 , p [ class "date" ] [ text <| DateFormat.tryFormat model.timeZone record.date ]
                 , div [ class "content" ] <| RawHtml.fromString record.content
-                , nav []
-                    [ button [ onClick (MarkRead record), type_ "button", class "button secondary mark-read" ] [ text "Mark read" ]
-                    ]
                 ]
 
         Article.Read ->
             article [ class "card row read" ]
                 [ h3 [] <| RawHtml.parseEntities record.title
-                , button [ onClick (MarkUnread record), type_ "button", class "button secondary undo flex-init" ] [ text "Undo" ]
+                , button [ onClick (MarkUnread record), type_ "button", class "button icon-only undo flex-init" ] [ text "Undo" ]
                 ]
 
 
