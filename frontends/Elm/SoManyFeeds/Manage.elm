@@ -164,7 +164,8 @@ view model =
             [ div []
                 [ Logo.view
                 , nav []
-                    [ a [ href "/read" ] [ text "Read" ]
+                    [ a [ href "/" ] [ text "Home" ]
+                    , a [ href "/read" ] [ text "Read" ]
                     , a [ href "/manage", class "current" ] [ text "Manage" ]
                     ]
                 ]

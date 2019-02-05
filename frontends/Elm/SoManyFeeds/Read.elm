@@ -80,7 +80,8 @@ view model =
             [ div []
                 [ Logo.view
                 , nav []
-                    [ a [ href "/read", class "current" ] [ text "Read" ]
+                    [ a [ href "/" ] [ text "Home" ]
+                    , a [ href "/read", class "current" ] [ text "Read" ]
                     , a [ href "/manage" ] [ text "Manage" ]
                     ]
                 ]
