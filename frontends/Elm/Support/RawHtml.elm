@@ -3,6 +3,7 @@ module Support.RawHtml exposing (fromString, parseEntities)
 import Html exposing (Html)
 import Html.Attributes exposing (target)
 import Html.Parser as Parser
+import Regex exposing (Regex)
 import VirtualDom
 
 
@@ -28,6 +29,13 @@ fromString rawString =
         |> Result.withDefault []
 
 
+unformattedRegex : Regex
+unformattedRegex =
+    "\\n(\\s*)\\n"
+        |> Regex.fromString
+        |> Maybe.withDefault Regex.never
+
+
 nodeToHtml : Bool -> Parser.Node -> List (Html msg)
 nodeToHtml isTopLevel node =
     case node of
@@ -35,10 +43,14 @@ nodeToHtml isTopLevel node =
             let
                 cleanedText =
                     String.replace "&quot;" "\"" text
+
+                isUnformattedText =
+                    Regex.contains unformattedRegex cleanedText
             in
-            if String.contains "\n\n" cleanedText then
+            if isUnformattedText then
                 cleanedText
-                    |> String.split "\n\n"
+                    |> String.split "\n"
+                    |> List.filter (not << String.isEmpty)
                     |> List.map (\t -> Html.p [] [ Html.text t ])
 
             else if isTopLevel then
