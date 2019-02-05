@@ -14,6 +14,7 @@ import SoManyFeeds.Logo as Logo
 
 type alias Flags =
     { userName : String
+    , maxFeeds : Int
     , feeds : List Feed
     }
 
@@ -26,6 +27,7 @@ type Dialog a
 
 type alias Model =
     { userName : String
+    , maxFeeds : Int
     , feeds : List Feed
     , form : Feed.Fields
     , creationInProgress : Bool
@@ -49,6 +51,7 @@ type Msg
 init : Flags -> ( Model, Cmd Msg )
 init flags =
     ( { userName = flags.userName
+      , maxFeeds = flags.maxFeeds
       , feeds =
             flags.feeds
                 |> List.sortBy .id
@@ -156,6 +159,21 @@ deleteDialog model =
             div [] []
 
 
+hasReachedMaxFeeds : Model -> Bool
+hasReachedMaxFeeds model =
+    List.length model.feeds >= model.maxFeeds
+
+
+maxFeedsView : Model -> Html Msg
+maxFeedsView model =
+    section []
+        [ div [ class "card" ]
+            [ h3 [] [ text "Feeds limit reached" ]
+            , p [ class "message" ] [ text "You have reached your feed subscription limit. You will need to unsubscribe a feed before you can create a new one." ]
+            ]
+        ]
+
+
 view : Model -> Document Msg
 view model =
     { title = "SoManyFeeds - A feed aggregator by Damien Le Berrigaud"
@@ -177,7 +195,11 @@ view model =
         , div [ class "main" ]
             [ overlay model
             , deleteDialog model
-            , newFeedForm model
+            , if hasReachedMaxFeeds model then
+                maxFeedsView model
+
+              else
+                newFeedForm model
             , feedList model
             ]
         ]

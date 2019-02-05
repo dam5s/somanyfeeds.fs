@@ -102,6 +102,16 @@ let find dataSource sql (bindings : Binding list) (mapping : DbDataRecord -> 'T)
     )
 
 
+let count dataSource sql (bindings : Binding list) : AsyncResult<int64> =
+    readFrom dataSource sql bindings (fun reader ->
+        reader
+        |> Seq.cast<DbDataRecord>
+        |> Seq.map (fun r -> r.GetInt64(0))
+        |> Seq.tryHead
+        |> Option.defaultValue (int64 0)
+    )
+
+
 let update dataSource sql (bindings : Binding list) : AsyncResult<int> =
     usingConnection dataSource (fun connection ->
         use command = createCommand connection sql bindings

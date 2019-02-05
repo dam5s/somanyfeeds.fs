@@ -8,12 +8,17 @@ open SoManyFeedsServer
 open SoManyFeedsServer.Json
 
 
+let private maxFeeds : int =
+    Env.varDefaultParse int "MAX_FEEDS" (always "20")
+
+
 let private authenticatedPage (user : Authentication.User) : WebPart =
 
     let listFeeds = FeedsDataGateway.listFeeds DataAccess.dataSource user.Id
-    let createFeed = FeedsDataGateway.createFeed DataAccess.dataSource user.Id
+    let createFeed = FeedsService.createFeed DataAccess.dataSource maxFeeds user.Id
     let updateFeed = FeedsDataGateway.updateFeed DataAccess.dataSource user.Id
     let deleteFeed = FeedsDataGateway.deleteFeed DataAccess.dataSource user.Id
+
     let listRecentArticles = UserArticlesService.listRecent DataAccess.dataSource user
     let createReadArticle articleId =
         UserArticlesDataGateway.createReadArticle
@@ -29,7 +34,7 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
         ReadPage.page listRecentArticles user
 
     let managePage _ =
-        ManagePage.page listFeeds user
+        ManagePage.page maxFeeds listFeeds user
 
     let listFeedsApi _ =
         FeedsApi.list listFeeds

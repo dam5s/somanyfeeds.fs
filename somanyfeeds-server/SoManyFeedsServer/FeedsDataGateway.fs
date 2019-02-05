@@ -66,6 +66,12 @@ let findFeed (dataSource : DataSource) (userId : int64) (feedId : int64) : Async
         mapFeed
 
 
+let countFeeds (dataSource : DataSource) (userId : int64) : AsyncResult<int64> =
+    count dataSource
+        "select count(1) from feeds where user_id = @UserId"
+        [ Binding ("@UserId", userId) ]
+
+
 let createFeed (dataSource : DataSource) (userId : int64) (fields : FeedFields) : AsyncResult<FeedRecord> =
     let bindings =
         [
