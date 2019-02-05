@@ -2,7 +2,7 @@ module SoManyFeeds.Manage exposing (main)
 
 import Browser exposing (Document)
 import Html exposing (Attribute, Html, a, button, dd, div, dl, dt, form, h1, h2, h3, header, input, label, nav, p, section, text)
-import Html.Attributes exposing (class, disabled, href, name, target, type_, value)
+import Html.Attributes exposing (class, disabled, href, name, placeholder, target, type_, value)
 import Html.Events exposing (onClick, onInput, onSubmit)
 import Http
 import Keyboard
@@ -113,11 +113,11 @@ newFeedForm model =
             [ h3 [] [ text "Add a feed" ]
             , label []
                 [ text "Name"
-                , input [ type_ "text", name "name", value nameValue, onInput UpdateFormName, disabled model.creationInProgress ] []
+                , input [ placeholder "Le Monde", type_ "text", name "name", value nameValue, onInput UpdateFormName, disabled model.creationInProgress ] []
                 ]
             , label []
                 [ text "Url"
-                , input [ type_ "text", name "url", value urlValue, onInput UpdateFormUrl, disabled model.creationInProgress ] []
+                , input [ placeholder "https://www.lemonde.fr/rss/une.xml", type_ "text", name "url", value urlValue, onInput UpdateFormUrl, disabled model.creationInProgress ] []
                 ]
             , nav []
                 [ button [ class "button primary", disabled model.creationInProgress ] [ text "Subscribe" ]
