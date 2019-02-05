@@ -465,27 +465,26 @@ input[type="text"], input[type="password"] {
 .button.icon-only {
   height: 2.5rem;
   width: 2.5rem;
-  background-color: transparent;
   overflow-x: hidden;
   white-space: nowrap;
   text-indent: 2rem;
   border-radius: 2rem;
   border: none;
 
-  @media (min-width: $small-screen-width) {
-    &:hover {
-      background-color: transparentize($accent-color, .8);
-    }
-  }
-
   &.mark-read {
     @include icon(icon-link-svg($mark-read-icon-path));
+    background-color: transparentize($accent-color, .9);
     background-position: center;
   }
 
   &.undo {
-    @include icon(icon-link-svg($undo-icon-path));
+    @include icon(icon-secondary-svg($undo-icon-path));
+    background-color: transparentize($dark-color, .8);
     background-position: center;
+  }
+
+  &:active, &:hover {
+    background-color: transparentize($accent-color, .8);
   }
 }
 
