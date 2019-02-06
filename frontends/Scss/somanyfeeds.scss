@@ -361,7 +361,7 @@ label {
   font-weight: $sans-serif-normal;
 }
 
-input[type="text"], input[type="password"] {
+input[type="text"], input[type="email"], input[type="password"] {
   background-color: $bg-color;
   color: $fg-color;
   border: none;
@@ -377,6 +377,13 @@ input[type="text"], input[type="password"] {
   &:disabled {
     opacity: 0.5;
   }
+}
+
+.field-error {
+  color: $error-color;
+  font-size: .8rem;
+  height: .8rem;
+  margin: 0 0 -.2rem;
 }
 
 .styled-select {

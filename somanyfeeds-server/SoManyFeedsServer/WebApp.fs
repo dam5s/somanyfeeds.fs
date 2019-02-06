@@ -87,6 +87,7 @@ let webPart =
     choose [
         GET >=> path "/" >=> homePage
         GET >=> Files.browseHome
+        GET >=> path "/register" >=> request Authentication.registrationPage
         GET >=> path "/login" >=> request Authentication.loginPage
         POST >=> path "/login" >=> request (Authentication.doLogin findByEmail)
         GET >=> path "/logout" >=> request Authentication.doLogout

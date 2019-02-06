@@ -74,7 +74,7 @@ let private runElm elmArgs =
 
 let private buildElm _ =
     runElm "make --optimize --output ../../damo-io-server/Resources/public/damo-io.js DamoIO/App.elm"
-    runElm "make --optimize --output ../../somanyfeeds-server/Resources/public/somanyfeeds.js SoManyFeeds/Read.elm SoManyFeeds/Manage.elm"
+    runElm "make --optimize --output ../../somanyfeeds-server/Resources/public/somanyfeeds.js SoManyFeeds/Read.elm SoManyFeeds/Manage.elm SoManyFeeds/Register.elm"
 
 
 let private copyFonts _ =

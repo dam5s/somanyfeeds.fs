@@ -60,6 +60,9 @@ let private loginError : WebPart =
 let loginPage (request : HttpRequest) : WebPart =
     page "login.html.liquid" { Error = false }
 
+let registrationPage (request : HttpRequest) : WebPart =
+    page "register.html.liquid" ()
+
 
 let doLogin (findByEmail : string -> Async<FindResult<UserRecord>>) (request : HttpRequest) : WebPart =
     fun ctx -> async {
