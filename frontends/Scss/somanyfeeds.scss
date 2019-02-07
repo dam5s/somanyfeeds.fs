@@ -260,6 +260,8 @@ p {
     font-size: 1.6rem;
     color: transparentize($fg-color, 0.5);
     margin-bottom: 2rem;
+    padding: 1rem;
+    text-align: center;
 
     strong {
       font-weight: $serif-normal;
