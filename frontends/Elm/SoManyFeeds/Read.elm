@@ -69,7 +69,20 @@ articleView model record =
 
 articleList : Model -> Html Msg
 articleList model =
-    section [] <| List.map (articleView model) model.articles
+    if List.isEmpty model.articles then
+        section []
+            [ div [ class "card" ]
+                [ p [ class "message" ]
+                    [ text "You don't have anything to read. Have you "
+                    , a [ href "/manage" ] [ text "subscribed to any feed" ]
+                    , text " yet?"
+                    ]
+                , p [ class "message" ] [ text "New feed subscriptions may take ~10 minutes before being available." ]
+                ]
+            ]
+
+    else
+        section [] <| List.map (articleView model) model.articles
 
 
 view : Model -> Document Msg

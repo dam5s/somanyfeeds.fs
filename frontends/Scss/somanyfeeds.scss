@@ -524,6 +524,10 @@ dt {
     padding: 2rem;
     border-radius: 2px;
   }
+
+  > :last-child {
+    margin-bottom: 0;
+  }
 }
 
 .dialog {

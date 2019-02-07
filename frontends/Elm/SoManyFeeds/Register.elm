@@ -2,7 +2,7 @@ module SoManyFeeds.Register exposing (main)
 
 import Browser exposing (Document)
 import Html exposing (Html, a, button, div, form, h1, h2, header, input, label, nav, p, section, text)
-import Html.Attributes exposing (class, href, placeholder, type_, value)
+import Html.Attributes exposing (autofocus, class, href, placeholder, type_, value)
 import Html.Events exposing (onBlur, onInput, onSubmit)
 import Http
 import SoManyFeeds.Logo as Logo
@@ -71,6 +71,7 @@ view model =
                             , value <| RegistrationForm.name model.form
                             , onInput <| UpdateForm RegistrationForm.updateName
                             , onBlur <| ValidateField RegistrationForm.validateName
+                            , autofocus True
                             , type_ "text"
                             ]
                             []
