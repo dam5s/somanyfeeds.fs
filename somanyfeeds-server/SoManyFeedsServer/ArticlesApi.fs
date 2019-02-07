@@ -34,22 +34,13 @@ module Encoders =
 let list (listArticles : AsyncResult<(FeedRecord option * ArticleRecord) list>) : WebPart =
     fun ctx -> async {
         match! listArticles with
-        | Ok articles ->
-            return! articles
-            |> serializeList Encoders.article
-            |> jsonResponse HTTP_200
-            |> fun wp -> wp ctx
-        | Error message ->
-            return! serverError message ctx
+        | Ok articles -> return! listResponse HTTP_200 Encoders.article articles ctx
+        | Error message -> return! serverErrorResponse message ctx
     }
 
 let update (updateOperation : AsyncResult<unit>) : WebPart =
     fun ctx -> async {
         match! updateOperation with
-        | Ok _ ->
-            return! ""
-            |> jsonResponse HTTP_200
-            |> fun wp -> wp ctx
-        | Error message ->
-            return! serverError message ctx
+        | Ok _ -> return! jsonResponse HTTP_200 "" ctx
+        | Error message -> return! serverErrorResponse message ctx
     }

@@ -62,6 +62,19 @@ let jsonResponse (status : HttpCode) (json : string) : WebPart =
         >=> response status (UTF8.bytes json)
 
 
+let objectResponse (status : HttpCode) (encoder : 'a -> Json<unit>) (object : 'a) : WebPart =
+    object
+    |> serializeObject encoder
+    |> jsonResponse status
+
+
+
+let listResponse (status : HttpCode) (encoder : 'a -> Json<unit>) (list : 'a list) : WebPart =
+    list
+    |> serializeList encoder
+    |> jsonResponse status
+
+
 let private decodeToChoice (decoder : Json -> JsonResult<'a> * Json) (json: Json) : Choice<'a, string> =
     decoder json
     |> fst
@@ -88,12 +101,10 @@ let deserializeBody (decoder : Json -> JsonResult<'a> * Json) (next : 'a -> WebP
     )
 
 
-let private jsonError (message : string) : Json<unit> =
+let private errorEncoder (message : string) : Json<unit> =
     Json.write "error" "An error occured"
     *> Json.write "message" message
 
 
-let serverError (message : string) =
-    message
-    |> serializeObject jsonError
-    |> jsonResponse HTTP_500
+let serverErrorResponse (message : string) : WebPart =
+    objectResponse HTTP_500 errorEncoder message

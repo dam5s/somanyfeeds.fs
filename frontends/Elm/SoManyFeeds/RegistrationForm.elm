@@ -1,6 +1,7 @@
-module SoManyFeeds.RegistrationForm exposing (RegistrationForm, ValidRegistrationForm, email, emailError, isValid, name, nameError, new, password, passwordConfirmation, passwordConfirmationError, passwordError, request, updateEmail, updateName, updatePassword, updatePasswordConfirmation, validate, validateEmail, validateName, validatePassword, validatePasswordConfirmation)
+module SoManyFeeds.RegistrationForm exposing (RegistrationForm, ValidRegistrationForm, applyHttpError, email, emailError, isValid, name, nameError, new, password, passwordConfirmation, passwordConfirmationError, passwordError, request, serverError, updateEmail, updateName, updatePassword, updatePasswordConfirmation, validate, validateEmail, validateName, validatePassword, validatePasswordConfirmation)
 
 import Http
+import Json.Decode
 import Json.Encode
 
 
@@ -16,7 +17,8 @@ type alias Field =
 
 type RegistrationForm
     = RegistrationForm
-        { name : Field
+        { serverError : Maybe Error
+        , name : Field
         , email : Field
         , password : Field
         , passwordConfirmation : Field
@@ -39,7 +41,8 @@ new =
             { value = "", error = Nothing }
     in
     RegistrationForm
-        { name = newField
+        { serverError = Nothing
+        , name = newField
         , email = newField
         , password = newField
         , passwordConfirmation = newField
@@ -58,6 +61,10 @@ maybeErrorToString maybeErr =
 
         Just (Error value) ->
             value
+
+
+serverError =
+    fields >> .serverError >> maybeErrorToString
 
 
 name =
@@ -135,11 +142,83 @@ request (ValidRegistrationForm form) =
         }
 
 
+type alias FieldErrors =
+    { nameError : Maybe Error
+    , emailError : Maybe Error
+    , passwordError : Maybe Error
+    , passwordConfirmationError : Maybe Error
+    }
+
+
+parseFieldErrors : String -> Result () FieldErrors
+parseFieldErrors body =
+    let
+        maybeErrorDecoder =
+            Json.Decode.string |> Json.Decode.map Error |> Json.Decode.maybe
+
+        errorsDecoder =
+            Json.Decode.map4 FieldErrors
+                (Json.Decode.field "nameError" maybeErrorDecoder)
+                (Json.Decode.field "emailError" maybeErrorDecoder)
+                (Json.Decode.field "passwordError" maybeErrorDecoder)
+                (Json.Decode.field "passwordConfirmationError" maybeErrorDecoder)
+    in
+    Json.Decode.decodeString errorsDecoder body
+        |> Result.mapError (always ())
+
+
+addServerError : RegistrationForm -> RegistrationForm
+addServerError (RegistrationForm form) =
+    RegistrationForm { form | serverError = Just (Error "An error occured while contacting our server, please try again later.") }
+
+
+addFieldErrors : FieldErrors -> RegistrationForm -> RegistrationForm
+addFieldErrors errors (RegistrationForm form) =
+    RegistrationForm
+        { form
+            | name = setFieldError errors.nameError form.name
+            , email = setFieldError errors.emailError form.email
+            , password = setFieldError errors.passwordError form.password
+            , passwordConfirmation = setFieldError errors.passwordConfirmationError form.passwordConfirmation
+        }
+
+
+type ApiError
+    = ValidationError FieldErrors
+    | ServerError
+
+
+apiErrorOf : Http.Error -> ApiError
+apiErrorOf err =
+    case err of
+        Http.BadStatus response ->
+            case parseFieldErrors response.body of
+                Ok fieldErrors ->
+                    ValidationError fieldErrors
+
+                _ ->
+                    ServerError
+
+        _ ->
+            ServerError
+
+
+applyHttpError : Http.Error -> RegistrationForm -> RegistrationForm
+applyHttpError err form =
+    case apiErrorOf err of
+        ValidationError errors ->
+            addFieldErrors errors form
+
+        _ ->
+            addServerError form
+
+
 validate : RegistrationForm -> Result RegistrationForm ValidRegistrationForm
 validate form =
     let
         validatedForm =
             form
+                |> removeServerError
                 |> validateName
                 |> validateEmail
                 |> validatePassword
@@ -160,6 +239,10 @@ validate form =
         Err validatedForm
 
 
+removeServerError (RegistrationForm form) =
+    RegistrationForm { form | serverError = Nothing }
+
+
 validateName (RegistrationForm form) =
     RegistrationForm { form | name = validateField nameValidation form.name }
 
@@ -178,7 +261,12 @@ validatePasswordConfirmation (RegistrationForm form) =
 
 validateField : (String -> Maybe Error) -> Field -> Field
 validateField validator field =
-    { field | error = validator field.value }
+    setFieldError (validator field.value) field
+
+
+setFieldError : Maybe Error -> Field -> Field
+setFieldError newErr field =
+    { field | error = newErr }
 
 
 isValid : RegistrationForm -> Bool
@@ -211,7 +299,7 @@ emailValidation value =
         Nothing
 
     else
-        Just (Error "email address required")
+        Just (Error "must be an email")
 
 
 passwordValidation : String -> Maybe Error
@@ -220,7 +308,7 @@ passwordValidation value =
         Nothing
 
     else
-        Just (Error "at least 8 characters required")
+        Just (Error "must be at least 8 characters long")
 
 
 passwordConfirmationValidation : String -> String -> Maybe Error

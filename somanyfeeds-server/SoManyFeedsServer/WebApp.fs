@@ -82,12 +82,16 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
 
 let webPart =
     let findByEmail = UsersDataGateway.findByEmail DataAccess.dataSource
+    let createUser = deserializeBody
+                         UsersApi.Decoders.registration
+                         (UsersApi.create <| UsersService.create DataAccess.dataSource)
     let homePage = DotLiquid.page "home.html.liquid" ()
 
     choose [
         GET >=> path "/" >=> homePage
         GET >=> Files.browseHome
         GET >=> path "/register" >=> request Authentication.registrationPage
+        POST >=> path "/api/users" >=> createUser
         GET >=> path "/login" >=> request Authentication.loginPage
         POST >=> path "/login" >=> request (Authentication.doLogin findByEmail)
         GET >=> path "/logout" >=> request Authentication.doLogout

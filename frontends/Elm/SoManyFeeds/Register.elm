@@ -6,6 +6,7 @@ import Html.Attributes exposing (class, href, placeholder, type_, value)
 import Html.Events exposing (onBlur, onInput, onSubmit)
 import Http
 import SoManyFeeds.Logo as Logo
+import SoManyFeeds.RedirectTo exposing (redirectTo)
 import SoManyFeeds.RegistrationForm as RegistrationForm exposing (RegistrationForm, ValidRegistrationForm)
 
 
@@ -34,6 +35,15 @@ init flags =
 
 view : Model -> Document Msg
 view model =
+    let
+        serverErrorView =
+            case RegistrationForm.serverError model.form of
+                "" ->
+                    div [] []
+
+                message ->
+                    p [ class "error message" ] [ text message ]
+    in
     { title = "SoManyFeeds - A feed aggregator by Damien Le Berrigaud"
     , body =
         [ header [ class "app-header" ]
@@ -53,7 +63,8 @@ view model =
         , div [ class "main" ]
             [ section []
                 [ form [ class "card", onSubmit Register ]
-                    [ label []
+                    [ serverErrorView
+                    , label []
                         [ text "Name"
                         , input
                             [ placeholder "John"
@@ -133,11 +144,11 @@ update msg model =
         ValidateField validationFunction ->
             ( { model | form = validationFunction model.form }, Cmd.none )
 
-        RegistrationResult (Err _) ->
-            ( model, Cmd.none )
+        RegistrationResult (Err error) ->
+            ( { model | form = RegistrationForm.applyHttpError error model.form }, Cmd.none )
 
         RegistrationResult (Ok _) ->
-            ( model, Cmd.none )
+            ( model, redirectTo "/read" )
 
 
 main : Program Flags Model Msg

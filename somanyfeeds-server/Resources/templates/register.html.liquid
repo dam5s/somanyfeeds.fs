@@ -5,7 +5,10 @@
 
 <script src="/somanyfeeds.js?v={%  include "_assets_version.html.liquid" %}"></script>
 <script>
-    Elm.SoManyFeeds.Register.init({flags: {}});
+    var app = Elm.SoManyFeeds.Register.init({flags: {}});
+    app.ports.redirectTo.subscribe(function (destination) {
+        window.location = destination;
+    })
 </script>
 
 </body>

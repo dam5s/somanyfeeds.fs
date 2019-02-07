@@ -6,6 +6,8 @@ type HashedPassword =
     HashedPassword of string
 
 
+let hashedValue (HashedPassword value) = value
+
 let generateHash =
     BCrypt.HashPassword >> HashedPassword
 

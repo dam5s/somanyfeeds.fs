@@ -33,48 +33,30 @@ module Decoders =
 let list (listFeeds : AsyncResult<FeedRecord list>) : WebPart =
     fun ctx -> async {
         match! listFeeds with
-        | Ok feeds ->
-            return! feeds
-            |> serializeList Encoders.feed
-            |> jsonResponse HTTP_200
-            |> fun wp -> wp ctx
-
-        | Error message ->
-            return! serverError message ctx
+        | Ok feeds -> return! listResponse HTTP_200 Encoders.feed feeds ctx
+        | Error message -> return! serverErrorResponse message ctx
     }
 
 
 let create (createFeed : FeedFields -> AsyncResult<FeedRecord>) (fields : FeedFields) : WebPart =
     fun ctx -> async {
         match! createFeed fields with
-        | Ok feed ->
-            return! feed
-            |> serializeObject Encoders.feed
-            |> jsonResponse HTTP_201
-            |> fun wp -> wp ctx
-        | Error message ->
-            return! serverError message ctx
+        | Ok feed -> return! objectResponse HTTP_201 Encoders.feed feed ctx
+        | Error message -> return! serverErrorResponse message ctx
     }
 
 
 let update (updateFeed : FeedFields -> AsyncResult<FeedRecord>) (fields : FeedFields) : WebPart =
     fun ctx -> async {
         match! updateFeed fields with
-        | Ok feed ->
-            return! feed
-            |> serializeObject Encoders.feed
-            |> jsonResponse HTTP_200
-            |> fun wp -> wp ctx
-        | Error message ->
-            return! serverError message ctx
+        | Ok feed -> return! objectResponse HTTP_200 Encoders.feed feed ctx
+        | Error message -> return! serverErrorResponse message ctx
     }
 
 
 let delete (deleteFeed : unit -> AsyncResult<unit>) : WebPart =
     fun ctx -> async {
         match! deleteFeed () with
-        | Ok _ ->
-            return! Successful.NO_CONTENT ctx
-        | Error message ->
-            return! serverError message ctx
+        | Ok _ -> return! Successful.NO_CONTENT ctx
+        | Error message -> return! serverErrorResponse message ctx
     }
