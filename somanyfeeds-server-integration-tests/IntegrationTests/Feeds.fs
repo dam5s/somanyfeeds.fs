@@ -7,7 +7,8 @@ open SoManyFeedsServer
 
 let all () =
     before (fun _ ->
-        executeSql "truncate feeds"
+        executeSql "delete from feeds"
+        executeSql "delete from users"
     )
 
     "Feeds CRUD" &&& fun _ ->
@@ -15,6 +16,16 @@ let all () =
 
         expectToFind "h1" "Welcome"
         click "Read"
+
+        expectToFind "h1" "Authentication required"
+        click "Sign up now"
+
+        expectToFind "h1" "Registration"
+        "input[name='name']" << "Damo"
+        "input[name='email']" << "damo@example.com"
+        "input[name='password']" << "supersecret"
+        "input[name='passwordConfirmation']" << "supersecret"
+        click "Sign up"
 
         expectToFind "h1" "Authentication required"
         "input[name='email']" << "damo@example.com"

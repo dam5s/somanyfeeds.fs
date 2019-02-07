@@ -2,7 +2,7 @@ module SoManyFeeds.Register exposing (main)
 
 import Browser exposing (Document)
 import Html exposing (Html, a, button, div, form, h1, h2, header, input, label, nav, p, section, text)
-import Html.Attributes exposing (autofocus, class, href, placeholder, type_, value)
+import Html.Attributes exposing (autofocus, class, href, name, placeholder, type_, value)
 import Html.Events exposing (onBlur, onInput, onSubmit)
 import Http
 import SoManyFeeds.Logo as Logo
@@ -68,6 +68,7 @@ view model =
                         [ text "Name"
                         , input
                             [ placeholder "John"
+                            , name "name"
                             , value <| RegistrationForm.name model.form
                             , onInput <| UpdateForm RegistrationForm.updateName
                             , onBlur <| ValidateField RegistrationForm.validateName
@@ -81,6 +82,7 @@ view model =
                         [ text "Email"
                         , input
                             [ placeholder "john@example.com"
+                            , name "email"
                             , value <| RegistrationForm.email model.form
                             , onInput <| UpdateForm RegistrationForm.updateEmail
                             , onBlur <| ValidateField RegistrationForm.validateEmail
@@ -93,6 +95,7 @@ view model =
                         [ text "Password"
                         , input
                             [ placeholder "******************"
+                            , name "password"
                             , value <| RegistrationForm.password model.form
                             , onInput <| UpdateForm RegistrationForm.updatePassword
                             , onBlur <| ValidateField RegistrationForm.validatePassword
@@ -105,6 +108,7 @@ view model =
                         [ text "Password confirmation"
                         , input
                             [ placeholder "******************"
+                            , name "passwordConfirmation"
                             , value <| RegistrationForm.passwordConfirmation model.form
                             , onInput <| UpdateForm RegistrationForm.updatePasswordConfirmation
                             , onBlur <| ValidateField RegistrationForm.validatePasswordConfirmation
