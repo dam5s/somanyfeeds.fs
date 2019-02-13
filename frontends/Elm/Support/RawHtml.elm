@@ -47,7 +47,7 @@ nodeToHtml isTopLevel node =
                 isUnformattedText =
                     Regex.contains unformattedRegex cleanedText
             in
-            if isUnformattedText then
+            if isTopLevel && isUnformattedText then
                 cleanedText
                     |> String.split "\n"
                     |> List.filter (not << String.isEmpty)
