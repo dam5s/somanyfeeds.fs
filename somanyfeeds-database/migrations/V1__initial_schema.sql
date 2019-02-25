@@ -1,8 +1,3 @@
-drop table if exists articles;
-drop table if exists feeds;
-drop table if exists users;
-
-
 create table users
 (
   id            bigserial primary key,
@@ -53,9 +48,3 @@ create table read_articles
 
 create index read_articles_user_id on read_articles (user_id);
 create index read_articles_article_id on read_articles (article_id);
-
-
-insert into users (id, email, name, password_hash)
-values (1, 'damo@example.com', 'Damo', '$2a$11$ExRbaoOXuZI61PdZhMauouk/PwZXH84ueRixvKnC0QU8l9QUsexeC'); -- supersecret
-
-select setval('users_id_seq', 1);
