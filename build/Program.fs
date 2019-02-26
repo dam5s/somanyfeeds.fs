@@ -4,14 +4,7 @@ open System
 open System.IO
 open Support
 open Fake.Core
-open Fake.DotNet
 open Fake.IO
-open Fake.Runtime
-
-
-let private dotnet (command : string) (args : string) _ =
-    let result = DotNet.exec id command args
-    Support.ensureSuccessExitCode result.ExitCode
 
 
 let private clean _ =
@@ -25,14 +18,14 @@ let private somanyfeedsServerIntegrationTests _ =
     Environment.setEnvironVar "PORT" "9090"
     Environment.setEnvironVar "CONTENT_ROOT" (Path.GetFullPath "somanyfeeds-server")
     Environment.setEnvironVar "DB_CONNECTION" "Host=localhost;Username=somanyfeeds;Password=secret;Database=somanyfeeds_integration_tests"
-    dotnet "run" "-p somanyfeeds-server-integration-tests" ()
+    DotNet.run "somanyfeeds-server-integration-tests" ()
     ()
 
 
 let private setupCacheBustingLinks _ =
     let timestamp = DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()
     let timestampPath = "somanyfeeds-server/bin/Release/netcoreapp2.2/publish/Resources/templates/_assets_version.html.liquid"
-    File.write false timestampPath [timestamp]
+    Support.writeToFile timestampPath timestamp
     ()
 
 
@@ -45,14 +38,14 @@ let main args =
     Database.loadTasks ()
 
     Target.create "clean" clean
-    Target.create "restore" <| dotnet "restore" ""
-    Target.create "build" <| dotnet "build" ""
-    Target.create "test" <| dotnet "test" "feeds-processing-tests"
+    Target.create "restore" <| DotNet.restore
+    Target.create "build" <| DotNet.build
+    Target.create "test" <| DotNet.test "feeds-processing-tests"
     Target.create "integration-tests" <| somanyfeedsServerIntegrationTests
 
-    Target.create "publish" (fun _ ->
-        dotnet "publish" "damo-io-server -c Release" ()
-        dotnet "publish" "somanyfeeds-server -c Release" ()
+    Target.create "release" (fun _ ->
+        DotNet.release "damo-io-server" ()
+        DotNet.release "somanyfeeds-server" ()
         setupCacheBustingLinks ()
     )
 
@@ -64,8 +57,8 @@ let main args =
 
     "test" |> dependsOn [ "build" ]
     "integration-tests" |> dependsOn [ "build" ]
-    "publish" |> dependsOn [ "test" ; "integration-tests" ; "build" ; "clean" ]
+    "release" |> dependsOn [ "test" ; "integration-tests" ; "build" ; "clean" ]
 
-    Target.runOrDefault "publish"
+    Target.runOrDefault "release"
 
     0

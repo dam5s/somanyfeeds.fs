@@ -18,6 +18,7 @@
     <Compile Include="Support.fs" />
     <Compile Include="Frontend.fs" />
     <Compile Include="Database.fs" />
+    <Compile Include="DotNet.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 </Project>
