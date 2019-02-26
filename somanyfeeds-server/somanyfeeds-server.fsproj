@@ -17,24 +17,29 @@
     <ProjectReference Include="../prelude/prelude.fsproj" />
     <ProjectReference Include="../feeds-processing/feeds-processing.fsproj" />
 
-    <Compile Include="SoManyFeedsServer/Json.fs" />
-    <Compile Include="SoManyFeedsServer/DataSource.fs" />
     <Compile Include="SoManyFeedsServer/Passwords.fs" />
-    <Compile Include="SoManyFeedsServer/FeedsDataGateway.fs" />
-    <Compile Include="SoManyFeedsServer/FeedsService.fs" />
-    <Compile Include="SoManyFeedsServer/ArticlesDataGateway.fs" />
     <Compile Include="SoManyFeedsServer/Registration.fs" />
+
+    <Compile Include="SoManyFeedsServer/DataSource.fs" />
+    <Compile Include="SoManyFeedsServer/FeedsDataGateway.fs" />
+    <Compile Include="SoManyFeedsServer/ArticlesDataGateway.fs" />
     <Compile Include="SoManyFeedsServer/UsersDataGateway.fs" />
-    <Compile Include="SoManyFeedsServer/UsersService.fs" />
-    <Compile Include="SoManyFeedsServer/UsersApi.fs" />
+    <Compile Include="SoManyFeedsServer/UserArticlesDataGateway.fs" />
+
     <Compile Include="SoManyFeedsServer/ErrorPage.fs" />
     <Compile Include="SoManyFeedsServer/Authentication.fs" />
-    <Compile Include="SoManyFeedsServer/UserArticlesDataGateway.fs" />
+
+    <Compile Include="SoManyFeedsServer/FeedsService.fs" />
+    <Compile Include="SoManyFeedsServer/UsersService.fs" />
     <Compile Include="SoManyFeedsServer/UserArticlesService.fs" />
+
+    <Compile Include="SoManyFeedsServer/Json.fs" />
+    <Compile Include="SoManyFeedsServer/UsersApi.fs" />
     <Compile Include="SoManyFeedsServer/FeedsApi.fs" />
     <Compile Include="SoManyFeedsServer/ArticlesApi.fs" />
     <Compile Include="SoManyFeedsServer/ReadPage.fs" />
     <Compile Include="SoManyFeedsServer/ManagePage.fs" />
+
     <Compile Include="SoManyFeedsServer/DataAccess.fs" />
     <Compile Include="SoManyFeedsServer/FeedsProcessor.fs" />
     <Compile Include="SoManyFeedsServer/WebApp.fs" />
