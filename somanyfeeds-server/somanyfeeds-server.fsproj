@@ -25,6 +25,7 @@
     <Compile Include="SoManyFeedsServer/ArticlesDataGateway.fs" />
     <Compile Include="SoManyFeedsServer/UsersDataGateway.fs" />
     <Compile Include="SoManyFeedsServer/UserArticlesDataGateway.fs" />
+    <Compile Include="SoManyFeedsServer/FeedJobsDataGateway.fs" />
 
     <Compile Include="SoManyFeedsServer/ErrorPage.fs" />
     <Compile Include="SoManyFeedsServer/Authentication.fs" />
