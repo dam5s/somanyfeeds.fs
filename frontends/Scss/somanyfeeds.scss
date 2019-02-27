@@ -304,6 +304,9 @@ hr {
 article {
   h3, p {
     max-width: 50rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
   }
 
   .content {
