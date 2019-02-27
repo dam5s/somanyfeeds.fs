@@ -8,7 +8,8 @@ open Suave.Operators
 open Suave.Response
 
 
-let private logger = loggerWithName "SoManyFeedsServer.Json"
+type private Logs = Logs
+let private logger = createLogger<Logs>
 
 
 let serializeSimpleMap (map : Map<string, obj>) : string =

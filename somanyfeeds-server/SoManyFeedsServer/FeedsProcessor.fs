@@ -10,6 +10,10 @@ open FeedsProcessing.Feeds
 open SoManyFeedsServer.ArticlesDataGateway
 
 
+type private Logs = Logs
+let private logger = createLogger<Logs>
+
+
 let private createMissing _ = FeedJobsDataGateway.createMissing dataSource
 let private startJobs _ = FeedJobsDataGateway.startSome dataSource 5
 
@@ -30,9 +34,6 @@ let private sequence : AsyncSeq<FeedUrl> =
 
             do! Async.Sleep (oneMinute * 5)
     }
-
-
-let private logger = loggerWithName "SoManyFeedsServer.FeedsProcessor"
 
 
 let private logFeedError (FeedUrl url) (msg : string) : string =
