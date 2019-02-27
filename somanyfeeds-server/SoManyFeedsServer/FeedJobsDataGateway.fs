@@ -5,7 +5,7 @@ open SoManyFeedsServer.DataSource
 
 
 type JobFailure =
-    JobFailure of string
+    JobFailure of message:string
 
 
 let createMissing (dataSource : DataSource) : AsyncResult<int> =

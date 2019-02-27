@@ -9,7 +9,7 @@ open SoManyFeedsServer.DataSource
 type UserCreationResult =
     | CreationSuccess of UserRecord
     | CreationFailure of ValidationErrors
-    | CreationError of string
+    | CreationError of message:string
 
 
 let create (dataSource : DataSource) (registration : Registration) : Async<UserCreationResult> =

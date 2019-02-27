@@ -9,11 +9,11 @@ type DataSource = AsyncResult<DbConnection>
 type FindResult<'T> =
     | Found of 'T
     | NotFound
-    | FindError of string
+    | FindError of message:string
 
 
 type Binding =
-    Binding of string * obj
+    Binding of name:string * value:obj
 
 
 let optionBinding (name : string, option : 'T option) =
