@@ -12,7 +12,7 @@ let all () =
     )
 
     "Feeds CRUD" &&& fun _ ->
-        url <| sprintf "http://localhost:%d" Config.port
+        url <| sprintf "http://localhost:%d" WebConfig.port
 
         expectToFind "h1" "Welcome"
         click "Read"

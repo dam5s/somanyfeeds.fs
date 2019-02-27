@@ -5,9 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Prelude\Support.fs" />
-    <Compile Include="Prelude\AsyncResult.fs" />
-    <Compile Include="Prelude\UnsafeOperation.fs" />
+    <PackageReference Update="FSharp.Core" Version="4.6.2" />
+
+    <Compile Include="Prelude/Support.fs" />
+    <Compile Include="Prelude/AsyncResult.fs" />
+    <Compile Include="Prelude/Logging.fs" />
+    <Compile Include="Prelude/UnsafeOperation.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Logary.Adapters.Facade" Version="5.0.0-rc.1" />
   </ItemGroup>
 
 </Project>

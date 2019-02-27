@@ -7,6 +7,10 @@ open Suave.Writers
 open Suave.Operators
 open Suave.Response
 
+
+let private logger = getLogger "somanyfeeds-server.json"
+
+
 let serializeSimpleMap (map : Map<string, obj>) : string =
     map
     |> Map.map (fun k (value : obj) ->
@@ -17,8 +21,9 @@ let serializeSimpleMap (map : Map<string, obj>) : string =
         | :? int64 as x -> Json.Number (decimal x)
         | :? string as x -> Json.String x
         | _ ->
-            eprintfn "Unsupported value for session: %A" value
-            Json.Null ()
+            sprintf "Unsupported value for session: %A" value
+            |> logError logger
+            |> always (Json.Null ())
     )
     |> Json.Object
     |> Json.format
@@ -33,8 +38,9 @@ let deserializeSimpleMap (json : string) : Map<string, obj> =
             | Json.Number n -> int64 n :> obj
             | Json.String s -> s :> obj
             | _ ->
-                eprintfn "Unsupported value in session: %A" value
-                null
+                sprintf "Unsupported value in session: %A" value
+                |> logError logger
+                |> always null
         )
 
     json

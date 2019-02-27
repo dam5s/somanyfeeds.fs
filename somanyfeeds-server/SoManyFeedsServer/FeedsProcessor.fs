@@ -32,14 +32,19 @@ let private sequence : AsyncSeq<FeedUrl> =
     }
 
 
-let private logError (FeedUrl url) (msg : string) : string =
-    eprintfn "There was an error while processing the feed with url %s: %s" url msg
-    msg
+let private logger = getLogger "somanyfeeds-server.feeds-processor"
+
+
+let private logFeedError (FeedUrl url) (msg : string) : string =
+    sprintf "There was an error while processing the feed with url %s: %s" url msg
+    |> logError logger
+    |> always msg
 
 
 let private logArticleError (url : string) (msg : string) : string =
-    eprintfn "There was an error while persisting the article with url %s: %s" url msg
-    msg
+    sprintf "There was an error while persisting the article with url %s: %s" url msg
+    |> logError logger
+    |> always msg
 
 
 let private completeJob (feedUrl : FeedUrl) =
@@ -51,7 +56,7 @@ let private completeJob (feedUrl : FeedUrl) =
 
 let private failJob (feedUrl : FeedUrl) (message : string) =
     message
-    |> logError feedUrl
+    |> logFeedError feedUrl
     |> JobFailure
     |> FeedJobsDataGateway.fail dataSource feedUrl
     |> Async.RunSynchronously
@@ -77,7 +82,9 @@ let private persistArticle (fields : ArticleFields) : Async<unit> =
 
 
 let private processFeed (feedUrl : FeedUrl) : ArticleFields seq =
-    printfn "Processing feed %A" feedUrl
+    sprintf "Processing feed %A" feedUrl
+    |> logInfo logger
+    |> ignore
 
     let processResult =
         feedUrl

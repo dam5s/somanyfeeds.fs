@@ -2,7 +2,9 @@
 
 open IntegrationTests
 open OpenQA.Selenium.Chrome
+open SoManyFeedsServer
 open Suave
+open Suave.Logging
 open System
 open System.Threading
 open canopy
@@ -25,7 +27,10 @@ let private chromeOptions =
 
 
 once (fun () ->
-    let config = SoManyFeedsServer.Config.create
+    LoggingConfig.configure ()
+
+    let logger = Log.create "suave"
+    let config = SoManyFeedsServer.WebConfig.create logger
     let webPart = SoManyFeedsServer.WebApp.webPart
 
     let listening, server = startWebServerAsync config webPart

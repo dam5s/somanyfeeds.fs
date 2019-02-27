@@ -1,4 +1,4 @@
-module SoManyFeedsServer.Config
+module SoManyFeedsServer.WebConfig
 
 open Suave
 open DotLiquid
@@ -33,7 +33,7 @@ let port : int =
     Env.varDefaultParse int "PORT" <| always "8080"
 
 
-let create : SuaveConfig =
+let create (logger : Logging.Logger) : SuaveConfig =
     setTemplatesDir templatesFolder
     setCSharpNamingConvention ()
 
@@ -44,4 +44,5 @@ let create : SuaveConfig =
         bindings = [ binding ]
         serverKey = ServerKey.fromBase64 (Env.varRequired "COOKIE_ENCRYPTION_KEY")
         cookieSerialiser = new JsonCookieSerialiser()
+        logger = logger
     }

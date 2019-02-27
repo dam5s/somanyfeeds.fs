@@ -1,13 +1,21 @@
 [<AutoOpen>]
 module UnsafeOperation
+
 open System
+
+
+let private logger = getLogger "prelude.unsafe-operation"
 
 
 type UnsafeOperationBuilder(description: string) =
     member x.Error(ex: Exception) =
         let msg = sprintf "%s error: %s" description (ex.Message.Trim ())
-        eprintfn "%s" msg
-        eprintfn "Exception details %s" (ex.ToString ())
+                  |> logError logger
+
+        sprintf "Exception details %s" (ex.ToString ())
+        |> logError logger
+        |> ignore
+
         Error msg
 
     member x.Return(func: unit -> 'a): Result<'a, string> =

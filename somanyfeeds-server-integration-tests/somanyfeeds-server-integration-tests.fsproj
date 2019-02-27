@@ -6,6 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Update="FSharp.Core" Version="4.6.2" />
+
     <PackageReference Include="canopy" Version="2.1.0" />
     <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="2.45.0" />
 

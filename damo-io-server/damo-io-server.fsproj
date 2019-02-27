@@ -6,6 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Update="FSharp.Core" Version="4.6.2" />
+
     <PackageReference Include="FSharp.Control.AsyncSeq" Version="2.0.21" />
     <PackageReference Include="FSharp.Data" Version="3.0.0" />
     <PackageReference Include="DotLiquid" Version="2.0.298" />

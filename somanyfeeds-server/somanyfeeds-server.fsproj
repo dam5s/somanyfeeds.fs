@@ -6,9 +6,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Update="FSharp.Core" Version="4.6.2" />
+
     <PackageReference Include="BCrypt.Net-Next.StrongName" Version="3.1.2" />
     <PackageReference Include="FSharp.Control.AsyncSeq" Version="2.0.21" />
     <PackageReference Include="DotLiquid" Version="2.0.298" />
+    <PackageReference Include="Logary" Version="5.0.0-rc.1" />
+    <PackageReference Include="Logary.Adapters.Facade" Version="5.0.0-rc.1" />
+    <PackageReference Include="Logary.Adapters.Suave" Version="4.0.200" />
     <PackageReference Include="Suave" Version="2.5.3" />
     <PackageReference Include="Suave.DotLiquid" Version="2.5.3" />
     <PackageReference Include="Chiron" Version="6.3.1" />
@@ -44,7 +49,9 @@
     <Compile Include="SoManyFeedsServer/DataAccess.fs" />
     <Compile Include="SoManyFeedsServer/FeedsProcessor.fs" />
     <Compile Include="SoManyFeedsServer/WebApp.fs" />
-    <Compile Include="SoManyFeedsServer/Config.fs" />
+    <Compile Include="SoManyFeedsServer/WebConfig.fs" />
+    <Compile Include="SoManyFeedsServer/LoggingConfig.fs" />
+
     <Compile Include="Tasks.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>

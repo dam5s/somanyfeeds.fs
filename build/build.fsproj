@@ -6,6 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Update="FSharp.Core" Version="4.6.2" />
+
     <PackageReference Include="Evolve" Version="2.1.0" />
     <PackageReference Include="Npgsql" Version="4.0.4" />
     <PackageReference Include="SharpScss" Version="1.4.0" />
