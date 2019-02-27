@@ -12,7 +12,7 @@ let private log logger lvl msg =
     msg
 
 
-let getLogger (name : string) =
+let loggerWithName (name : string) =
     Log.create name
 
 let logError logger msg =

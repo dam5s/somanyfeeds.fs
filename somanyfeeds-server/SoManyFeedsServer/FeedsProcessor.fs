@@ -32,7 +32,7 @@ let private sequence : AsyncSeq<FeedUrl> =
     }
 
 
-let private logger = getLogger "somanyfeeds-server.feeds-processor"
+let private logger = loggerWithName "SoManyFeedsServer.FeedsProcessor"
 
 
 let private logFeedError (FeedUrl url) (msg : string) : string =

@@ -4,7 +4,7 @@ module UnsafeOperation
 open System
 
 
-let private logger = getLogger "prelude.unsafe-operation"
+let private logger = loggerWithName "Prelude.UnsafeOperation"
 
 
 type UnsafeOperationBuilder(description: string) =
