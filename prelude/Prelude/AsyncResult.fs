@@ -5,10 +5,15 @@ module AsyncResult
 type AsyncResult<'T> =
     Async<Result<'T, string>>
 
+
+[<RequireQualifiedAccess>]
 module AsyncResult =
 
     let result (value: 'T) : AsyncResult<'T> =
         async { return Ok value }
+
+    let error (message: string) : AsyncResult<'T> =
+        async { return Error message }
 
     let map (mapping : 'T -> 'U) (result : AsyncResult<'T>) : AsyncResult<'U> =
         async {
@@ -38,7 +43,6 @@ module AsyncResult =
             | Error _ -> return value
         }
 
-
     let using (resource: #System.IDisposable) func =
         try
             func resource
@@ -52,8 +56,8 @@ module AsyncResult =
 type AsyncResultBuilder() =
     member x.Bind(result, mapping) = AsyncResult.bind mapping result
     member x.Return(value) = async { return Ok value }
-    member x.ReturnFrom(result) = async { return result }
+    member x.ReturnFrom(result) = result
     member x.Using(resource, func) = AsyncResult.using resource func
 
 
-let asyncResult = new AsyncResultBuilder()
+let asyncResult = AsyncResultBuilder()

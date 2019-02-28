@@ -10,8 +10,7 @@ let createFeed (dataSource : DataSource) (maxFeeds : int) (userId : int64) (fiel
 
         if count >= (int64 maxFeeds)
         then
-            return! Error "Max number of feeds reached"
+            return! AsyncResult.error "Max number of feeds reached"
         else
-            let! record = FeedsDataGateway.createFeed dataSource userId fields
-            return record
+            return! FeedsDataGateway.createFeed dataSource userId fields
     }

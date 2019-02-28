@@ -48,15 +48,17 @@ let private fromOptionResult (result : AsyncResult<'T option>) : Async<FindResul
 
 
 let private usingConnection (dataSource : DataSource) (mapping : DbConnection -> 'T) : AsyncResult<'T> =
-   asyncResult {
-       let! connection = dataSource
+    asyncResult {
+        let! connection = dataSource
 
-       return! unsafeOperation "Data access" { return fun _ ->
-           use c = connection
-           c.Open ()
-           mapping c
-       }
-   }
+        return! async {
+            return unsafeOperation "Data access" { return fun _ ->
+                use c = connection
+                c.Open ()
+                mapping c
+            }
+        }
+    }
 
 
 let private applyBinding (command : DbCommand) (Binding (name, value)) =

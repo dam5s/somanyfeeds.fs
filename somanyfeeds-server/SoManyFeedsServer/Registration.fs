@@ -44,7 +44,7 @@ let private emailValidation (registration : Registration) : string option =
     let isEmpty = String.isEmpty registration.Email
     let isNotEmail = not <| String.contains "@" registration.Email
 
-    if  isEmpty || isNotEmail
+    if isEmpty || isNotEmail
     then Some "must be an email"
     else None
 

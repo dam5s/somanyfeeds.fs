@@ -5,6 +5,7 @@ module Support
 let always a _ = a
 
 
+[<RequireQualifiedAccess>]
 module Result =
     let defaultValue (other : 'a) (result : Result<'a, 'b>) : 'a =
         match result with
@@ -17,6 +18,7 @@ module Result =
         | Error _ -> None
 
 
+[<RequireQualifiedAccess>]
 module Choice =
     let defaultValue (other : 'a) (choice : Choice<'a, 'b>) : 'a =
         match choice with
