@@ -75,7 +75,6 @@ let objectResponse (status : HttpCode) (encoder : 'a -> Json<unit>) (object : 'a
     |> jsonResponse status
 
 
-
 let listResponse (status : HttpCode) (encoder : 'a -> Json<unit>) (list : 'a list) : WebPart =
     list
     |> serializeList encoder
