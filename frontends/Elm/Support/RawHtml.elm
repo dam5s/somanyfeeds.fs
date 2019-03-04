@@ -4,7 +4,7 @@ import Html exposing (Html)
 import Html.Attributes exposing (target)
 import Html.Parser as Parser
 import Regex exposing (Regex)
-import VirtualDom
+import VirtualDom exposing (Attribute)
 
 
 parseEntities : String -> List (Html msg)
@@ -80,13 +80,13 @@ elementToHtml name attrs children =
             case name of
                 "a" ->
                     Html.a
-                        (List.map attributeToHtml attrs ++ [ target "_blank" ])
+                        (List.filterMap attributeToHtml attrs ++ [ target "_blank" ])
                         (List.concatMap (nodeToHtml False) children)
 
                 _ ->
                     VirtualDom.node
                         name
-                        (List.map attributeToHtml attrs)
+                        (List.filterMap attributeToHtml attrs)
                         (List.concatMap (nodeToHtml False) children)
 
 
@@ -106,10 +106,14 @@ emptyDiv =
     Html.div [] []
 
 
+attributeToHtml : ( String, String ) -> Maybe (Attribute msg)
 attributeToHtml ( name, value ) =
     case name of
         "src" ->
-            VirtualDom.attribute name (String.replace "http://" "https://" value)
+            Just <| VirtualDom.attribute name (String.replace "http://" "https://" value)
+
+        "style" ->
+            Nothing
 
         _ ->
-            VirtualDom.attribute name value
+            Just <| VirtualDom.attribute name value
