@@ -2,9 +2,11 @@ module SoManyFeedsServer.UsersDataGateway
 
 open System.Data.Common
 open SoManyFeedsServer.Passwords
-open SoManyFeedsServer.DataSource
 open SoManyFeedsServer.Registration
+open SoManyFeedsServer
 open AsyncResult.Operators
+open DataContext
+open SoManyFeedsServer.DataSource
 
 
 type UserRecord =
@@ -15,23 +17,27 @@ type UserRecord =
     }
 
 
-let private mapUser (record : DbDataRecord) : UserRecord =
-    { Id = record.GetInt64 0
-      Name = record.GetString 1
-      Email = record.GetString 2
-      PasswordHash = record.GetString 3 |> HashedPassword
+let private mapUser (id, name, email, passwordHash) : UserRecord =
+    { Id = id
+      Name = name
+      Email = email
+      PasswordHash = HashedPassword passwordHash
     }
 
 
-let findByEmail (dataSource : DataSource) (email : string) : Async<FindResult<UserRecord>> =
-    find dataSource
-        """ select id, name, email, password_hash
-            from users
-            where email = @Email
-            limit 1
-        """
-        [ Binding ("@Email", email) ]
-        mapUser
+let findByEmail (dataContext : DataContext) (email : string) : Async<FindResult<UserRecord>> =
+    fromOptionResult <| asyncResult {
+        let! ctx = dataContext
+
+        return query {
+            for user in ctx.Users do
+            where (user.Email = email)
+            take 1
+            select (user.Id, user.Name, user.Email, user.PasswordHash)
+        }
+        |> Seq.tryHead
+        |> Option.map mapUser
+    }
 
 
 let create (dataSource : DataSource) (registration : ValidRegistration) : AsyncResult<UserRecord> =
@@ -52,7 +58,7 @@ let create (dataSource : DataSource) (registration : ValidRegistration) : AsyncR
               PasswordHash = fields.PasswordHash
             }
 
-    query dataSource
+    findAll dataSource
         """ insert into users (name, email, password_hash)
             values (@Name, @Email, @PasswordHash)
             returning id

@@ -81,10 +81,10 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
 
 
 let webPart =
-    let findByEmail = UsersDataGateway.findByEmail DataAccess.dataSource
+    let findByEmail = UsersDataGateway.findByEmail DataContext.dataContext
     let createUser = deserializeBody
                          UsersApi.Decoders.registration
-                         (UsersApi.create <| UsersService.create DataAccess.dataSource)
+                         (UsersApi.create <| UsersService.create DataAccess.dataSource DataContext.dataContext)
     let homePage = DotLiquid.page "home.html.liquid" ()
 
     choose [

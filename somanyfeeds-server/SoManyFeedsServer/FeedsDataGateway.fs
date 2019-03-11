@@ -28,7 +28,7 @@ let private mapFeed (record : DbDataRecord) : FeedRecord =
 
 
 let listUrls (dataSource : DataSource) (_ : unit) : AsyncResult<string list> =
-    query dataSource
+    findAll dataSource
         """ select distinct url
             from feeds
         """
@@ -40,7 +40,7 @@ let listFeeds (dataSource : DataSource) (userId : int64) : AsyncResult<FeedRecor
     let bindings =
         [ Binding ("@UserId", userId) ]
 
-    query dataSource
+    findAll dataSource
         """ select id, user_id, name, url
             from feeds
             where user_id = @UserId
@@ -88,7 +88,7 @@ let createFeed (dataSource : DataSource) (userId : int64) (fields : FeedFields) 
               Url = fields.Url
             }
 
-    query dataSource
+    findAll dataSource
         """ insert into feeds (user_id, name, url)
             values (@UserId, @Name, @Url)
             returning id

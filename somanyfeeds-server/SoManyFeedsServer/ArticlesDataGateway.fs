@@ -60,7 +60,7 @@ let createOrUpdateArticle (dataSource : DataSource) (fields : ArticleFields) : A
               Date = fields.Date
             }
 
-    query dataSource
+    findAll dataSource
         """ insert into articles (url, title, feed_url, content, date)
             values (@Url, @Title, @FeedUrl, @Content, @Date)
             on conflict (url, feed_url) do update set

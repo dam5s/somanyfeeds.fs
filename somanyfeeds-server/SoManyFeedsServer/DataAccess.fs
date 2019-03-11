@@ -13,5 +13,5 @@ let private connectionString =
 
 let dataSource : DataSource =
     async {
-       return Ok <| (new NpgsqlConnection (connectionString) :> DbConnection)
+       return Ok (new NpgsqlConnection (connectionString) :> DbConnection)
     }

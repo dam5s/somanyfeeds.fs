@@ -20,7 +20,7 @@ let listRecentUnreadArticles (dataSource : DataSource) (userId : int64) : AsyncR
                 limit 20
             """
 
-        query dataSource sql bindings mapArticle
+        findAll dataSource sql bindings mapArticle
 
 
 type ReadArticleRecord =

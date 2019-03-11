@@ -19,7 +19,7 @@ let createMissing (dataSource : DataSource) : AsyncResult<int> =
 
 
 let startSome (dataSource : DataSource) (howMany : int): AsyncResult<List<FeedUrl>> =
-    query
+    findAll
         dataSource
         """
         update feed_jobs

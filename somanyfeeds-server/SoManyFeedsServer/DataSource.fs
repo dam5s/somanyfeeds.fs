@@ -35,15 +35,12 @@ let inBindings (prefix : string) (values : 'T list) : (string * Binding list) =
     args, bindings
 
 
-let private fromOptionResult (result : AsyncResult<'T option>) : Async<FindResult<'T>> =
+let fromOptionResult (result : AsyncResult<'T option>) : Async<FindResult<'T>> =
     async {
         match! result with
-        | Ok (Some value) ->
-            return Found value
-        | Ok None ->
-            return NotFound
-        | Error message ->
-            return FindError message
+        | Ok (Some value) -> return Found value
+        | Ok None -> return NotFound
+        | Error message -> return FindError message
     }
 
 
@@ -86,7 +83,7 @@ let private readFrom (dataSource : DataSource) (sql : string) (bindings : Bindin
     )
 
 
-let query dataSource sql (bindings : Binding list) (mapping : DbDataRecord -> 'T) : AsyncResult<'T list> =
+let findAll dataSource sql (bindings : Binding list) (mapping : DbDataRecord -> 'T) : AsyncResult<'T list> =
     readFrom dataSource sql bindings (fun reader ->
         reader
         |> Seq.cast<DbDataRecord>

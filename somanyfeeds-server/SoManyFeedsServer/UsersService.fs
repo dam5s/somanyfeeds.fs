@@ -4,6 +4,7 @@ open SoManyFeedsServer
 open SoManyFeedsServer.UsersDataGateway
 open SoManyFeedsServer.Registration
 open SoManyFeedsServer.DataSource
+open DataContext
 
 
 type UserCreationResult =
@@ -12,11 +13,11 @@ type UserCreationResult =
     | CreationError of message:string
 
 
-let create (dataSource : DataSource) (registration : Registration) : Async<UserCreationResult> =
+let create (dataSource : DataSource) (dataContext : DataContext) (registration : Registration) : Async<UserCreationResult> =
     async {
         match Registration.validate registration with
         | Ok validReg ->
-            match! UsersDataGateway.findByEmail dataSource (Registration.email validReg) with
+            match! UsersDataGateway.findByEmail dataContext (Registration.email validReg) with
             | Found _ ->
                 return CreationFailure
                     { NameError = None

@@ -36,7 +36,7 @@ module SanitizeArticles =
         printfn "Sanitizing articles..."
 
         let articlesResult =
-            DataSource.query
+            DataSource.findAll
                 DataAccess.dataSource
                 "select id, content from articles"
                 []
