@@ -1,12 +1,9 @@
 module SoManyFeedsServer.UsersDataGateway
 
-open System.Data.Common
 open SoManyFeedsServer.Passwords
 open SoManyFeedsServer.Registration
-open SoManyFeedsServer
-open AsyncResult.Operators
-open DataContext
 open SoManyFeedsServer.DataSource
+open SoManyFeedsServer
 
 
 type UserRecord =
@@ -17,52 +14,40 @@ type UserRecord =
     }
 
 
-let private mapUser (id, name, email, passwordHash) : UserRecord =
-    { Id = id
-      Name = name
-      Email = email
-      PasswordHash = HashedPassword passwordHash
+let private entityToRecord (entity : UserEntity) : UserRecord =
+    { Id = entity.Id
+      Name = entity.Name
+      Email = entity.Email
+      PasswordHash = HashedPassword entity.PasswordHash
     }
 
 
 let findByEmail (dataContext : DataContext) (email : string) : Async<FindResult<UserRecord>> =
-    fromOptionResult <| asyncResult {
+    asyncResult {
         let! ctx = dataContext
 
         return query {
-            for user in ctx.Users do
+            for user in ctx.Public.Users do
             where (user.Email = email)
             take 1
-            select (user.Id, user.Name, user.Email, user.PasswordHash)
         }
         |> Seq.tryHead
-        |> Option.map mapUser
+        |> Option.map entityToRecord
     }
+    |> fromOptionResult
 
 
-let create (dataSource : DataSource) (registration : ValidRegistration) : AsyncResult<UserRecord> =
-    let fields = Registration.fields registration
+let create (dataContext : DataContext) (registration : ValidRegistration) : AsyncResult<UserRecord> =
+    asyncResult {
+        let fields = Registration.fields registration
+        let! ctx = dataContext
 
-    let bindings =
-        [
-        Binding ("@Name", fields.Name)
-        Binding ("@Email", fields.Email)
-        Binding ("@PasswordHash", Passwords.hashedValue fields.PasswordHash)
-        ]
+        let entity = ctx.Public.Users.Create ()
+        entity.Name <- fields.Name
+        entity.Email <- fields.Email
+        entity.PasswordHash <- Passwords.hashedValue fields.PasswordHash
 
-    let mapping =
-        fun (record : DbDataRecord) ->
-            { Id = record.GetInt64(0)
-              Name = fields.Name
-              Email = fields.Email
-              PasswordHash = fields.PasswordHash
-            }
+        ctx.SubmitUpdates ()
 
-    findAll dataSource
-        """ insert into users (name, email, password_hash)
-            values (@Name, @Email, @PasswordHash)
-            returning id
-        """
-        bindings
-        mapping
-        <!> (List.first >> Option.get)
+        return entityToRecord entity
+    }

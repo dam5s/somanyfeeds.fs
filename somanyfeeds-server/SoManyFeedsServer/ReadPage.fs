@@ -14,7 +14,9 @@ type ReadViewModel =
 
 let page (listArticles : AsyncResult<(FeedRecord option * ArticleRecord) list>) (user : Authentication.User) : WebPart =
     fun ctx -> async {
-        match! listArticles with
+        let! listResult = listArticles
+
+        match listResult with
         | Ok records ->
             let viewModel =
                 { UserName = user.Name

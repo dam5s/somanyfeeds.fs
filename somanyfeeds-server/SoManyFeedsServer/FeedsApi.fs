@@ -32,7 +32,9 @@ module Decoders =
 
 let list (listFeeds : AsyncResult<FeedRecord list>) : WebPart =
     fun ctx -> async {
-        match! listFeeds with
+        let! feedsResult = listFeeds
+
+        match feedsResult with
         | Ok feeds -> return! listResponse HTTP_200 Encoders.feed feeds ctx
         | Error message -> return! serverErrorResponse message ctx
     }
@@ -40,7 +42,9 @@ let list (listFeeds : AsyncResult<FeedRecord list>) : WebPart =
 
 let create (createFeed : FeedFields -> AsyncResult<FeedRecord>) (fields : FeedFields) : WebPart =
     fun ctx -> async {
-        match! createFeed fields with
+        let! createResult = createFeed fields
+
+        match createResult with
         | Ok feed -> return! objectResponse HTTP_201 Encoders.feed feed ctx
         | Error message -> return! serverErrorResponse message ctx
     }
@@ -48,7 +52,9 @@ let create (createFeed : FeedFields -> AsyncResult<FeedRecord>) (fields : FeedFi
 
 let update (updateFeed : FeedFields -> AsyncResult<FeedRecord>) (fields : FeedFields) : WebPart =
     fun ctx -> async {
-        match! updateFeed fields with
+        let! updateResult = updateFeed fields
+
+        match updateResult with
         | Ok feed -> return! objectResponse HTTP_200 Encoders.feed feed ctx
         | Error message -> return! serverErrorResponse message ctx
     }
@@ -56,7 +62,9 @@ let update (updateFeed : FeedFields -> AsyncResult<FeedRecord>) (fields : FeedFi
 
 let delete (deleteFeed : unit -> AsyncResult<unit>) : WebPart =
     fun ctx -> async {
-        match! deleteFeed () with
+        let! deleteResult = deleteFeed ()
+
+        match deleteResult with
         | Ok _ -> return! Successful.NO_CONTENT ctx
         | Error message -> return! serverErrorResponse message ctx
     }

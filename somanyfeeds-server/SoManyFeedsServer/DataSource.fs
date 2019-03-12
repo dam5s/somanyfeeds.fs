@@ -1,6 +1,8 @@
 module SoManyFeedsServer.DataSource
 
+open Npgsql
 open System.Data.Common
+open FSharp.Data.Sql
 
 
 type DataSource = AsyncResult<DbConnection>
@@ -37,7 +39,9 @@ let inBindings (prefix : string) (values : 'T list) : (string * Binding list) =
 
 let fromOptionResult (result : AsyncResult<'T option>) : Async<FindResult<'T>> =
     async {
-        match! result with
+        let! r = result
+
+        match r with
         | Ok (Some value) -> return Found value
         | Ok None -> return NotFound
         | Error message -> return FindError message
@@ -116,3 +120,38 @@ let update dataSource sql (bindings : Binding list) : AsyncResult<int> =
         use command = createCommand connection sql bindings
         command.ExecuteNonQuery ()
     )
+
+
+[<Literal>]
+let private resolutionPath = __SOURCE_DIRECTORY__ + "/../Libraries"
+
+[<Literal>]
+let private defaultConnectionString = "User ID=somanyfeeds;Host=localhost;Port=5432;Database=somanyfeeds_dev;Password=secret"
+
+
+let private connectionString =
+    Env.varDefault "DB_CONNECTION" (always defaultConnectionString)
+
+
+type SoManyFeedsDb =
+    SqlDataProvider<Common.DatabaseProviderTypes.POSTGRESQL,
+                    defaultConnectionString,
+                    ResolutionPath = resolutionPath,
+                    Owner="public">
+
+
+type DataContext = AsyncResult<SoManyFeedsDb.dataContext>
+type UserEntity = SoManyFeedsDb.dataContext.``public.usersEntity``
+
+
+let dataContext : DataContext =
+    async {
+       return unsafeOperation "Get data context" { return fun _ ->
+           SoManyFeedsDb.GetDataContext(connectionString)
+       }
+    }
+
+let dataSource : DataSource =
+    async {
+       return Ok (new NpgsqlConnection (connectionString) :> DbConnection)
+    }

@@ -5,6 +5,7 @@ open Suave.Filters
 open Suave.Operators
 open Suave.RequestErrors
 open SoManyFeedsServer
+open SoManyFeedsServer.DataSource
 open SoManyFeedsServer.Json
 
 
@@ -14,19 +15,19 @@ let private maxFeeds : int =
 
 let private authenticatedPage (user : Authentication.User) : WebPart =
 
-    let listFeeds = FeedsDataGateway.listFeeds DataAccess.dataSource user.Id
-    let createFeed = FeedsService.createFeed DataAccess.dataSource maxFeeds user.Id
-    let updateFeed = FeedsDataGateway.updateFeed DataAccess.dataSource user.Id
-    let deleteFeed = FeedsDataGateway.deleteFeed DataAccess.dataSource user.Id
+    let listFeeds = FeedsDataGateway.listFeeds dataSource user.Id
+    let createFeed = FeedsService.createFeed dataSource maxFeeds user.Id
+    let updateFeed = FeedsDataGateway.updateFeed dataSource user.Id
+    let deleteFeed = FeedsDataGateway.deleteFeed dataSource user.Id
 
-    let listRecentArticles = UserArticlesService.listRecent DataAccess.dataSource user
+    let listRecentArticles = UserArticlesService.listRecent dataSource user
     let createReadArticle articleId =
         UserArticlesDataGateway.createReadArticle
-            DataAccess.dataSource
+            dataSource
             { UserId = user.Id ; ArticleId = articleId }
     let deleteReadArticle articleId =
         UserArticlesDataGateway.deleteReadArticle
-            DataAccess.dataSource
+            dataSource
             { UserId = user.Id ; ArticleId = articleId }
 
 
@@ -81,10 +82,10 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
 
 
 let webPart =
-    let findByEmail = UsersDataGateway.findByEmail DataContext.dataContext
+    let findByEmail = UsersDataGateway.findByEmail DataSource.dataContext
     let createUser = deserializeBody
                          UsersApi.Decoders.registration
-                         (UsersApi.create <| UsersService.create DataAccess.dataSource DataContext.dataContext)
+                         (UsersApi.create <| UsersService.create DataSource.dataContext)
     let homePage = DotLiquid.page "home.html.liquid" ()
 
     choose [

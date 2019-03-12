@@ -15,7 +15,9 @@ type ManageViewModel =
 
 let page (maxFeeds : int) (listFeeds : AsyncResult<FeedRecord list>) (user : Authentication.User) : WebPart =
     fun ctx -> async {
-        match! listFeeds with
+        let! listResult = listFeeds
+
+        match listResult with
         | Ok records ->
             let viewModel =
                 { UserName = user.Name

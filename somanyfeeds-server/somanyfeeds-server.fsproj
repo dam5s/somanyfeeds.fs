@@ -1,9 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <OutputType>Exe</OutputType>
     <ServerGarbageCollection>true</ServerGarbageCollection>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <FscToolPath>/usr/bin</FscToolPath>
+    <FscToolExe>fsharpc</FscToolExe>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,10 +23,10 @@
     <PackageReference Include="Suave.DotLiquid" Version="2.5.3" />
     <PackageReference Include="Chiron" Version="6.3.1" />
     <PackageReference Include="Npgsql" Version="4.0.5" />
+    <PackageReference Include="SQLProvider" Version="1.1.59" />
 
     <ProjectReference Include="../prelude/prelude.fsproj" />
     <ProjectReference Include="../feeds-processing/feeds-processing.fsproj" />
-    <ProjectReference Include="../somanyfeeds-db-provider/somanyfeeds-db-provider.fsproj" />
 
     <Compile Include="SoManyFeedsServer/Passwords.fs" />
     <Compile Include="SoManyFeedsServer/Registration.fs" />
@@ -47,7 +52,6 @@
     <Compile Include="SoManyFeedsServer/ReadPage.fs" />
     <Compile Include="SoManyFeedsServer/ManagePage.fs" />
 
-    <Compile Include="SoManyFeedsServer/DataAccess.fs" />
     <Compile Include="SoManyFeedsServer/FeedsProcessor.fs" />
     <Compile Include="SoManyFeedsServer/WebApp.fs" />
     <Compile Include="SoManyFeedsServer/WebConfig.fs" />

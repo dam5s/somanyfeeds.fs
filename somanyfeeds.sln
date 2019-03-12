@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-#
+# 
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "damo-io-server", "damo-io-server\damo-io-server.fsproj", "{A7157346-F377-4B8A-8CF2-1DB962115171}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "frontends", "frontends\frontends.fsproj", "{3FFF4355-EB86-42A6-9E8E-0EAB5D20615D}"
@@ -16,8 +16,6 @@ EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "somanyfeeds-server-integration-tests", "somanyfeeds-server-integration-tests\somanyfeeds-server-integration-tests.fsproj", "{A6573A90-30DE-4889-99E0-445094C09318}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "prelude", "prelude\prelude.fsproj", "{3ECDD435-CF99-49FA-A0CE-DB5C7A643B2E}"
-EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "somanyfeeds-db-provider", "somanyfeeds-db-provider\somanyfeeds-db-provider.fsproj", "{35F28CCE-B818-433A-9740-695EAF37D472}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -137,17 +135,5 @@ Global
 		{3ECDD435-CF99-49FA-A0CE-DB5C7A643B2E}.Release|x64.Build.0 = Release|Any CPU
 		{3ECDD435-CF99-49FA-A0CE-DB5C7A643B2E}.Release|x86.ActiveCfg = Release|Any CPU
 		{3ECDD435-CF99-49FA-A0CE-DB5C7A643B2E}.Release|x86.Build.0 = Release|Any CPU
-		{35F28CCE-B818-433A-9740-695EAF37D472}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{35F28CCE-B818-433A-9740-695EAF37D472}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{35F28CCE-B818-433A-9740-695EAF37D472}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{35F28CCE-B818-433A-9740-695EAF37D472}.Debug|x64.Build.0 = Debug|Any CPU
-		{35F28CCE-B818-433A-9740-695EAF37D472}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{35F28CCE-B818-433A-9740-695EAF37D472}.Debug|x86.Build.0 = Debug|Any CPU
-		{35F28CCE-B818-433A-9740-695EAF37D472}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{35F28CCE-B818-433A-9740-695EAF37D472}.Release|Any CPU.Build.0 = Release|Any CPU
-		{35F28CCE-B818-433A-9740-695EAF37D472}.Release|x64.ActiveCfg = Release|Any CPU
-		{35F28CCE-B818-433A-9740-695EAF37D472}.Release|x64.Build.0 = Release|Any CPU
-		{35F28CCE-B818-433A-9740-695EAF37D472}.Release|x86.ActiveCfg = Release|Any CPU
-		{35F28CCE-B818-433A-9740-695EAF37D472}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

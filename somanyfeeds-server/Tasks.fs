@@ -23,7 +23,7 @@ module SanitizeArticles =
         articles
         |> List.map (fun record ->
             DataSource.update
-                DataAccess.dataSource
+                dataSource
                 "update articles set content = @Content where id = @Id"
                 [
                 Binding ("@Content", Html.sanitize record.Content)
@@ -37,7 +37,7 @@ module SanitizeArticles =
 
         let articlesResult =
             DataSource.findAll
-                DataAccess.dataSource
+                dataSource
                 "select id, content from articles"
                 []
                 (fun record -> { Id = record.GetInt64 0 ; Content = record.GetString 1 })
