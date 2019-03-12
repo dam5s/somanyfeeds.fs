@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
@@ -14,7 +14,6 @@
     <PackageReference Include="DotLiquid" Version="2.0.298" />
     <PackageReference Include="Logary" Version="5.0.0-rc.1" />
     <PackageReference Include="Logary.Adapters.Facade" Version="5.0.0-rc.1" />
-    <PackageReference Include="Logary.Adapters.Suave" Version="4.0.200" />
     <PackageReference Include="Suave" Version="2.5.3" />
     <PackageReference Include="Suave.DotLiquid" Version="2.5.3" />
     <PackageReference Include="Chiron" Version="6.3.1" />

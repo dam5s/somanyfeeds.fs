@@ -33,7 +33,7 @@ let port : int =
     Env.varDefaultParse int "PORT" <| always "8080"
 
 
-let create (logger : Logging.Logger) : SuaveConfig =
+let create : SuaveConfig =
     setTemplatesDir templatesFolder
     setCSharpNamingConvention ()
 
@@ -44,5 +44,4 @@ let create (logger : Logging.Logger) : SuaveConfig =
         bindings = [ binding ]
         serverKey = ServerKey.fromBase64 (Env.varRequired "COOKIE_ENCRYPTION_KEY")
         cookieSerialiser = new JsonCookieSerialiser()
-        logger = logger
     }

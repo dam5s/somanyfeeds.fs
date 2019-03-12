@@ -1,7 +1,6 @@
 ﻿module Program
 
 open Suave
-open Suave.Logging
 open SoManyFeedsServer
 
 
@@ -9,14 +8,12 @@ open SoManyFeedsServer
 let main args =
     LoggingConfig.configure ()
 
-    let logger = Log.create "suave"
-
     args
     |> Array.tryHead
     |> Option.bind (fun name -> Tasks.run name)
     |> Option.defaultWith (fun _ ->
         Async.Start FeedsProcessor.backgroundProcessing
-        startWebServer (WebConfig.create logger) WebApp.webPart
+        startWebServer WebConfig.create WebApp.webPart
     )
 
     0

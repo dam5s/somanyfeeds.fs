@@ -8,7 +8,7 @@ open Fake.IO
 
 
 let private clean _ =
-    ["." ; "prelude" ; "damo-io-server" ; "somanyfeeds-server" ; "feeds-processing"; "feeds-processing-tests" ; "frontends"]
+    ["." ; "prelude" ; "damo-io-server" ; "somanyfeeds-server"; "somanyfeeds-server-integration-tests" ; "feeds-processing"; "feeds-processing-tests" ; "frontends"]
     |> List.collect (fun p -> [ Path.Combine (p, "bin") ; Path.Combine (p, "obj") ])
     |> List.map Directory.delete
     |> ignore

@@ -29,8 +29,7 @@ let private chromeOptions =
 once (fun () ->
     LoggingConfig.configure ()
 
-    let logger = Log.create "suave"
-    let config = SoManyFeedsServer.WebConfig.create logger
+    let config = SoManyFeedsServer.WebConfig.create
     let webPart = SoManyFeedsServer.WebApp.webPart
 
     let listening, server = startWebServerAsync config webPart
