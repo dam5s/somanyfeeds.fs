@@ -26,13 +26,15 @@ let findByEmail (dataContext : DataContext) (email : string) : Async<FindResult<
     asyncResult {
         let! ctx = dataContext
 
-        return query {
-            for user in ctx.Public.Users do
-            where (user.Email = email)
-            take 1
+        return! dataAccessOperation { return fun _ ->
+            query {
+                for user in ctx.Public.Users do
+                where (user.Email = email)
+                take 1
+            }
+            |> Seq.tryHead
+            |> Option.map entityToRecord
         }
-        |> Seq.tryHead
-        |> Option.map entityToRecord
     }
     |> fromOptionResult
 
@@ -42,12 +44,14 @@ let create (dataContext : DataContext) (registration : ValidRegistration) : Asyn
         let fields = Registration.fields registration
         let! ctx = dataContext
 
-        let entity = ctx.Public.Users.Create ()
-        entity.Name <- fields.Name
-        entity.Email <- fields.Email
-        entity.PasswordHash <- Passwords.hashedValue fields.PasswordHash
+        return! dataAccessOperation { return fun _ ->
+            let entity = ctx.Public.Users.Create ()
+            entity.Name <- fields.Name
+            entity.Email <- fields.Email
+            entity.PasswordHash <- Passwords.hashedValue fields.PasswordHash
 
-        ctx.SubmitUpdates ()
+            ctx.SubmitUpdates ()
 
-        return entityToRecord entity
+            entityToRecord entity
+        }
     }

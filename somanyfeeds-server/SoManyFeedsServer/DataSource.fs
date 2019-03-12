@@ -155,3 +155,7 @@ let dataSource : DataSource =
     async {
        return Ok (new NpgsqlConnection (connectionString) :> DbConnection)
     }
+
+
+let dataAccessOperation =
+    unsafeAsyncOperation "Data access"
