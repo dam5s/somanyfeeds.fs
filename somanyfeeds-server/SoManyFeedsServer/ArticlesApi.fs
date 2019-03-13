@@ -31,7 +31,7 @@ module Encoders =
         *> Json.write "readUrl" (sprintf "/api/articles/%d/read" article.Id)
 
 
-let list (listArticles : AsyncResult<(FeedRecord option * ArticleRecord) list>) : WebPart =
+let list (listArticles : AsyncResult<(FeedRecord option * ArticleRecord) seq>) : WebPart =
     fun ctx -> async {
         let! articlesResult = listArticles
 

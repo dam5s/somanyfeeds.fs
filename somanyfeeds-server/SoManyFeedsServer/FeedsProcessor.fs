@@ -75,7 +75,7 @@ let private articleToFields (FeedUrl feedUrl) (article : Article) : ArticleField
 
 let private persistArticle (fields : ArticleFields) : Async<unit> =
     async {
-        let! result = createOrUpdateArticle dataSource fields
+        let! result = createOrUpdateArticle dataContext fields
                       |> AsyncResult.mapError (logArticleError fields.Url)
 
         result |> ignore

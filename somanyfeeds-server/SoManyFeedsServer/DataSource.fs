@@ -137,11 +137,15 @@ let private connectionString =
     Env.varDefault "DB_CONNECTION" (always defaultConnectionString)
 
 
-type SoManyFeedsDb =
+type private SoManyFeedsDb =
     SqlDataProvider<Common.DatabaseProviderTypes.POSTGRESQL,
                     defaultConnectionString,
                     ResolutionPath = resolutionPath,
-                    Owner="public">
+                    UseOptionTypes = true>
+
+type FeedEntity = SoManyFeedsDb.dataContext.``public.feedsEntity``
+type UserEntity = SoManyFeedsDb.dataContext.``public.usersEntity``
+type ArticleEntity = SoManyFeedsDb.dataContext.``public.articlesEntity``
 
 
 type DataContext = AsyncResult<SoManyFeedsDb.dataContext>

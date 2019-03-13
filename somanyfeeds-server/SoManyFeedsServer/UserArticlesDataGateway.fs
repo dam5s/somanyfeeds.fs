@@ -1,26 +1,39 @@
 module UserArticlesDataGateway
 
+open SoManyFeedsServer
 open SoManyFeedsServer.ArticlesDataGateway
 open SoManyFeedsServer.DataSource
+open FSharp.Data.Sql
 
 
-let listRecentUnreadArticles (dataSource : DataSource) (userId : int64) : AsyncResult<ArticleRecord list> =
-        let bindings =
-            [ Binding ("@UserId", userId) ]
+let listRecentUnreadArticles (dataContext : DataContext) (userId : int64) : AsyncResult<ArticleRecord seq> =
+    asyncResult {
+        let! ctx = dataContext
 
-        let sql =
-            """ select a.id, a.url, a.title, a.feed_url, a.content, a.date
-                from articles a
-                join feeds f on f.url = a.feed_url
-                join users u on u.id = f.user_id
-                left join read_articles r on r.user_id = f.user_id and r.article_id = a.id
-                where u.id = @UserId
-                and r.article_id is null
-                order by date desc
-                limit 20
-            """
+        return! dataAccessOperation { return fun _ ->
+            let userReadArticleIds =
+                query {
+                    for readArticle in ctx.Public.ReadArticles do
+                    where (readArticle.UserId = userId)
+                    select readArticle.ArticleId
+                }
 
-        findAll dataSource sql bindings mapArticle
+            query {
+                for article in ctx.Public.Articles do
+
+                join feed in ctx.Public.Feeds on (article.FeedUrl = feed.Url)
+                join user in ctx.Public.Users on (feed.UserId = user.Id)
+
+                where (user.Id = userId && (article.Id |<>| userReadArticleIds))
+
+                sortByDescending article.Date
+                take 20
+
+                select article
+            }
+            |> Seq.map ArticlesDataGateway.entityToRecord
+        }
+    }
 
 
 type ReadArticleRecord =
@@ -29,23 +42,32 @@ type ReadArticleRecord =
     }
 
 
-let createReadArticle (dataSource : DataSource) (record : ReadArticleRecord) : AsyncResult<unit> =
-    let bindings =
-        [
-        Binding ("@UserId", record.UserId)
-        Binding ("@ArticleId", record.ArticleId)
-        ]
+let createReadArticle (dataContext : DataContext) (record : ReadArticleRecord) : AsyncResult<unit> =
+    asyncResult {
+        let! ctx = dataContext
 
-    update dataSource "insert into read_articles (user_id, article_id) values (@UserId, @ArticleId)" bindings
-    |> AsyncResult.map (always ())
+        return! dataAccessOperation { return fun _ ->
+            let entity = ctx.Public.ReadArticles.Create ()
+            entity.UserId <- record.UserId
+            entity.ArticleId <- record.ArticleId
+            ctx.SubmitUpdates ()
+        }
+    }
 
 
-let deleteReadArticle (dataSource : DataSource) (record : ReadArticleRecord) : AsyncResult<unit> =
-    let bindings =
-        [
-        Binding ("@UserId", record.UserId)
-        Binding ("@ArticleId", record.ArticleId)
-        ]
+let deleteReadArticle (dataContext : DataContext) (record : ReadArticleRecord) : AsyncResult<unit> =
+    asyncResult {
+        let! ctx = dataContext
 
-    update dataSource "delete from read_articles where user_id = @UserId and article_id = @ArticleId" bindings
-    |> AsyncResult.map (always ())
+        return! dataAccessOperation { return fun _ ->
+            query {
+                for readArticle in ctx.Public.ReadArticles do
+                where (readArticle.UserId = record.UserId && readArticle.ArticleId = record.ArticleId)
+                take 1
+            }
+            |> Seq.map (fun e -> e.Delete())
+            |> ignore
+
+            ctx.SubmitUpdates()
+        }
+    }

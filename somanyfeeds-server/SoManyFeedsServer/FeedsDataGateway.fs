@@ -18,9 +18,6 @@ type FeedFields =
     }
 
 
-type private FeedEntity = SoManyFeedsDb.dataContext.``public.feedsEntity``
-
-
 let private entityToRecord (entity : FeedEntity) : FeedRecord =
     { Id = entity.Id
       UserId = entity.UserId

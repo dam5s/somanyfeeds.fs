@@ -4,7 +4,6 @@ open SoManyFeedsServer.Passwords
 open SoManyFeedsServer.Registration
 open SoManyFeedsServer.DataSource
 open SoManyFeedsServer
-open SoManyFeedsServer.DataSource
 
 
 type UserRecord =
@@ -14,8 +13,6 @@ type UserRecord =
       PasswordHash : HashedPassword
     }
 
-
-type private UserEntity = SoManyFeedsDb.dataContext.``public.usersEntity``
 
 let private entityToRecord (entity : UserEntity) : UserRecord =
     { Id = entity.Id

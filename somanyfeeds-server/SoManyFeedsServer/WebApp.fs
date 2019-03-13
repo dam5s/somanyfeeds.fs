@@ -20,14 +20,14 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
     let updateFeed = FeedsDataGateway.updateFeed dataContext user.Id
     let deleteFeed = FeedsDataGateway.deleteFeed dataContext user.Id
 
-    let listRecentArticles = UserArticlesService.listRecent dataSource user
+    let listRecentArticles = UserArticlesService.listRecent dataContext user
     let createReadArticle articleId =
         UserArticlesDataGateway.createReadArticle
-            dataSource
+            dataContext
             { UserId = user.Id ; ArticleId = articleId }
     let deleteReadArticle articleId =
         UserArticlesDataGateway.deleteReadArticle
-            dataSource
+            dataContext
             { UserId = user.Id ; ArticleId = articleId }
 
 

@@ -3,7 +3,7 @@ module SoManyFeedsServer.ArticlesDataGateway
 open System
 open System.Data.Common
 open SoManyFeedsServer.DataSource
-open AsyncResult.Operators
+open FSharp.Data.Sql.Common
 
 
 type ArticleRecord =
@@ -40,35 +40,31 @@ let mapArticle (record : DbDataRecord) : ArticleRecord =
     }
 
 
-let createOrUpdateArticle (dataSource : DataSource) (fields : ArticleFields) : AsyncResult<ArticleRecord> =
-    let bindings =
-        [
-        Binding ("@Url", fields.Url)
-        Binding ("@Title", fields.Title)
-        Binding ("@FeedUrl", fields.FeedUrl)
-        Binding ("@Content", fields.Content)
-        optionBinding ("@Date", fields.Date)
-        ]
+let entityToRecord (entity : ArticleEntity) : ArticleRecord =
+    { Id = entity.Id
+      Url = entity.Url
+      Title = entity.Title
+      FeedUrl = entity.FeedUrl
+      Content = entity.Content
+      Date = entity.Date |> Option.map (fun d -> new DateTimeOffset(d))
+    }
 
-    let mapping =
-        fun (record : DbDataRecord) ->
-            { Id = record.GetInt64(0)
-              Url = fields.Url
-              Title = fields.Title
-              FeedUrl = fields.FeedUrl
-              Content = fields.Content
-              Date = fields.Date
-            }
 
-    findAll dataSource
-        """ insert into articles (url, title, feed_url, content, date)
-            values (@Url, @Title, @FeedUrl, @Content, @Date)
-            on conflict (url, feed_url) do update set
-                title = excluded.title,
-                content = excluded.content,
-                date = excluded.date
-            returning id
-        """
-        bindings
-        mapping
-        <!> (List.first >> Option.get)
+let createOrUpdateArticle (dataContext : DataContext) (fields : ArticleFields) : AsyncResult<ArticleRecord> =
+    asyncResult {
+        let! ctx = dataContext
+
+        return! dataAccessOperation { return fun _ ->
+            let entity = ctx.Public.Articles.Create ()
+            entity.Url <- fields.Url
+            entity.Title <- fields.Title
+            entity.FeedUrl <- fields.FeedUrl
+            entity.Content <- fields.Content
+            entity.Date <- fields.Date |> Option.map (fun d -> d.UtcDateTime)
+            entity.OnConflict <- OnConflict.Update
+
+            ctx.SubmitUpdates ()
+
+            entityToRecord entity
+        }
+    }
