@@ -1,6 +1,5 @@
 module SoManyFeedsServer.FeedsDataGateway
 
-open System.Data.Common
 open SoManyFeedsServer.DataSource
 open AsyncResult.Operators
 
@@ -19,118 +18,124 @@ type FeedFields =
     }
 
 
-let private mapFeed (record : DbDataRecord) : FeedRecord =
-    { Id = record.GetInt64 0
-      UserId = record.GetInt64 1
-      Name = record.GetString 2
-      Url = record.GetString 3
+type private FeedEntity = SoManyFeedsDb.dataContext.``public.feedsEntity``
+
+
+let private entityToRecord (entity : FeedEntity) : FeedRecord =
+    { Id = entity.Id
+      UserId = entity.UserId
+      Name = entity.Name
+      Url = entity.Url
     }
 
 
-let listUrls (dataSource : DataSource) (_ : unit) : AsyncResult<string list> =
-    findAll dataSource
-        """ select distinct url
-            from feeds
-        """
-        []
-        (fun record -> record.GetString 0)
+let listFeeds (dataContext : DataContext) (userId : int64) : AsyncResult<FeedRecord seq> =
+    asyncResult {
+        let! ctx = dataContext
 
-
-let listFeeds (dataSource : DataSource) (userId : int64) : AsyncResult<FeedRecord list> =
-    let bindings =
-        [ Binding ("@UserId", userId) ]
-
-    findAll dataSource
-        """ select id, user_id, name, url
-            from feeds
-            where user_id = @UserId
-        """
-        bindings
-        mapFeed
-
-
-let findFeed (dataSource : DataSource) (userId : int64) (feedId : int64) : Async<FindResult<FeedRecord>> =
-    let bindings =
-        [
-        Binding ("@UserId", userId)
-        Binding ("@FeedId", feedId)
-        ]
-
-    find dataSource
-        """ select id, user_id, name, url
-            from feeds
-            where id = @FeedId and user_id = @UserId
-            limit 1
-        """
-        bindings
-        mapFeed
-
-
-let countFeeds (dataSource : DataSource) (userId : int64) : AsyncResult<int64> =
-    count dataSource
-        "select count(1) from feeds where user_id = @UserId"
-        [ Binding ("@UserId", userId) ]
-
-
-let createFeed (dataSource : DataSource) (userId : int64) (fields : FeedFields) : AsyncResult<FeedRecord> =
-    let bindings =
-        [
-        Binding ("@UserId", userId)
-        Binding ("@Name", fields.Name)
-        Binding ("@Url", fields.Url)
-        ]
-
-    let mapping =
-        fun (record : DbDataRecord) ->
-            { Id = record.GetInt64(0)
-              UserId = userId
-              Name = fields.Name
-              Url = fields.Url
+        return! dataAccessOperation { return fun _ ->
+            query {
+                for feed in ctx.Public.Feeds do
+                where (feed.UserId = userId)
             }
-
-    findAll dataSource
-        """ insert into feeds (user_id, name, url)
-            values (@UserId, @Name, @Url)
-            returning id
-        """
-        bindings
-        mapping
-        <!> (List.first >> Option.get)
-
-
-let updateFeed (dataSource : DataSource) (userId : int64) (feedId : int64) (fields : FeedFields) : AsyncResult<FeedRecord> =
-    let bindings =
-        [
-        Binding ("@FeedId", feedId)
-        Binding ("@UserId", userId)
-        Binding ("@Name", fields.Name)
-        Binding ("@Url", fields.Url)
-        ]
-
-    let updatedRecord =
-        { Id = feedId
-          UserId = userId
-          Name = fields.Name
-          Url = fields.Url
+            |> Seq.map entityToRecord
         }
-
-    update dataSource
-        """ update feeds
-            set name = @Name, url = @Url
-            where user_id = @UserId and id = @FeedId
-        """
-        bindings
-        <!> always updatedRecord
+    }
 
 
-let deleteFeed (dataSource : DataSource) (userId : int64) (feedId : int64) : AsyncResult<unit> =
-    let bindings =
-        [
-        Binding ("@FeedId", feedId)
-        Binding ("@UserId", userId)
-        ]
+let findFeed (dataContext : DataContext) (userId : int64) (feedId : int64) : Async<FindResult<FeedRecord>> =
+    asyncResult {
+        let! ctx = dataContext
 
-    update dataSource
-        "delete from feeds where user_id = @UserId and id = @FeedId"
-        bindings
-        <!> always ()
+        return! dataAccessOperation { return fun _ ->
+            query {
+                for feed in ctx.Public.Feeds do
+                where (feed.UserId = userId && feed.Id = feedId)
+                take 1
+            }
+            |> Seq.tryHead
+            |> Option.map entityToRecord
+        }
+    }
+    |> FindResult.asyncFromAsyncResultOfOption
+
+
+let countFeeds (dataContext : DataContext) (userId : int64) : AsyncResult<int64> =
+    asyncResult {
+        let! ctx = dataContext
+
+        return! dataAccessOperation { return fun _ ->
+            query {
+                for feed in ctx.Public.Feeds do
+                where (feed.UserId = userId)
+                count
+            }
+            |> int64
+        }
+    }
+
+
+let createFeed (dataContext : DataContext) (userId : int64) (fields : FeedFields) : AsyncResult<FeedRecord> =
+    asyncResult {
+        let! ctx = dataContext
+
+        return! dataAccessOperation { return fun _ ->
+            let entity = ctx.Public.Feeds.Create ()
+            entity.UserId <- userId
+            entity.Name <- fields.Name
+            entity.Url <- fields.Url
+
+            ctx.SubmitUpdates ()
+
+            entityToRecord entity
+        }
+    }
+
+
+let updateFeed (dataContext : DataContext) (userId : int64) (feedId : int64) (fields : FeedFields) : AsyncResult<FeedRecord> =
+    let entityOptionToAsyncResult result =
+        match result with
+        | Some e -> AsyncResult.result (entityToRecord e)
+        | None -> AsyncResult.error "Record not found"
+
+    asyncResult {
+        let! ctx = dataContext
+
+        return! dataAccessOperation { return fun _ ->
+            query {
+                for feed in ctx.Public.Feeds do
+                where (feed.Id = feedId && feed.UserId = userId)
+                take 1
+            }
+            |> Seq.tryHead
+            |> Option.map (fun entity ->
+                entity.Name <- fields.Name
+                entity.Url <- fields.Url
+
+                ctx.SubmitUpdates ()
+
+                entity
+            )
+        }
+    }
+    |> AsyncResult.bind entityOptionToAsyncResult
+
+
+let deleteFeed (dataContext : DataContext) (userId : int64) (feedId : int64) : AsyncResult<unit> =
+    asyncResult {
+        let! ctx = dataContext
+
+        return! dataAccessOperation { return fun _ ->
+            query {
+                for feed in ctx.Public.Feeds do
+                where (feed.Id = feedId && feed.UserId = userId)
+                take 1
+            }
+            |> Seq.tryHead
+            |> Option.map (fun entity -> entity.Delete ())
+            |> ignore
+
+            ctx.SubmitUpdates ()
+        }
+    }
+    <!> always ()

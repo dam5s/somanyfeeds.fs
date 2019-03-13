@@ -14,6 +14,20 @@ type FindResult<'T> =
     | FindError of message:string
 
 
+[<RequireQualifiedAccess>]
+module FindResult =
+    let asyncFromAsyncResultOfOption (result : AsyncResult<'T option>) : Async<FindResult<'T>> =
+        async {
+            let! r = result
+
+            match r with
+            | Ok (Some value) -> return Found value
+            | Ok None -> return NotFound
+            | Error message -> return FindError message
+        }
+
+
+
 type Binding =
     Binding of name:string * value:obj
 
@@ -35,17 +49,6 @@ let inBindings (prefix : string) (values : 'T list) : (string * Binding list) =
         |> List.mapi (fun index value -> Binding (sprintf "%s%d" prefix index, value))
 
     args, bindings
-
-
-let fromOptionResult (result : AsyncResult<'T option>) : Async<FindResult<'T>> =
-    async {
-        let! r = result
-
-        match r with
-        | Ok (Some value) -> return Found value
-        | Ok None -> return NotFound
-        | Error message -> return FindError message
-    }
 
 
 let private usingConnection (dataSource : DataSource) (mapping : DbConnection -> 'T) : AsyncResult<'T> =
@@ -97,12 +100,13 @@ let findAll dataSource sql (bindings : Binding list) (mapping : DbDataRecord -> 
 
 
 let find dataSource sql (bindings : Binding list) (mapping : DbDataRecord -> 'T) : Async<FindResult<'T>> =
-    fromOptionResult <| readFrom dataSource sql bindings (fun reader ->
+    readFrom dataSource sql bindings (fun reader ->
         reader
         |> Seq.cast<DbDataRecord>
         |> Seq.map mapping
         |> Seq.tryHead
     )
+    |> FindResult.asyncFromAsyncResultOfOption
 
 
 let count dataSource sql (bindings : Binding list) : AsyncResult<int64> =
@@ -141,7 +145,6 @@ type SoManyFeedsDb =
 
 
 type DataContext = AsyncResult<SoManyFeedsDb.dataContext>
-type UserEntity = SoManyFeedsDb.dataContext.``public.usersEntity``
 
 
 let dataContext : DataContext =

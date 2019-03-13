@@ -6,12 +6,12 @@ open SoManyFeedsServer.FeedsDataGateway
 open SoManyFeedsServer.DataSource
 
 
-let private articlesWithFeeds (feeds : FeedRecord list) (articles : ArticleRecord list) : (FeedRecord option * ArticleRecord) list =
+let private articlesWithFeeds (feeds : FeedRecord seq) (articles : ArticleRecord list) : (FeedRecord option * ArticleRecord) list =
     articles
     |> List.map (fun article ->
         let feed =
             feeds
-            |> List.tryFind (fun feed -> feed.Url = article.FeedUrl)
+            |> Seq.tryFind (fun feed -> feed.Url = article.FeedUrl)
 
         feed, article
     )
@@ -19,7 +19,7 @@ let private articlesWithFeeds (feeds : FeedRecord list) (articles : ArticleRecor
 
 let listRecent (dataSource : DataSource) (user : User) : AsyncResult<(FeedRecord option * ArticleRecord) list> =
     asyncResult {
-        let! feeds = FeedsDataGateway.listFeeds dataSource user.Id
+        let! feeds = FeedsDataGateway.listFeeds dataContext user.Id
         let! articles = UserArticlesDataGateway.listRecentUnreadArticles dataSource user.Id
         return articlesWithFeeds feeds articles
     }

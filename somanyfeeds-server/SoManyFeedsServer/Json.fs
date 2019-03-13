@@ -57,9 +57,10 @@ let serializeObject (encoder : 'a -> Json<unit>) (record : 'a) : string =
     |> Json.format
 
 
-let serializeList (encoder : 'a -> Json<unit>) (records : 'a list) : string =
+let serializeList (encoder : 'a -> Json<unit>) (records : 'a seq) : string =
     records
-    |> List.map (Json.serializeWith encoder)
+    |> Seq.map (Json.serializeWith encoder)
+    |> Seq.toList
     |> Json.Array
     |> Json.format
 
@@ -75,7 +76,7 @@ let objectResponse (status : HttpCode) (encoder : 'a -> Json<unit>) (object : 'a
     |> jsonResponse status
 
 
-let listResponse (status : HttpCode) (encoder : 'a -> Json<unit>) (list : 'a list) : WebPart =
+let listResponse (status : HttpCode) (encoder : 'a -> Json<unit>) (list : 'a seq) : WebPart =
     list
     |> serializeList encoder
     |> jsonResponse status

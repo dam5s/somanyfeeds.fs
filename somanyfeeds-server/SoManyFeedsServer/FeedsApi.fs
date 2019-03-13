@@ -30,7 +30,7 @@ module Decoders =
         decoder json
 
 
-let list (listFeeds : AsyncResult<FeedRecord list>) : WebPart =
+let list (listFeeds : AsyncResult<FeedRecord seq>) : WebPart =
     fun ctx -> async {
         let! feedsResult = listFeeds
 

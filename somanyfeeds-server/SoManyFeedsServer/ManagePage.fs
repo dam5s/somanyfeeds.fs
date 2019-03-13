@@ -13,7 +13,7 @@ type ManageViewModel =
     }
 
 
-let page (maxFeeds : int) (listFeeds : AsyncResult<FeedRecord list>) (user : Authentication.User) : WebPart =
+let page (maxFeeds : int) (listFeeds : AsyncResult<FeedRecord seq>) (user : Authentication.User) : WebPart =
     fun ctx -> async {
         let! listResult = listFeeds
 

@@ -4,6 +4,7 @@ open SoManyFeedsServer.Passwords
 open SoManyFeedsServer.Registration
 open SoManyFeedsServer.DataSource
 open SoManyFeedsServer
+open SoManyFeedsServer.DataSource
 
 
 type UserRecord =
@@ -13,6 +14,8 @@ type UserRecord =
       PasswordHash : HashedPassword
     }
 
+
+type private UserEntity = SoManyFeedsDb.dataContext.``public.usersEntity``
 
 let private entityToRecord (entity : UserEntity) : UserRecord =
     { Id = entity.Id
@@ -36,7 +39,7 @@ let findByEmail (dataContext : DataContext) (email : string) : Async<FindResult<
             |> Option.map entityToRecord
         }
     }
-    |> fromOptionResult
+    |> FindResult.asyncFromAsyncResultOfOption
 
 
 let create (dataContext : DataContext) (registration : ValidRegistration) : AsyncResult<UserRecord> =

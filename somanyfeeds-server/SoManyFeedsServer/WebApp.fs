@@ -15,10 +15,10 @@ let private maxFeeds : int =
 
 let private authenticatedPage (user : Authentication.User) : WebPart =
 
-    let listFeeds = FeedsDataGateway.listFeeds dataSource user.Id
-    let createFeed = FeedsService.createFeed dataSource maxFeeds user.Id
-    let updateFeed = FeedsDataGateway.updateFeed dataSource user.Id
-    let deleteFeed = FeedsDataGateway.deleteFeed dataSource user.Id
+    let listFeeds = FeedsDataGateway.listFeeds dataContext user.Id
+    let createFeed = FeedsService.createFeed dataContext maxFeeds user.Id
+    let updateFeed = FeedsDataGateway.updateFeed dataContext user.Id
+    let deleteFeed = FeedsDataGateway.deleteFeed dataContext user.Id
 
     let listRecentArticles = UserArticlesService.listRecent dataSource user
     let createReadArticle articleId =
