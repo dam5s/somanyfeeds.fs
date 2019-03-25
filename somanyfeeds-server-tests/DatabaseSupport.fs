@@ -20,6 +20,12 @@ let executeSql (sql : string) =
     command.ExecuteNonQuery () |> ignore
 
 
+let executeAllSql (sql : string list) =
+    sql
+    |> List.map executeSql
+    |> ignore
+
+
 let queryDataContext queryFn =
     asyncResult {
         let! ctx = DataSource.dataContext

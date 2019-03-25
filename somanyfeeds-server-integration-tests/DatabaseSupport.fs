@@ -2,6 +2,7 @@
 module DatabaseSupport
 
 open Npgsql
+open SoManyFeedsServer
 
 
 let executeSql (sql : string) =
@@ -11,3 +12,19 @@ let executeSql (sql : string) =
     use command = connection.CreateCommand ()
     command.CommandText <- sql
     command.ExecuteNonQuery () |> ignore
+
+
+let executeAllSql (sql : string list) =
+    sql
+    |> List.map executeSql
+    |> ignore
+
+
+let queryDataContext queryFn =
+    asyncResult {
+        let! ctx = DataSource.dataContext
+        return queryFn ctx |> Seq.map id
+    }
+    |> Async.RunSynchronously
+    |> Result.defaultValue Seq.empty
+    |> Seq.toList

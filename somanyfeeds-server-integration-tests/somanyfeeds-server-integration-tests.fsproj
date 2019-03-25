@@ -5,17 +5,29 @@
     <OutputType>Exe</OutputType>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <FscToolPath>/usr/bin</FscToolPath>
+    <FscToolExe>fsharpc</FscToolExe>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Update="FSharp.Core" Version="4.6.2" />
 
     <PackageReference Include="canopy" Version="2.1.0" />
     <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="2.45.0" />
+    <PackageReference Include="FsUnit" Version="3.4.0" />
 
     <ProjectReference Include="../somanyfeeds-server/somanyfeeds-server.fsproj" />
 
     <Compile Include="DatabaseSupport.fs" />
+    <Compile Include="WebServerSupport.fs" />
     <Compile Include="Assertions.fs" />
     <Compile Include="IntegrationTests/Feeds.fs" />
+    <Compile Include="IntegrationTests/FeedsProcessing.fs" />
     <Compile Include="Program.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resources Include="Resources/**" />
   </ItemGroup>
 </Project>

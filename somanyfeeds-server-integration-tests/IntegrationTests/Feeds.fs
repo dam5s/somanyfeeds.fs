@@ -1,17 +1,36 @@
 module IntegrationTests.Feeds
 
+open System.Threading
 open canopy.runner.classic
 open canopy.classic
 open SoManyFeedsServer
 
+let mutable private tokenSource : CancellationTokenSource option =
+    None
 
 let all () =
-    before (fun _ ->
-        executeSql "delete from feeds"
-        executeSql "delete from users"
+    context "Feeds"
+
+    before (fun () ->
+        LoggingConfig.configure ()
+
+        let config = SoManyFeedsServer.WebConfig.create
+        let webPart = SoManyFeedsServer.WebApp.webPart
+
+        tokenSource <- Some <| WebServerSupport.start config webPart
     )
 
-    "Feeds CRUD" &&& fun _ ->
+    after (fun () ->
+        tokenSource
+        |> Option.map (fun src -> src.Cancel ())
+        |> ignore
+    )
+
+    "CRUD" &&& fun _ ->
+        executeAllSql
+            [ "delete from feeds"
+              "delete from users" ]
+
         url <| sprintf "http://localhost:%d" WebConfig.port
 
         expectToFind "h1" "Welcome"
