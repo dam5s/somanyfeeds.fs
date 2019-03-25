@@ -146,6 +146,7 @@ type private SoManyFeedsDb =
 type FeedEntity = SoManyFeedsDb.dataContext.``public.feedsEntity``
 type UserEntity = SoManyFeedsDb.dataContext.``public.usersEntity``
 type ArticleEntity = SoManyFeedsDb.dataContext.``public.articlesEntity``
+type FeedJobEntity = SoManyFeedsDb.dataContext.``public.feed_jobsEntity``
 
 
 type DataContext = AsyncResult<SoManyFeedsDb.dataContext>

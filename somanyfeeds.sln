@@ -17,6 +17,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "somanyfeeds-server-integrat
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "prelude", "prelude\prelude.fsproj", "{3ECDD435-CF99-49FA-A0CE-DB5C7A643B2E}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "somanyfeeds-server-tests", "somanyfeeds-server-tests\somanyfeeds-server-tests.fsproj", "{E5E94FD2-D150-4EF7-BC24-B3EBC181F6B5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -135,5 +137,17 @@ Global
 		{3ECDD435-CF99-49FA-A0CE-DB5C7A643B2E}.Release|x64.Build.0 = Release|Any CPU
 		{3ECDD435-CF99-49FA-A0CE-DB5C7A643B2E}.Release|x86.ActiveCfg = Release|Any CPU
 		{3ECDD435-CF99-49FA-A0CE-DB5C7A643B2E}.Release|x86.Build.0 = Release|Any CPU
+		{E5E94FD2-D150-4EF7-BC24-B3EBC181F6B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5E94FD2-D150-4EF7-BC24-B3EBC181F6B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5E94FD2-D150-4EF7-BC24-B3EBC181F6B5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E5E94FD2-D150-4EF7-BC24-B3EBC181F6B5}.Debug|x64.Build.0 = Debug|Any CPU
+		{E5E94FD2-D150-4EF7-BC24-B3EBC181F6B5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E5E94FD2-D150-4EF7-BC24-B3EBC181F6B5}.Debug|x86.Build.0 = Debug|Any CPU
+		{E5E94FD2-D150-4EF7-BC24-B3EBC181F6B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5E94FD2-D150-4EF7-BC24-B3EBC181F6B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5E94FD2-D150-4EF7-BC24-B3EBC181F6B5}.Release|x64.ActiveCfg = Release|Any CPU
+		{E5E94FD2-D150-4EF7-BC24-B3EBC181F6B5}.Release|x64.Build.0 = Release|Any CPU
+		{E5E94FD2-D150-4EF7-BC24-B3EBC181F6B5}.Release|x86.ActiveCfg = Release|Any CPU
+		{E5E94FD2-D150-4EF7-BC24-B3EBC181F6B5}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

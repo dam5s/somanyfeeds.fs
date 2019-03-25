@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <GenerateProgramFile>false</GenerateProgramFile>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <FscToolPath>/usr/bin</FscToolPath>
+    <FscToolExe>fsharpc</FscToolExe>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Update="FSharp.Core" Version="4.6.2" />
+
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+    <PackageReference Include="NUnit" Version="3.11.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.11.2" />
+    <PackageReference Include="FsUnit" Version="3.4.0" />
+
+    <ProjectReference Include="../somanyfeeds-server/somanyfeeds-server.fsproj" />
+
+    <Compile Include="DatabaseSupport.fs" />
+    <Compile Include="SoManyFeedsServerTests/FeedJobsDataGatewayTests.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+</Project>

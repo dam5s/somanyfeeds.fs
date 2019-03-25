@@ -25,14 +25,20 @@ let private migrate connectionString =
 
 
 let loadTasks _ =
-    let dev = "Host=localhost;Username=somanyfeeds;Password=secret;Database=somanyfeeds_dev"
-    let test = "Host=localhost;Username=somanyfeeds;Password=secret;Database=somanyfeeds_integration_tests"
+    let localDatabases =
+        [
+        ("dev", "Host=localhost;Username=somanyfeeds;Password=secret;Database=somanyfeeds_dev")
+        ("tests", "Host=localhost;Username=somanyfeeds;Password=secret;Database=somanyfeeds_tests")
+        ("integration tests", "Host=localhost;Username=somanyfeeds;Password=secret;Database=somanyfeeds_integration_tests")
+        ]
 
     Target.create "db:somanyfeeds:local:migrate" (fun _ ->
-        printfn "\n\nMigrating dev database..."
-        migrate dev
-        printfn "\nMigrating test database..."
-        migrate test
+        localDatabases
+        |> List.map (fun (name, connectionString) ->
+            printfn "\n\nMigrating %s database..." name
+            migrate connectionString
+        )
+        |> ignore
         printfn "\n"
     )
 

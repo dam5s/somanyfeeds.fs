@@ -14,8 +14,8 @@ type private Logs = Logs
 let private logger = createLogger<Logs>
 
 
-let private createMissing _ = FeedJobsDataGateway.createMissing dataSource
-let private startJobs _ = FeedJobsDataGateway.startSome dataSource 5
+let private createMissing _ = FeedJobsDataGateway.createMissing dataContext
+let private startJobs _ = FeedJobsDataGateway.startSome dataContext 5
 
 
 let private sequence : AsyncSeq<FeedUrl> =
@@ -27,7 +27,7 @@ let private sequence : AsyncSeq<FeedUrl> =
 
             let! feedUrls =
                 startJobs ()
-                |> AsyncResult.defaultValue []
+                |> AsyncResult.defaultValue Seq.empty
 
             for url in feedUrls do
                 yield url
@@ -50,7 +50,7 @@ let private logArticleError (url : string) (msg : string) : string =
 
 let private completeJob (feedUrl : FeedUrl) =
     feedUrl
-    |> FeedJobsDataGateway.complete dataSource
+    |> FeedJobsDataGateway.complete dataContext
     |> Async.RunSynchronously
     |> ignore
 
@@ -59,7 +59,7 @@ let private failJob (feedUrl : FeedUrl) (message : string) =
     message
     |> logFeedError feedUrl
     |> JobFailure
-    |> FeedJobsDataGateway.fail dataSource feedUrl
+    |> FeedJobsDataGateway.fail dataContext feedUrl
     |> Async.RunSynchronously
     |> ignore
 
