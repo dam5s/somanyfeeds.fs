@@ -1,10 +1,13 @@
 [<AutoOpen>]
 module DatabaseSupport
 
-open SoManyFeedsServer
+open Npgsql
 
 
 let executeSql (sql : string) =
-    DataSource.update DataSource.dataSource sql []
-    |> Async.RunSynchronously
-    |> ignore
+    use connection = new NpgsqlConnection (Env.varRequired "DB_CONNECTION")
+    connection.Open ()
+
+    use command = connection.CreateCommand ()
+    command.CommandText <- sql
+    command.ExecuteNonQuery () |> ignore
