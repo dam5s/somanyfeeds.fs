@@ -38,10 +38,9 @@ let main args =
     Database.loadTasks ()
 
     Target.create "clean" clean
-    Target.create "restore" <| DotNet.restore
-    Target.create "build" <| DotNet.build
-    Target.create "test" <| DotNet.test "feeds-processing-tests"
-    Target.create "integration-tests" <| somanyfeedsServerIntegrationTests
+    Target.create "build" DotNet.build
+    Target.create "test" DotNet.test
+    Target.create "integration-tests" somanyfeedsServerIntegrationTests
 
     Target.create "release" (fun _ ->
         DotNet.release "damo-io-server" ()
@@ -51,7 +50,7 @@ let main args =
 
 
     "clean" |> dependsOn [ "frontend:clean" ]
-    "build" |> dependsOn [ "frontend:build" ; "restore" ]
+    "build" |> dependsOn [ "frontend:build" ]
 
     "build" |> mustRunAfter "clean"
 

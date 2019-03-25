@@ -15,8 +15,8 @@ let restore _ =
 let build _ =
     dotnet "build" ""
 
-let test project _ =
-    dotnet "test" project
+let test _ =
+    dotnet "test" ""
 
 let run project _ =
     dotnet "run" (sprintf "-p %s" project)
