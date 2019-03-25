@@ -26,7 +26,7 @@ let private entityToRecord (entity : FeedEntity) : FeedRecord =
     }
 
 
-let listFeeds (dataContext : DataContext) (userId : int64) : AsyncResult<FeedRecord seq> =
+let listFeeds (userId : int64) : AsyncResult<FeedRecord seq> =
     asyncResult {
         let! ctx = dataContext
 
@@ -40,7 +40,7 @@ let listFeeds (dataContext : DataContext) (userId : int64) : AsyncResult<FeedRec
     }
 
 
-let findFeed (dataContext : DataContext) (userId : int64) (feedId : int64) : Async<FindResult<FeedRecord>> =
+let findFeed (userId : int64) (feedId : int64) : Async<FindResult<FeedRecord>> =
     asyncResult {
         let! ctx = dataContext
 
@@ -57,7 +57,7 @@ let findFeed (dataContext : DataContext) (userId : int64) (feedId : int64) : Asy
     |> FindResult.asyncFromAsyncResultOfOption
 
 
-let countFeeds (dataContext : DataContext) (userId : int64) : AsyncResult<int64> =
+let countFeeds (userId : int64) : AsyncResult<int64> =
     asyncResult {
         let! ctx = dataContext
 
@@ -72,7 +72,7 @@ let countFeeds (dataContext : DataContext) (userId : int64) : AsyncResult<int64>
     }
 
 
-let createFeed (dataContext : DataContext) (userId : int64) (fields : FeedFields) : AsyncResult<FeedRecord> =
+let createFeed (userId : int64) (fields : FeedFields) : AsyncResult<FeedRecord> =
     asyncResult {
         let! ctx = dataContext
 
@@ -89,7 +89,7 @@ let createFeed (dataContext : DataContext) (userId : int64) (fields : FeedFields
     }
 
 
-let updateFeed (dataContext : DataContext) (userId : int64) (feedId : int64) (fields : FeedFields) : AsyncResult<FeedRecord> =
+let updateFeed (userId : int64) (feedId : int64) (fields : FeedFields) : AsyncResult<FeedRecord> =
     let entityOptionToAsyncResult result =
         match result with
         | Some e -> AsyncResult.result (entityToRecord e)
@@ -118,7 +118,7 @@ let updateFeed (dataContext : DataContext) (userId : int64) (feedId : int64) (fi
     |> AsyncResult.bind entityOptionToAsyncResult
 
 
-let deleteFeed (dataContext : DataContext) (userId : int64) (feedId : int64) : AsyncResult<unit> =
+let deleteFeed (userId : int64) (feedId : int64) : AsyncResult<unit> =
     asyncResult {
         let! ctx = dataContext
 

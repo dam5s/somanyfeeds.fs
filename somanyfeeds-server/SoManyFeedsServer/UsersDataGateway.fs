@@ -22,7 +22,7 @@ let private entityToRecord (entity : UserEntity) : UserRecord =
     }
 
 
-let findByEmail (dataContext : DataContext) (email : string) : Async<FindResult<UserRecord>> =
+let findByEmail (email : string) : Async<FindResult<UserRecord>> =
     asyncResult {
         let! ctx = dataContext
 
@@ -39,7 +39,7 @@ let findByEmail (dataContext : DataContext) (email : string) : Async<FindResult<
     |> FindResult.asyncFromAsyncResultOfOption
 
 
-let create (dataContext : DataContext) (registration : ValidRegistration) : AsyncResult<UserRecord> =
+let create (registration : ValidRegistration) : AsyncResult<UserRecord> =
     asyncResult {
         let fields = Registration.fields registration
         let! ctx = dataContext

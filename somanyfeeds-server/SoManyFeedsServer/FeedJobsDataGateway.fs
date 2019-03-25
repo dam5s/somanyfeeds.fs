@@ -10,7 +10,7 @@ type JobFailure =
     JobFailure of message:string
 
 
-let createMissing (dataContext: DataContext) : AsyncResult<int> =
+let createMissing : AsyncResult<int> =
     asyncResult {
         let! ctx = dataContext
 
@@ -40,7 +40,7 @@ let createMissing (dataContext: DataContext) : AsyncResult<int> =
     }
 
 
-let startSome (dataContext: DataContext) (howMany : int): AsyncResult<FeedUrl seq> =
+let startSome (howMany : int): AsyncResult<FeedUrl seq> =
     asyncResult {
         let! ctx = dataContext
 
@@ -73,7 +73,7 @@ let startSome (dataContext: DataContext) (howMany : int): AsyncResult<FeedUrl se
     }
 
 
-let private updateJob (dataContext: DataContext) (FeedUrl url)  updateFunction : AsyncResult<int> =
+let private updateJob (FeedUrl url)  updateFunction : AsyncResult<int> =
     asyncResult {
         let! ctx = dataContext
 
@@ -93,18 +93,18 @@ let private updateJob (dataContext: DataContext) (FeedUrl url)  updateFunction :
     }
 
 
-let complete (dataContext: DataContext) (url : FeedUrl): AsyncResult<int> =
+let complete (url : FeedUrl): AsyncResult<int> =
     let setCompleted (entity : FeedJobEntity) =
         entity.CompletedAt <- Some DateTime.UtcNow
         entity.LockedUntil <- None
 
-    updateJob dataContext url setCompleted
+    updateJob url setCompleted
 
 
-let fail (dataContext: DataContext) (url : FeedUrl) (JobFailure message): AsyncResult<int> =
+let fail (url : FeedUrl) (JobFailure message): AsyncResult<int> =
     let setFailed (entity : FeedJobEntity) =
         entity.LastFailedAt <- Some DateTime.UtcNow
         entity.LastFailure <- message
         entity.LockedUntil <- None
 
-    updateJob dataContext url setFailed
+    updateJob url setFailed

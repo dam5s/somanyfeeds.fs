@@ -6,7 +6,7 @@ open SoManyFeedsServer.DataSource
 open FSharp.Data.Sql
 
 
-let listRecentUnreadArticles (dataContext : DataContext) (userId : int64) : AsyncResult<ArticleRecord seq> =
+let listRecentUnreadArticles (userId : int64) : AsyncResult<ArticleRecord seq> =
     asyncResult {
         let! ctx = dataContext
 
@@ -42,7 +42,7 @@ type ReadArticleRecord =
     }
 
 
-let createReadArticle (dataContext : DataContext) (record : ReadArticleRecord) : AsyncResult<unit> =
+let createReadArticle (record : ReadArticleRecord) : AsyncResult<unit> =
     asyncResult {
         let! ctx = dataContext
 
@@ -55,7 +55,7 @@ let createReadArticle (dataContext : DataContext) (record : ReadArticleRecord) :
     }
 
 
-let deleteReadArticle (dataContext : DataContext) (record : ReadArticleRecord) : AsyncResult<unit> =
+let deleteReadArticle (record : ReadArticleRecord) : AsyncResult<unit> =
     asyncResult {
         let! ctx = dataContext
 

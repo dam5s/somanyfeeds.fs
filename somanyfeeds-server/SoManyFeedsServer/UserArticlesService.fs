@@ -17,9 +17,9 @@ let private articlesWithFeeds (feeds : FeedRecord seq) (articles : ArticleRecord
     )
 
 
-let listRecent (dataContext : DataContext) (user : User) : AsyncResult<(FeedRecord option * ArticleRecord) seq> =
+let listRecent (user : User) : AsyncResult<(FeedRecord option * ArticleRecord) seq> =
     asyncResult {
-        let! feeds = FeedsDataGateway.listFeeds dataContext user.Id
-        let! articles = UserArticlesDataGateway.listRecentUnreadArticles dataContext user.Id
+        let! feeds = FeedsDataGateway.listFeeds user.Id
+        let! articles = UserArticlesDataGateway.listRecentUnreadArticles user.Id
         return articlesWithFeeds feeds articles
     }

@@ -12,11 +12,11 @@ type UserCreationResult =
     | CreationError of message:string
 
 
-let create (dataContext : DataContext) (registration : Registration) : Async<UserCreationResult> =
+let create (registration : Registration) : Async<UserCreationResult> =
     async {
         match Registration.validate registration with
         | Ok validReg ->
-            let! findResult = UsersDataGateway.findByEmail dataContext (Registration.email validReg)
+            let! findResult = UsersDataGateway.findByEmail (Registration.email validReg)
 
             match findResult with
             | Found _ ->
@@ -29,7 +29,7 @@ let create (dataContext : DataContext) (registration : Registration) : Async<Use
             | FindError message ->
                 return CreationError message
             | _ ->
-                let! createResult = UsersDataGateway.create dataContext validReg
+                let! createResult = UsersDataGateway.create validReg
 
                 match createResult with
                 | Ok record -> return CreationSuccess record

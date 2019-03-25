@@ -5,7 +5,6 @@ open Suave.Filters
 open Suave.Operators
 open Suave.RequestErrors
 open SoManyFeedsServer
-open SoManyFeedsServer.DataSource
 open SoManyFeedsServer.Json
 
 
@@ -15,20 +14,16 @@ let private maxFeeds : int =
 
 let private authenticatedPage (user : Authentication.User) : WebPart =
 
-    let listFeeds = FeedsDataGateway.listFeeds dataContext user.Id
-    let createFeed = FeedsService.createFeed dataContext maxFeeds user.Id
-    let updateFeed = FeedsDataGateway.updateFeed dataContext user.Id
-    let deleteFeed = FeedsDataGateway.deleteFeed dataContext user.Id
+    let listFeeds = FeedsDataGateway.listFeeds user.Id
+    let createFeed = FeedsService.createFeed maxFeeds user.Id
+    let updateFeed = FeedsDataGateway.updateFeed user.Id
+    let deleteFeed = FeedsDataGateway.deleteFeed user.Id
 
-    let listRecentArticles = UserArticlesService.listRecent dataContext user
+    let listRecentArticles = UserArticlesService.listRecent user
     let createReadArticle articleId =
-        UserArticlesDataGateway.createReadArticle
-            dataContext
-            { UserId = user.Id ; ArticleId = articleId }
+        UserArticlesDataGateway.createReadArticle { UserId = user.Id ; ArticleId = articleId }
     let deleteReadArticle articleId =
-        UserArticlesDataGateway.deleteReadArticle
-            dataContext
-            { UserId = user.Id ; ArticleId = articleId }
+        UserArticlesDataGateway.deleteReadArticle { UserId = user.Id ; ArticleId = articleId }
 
 
     let readPage _ =
@@ -82,10 +77,10 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
 
 
 let webPart =
-    let findByEmail = UsersDataGateway.findByEmail DataSource.dataContext
+    let findByEmail = UsersDataGateway.findByEmail
     let createUser = deserializeBody
                          UsersApi.Decoders.registration
-                         (UsersApi.create <| UsersService.create DataSource.dataContext)
+                         (UsersApi.create UsersService.create)
     let homePage = DotLiquid.page "home.html.liquid" ()
 
     choose [

@@ -50,7 +50,7 @@ let entityToRecord (entity : ArticleEntity) : ArticleRecord =
     }
 
 
-let createOrUpdateArticle (dataContext : DataContext) (fields : ArticleFields) : AsyncResult<ArticleRecord> =
+let createOrUpdateArticle (fields : ArticleFields) : AsyncResult<ArticleRecord> =
     asyncResult {
         let! ctx = dataContext
 

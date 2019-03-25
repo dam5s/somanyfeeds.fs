@@ -24,7 +24,7 @@ let ``standard background processing flow`` () =
     """
 
 
-    FeedJobsDataGateway.createMissing dataContext
+    FeedJobsDataGateway.createMissing
     |> Async.RunSynchronously
     |> ignore
 
@@ -40,7 +40,7 @@ let ``standard background processing flow`` () =
                         ]
 
 
-    let started = FeedJobsDataGateway.startSome dataContext 2
+    let started = FeedJobsDataGateway.startSome 2
                     |> Async.RunSynchronously
                     |> Result.defaultValue Seq.empty
 
