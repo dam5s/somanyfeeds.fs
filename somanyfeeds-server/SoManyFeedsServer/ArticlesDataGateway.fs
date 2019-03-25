@@ -1,7 +1,6 @@
 module SoManyFeedsServer.ArticlesDataGateway
 
 open System
-open System.Data.Common
 open SoManyFeedsServer.DataSource
 open FSharp.Data.Sql.Common
 
@@ -22,21 +21,6 @@ type ArticleFields =
       FeedUrl : string
       Content : string
       Date : DateTimeOffset option
-    }
-
-
-let mapArticle (record : DbDataRecord) : ArticleRecord =
-    let date index =
-        match Convert.IsDBNull index with
-        | true -> None
-        | false -> Some <| new DateTimeOffset (record.GetDateTime index)
-
-    { Id = record.GetInt64 0
-      Url = record.GetString 1
-      Title = record.GetString 2
-      FeedUrl = record.GetString 3
-      Content = record.GetString 4
-      Date = date 5
     }
 
 
