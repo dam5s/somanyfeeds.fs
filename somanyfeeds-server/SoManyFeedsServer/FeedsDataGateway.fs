@@ -27,66 +27,50 @@ let private entityToRecord (entity : FeedEntity) : FeedRecord =
 
 
 let listFeeds (userId : int64) : AsyncResult<FeedRecord seq> =
-    asyncResult {
-        let! ctx = dataContext
-
-        return! dataAccessOperation { return fun _ ->
-            query {
-                for feed in ctx.Public.Feeds do
-                where (feed.UserId = userId)
-            }
-            |> Seq.map entityToRecord
+    dataAccessOperation (fun ctx ->
+        query {
+            for feed in ctx.Public.Feeds do
+            where (feed.UserId = userId)
         }
-    }
+        |> Seq.map entityToRecord
+    )
 
 
 let findFeed (userId : int64) (feedId : int64) : Async<FindResult<FeedRecord>> =
-    asyncResult {
-        let! ctx = dataContext
-
-        return! dataAccessOperation { return fun _ ->
-            query {
-                for feed in ctx.Public.Feeds do
-                where (feed.UserId = userId && feed.Id = feedId)
-                take 1
-            }
-            |> Seq.tryHead
-            |> Option.map entityToRecord
+    dataAccessOperation (fun ctx ->
+        query {
+            for feed in ctx.Public.Feeds do
+            where (feed.UserId = userId && feed.Id = feedId)
+            take 1
         }
-    }
+        |> Seq.tryHead
+        |> Option.map entityToRecord
+    )
     |> FindResult.asyncFromAsyncResultOfOption
 
 
 let countFeeds (userId : int64) : AsyncResult<int64> =
-    asyncResult {
-        let! ctx = dataContext
-
-        return! dataAccessOperation { return fun _ ->
-            query {
-                for feed in ctx.Public.Feeds do
-                where (feed.UserId = userId)
-                count
-            }
-            |> int64
+    dataAccessOperation (fun ctx ->
+        query {
+            for feed in ctx.Public.Feeds do
+            where (feed.UserId = userId)
+            count
         }
-    }
+        |> int64
+    )
 
 
 let createFeed (userId : int64) (fields : FeedFields) : AsyncResult<FeedRecord> =
-    asyncResult {
-        let! ctx = dataContext
+    dataAccessOperation (fun ctx ->
+        let entity = ctx.Public.Feeds.Create ()
+        entity.UserId <- userId
+        entity.Name <- fields.Name
+        entity.Url <- fields.Url
 
-        return! dataAccessOperation { return fun _ ->
-            let entity = ctx.Public.Feeds.Create ()
-            entity.UserId <- userId
-            entity.Name <- fields.Name
-            entity.Url <- fields.Url
+        ctx.SubmitUpdates ()
 
-            ctx.SubmitUpdates ()
-
-            entityToRecord entity
-        }
-    }
+        entityToRecord entity
+    )
 
 
 let updateFeed (userId : int64) (feedId : int64) (fields : FeedFields) : AsyncResult<FeedRecord> =
@@ -95,44 +79,36 @@ let updateFeed (userId : int64) (feedId : int64) (fields : FeedFields) : AsyncRe
         | Some e -> AsyncResult.result (entityToRecord e)
         | None -> AsyncResult.error "Record not found"
 
-    asyncResult {
-        let! ctx = dataContext
-
-        return! dataAccessOperation { return fun _ ->
-            query {
-                for feed in ctx.Public.Feeds do
-                where (feed.Id = feedId && feed.UserId = userId)
-                take 1
-            }
-            |> Seq.tryHead
-            |> Option.map (fun entity ->
-                entity.Name <- fields.Name
-                entity.Url <- fields.Url
-
-                ctx.SubmitUpdates ()
-
-                entity
-            )
+    dataAccessOperation (fun ctx ->
+        query {
+            for feed in ctx.Public.Feeds do
+            where (feed.Id = feedId && feed.UserId = userId)
+            take 1
         }
-    }
+        |> Seq.tryHead
+        |> Option.map (fun entity ->
+            entity.Name <- fields.Name
+            entity.Url <- fields.Url
+
+            ctx.SubmitUpdates ()
+
+            entity
+        )
+    )
     |> AsyncResult.bind entityOptionToAsyncResult
 
 
 let deleteFeed (userId : int64) (feedId : int64) : AsyncResult<unit> =
-    asyncResult {
-        let! ctx = dataContext
-
-        return! dataAccessOperation { return fun _ ->
-            query {
-                for feed in ctx.Public.Feeds do
-                where (feed.Id = feedId && feed.UserId = userId)
-                take 1
-            }
-            |> Seq.tryHead
-            |> Option.map (fun entity -> entity.Delete ())
-            |> ignore
-
-            ctx.SubmitUpdates ()
+    dataAccessOperation (fun ctx ->
+        query {
+            for feed in ctx.Public.Feeds do
+            where (feed.Id = feedId && feed.UserId = userId)
+            take 1
         }
-    }
+        |> Seq.tryHead
+        |> Option.map (fun entity -> entity.Delete ())
+        |> ignore
+
+        ctx.SubmitUpdates ()
+    )
     <!> always ()

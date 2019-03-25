@@ -11,86 +11,74 @@ type JobFailure =
 
 
 let createMissing : AsyncResult<int> =
-    asyncResult {
-        let! ctx = dataContext
+    dataAccessOperation (fun ctx ->
+        let existingUrls =
+            query {
+                for job in ctx.Public.FeedJobs do
+                select job.FeedUrl
+            }
+        let missingUrls =
+            query {
+                for feed in ctx.Public.Feeds do
+                where (feed.Url |<>| existingUrls)
+                select feed.Url
+            }
+        let updatesCount =
+            missingUrls
+            |> Seq.map (fun url ->
+                let entity = ctx.Public.FeedJobs.Create ()
+                entity.FeedUrl <- url
+            )
+            |> Seq.length
 
-        return! dataAccessOperation { return fun _ ->
-            let existingUrls =
-                query {
-                    for job in ctx.Public.FeedJobs do
-                    select job.FeedUrl
-                }
-            let missingUrls =
-                query {
-                    for feed in ctx.Public.Feeds do
-                    where (feed.Url |<>| existingUrls)
-                    select feed.Url
-                }
-            let updatesCount =
-                missingUrls
-                |> Seq.map (fun url ->
-                    let entity = ctx.Public.FeedJobs.Create ()
-                    entity.FeedUrl <- url
-                )
-                |> Seq.length
-
-            ctx.SubmitUpdates ()
-            updatesCount
-        }
-    }
+        ctx.SubmitUpdates ()
+        updatesCount
+    )
 
 
 let startSome (howMany : int): AsyncResult<FeedUrl seq> =
-    asyncResult {
-        let! ctx = dataContext
-
+    dataAccessOperation (fun ctx ->
         let now = DateTime.UtcNow
         let tenMinutesAgo = now.AddMinutes(-10.0)
         let twoMinutesFromNow = now.AddMinutes(2.0)
 
-        return! dataAccessOperation { return fun _ ->
-            let updatedUrls =
-                query {
-                    for job in ctx.Public.FeedJobs do
-                    where (
-                        (job.LockedUntil.IsNone || job.LockedUntil.Value < now)
-                        && (job.CompletedAt.IsNone || job.CompletedAt.Value < tenMinutesAgo)
-                    )
-                    take howMany
-                    select job
-                }
-                |> Seq.map (fun job ->
-                    job.StartedAt <- Some now
-                    job.LockedUntil <- Some twoMinutesFromNow
-
-                    ctx.SubmitUpdates ()
-
-                    FeedUrl job.FeedUrl
+        let updatedUrls =
+            query {
+                for job in ctx.Public.FeedJobs do
+                where (
+                    (job.LockedUntil.IsNone || job.LockedUntil.Value < now)
+                    && (job.CompletedAt.IsNone || job.CompletedAt.Value < tenMinutesAgo)
                 )
+                take howMany
+                select job
+            }
+            |> Seq.map (fun job ->
+                job.StartedAt <- Some now
+                job.LockedUntil <- Some twoMinutesFromNow
 
-            updatedUrls
-        }
-    }
+                ctx.SubmitUpdates ()
+
+                FeedUrl job.FeedUrl
+            )
+
+        updatedUrls
+    )
 
 
 let private updateJob (FeedUrl url)  updateFunction : AsyncResult<int> =
-    asyncResult {
-        let! ctx = dataContext
+    dataAccessOperation (fun ctx ->
+        let updatesCount =
+            query {
+                for job in ctx.Public.FeedJobs do
+                where (job.FeedUrl = url)
+                take 1
+            }
+            |> Seq.map updateFunction
+            |> Seq.length
 
-        return! dataAccessOperation { return fun _ ->
-            let updatesCount =
-                query {
-                    for job in ctx.Public.FeedJobs do
-                    where (job.FeedUrl = url)
-                    take 1
-                }
-                |> Seq.map updateFunction
-                |> Seq.length
-
-            ctx.SubmitUpdates ()
-            updatesCount
-        }
-    }
+        ctx.SubmitUpdates ()
+        updatesCount
+    )
 
 
 let complete (url : FeedUrl): AsyncResult<int> =

@@ -51,20 +51,16 @@ let entityToRecord (entity : ArticleEntity) : ArticleRecord =
 
 
 let createOrUpdateArticle (fields : ArticleFields) : AsyncResult<ArticleRecord> =
-    asyncResult {
-        let! ctx = dataContext
+    dataAccessOperation (fun ctx ->
+        let entity = ctx.Public.Articles.Create ()
+        entity.Url <- fields.Url
+        entity.Title <- fields.Title
+        entity.FeedUrl <- fields.FeedUrl
+        entity.Content <- fields.Content
+        entity.Date <- fields.Date |> Option.map (fun d -> d.UtcDateTime)
+        entity.OnConflict <- OnConflict.Update
 
-        return! dataAccessOperation { return fun _ ->
-            let entity = ctx.Public.Articles.Create ()
-            entity.Url <- fields.Url
-            entity.Title <- fields.Title
-            entity.FeedUrl <- fields.FeedUrl
-            entity.Content <- fields.Content
-            entity.Date <- fields.Date |> Option.map (fun d -> d.UtcDateTime)
-            entity.OnConflict <- OnConflict.Update
+        ctx.SubmitUpdates ()
 
-            ctx.SubmitUpdates ()
-
-            entityToRecord entity
-        }
-    }
+        entityToRecord entity
+    )

@@ -56,5 +56,11 @@ let dataContext : DataContext =
     }
 
 
-let dataAccessOperation =
-    unsafeAsyncOperation "Data access"
+let dataAccessOperation f =
+    asyncResult {
+        let! ctx = dataContext
+
+        return! unsafeAsyncOperation "Data access" { return fun _ ->
+            f ctx
+        }
+    }

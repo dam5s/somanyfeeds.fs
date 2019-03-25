@@ -23,35 +23,27 @@ let private entityToRecord (entity : UserEntity) : UserRecord =
 
 
 let findByEmail (email : string) : Async<FindResult<UserRecord>> =
-    asyncResult {
-        let! ctx = dataContext
-
-        return! dataAccessOperation { return fun _ ->
-            query {
-                for user in ctx.Public.Users do
-                where (user.Email = email)
-                take 1
-            }
-            |> Seq.tryHead
-            |> Option.map entityToRecord
+    dataAccessOperation (fun ctx ->
+        query {
+            for user in ctx.Public.Users do
+            where (user.Email = email)
+            take 1
         }
-    }
+        |> Seq.tryHead
+        |> Option.map entityToRecord
+    )
     |> FindResult.asyncFromAsyncResultOfOption
 
 
 let create (registration : ValidRegistration) : AsyncResult<UserRecord> =
-    asyncResult {
+    dataAccessOperation (fun ctx ->
         let fields = Registration.fields registration
-        let! ctx = dataContext
+        let entity = ctx.Public.Users.Create ()
+        entity.Name <- fields.Name
+        entity.Email <- fields.Email
+        entity.PasswordHash <- Passwords.hashedValue fields.PasswordHash
 
-        return! dataAccessOperation { return fun _ ->
-            let entity = ctx.Public.Users.Create ()
-            entity.Name <- fields.Name
-            entity.Email <- fields.Email
-            entity.PasswordHash <- Passwords.hashedValue fields.PasswordHash
+        ctx.SubmitUpdates ()
 
-            ctx.SubmitUpdates ()
-
-            entityToRecord entity
-        }
-    }
+        entityToRecord entity
+    )
