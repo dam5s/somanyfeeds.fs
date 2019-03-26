@@ -31,12 +31,12 @@ let ``creating then updating an article`` () =
     executeSql "delete from articles"
 
     let fields: ArticleFields =
-      { Url = "http://example.com/my/articles/1"
-        Title = "My Article"
-        FeedUrl = "http://example.com/my/feed"
-        Content = "This my article v1"
-        Date = Some (Posix.fromDateTimeOffset DateTimeOffset.UtcNow)
-      }
+        { Url = "http://example.com/my/articles/1"
+          Title = "My Article"
+          FeedUrl = "http://example.com/my/feed"
+          Content = "This my article v1"
+          Date = Some (Posix.fromDateTimeOffset DateTimeOffset.UtcNow)
+        }
 
 
     let createResult = fields
@@ -44,7 +44,7 @@ let ``creating then updating an article`` () =
                       |> Async.RunSynchronously
 
     match createResult with
-    | Error msg -> failwithf "Expected to get success back, but got: %s" msg
+    | Error msg -> failwithf "Expected Ok, but got Error '%s'" msg
     | Ok created ->
         fieldsOf created |> should equal fields
         find created.Id |> should equal created
@@ -52,6 +52,7 @@ let ``creating then updating an article`` () =
 
     let updatedFields =
         { fields with
+            Title = "My Article v2"
             Content = "This my article v2"
             Date = Some (Posix.fromDateTimeOffset DateTimeOffset.UtcNow)
         }
@@ -61,7 +62,7 @@ let ``creating then updating an article`` () =
                        |> Async.RunSynchronously
 
     match updateResult with
-    | Error msg -> failwithf "Expected to get success back, but got: %s" msg
+    | Error msg -> failwithf "Expected Ok, but got Error '%s'" msg
     | Ok updated ->
         fieldsOf updated |> should equal updatedFields
         find updated.Id |> should equal updated

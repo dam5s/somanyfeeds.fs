@@ -36,15 +36,25 @@ let entityToRecord (entity : ArticleEntity) : ArticleRecord =
 
 let createOrUpdateArticle (fields : ArticleFields) : AsyncResult<ArticleRecord> =
     dataAccessOperation (fun ctx ->
-        let entity = ctx.Public.Articles.Create ()
+        let maybeExisting =
+            query {
+                for a in ctx.Public.Articles do
+                where (a.FeedUrl = fields.FeedUrl && a.Url = fields.Url)
+                take 1
+            }
+            |> Seq.tryHead
+
+        let entity =
+            match maybeExisting with
+            | Some e -> e
+            | None -> ctx.Public.Articles.Create ()
+
         entity.Url <- fields.Url
-        entity.Title <- fields.Title
         entity.FeedUrl <- fields.FeedUrl
+        entity.Title <- fields.Title
         entity.Content <- fields.Content
         entity.Date <- fields.Date |> Option.map Posix.toDateTime
-        entity.OnConflict <- OnConflict.Update
 
         ctx.SubmitUpdates ()
-
         entityToRecord entity
     )
