@@ -8,8 +8,25 @@ open SoManyFeedsServer
 open SoManyFeedsServer.ArticlesDataGateway
 
 
+let private fieldsOf (record : ArticleRecord) =
+    { Url = record.Url
+      Title = record.Title
+      FeedUrl = record.FeedUrl
+      Content = record.Content
+      Date = record.Date
+    }
+
+let private find id =
+    queryDataContext (fun ctx ->
+        query { for a in ctx.Public.Articles do
+                where (a.Id = id)
+        })
+    |> Seq.head
+    |> ArticlesDataGateway.entityToRecord
+
+
 [<Test>]
-let ``creating an article`` () =
+let ``creating then updating an article`` () =
     setTestDbConnectionString ()
     executeSql "delete from articles"
 
@@ -21,28 +38,30 @@ let ``creating an article`` () =
         Date = Some (Posix.fromDateTimeOffset DateTimeOffset.UtcNow)
       }
 
-    let result = fields
-                 |> ArticlesDataGateway.createOrUpdateArticle
-                 |> Async.RunSynchronously
 
-    match result with
-    | Error _ ->
-        failwith "Expected to get success back"
+    let createResult = fields
+                      |> ArticlesDataGateway.createOrUpdateArticle
+                      |> Async.RunSynchronously
 
+    match createResult with
+    | Error msg -> failwithf "Expected to get success back, but got: %s" msg
     | Ok created ->
-        created.Url |> should equal fields.Url
-        created.Title |> should equal fields.Title
-        created.FeedUrl |> should equal fields.FeedUrl
-        created.Content |> should equal fields.Content
-        created.Date |> should equal fields.Date
+        fieldsOf created |> should equal fields
+        find created.Id |> should equal created
 
-        let persisted =
-            queryDataContext (fun ctx ->
-                query { for a in ctx.Public.Articles do
-                        where (a.Id = created.Id)
-                })
-            |> Seq.head
-            |> ArticlesDataGateway.entityToRecord
 
-        persisted |> should equal created
+    let updatedFields =
+        { fields with
+            Content = "This my article v2"
+            Date = Some (Posix.fromDateTimeOffset DateTimeOffset.UtcNow)
+        }
 
+    let updateResult = updatedFields
+                       |> ArticlesDataGateway.createOrUpdateArticle
+                       |> Async.RunSynchronously
+
+    match updateResult with
+    | Error msg -> failwithf "Expected to get success back, but got: %s" msg
+    | Ok updated ->
+        fieldsOf updated |> should equal updatedFields
+        find updated.Id |> should equal updated
