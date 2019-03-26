@@ -5,6 +5,7 @@ open FsUnit
 open FsUnitTyped
 open System
 open System.IO
+open Time
 open FeedsProcessing
 open FeedsProcessing.Download
 open FeedsProcessing.Xml
@@ -39,6 +40,7 @@ let ``with github Atom XML``() =
 
         let article = List.head records
         let expectedTimeUtc = new DateTimeOffset (2018, 04, 14, 21, 30, 17, TimeSpan.Zero)
+                              |> Posix.fromDateTimeOffset
 
         Article.title article |> should equal (Some "dam5s pushed to master in dam5s/somanyfeeds.fs")
         Article.link article |> should equal (Some "https://github.com/dam5s/somanyfeeds.fs")
@@ -61,6 +63,8 @@ let ``with RSS XML``() =
 
         let firstArticle = List.head records
         let expectedTimeUtc = new DateTimeOffset (2016, 09, 20, 12, 54, 44, TimeSpan.Zero)
+                              |> Posix.fromDateTimeOffset
+
         Article.title firstArticle |> should equal (Some "First title!")
         Article.link firstArticle |> should equal (Some "https://medium.com/@its_damo/first")
         Article.content firstArticle |> should equal "<p>This is the content in encoded tag</p>"
@@ -88,6 +92,7 @@ let ``processFeed with slashdot RDF XML``() =
 
         let article = List.head records
         let expectedTimeUtc = new DateTimeOffset (2018, 12, 28, 20, 55, 0, TimeSpan.Zero)
+                              |> Posix.fromDateTimeOffset
 
         Article.title article |> should equal (Some "Netflix Permanently Pulls iTunes Billing For New and Returning Users")
         Article.link article |> should equal (Some "https://news.slashdot.org/story/18/12/28/2054254/netflix-permanently-pulls-itunes-billing-for-new-and-returning-users?utm_source=rss1.0mainlinkanon&utm_medium=feed")

@@ -1,7 +1,7 @@
 module ``FeedJobsDataGateway tests``
 
 open NUnit.Framework
-open FsUnitTyped
+open FsUnit
 open SoManyFeedsServer
 
 
@@ -34,10 +34,10 @@ let ``standard background processing flow`` () =
                 sortBy job.FeedUrl
                 select job.FeedUrl
               })
-    urls |> shouldEqual [ "http://example.com/my-feeds/1"
-                          "http://example.com/my-feeds/2"
-                          "http://example.com/my-feeds/3"
-                        ]
+    urls |> should equal [ "http://example.com/my-feeds/1"
+                           "http://example.com/my-feeds/2"
+                           "http://example.com/my-feeds/3"
+                         ]
 
 
     let started = FeedJobsDataGateway.startSome 2
@@ -46,7 +46,7 @@ let ``standard background processing flow`` () =
 
     started
     |> Seq.length
-    |> shouldEqual 2
+    |> should equal 2
 
 
     let jobs = queryDataContext (fun ctx -> query { for job in ctx.Public.FeedJobs do select job })
@@ -54,4 +54,4 @@ let ``standard background processing flow`` () =
     jobs
     |> List.filter (fun job -> job.StartedAt.IsSome)
     |> List.length
-    |> shouldEqual 2
+    |> should equal 2

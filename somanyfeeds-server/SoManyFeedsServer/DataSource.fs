@@ -1,5 +1,6 @@
 module SoManyFeedsServer.DataSource
 
+open System
 open FSharp.Data.Sql
 
 
@@ -51,6 +52,7 @@ type DataContext = AsyncResult<SoManyFeedsDb.dataContext>
 let dataContext : DataContext =
     async {
        return unsafeOperation "Get data context" { return fun _ ->
+           Environment.SetEnvironmentVariable ("PGTZ", "UTC")
            SoManyFeedsDb.GetDataContext(connectionString)
        }
     }

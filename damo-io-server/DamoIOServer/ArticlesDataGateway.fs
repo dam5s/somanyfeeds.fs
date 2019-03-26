@@ -1,6 +1,7 @@
 module DamoIOServer.ArticlesDataGateway
 
 open System
+open Time
 open DamoIOServer.Sources
 
 
@@ -8,7 +9,7 @@ type ArticleRecord =
     { Title : string option
       Link : string option
       Content : string
-      Date : DateTimeOffset option
+      Date : Posix option
       Source : SourceType
     }
 

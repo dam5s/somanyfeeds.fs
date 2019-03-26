@@ -4,11 +4,13 @@ open NUnit.Framework
 open FsUnit
 open System
 open System.IO
+open Time
 
 open FeedsProcessing
 open FeedsProcessing.Download
 open FeedsProcessing.Feeds
 open FeedsProcessing.Twitter
+
 
 [<Test>]
 let ``processFeed twitter timeline`` () =
@@ -25,7 +27,9 @@ let ``processFeed twitter timeline`` () =
 
         let article = List.head records
         let expectedTimeUtc = new DateTimeOffset (2018, 04, 12, 15, 34, 05, TimeSpan.Zero)
+                              |> Posix.fromDateTimeOffset
+
         Article.title article |> should equal None
         Article.link article |> should equal (Some "https://twitter.com/its_damo")
         Article.content article |> should equal "I'm really liking F# so far."
-        Article.date article |> should equal (Some <| expectedTimeUtc.ToLocalTime ())
+        Article.date article |> should equal (Some expectedTimeUtc)

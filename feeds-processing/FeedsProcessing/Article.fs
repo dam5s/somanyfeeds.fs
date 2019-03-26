@@ -1,6 +1,7 @@
 module FeedsProcessing.Article
 
 open FeedsProcessing
+open Time
 open System
 
 
@@ -14,7 +15,7 @@ type private Fields =
     { Title : string option
       Link : string option
       Content : string
-      Date : DateTimeOffset option
+      Date : Posix option
     }
 
 
@@ -39,5 +40,5 @@ let create (title : string option) (link : string) (content : string option) (da
               |> Option.bind stringToOption
               |> Option.defaultValue ""
               |> Html.sanitize
-          Date = date
+          Date = Option.map Posix.fromDateTimeOffset date
         }

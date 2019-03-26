@@ -11,6 +11,7 @@
     <Compile Include="Prelude/AsyncResult.fs" />
     <Compile Include="Prelude/Logging.fs" />
     <Compile Include="Prelude/UnsafeOperation.fs" />
+    <Compile Include="Prelude/Time.fs" />
   </ItemGroup>
 
   <ItemGroup>

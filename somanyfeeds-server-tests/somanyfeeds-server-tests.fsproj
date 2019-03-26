@@ -22,6 +22,7 @@
 
     <Compile Include="DatabaseSupport.fs" />
     <Compile Include="SoManyFeedsServerTests/FeedJobsDataGatewayTests.fs" />
+    <Compile Include="SoManyFeedsServerTests/ArticlesDataGatewayTests.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 </Project>

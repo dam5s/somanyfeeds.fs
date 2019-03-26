@@ -5,12 +5,9 @@ open Suave
 open Suave.DotLiquid
 open Chiron
 open Chiron.Operators
+open Time
 open DamoIOServer.Sources
 open DamoIOServer.ArticlesDataGateway
-
-
-let private dateMap (d : DateTimeOffset): int64 =
-    d.ToUnixTimeMilliseconds ()
 
 
 let private source (record : ArticleRecord) : string =
@@ -25,7 +22,7 @@ let private toJson (record : ArticleRecord): Json<unit> =
     Json.write "title" record.Title
     *> Json.write "link" record.Link
     *> Json.write "content" record.Content
-    *> Json.write "date" (Option.map dateMap record.Date)
+    *> Json.write "date" (Option.map Posix.milliseconds record.Date)
     *> Json.write "source" (source record)
 
 
@@ -35,9 +32,12 @@ type ArticlesListViewModel =
 
 let list (findAllRecords : unit -> ArticleRecord list) (ctx : HttpContext): Async<HttpContext option> =
     async {
+        let now =
+            Posix.fromDateTimeOffset DateTimeOffset.UtcNow
+
         let recordsJson =
             findAllRecords ()
-            |> List.sortByDescending (fun r -> Option.defaultValue DateTimeOffset.UtcNow r.Date)
+            |> List.sortByDescending (fun r -> Option.defaultValue now r.Date)
             |> List.map (Json.serializeWith toJson)
             |> Json.Array
             |> Json.format

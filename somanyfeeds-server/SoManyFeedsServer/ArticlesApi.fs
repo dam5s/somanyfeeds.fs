@@ -1,21 +1,15 @@
 module SoManyFeedsServer.ArticlesApi
 
+open Time
+open Suave
 open SoManyFeedsServer.ArticlesDataGateway
 open SoManyFeedsServer.FeedsDataGateway
 open SoManyFeedsServer.Json
-open Suave
 
 
 module Encoders =
-    open System
     open Chiron
     open Chiron.Operators
-
-    let private epoch: DateTime =
-        new DateTime (1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
-
-    let private dateMap (d : DateTimeOffset): int64 =
-        d.ToUnixTimeMilliseconds ()
 
     let article (feedOption : FeedRecord option, article : ArticleRecord) : Json<unit> =
         let feedName = feedOption
@@ -27,7 +21,7 @@ module Encoders =
         *> Json.write "title" article.Title
         *> Json.write "feedUrl" article.FeedUrl
         *> Json.write "content" article.Content
-        *> Json.write "date" (Option.map dateMap article.Date)
+        *> Json.write "date" (Option.map Posix.milliseconds article.Date)
         *> Json.write "readUrl" (sprintf "/api/articles/%d/read" article.Id)
 
 

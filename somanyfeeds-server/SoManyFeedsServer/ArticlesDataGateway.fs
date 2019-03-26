@@ -1,6 +1,6 @@
 module SoManyFeedsServer.ArticlesDataGateway
 
-open System
+open Time
 open SoManyFeedsServer.DataSource
 open FSharp.Data.Sql.Common
 
@@ -11,7 +11,7 @@ type ArticleRecord =
       Title : string
       FeedUrl : string
       Content : string
-      Date : DateTimeOffset option
+      Date : Posix option
     }
 
 
@@ -20,7 +20,7 @@ type ArticleFields =
       Title : string
       FeedUrl : string
       Content : string
-      Date : DateTimeOffset option
+      Date : Posix option
     }
 
 
@@ -30,7 +30,7 @@ let entityToRecord (entity : ArticleEntity) : ArticleRecord =
       Title = entity.Title
       FeedUrl = entity.FeedUrl
       Content = entity.Content
-      Date = entity.Date |> Option.map (fun d -> new DateTimeOffset(d))
+      Date = entity.Date |> Option.map Posix.fromDateTime
     }
 
 
@@ -41,7 +41,7 @@ let createOrUpdateArticle (fields : ArticleFields) : AsyncResult<ArticleRecord> 
         entity.Title <- fields.Title
         entity.FeedUrl <- fields.FeedUrl
         entity.Content <- fields.Content
-        entity.Date <- fields.Date |> Option.map (fun d -> d.UtcDateTime)
+        entity.Date <- fields.Date |> Option.map Posix.toDateTime
         entity.OnConflict <- OnConflict.Update
 
         ctx.SubmitUpdates ()
