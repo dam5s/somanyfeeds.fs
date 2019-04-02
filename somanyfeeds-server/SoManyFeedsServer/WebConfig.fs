@@ -30,7 +30,7 @@ let private publicFolder : string =
 
 
 let port : int =
-    Env.varDefaultParse int "PORT" <| always "8080"
+    Env.varDefaultParse int "PORT" (always "8080")
 
 
 let create : SuaveConfig =

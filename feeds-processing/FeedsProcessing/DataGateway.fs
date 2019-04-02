@@ -17,8 +17,10 @@ let private base64encode (value : string) : string = Convert.ToBase64String (Tex
 let private bearerTokenHeader (BearerToken s) : string = sprintf "Bearer %s" s
 
 let private basicAuthHeader (username : string) (password : string) : BasicAuthHeader =
-    let credentials = sprintf "%s:%s" username password
-    BasicAuthHeader <| sprintf "Basic %s" (base64encode credentials)
+    sprintf "%s:%s" username password
+    |> base64encode
+    |> sprintf "Basic %s"
+    |> BasicAuthHeader
 
 
 let private parseToken (jsonString : string) : Result<BearerToken, string> =
@@ -29,8 +31,11 @@ let private parseToken (jsonString : string) : Result<BearerToken, string> =
             |> Option.map (fun p -> p.AsString ())
 
         match accessTokenOption with
-        | None -> Error <| sprintf "Could not parse access_token from json %s" jsonString
-        | Some accessToken -> Ok <| BearerToken accessToken
+        | None ->
+            jsonString
+            |> sprintf "Could not parse access_token from json %s"
+            |> Error
+        | Some accessToken -> Ok (BearerToken accessToken)
     }
 
 
@@ -58,7 +63,7 @@ let private requestTweets (TwitterHandle handle) (token : BearerToken) : Downloa
                   "screen_name", handle
                   "count", "60"
               ],
-              headers = [ Authorization <| bearerTokenHeader token ]
+              headers = [ Authorization (bearerTokenHeader token) ]
             )
             |> DownloadedFeed
     }

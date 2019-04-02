@@ -27,7 +27,9 @@ let ``with unsupported XML``() =
 
 [<Test>]
 let ``with github Atom XML``() =
-    let downloaded = DownloadedFeed <| File.ReadAllText "../../../../feeds-processing/Resources/samples/github.atom.sample"
+    let downloaded = "../../../../feeds-processing/Resources/samples/github.atom.sample"
+                     |> File.ReadAllText
+                     |> DownloadedFeed
 
 
     let result = processXmlFeed downloaded
@@ -50,7 +52,9 @@ let ``with github Atom XML``() =
 
 [<Test>]
 let ``with RSS XML``() =
-    let downloadedFeed = DownloadedFeed <| File.ReadAllText "../../../../feeds-processing/Resources/samples/rss.sample"
+    let downloadedFeed = "../../../../feeds-processing/Resources/samples/rss.sample"
+                         |> File.ReadAllText
+                         |> DownloadedFeed
 
 
     let result = processXmlFeed downloadedFeed
@@ -79,7 +83,9 @@ let ``with RSS XML``() =
 
 [<Test>]
 let ``processFeed with slashdot RDF XML``() =
-    let downloadedFeed = DownloadedFeed <| File.ReadAllText "../../../../feeds-processing/Resources/samples/slashdot.rdf.sample"
+    let downloadedFeed = "../../../../feeds-processing/Resources/samples/slashdot.rdf.sample"
+                         |> File.ReadAllText
+                         |> DownloadedFeed
 
 
     let result = processXmlFeed downloadedFeed

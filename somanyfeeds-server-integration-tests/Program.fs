@@ -23,7 +23,10 @@ let private chromeOptions =
 [<EntryPoint>]
 let main (_) =
     chromeDir <- sprintf "%s/dev/chromedriver-2.44" homeDir
-    start <| ChromeWithOptionsAndTimeSpan (chromeOptions, TimeSpan.FromSeconds 20.0)
+
+    (chromeOptions, TimeSpan.FromSeconds 20.0)
+    |> ChromeWithOptionsAndTimeSpan
+    |> start
 
     Feeds.all ()
     FeedsProcessing.all ()

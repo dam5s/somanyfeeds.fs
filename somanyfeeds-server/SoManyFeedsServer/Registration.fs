@@ -42,7 +42,7 @@ let private nameValidation (registration : Registration) : string option =
 
 let private emailValidation (registration : Registration) : string option =
     let isEmpty = String.isEmpty registration.Email
-    let isNotEmail = not <| String.contains "@" registration.Email
+    let isNotEmail = not (String.contains "@" registration.Email)
 
     if isEmpty || isNotEmail
     then Some "must be an email"
@@ -56,7 +56,7 @@ let private passwordValidation (registration : Registration) : string option =
 
 
 let private passwordConfirmationValidation (registration : Registration) : string option =
-    if not <| String.equals registration.PasswordConfirmation registration.Password
+    if not (String.equals registration.PasswordConfirmation registration.Password)
     then Some "confirmation mismatched"
     else None
 
@@ -86,4 +86,6 @@ let validate (registration : Registration) : Result<ValidRegistration, Validatio
 
     if anyError errors
     then Error errors
-    else Ok <| ValidRegistration (buildFields registration)
+    else buildFields registration
+         |> ValidRegistration
+         |> Ok

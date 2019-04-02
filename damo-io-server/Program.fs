@@ -9,7 +9,9 @@ open DamoIOServer
 
 let private portFromEnv: int =
     try
-        int <| Environment.GetEnvironmentVariable "PORT"
+        "PORT"
+        |> Environment.GetEnvironmentVariable
+        |> int
     with
     | _ ->
         8080

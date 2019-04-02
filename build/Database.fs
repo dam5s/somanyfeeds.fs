@@ -43,5 +43,7 @@ let loadTasks _ =
     )
 
     Target.create "db:somanyfeeds:remote:migrate" (fun _ ->
-        migrate <| Environment.environVarOrFail "DB_CONNECTION"
+        "DB_CONNECTION"
+        |> Environment.environVarOrFail
+        |> migrate
     )

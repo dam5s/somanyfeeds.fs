@@ -25,7 +25,11 @@ let private requiresHttps : WebPart =
 
 
 let private redirectToHttps : WebPart =
-    context (fun ctx -> redirect <| httpsUrlOf ctx.request)
+    context
+        (fun ctx -> ctx.request
+                    |> httpsUrlOf
+                    |> redirect
+        )
 
 
 let enforceSsl : WebPart =

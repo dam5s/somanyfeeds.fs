@@ -43,7 +43,7 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
     let updateFeedApi feedId =
         deserializeBody
             FeedsApi.Decoders.feedFields
-            (FeedsApi.update <| updateFeed feedId)
+            (updateFeed feedId |> FeedsApi.update)
 
     let deleteFeedApi feedId =
         FeedsApi.delete

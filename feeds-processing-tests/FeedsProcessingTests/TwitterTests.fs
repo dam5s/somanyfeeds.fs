@@ -14,7 +14,9 @@ open FeedsProcessing.Twitter
 
 [<Test>]
 let ``processFeed twitter timeline`` () =
-    let downloadedFeed = DownloadedFeed <| File.ReadAllText "../../../../feeds-processing/Resources/samples/twitter.timeline.sample"
+    let downloadedFeed = "../../../../feeds-processing/Resources/samples/twitter.timeline.sample"
+                         |> File.ReadAllText
+                         |> DownloadedFeed
 
 
     let result = processTweets (TwitterHandle "its_damo") downloadedFeed
@@ -26,7 +28,8 @@ let ``processFeed twitter timeline`` () =
         List.length records |> should equal 6
 
         let article = List.head records
-        let expectedTimeUtc = new DateTimeOffset (2018, 04, 12, 15, 34, 05, TimeSpan.Zero)
+        let expectedTimeUtc = (2018, 04, 12, 15, 34, 05, TimeSpan.Zero)
+                              |> DateTimeOffset
                               |> Posix.fromDateTimeOffset
 
         Article.title article |> should equal None

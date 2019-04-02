@@ -19,7 +19,7 @@ module private UnsafeOperation =
         Error msg
 
     let doTry description (func: unit -> 'a): Result<'a, string> =
-        try Ok <| func ()
+        try func () |> Ok
         with | ex -> error description ex
 
     let returnFrom description (func: unit -> Result<'a, string>): Result<'a, string> =

@@ -31,7 +31,7 @@ let all () =
             [ "delete from feeds"
               "delete from users" ]
 
-        url <| sprintf "http://localhost:%d" WebConfig.port
+        url (sprintf "http://localhost:%d" WebConfig.port)
 
         expectToFind "h1" "Welcome"
         click "Read"
