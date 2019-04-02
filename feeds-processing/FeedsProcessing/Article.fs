@@ -11,16 +11,15 @@ let private stringToOption text =
     else Some text
 
 
-type private Fields =
+type Article =
+    private Article of Fields
+
+and private Fields =
     { Title : string option
       Link : string option
       Content : string
       Date : Posix option
     }
-
-
-type Article =
-    private Article of Fields
 
 
 let title (Article fields) = fields.Title

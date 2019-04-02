@@ -10,16 +10,14 @@ type Registration =
       PasswordConfirmation : string
     }
 
+type ValidRegistration =
+    private ValidRegistration of RegistrationFields
 
-type RegistrationFields =
+and RegistrationFields =
     { Name : string
       Email : string
       PasswordHash : HashedPassword
     }
-
-
-type ValidRegistration =
-    private ValidRegistration of RegistrationFields
 
 
 let fields (ValidRegistration f) = f
