@@ -98,8 +98,8 @@ module private Rdf =
         parse downloaded |> Result.bind toArticles
 
 
-let private applyProcessor (downloaded : DownloadedFeed) (result : ProcessingResult) (processor : DownloadedFeed -> ProcessingResult) : ProcessingResult =
-    match result with
+let private tryProcessor (downloaded : DownloadedFeed) (previousState : ProcessingResult) (processor : DownloadedFeed -> ProcessingResult) : ProcessingResult =
+    match previousState with
     | Ok articles -> Ok articles
     | Error msg ->
         match processor downloaded with
@@ -107,11 +107,13 @@ let private applyProcessor (downloaded : DownloadedFeed) (result : ProcessingRes
         | Error nextMsg -> Error (sprintf "%s, %s" msg nextMsg)
 
 
-let processXmlFeed (downloaded : DownloadedFeed) : ProcessingResult =
-    [
-        Rss.processRss
-        Atom.processAtom
-        Rdf.processRdf
+let private processors =
+    [ Rss.processRss
+      Atom.processAtom
+      Rdf.processRdf
     ]
-    |> List.fold (applyProcessor downloaded) (Error "")
+
+let processXmlFeed (downloaded : DownloadedFeed) : ProcessingResult =
+    (Error "", processors)
+    ||> List.fold (tryProcessor downloaded)
     |> Result.mapError (sprintf "Failed all the parsers: %s")
