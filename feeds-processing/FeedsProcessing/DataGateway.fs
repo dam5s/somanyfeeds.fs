@@ -5,6 +5,7 @@ open System.Web
 open FSharp.Data
 open FSharp.Data.HttpRequestHeaders
 
+open System.Net.Http
 open FeedsProcessing.Feeds
 open FeedsProcessing.Download
 
@@ -76,7 +77,9 @@ let downloadTwitterTimeline (consumerKey : string) (consumerSecret : string) (ha
 
 let downloadFeed (FeedUrl url) : DownloadResult =
     unsafeOperation "Download feed" { return fun _ ->
-         url
-         |> Http.RequestString
-         |> DownloadedFeed
+        (new HttpClient())
+            .GetStringAsync(url)
+            .GetAwaiter()
+            .GetResult()
+            |> DownloadedFeed
     }
