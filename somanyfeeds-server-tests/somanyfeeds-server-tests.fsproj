@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <GenerateProgramFile>false</GenerateProgramFile>
+    <DotnetFscCompilerPath></DotnetFscCompilerPath>
   </PropertyGroup>
 
   <PropertyGroup>

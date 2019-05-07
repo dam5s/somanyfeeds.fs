@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <OutputType>Exe</OutputType>
     <ServerGarbageCollection>true</ServerGarbageCollection>
+    <DotnetFscCompilerPath></DotnetFscCompilerPath>
   </PropertyGroup>
 
   <PropertyGroup>
