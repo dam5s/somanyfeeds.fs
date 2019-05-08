@@ -1,0 +1,12 @@
+applications:
+- name: somanyfeeds
+  disk_quota: 1G
+  path: somanyfeeds-server/bin/Release/netcoreapp2.2/publish/
+  env:
+    COOKIE_ENCRYPTION_KEY: ...
+    DB_CONNECTION: ...
+  instances: 2
+  memory: 256M
+  routes:
+  - route: somanyfeeds.com
+  stack: cflinuxfs3

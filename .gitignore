@@ -7,3 +7,4 @@ obj
 public
 elm-stuff
 *.DotSettings.user
+manifest.yml
