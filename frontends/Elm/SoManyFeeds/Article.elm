@@ -1,6 +1,7 @@
-module SoManyFeeds.Article exposing (Article, Json, State(..), fromJson, markReadRequest, markUnreadRequest, setState)
+module SoManyFeeds.Article exposing (Article, Json, State(..), fromJson, listAllRequest, listByFeedRequest, markReadRequest, markUnreadRequest, setState)
 
 import Http
+import Json.Decode
 import Time
 
 
@@ -84,3 +85,29 @@ markUnreadRequest article =
         { method = "DELETE"
         , url = article.readUrl
         }
+
+
+decoder : Json.Decode.Decoder Json
+decoder =
+    Json.Decode.map7 Json
+        (Json.Decode.field "feedName" Json.Decode.string)
+        (Json.Decode.field "url" Json.Decode.string)
+        (Json.Decode.field "title" Json.Decode.string)
+        (Json.Decode.field "feedUrl" Json.Decode.string)
+        (Json.Decode.field "content" Json.Decode.string)
+        (Json.Decode.field "date" Json.Decode.int)
+        (Json.Decode.field "readUrl" Json.Decode.string)
+
+
+listAllRequest : Http.Request (List Json)
+listAllRequest =
+    Http.get "/api/articles/recent" (Json.Decode.list decoder)
+
+
+listByFeedRequest : String -> Http.Request (List Json)
+listByFeedRequest feedId =
+    let
+        path =
+            "/api/articles/recent?feedId=" ++ feedId
+    in
+    Http.get path (Json.Decode.list decoder)
