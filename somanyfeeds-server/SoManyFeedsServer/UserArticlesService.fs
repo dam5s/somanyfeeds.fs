@@ -3,23 +3,12 @@ module SoManyFeedsServer.UserArticlesService
 open SoManyFeedsServer.ArticlesDataGateway
 open SoManyFeedsServer.Authentication
 open SoManyFeedsServer.FeedsDataGateway
-open SoManyFeedsServer.DataSource
 
 
-let private articlesWithFeeds (feeds : FeedRecord seq) (articles : ArticleRecord seq) : (FeedRecord option * ArticleRecord) seq =
-    articles
-    |> Seq.map (fun article ->
-        let feed =
-            feeds
-            |> Seq.tryFind (fun feed -> feed.Url = article.FeedUrl)
-
-        feed, article
-    )
-
-
-let listRecent (user : User) : AsyncResult<(FeedRecord option * ArticleRecord) seq> =
+let listRecent (user : User) (maybeFeedId : int64 option) : AsyncResult<FeedRecord seq * ArticleRecord seq> =
     asyncResult {
         let! feeds = FeedsDataGateway.listFeeds user.Id
-        let! articles = UserArticlesDataGateway.listRecentUnreadArticles user.Id
-        return articlesWithFeeds feeds articles
+        let! articles = UserArticlesDataGateway.listRecentUnreadArticles user.Id maybeFeedId
+
+        return feeds, articles
     }

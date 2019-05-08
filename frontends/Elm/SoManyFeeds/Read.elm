@@ -1,12 +1,15 @@
 module SoManyFeeds.Read exposing (main)
 
 import Browser exposing (Document)
-import Html exposing (Html, a, article, button, div, h1, h2, h3, h4, header, nav, p, section, text)
-import Html.Attributes exposing (class, href, target, type_)
-import Html.Events exposing (onClick)
+import Html exposing (Attribute, Html, a, article, button, div, h1, h2, h3, h4, header, nav, option, p, section, select, text)
+import Html.Attributes exposing (class, href, selected, target, type_, value)
+import Html.Events exposing (on, onClick, targetValue)
 import Http
+import Json.Decode
 import SoManyFeeds.Article as Article exposing (Article)
+import SoManyFeeds.Feed exposing (Feed)
 import SoManyFeeds.Logo as Logo
+import SoManyFeeds.RedirectTo exposing (redirectTo)
 import Support.DateFormat as DateFormat
 import Support.RawHtml as RawHtml
 import Task
@@ -16,12 +19,16 @@ import Time
 type alias Flags =
     { userName : String
     , articles : List Article.Json
+    , feeds : List Feed
+    , selectedFeedId : Maybe Int
     }
 
 
 type alias Model =
     { userName : String
     , articles : List Article
+    , feeds : List Feed
+    , selectedFeedId : Maybe Int
     , timeZone : Maybe Time.Zone
     }
 
@@ -32,12 +39,15 @@ type Msg
     | MarkReadResult Article (Result Http.Error String)
     | MarkUnread Article
     | MarkUnreadResult Article (Result Http.Error String)
+    | GoToPath String
 
 
 init : Flags -> ( Model, Cmd Msg )
 init flags =
     ( { userName = flags.userName
       , articles = List.map Article.fromJson flags.articles
+      , feeds = flags.feeds
+      , selectedFeedId = flags.selectedFeedId
       , timeZone = Nothing
       }
     , Task.perform UpdateTimeZone Time.here
@@ -85,6 +95,32 @@ articleList model =
         section [] <| List.map (articleView model) model.articles
 
 
+feedOptions : Model -> List (Html Msg)
+feedOptions model =
+    let
+        feedUrl feed =
+            "/read/feed/" ++ String.fromInt feed.id
+
+        feedOption feed =
+            option [ selected (model.selectedFeedId == Just feed.id), value (feedUrl feed) ] [ text ("Show only " ++ feed.name) ]
+    in
+    [ option [ selected (model.selectedFeedId == Nothing), value "/read" ] [ text "Show all subscriptions" ] ]
+        ++ List.map feedOption model.feeds
+
+
+{-| This replaces onInput for selects.
+
+onInput only works in Chrome for selects,
+other browsers trigger a change event.
+
+See: <https://github.com/elm-lang/html/issues/71>
+
+-}
+onSelect : (String -> msg) -> Attribute msg
+onSelect msg =
+    on "change" (Json.Decode.map msg targetValue)
+
+
 view : Model -> Document Msg
 view model =
     { title = "SoManyFeeds - A feed aggregator by Damien Le Berrigaud"
@@ -102,6 +138,11 @@ view model =
         , header [ class "page" ]
             [ h2 [] [ text "Articles" ]
             , h1 [] [ text "Your reading list" ]
+            , nav []
+                [ div [ class "styled-select" ]
+                    [ select [ onSelect GoToPath ] (feedOptions model)
+                    ]
+                ]
             ]
         , div [ class "main" ] [ articleList model ]
         ]
@@ -143,6 +184,9 @@ update msg model =
 
         MarkUnreadResult record (Err _) ->
             ( model, Cmd.none )
+
+        GoToPath path ->
+            ( model, redirectTo path )
 
 
 main : Program Flags Model Msg

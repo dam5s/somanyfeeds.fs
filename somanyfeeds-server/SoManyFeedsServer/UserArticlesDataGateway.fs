@@ -6,7 +6,7 @@ open SoManyFeedsServer.DataSource
 open FSharp.Data.Sql
 
 
-let listRecentUnreadArticles (userId : int64) : AsyncResult<ArticleRecord seq> =
+let listRecentUnreadArticles (userId : int64) (maybeFeedId : int64 option) : AsyncResult<ArticleRecord seq> =
     dataAccessOperation (fun ctx ->
         let userReadArticleIds =
             query {
@@ -15,13 +15,27 @@ let listRecentUnreadArticles (userId : int64) : AsyncResult<ArticleRecord seq> =
                 select readArticle.ArticleId
             }
 
+        let feedIds =
+            match maybeFeedId with
+            | Some feedId ->
+                query {
+                    for feed in ctx.Public.Feeds do
+                    where (feed.Id = feedId)
+                    select feed.Id
+                }
+            | None ->
+                query {
+                    for feed in ctx.Public.Feeds do
+                    select feed.Id
+                }
+
         query {
             for article in ctx.Public.Articles do
 
             join feed in ctx.Public.Feeds on (article.FeedUrl = feed.Url)
             join user in ctx.Public.Users on (feed.UserId = user.Id)
 
-            where (user.Id = userId && (article.Id |<>| userReadArticleIds))
+            where (user.Id = userId && (article.Id |<>| userReadArticleIds) && (feed.Id |=| feedIds))
 
             sortByDescending article.Date
             take 20

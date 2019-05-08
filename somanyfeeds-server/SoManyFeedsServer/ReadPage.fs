@@ -9,18 +9,28 @@ open Suave.DotLiquid
 type ReadViewModel =
     { UserName : string
       ArticlesJson : string
+      FeedsJson : string
+      SelectedFeedId : string
     }
 
 
-let page (listArticles : AsyncResult<(FeedRecord option * ArticleRecord) seq>) (user : Authentication.User) : WebPart =
+let page
+    (listFeedsAndArticles : Authentication.User -> int64 option -> AsyncResult<FeedRecord seq * ArticleRecord seq>)
+    (user : Authentication.User)
+    (maybeFeedId : int64 option) : WebPart =
+
     fun ctx -> async {
-        let! listResult = listArticles
+        let! listResult = listFeedsAndArticles user maybeFeedId
 
         match listResult with
-        | Ok records ->
+        | Ok (feeds, articles) ->
             let viewModel =
                 { UserName = user.Name
-                  ArticlesJson = Json.serializeList ArticlesApi.Encoders.article records
+                  ArticlesJson = Json.serializeList (ArticlesApi.Encoders.article feeds) articles
+                  FeedsJson = Json.serializeList FeedsApi.Encoders.feed feeds
+                  SelectedFeedId = maybeFeedId
+                                   |> Option.map (sprintf "%d")
+                                   |> Option.defaultValue "null"
                 }
             return! page "read.html.liquid" viewModel ctx
         | Error message ->

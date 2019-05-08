@@ -25,6 +25,10 @@ $small-screen-width: 600px;
   @return 'data:image/svg+xml,%3Csvg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath fill="%23046380" d="' + $path + '" /%3E%3C/svg%3E';
 }
 
+@function icon-light-svg($path) {
+  @return 'data:image/svg+xml,%3Csvg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath fill="%23efefe0" d="' + $path + '" /%3E%3C/svg%3E';
+}
+
 @mixin icon($icon-url) {
   background-image: url($icon-url);
   background-repeat: no-repeat;
@@ -40,6 +44,7 @@ $small-screen-width: 600px;
 $mark-read-icon-path: 'M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z';
 $mark-all-read-icon-path: 'M0.41,13.41L6,19L7.41,17.58L1.83,12M22.24,5.58L11.66,16.17L7.5,12L6.07,13.41L11.66,19L23.66,7M18,7L16.59,5.58L10.24,11.93L11.66,13.34L18,7Z';
 $undo-icon-path: 'M12.5,8C9.85,8 7.45,9 5.6,10.6L2,7V16H11L7.38,12.38C8.77,11.22 10.54,10.5 12.5,10.5C16.04,10.5 19.05,12.81 20.1,16L22.47,15.22C21.08,11.03 17.15,8 12.5,8Z';
+$chevron-down-icon-path: 'M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z';
 
 
 html, body {
@@ -182,7 +187,16 @@ header.page {
   h1 {
     color: $bg-color;
     margin-top: -.3rem;
+    margin-bottom: .7rem;
     line-height: 1;
+  }
+
+  nav {
+    padding: 0;
+
+    @media (min-width: $small-screen-width) {
+      padding: 0 2rem;
+    }
   }
 }
 
@@ -393,26 +407,40 @@ input[type="text"], input[type="email"], input[type="password"] {
 
 .styled-select {
   padding: 0;
-  background-color: $bg-color;
+  background-color: transparentize($contrast-color, .8);
   color: $fg-color;
   border-radius: 2px;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
   width: 100%;
   font-family: $serif-fonts;
   font-weight: $serif-normal;
+  overflow-x: hidden;
+
+  &:hover {
+    background-color: transparentize($contrast-color, .6);
+  }
 
   select {
-    background: transparent;
     outline: none;
-    width: 100%;
+    width: calc(100% + 2rem);
     cursor: pointer;
     height: 2.27rem;
     line-height: 2.27rem;
-    padding: 0 .3rem;
-    border-radius: 2px;
     border: none;
+    @include icon(icon-light-svg($chevron-down-icon-path));
+    padding: 0 3rem 0 1.6rem;
+    background-color: transparent;
+    background-position: right 4.5rem center;
+    color: $light-color;
 
     &:disabled {
       opacity: 0.5;
+    }
+
+    @media (min-width: $small-screen-width) {
+      border-radius: 2px;
+      padding: 0 1.8rem 0 .5rem;
+      background-position: right 2.5rem center;
     }
   }
 }

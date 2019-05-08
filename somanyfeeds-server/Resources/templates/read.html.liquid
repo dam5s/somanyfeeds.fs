@@ -3,12 +3,18 @@
 {% include "_head.html.liquid" %}
 <body>
 
-<script src="/somanyfeeds.js?v={%  include "_assets_version.html.liquid" %}"></script>
+<script src="/somanyfeeds.js?v={% include "_assets_version.html.liquid" %}"></script>
 <script>
-    Elm.SoManyFeeds.Read.init({flags: {
+    var app = Elm.SoManyFeeds.Read.init({flags: {
         userName: "{{ model.UserName }}",
-        articles: {{ model.ArticlesJson }}
+        articles: {{ model.ArticlesJson }},
+        feeds: {{ model.FeedsJson }},
+        selectedFeedId : {{ model.SelectedFeedId }}
     }});
+
+    app.ports.redirectTo.subscribe(function (destination) {
+        window.location = destination;
+    })
 </script>
 
 </body>

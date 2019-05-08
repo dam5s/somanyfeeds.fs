@@ -11,8 +11,9 @@ module Encoders =
     open Chiron
     open Chiron.Operators
 
-    let article (feedOption : FeedRecord option, article : ArticleRecord) : Json<unit> =
-        let feedName = feedOption
+    let article (feeds : FeedRecord seq) (article : ArticleRecord) : Json<unit> =
+        let feedName = feeds
+                       |> Seq.tryFind (fun f -> f.Url = article.FeedUrl)
                        |> Option.map (fun f -> f.Name)
                        |> Option.defaultValue ""
 
@@ -25,12 +26,12 @@ module Encoders =
         *> Json.write "readUrl" (sprintf "/api/articles/%d/read" article.Id)
 
 
-let list (listArticles : AsyncResult<(FeedRecord option * ArticleRecord) seq>) : WebPart =
+let list (listArticles : AsyncResult<FeedRecord seq * ArticleRecord seq>) : WebPart =
     fun ctx -> async {
         let! articlesResult = listArticles
 
         match articlesResult with
-        | Ok articles -> return! listResponse HTTP_200 Encoders.article articles ctx
+        | Ok (feeds, articles) -> return! listResponse HTTP_200 (Encoders.article feeds) articles ctx
         | Error message -> return! serverErrorResponse message ctx
     }
 

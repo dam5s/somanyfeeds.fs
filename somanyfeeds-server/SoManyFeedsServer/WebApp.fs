@@ -19,7 +19,6 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
     let updateFeed = FeedsDataGateway.updateFeed user.Id
     let deleteFeed = FeedsDataGateway.deleteFeed user.Id
 
-    let listRecentArticles = UserArticlesService.listRecent user
     let createReadArticle articleId =
         UserArticlesDataGateway.createReadArticle { UserId = user.Id ; ArticleId = articleId }
     let deleteReadArticle articleId =
@@ -27,7 +26,10 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
 
 
     let readPage _ =
-        ReadPage.page listRecentArticles user
+        ReadPage.page UserArticlesService.listRecent user None
+
+    let readFeedPage feedId =
+        ReadPage.page UserArticlesService.listRecent user (Some feedId)
 
     let managePage _ =
         ManagePage.page maxFeeds listFeeds user
@@ -49,8 +51,16 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
         FeedsApi.delete
             (fun _ -> deleteFeed feedId)
 
-    let listRecentArticlesApi _ =
-        ArticlesApi.list listRecentArticles
+    let paramToId param =
+        unsafeOperation "Reading id query param" { return fun _ -> int64 param }
+
+    let listRecentArticlesApi (request : HttpRequest) =
+        let maybeFeedId = request.queryParam "feedId"
+                          |> Result.ofChoice
+                          |> Result.bind paramToId
+                          |> Result.toOption
+
+        ArticlesApi.list (UserArticlesService.listRecent user maybeFeedId)
 
     let createReadArticleApi articleId =
         ArticlesApi.update (createReadArticle articleId)
@@ -61,6 +71,7 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
 
     choose [
         GET >=> path "/read" >=> request readPage
+        GET >=> pathScan "/read/feed/%d" readFeedPage
         GET >=> path "/manage" >=> request managePage
 
         GET >=> path "/api/feeds" >=> request listFeedsApi

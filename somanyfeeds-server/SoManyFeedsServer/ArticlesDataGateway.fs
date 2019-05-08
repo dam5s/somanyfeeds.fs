@@ -2,7 +2,6 @@ module SoManyFeedsServer.ArticlesDataGateway
 
 open Time
 open SoManyFeedsServer.DataSource
-open FSharp.Data.Sql.Common
 
 
 type ArticleRecord =
