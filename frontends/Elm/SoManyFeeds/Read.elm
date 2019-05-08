@@ -10,6 +10,7 @@ import Json.Decode
 import SoManyFeeds.Article as Article exposing (Article)
 import SoManyFeeds.Feed exposing (Feed)
 import SoManyFeeds.Logo as Logo
+import SoManyFeeds.RemoteData as RemoteData exposing (RemoteData(..))
 import Support.DateFormat as DateFormat
 import Support.RawHtml as RawHtml
 import Task
@@ -28,7 +29,7 @@ type alias Flags =
 type alias Model =
     { navKey : Key
     , userName : String
-    , articles : List Article
+    , articles : RemoteData (List Article)
     , feeds : List Feed
     , selectedFeedId : Maybe Int
     , timeZone : Maybe Time.Zone
@@ -51,7 +52,7 @@ init : Flags -> Url -> Key -> ( Model, Cmd Msg )
 init flags _ navKey =
     ( { navKey = navKey
       , userName = flags.userName
-      , articles = List.map Article.fromJson flags.articles
+      , articles = Loaded (List.map Article.fromJson flags.articles)
       , feeds = flags.feeds
       , selectedFeedId = flags.selectedFeedId
       , timeZone = Nothing
@@ -85,20 +86,41 @@ articleView model record =
 
 articleList : Model -> Html Msg
 articleList model =
-    if List.isEmpty model.articles then
-        section []
-            [ div [ class "card" ]
-                [ p [ class "message" ]
-                    [ text "You don't have anything to read. Have you "
-                    , a [ href "/manage" ] [ text "subscribed to any feed" ]
-                    , text " yet?"
+    case model.articles of
+        Loaded [] ->
+            if List.isEmpty model.feeds then
+                section []
+                    [ div [ class "card" ]
+                        [ p [ class "message" ] [ text "You have not ", a [ href "/manage" ] [ text "subscribed to any feed" ], text " yet." ]
+                        , p [ class "message" ] [ text "Please use the ", a [ href "/manage" ] [ text "manage tab" ], text " to subscribe to some feeds." ]
+                        ]
                     ]
-                , p [ class "message" ] [ text "New feed subscriptions may take ~10 minutes before being available." ]
-                ]
-            ]
 
-    else
-        section [] <| List.map (articleView model) model.articles
+            else
+                section []
+                    [ div [ class "card" ]
+                        [ p [ class "message" ] [ text "No unread articles." ]
+                        , p [ class "message" ] [ text "New feed subscriptions may take ~10 minutes before being available." ]
+                        ]
+                    ]
+
+        Loaded articles ->
+            section [] <| List.map (articleView model) articles
+
+        Loading ->
+            section []
+                [ div [ class "card" ]
+                    [ p [ class "message" ] [ text "Loading your reading list. Thank you for your patience." ]
+                    ]
+                ]
+
+        Error message ->
+            section []
+                [ div [ class "card" ]
+                    [ p [ class "message" ] [ text "There was an error while loading your articles." ]
+                    , p [ class "message" ] [ text message ]
+                    ]
+                ]
 
 
 feedOptions : Model -> List (Html Msg)
@@ -175,14 +197,14 @@ update msg model =
             ( model, Cmd.none )
 
         FilterByFeed "" ->
-            ( model, Cmd.batch [ Nav.pushUrl model.navKey "/read", loadAllFeeds ] )
+            ( { model | articles = Loading }, Cmd.batch [ Nav.pushUrl model.navKey "/read", loadAllFeeds ] )
 
         FilterByFeed feedId ->
             let
                 feedUrl =
                     "/read/feed/" ++ feedId
             in
-            ( model, Cmd.batch [ Nav.pushUrl model.navKey feedUrl, loadFeed feedId ] )
+            ( { model | articles = Loading }, Cmd.batch [ Nav.pushUrl model.navKey feedUrl, loadFeed feedId ] )
 
         UpdateTimeZone timeZone ->
             ( { model | timeZone = Just timeZone }, Cmd.none )
@@ -195,7 +217,8 @@ update msg model =
         MarkReadResult record (Ok _) ->
             let
                 updatedArticles =
-                    Article.setState Article.Read record model.articles
+                    model.articles
+                        |> RemoteData.map (Article.setState Article.Read record)
             in
             ( { model | articles = updatedArticles }, Cmd.none )
 
@@ -210,7 +233,8 @@ update msg model =
         MarkUnreadResult record (Ok _) ->
             let
                 updatedArticles =
-                    Article.setState Article.Unread record model.articles
+                    model.articles
+                        |> RemoteData.map (Article.setState Article.Unread record)
             in
             ( { model | articles = updatedArticles }, Cmd.none )
 
@@ -218,10 +242,10 @@ update msg model =
             ( model, Cmd.none )
 
         ReceivedArticles (Ok articles) ->
-            ( { model | articles = List.map Article.fromJson articles }, Cmd.none )
+            ( { model | articles = Loaded (List.map Article.fromJson articles) }, Cmd.none )
 
-        ReceivedArticles (Err _) ->
-            ( model, Cmd.none )
+        ReceivedArticles (Err err) ->
+            ( { model | articles = RemoteData.errorFromHttp err }, Cmd.none )
 
 
 main : Program Flags Model Msg
