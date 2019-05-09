@@ -1,4 +1,4 @@
-module UserArticlesDataGateway
+module SoManyFeedsServer.UserArticlesDataGateway
 
 open SoManyFeedsServer
 open SoManyFeedsServer.ArticlesDataGateway
