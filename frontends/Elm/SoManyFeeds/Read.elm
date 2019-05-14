@@ -42,10 +42,11 @@ type Msg
     | FilterByFeed String
     | ReceivedArticles (Result Http.Error (List Article.Json))
     | UpdateTimeZone Time.Zone
-    | MarkRead Article
-    | MarkReadResult Article (Result Http.Error String)
-    | MarkUnread Article
-    | MarkUnreadResult Article (Result Http.Error String)
+    | Bookmark Article
+    | RemoveBookmark Article
+    | Read Article
+    | Unread Article
+    | ChangeArticleStateResult Article Article.State (Result Http.Error String)
 
 
 init : Flags -> Url -> Key -> ( Model, Cmd Msg )
@@ -71,7 +72,8 @@ articleView model record =
                         [ h4 [] [ text record.feedName ]
                         , h3 [] [ a [ href record.url, target "_blank" ] <| RawHtml.parseEntities record.title ]
                         ]
-                    , button [ onClick (MarkRead record), type_ "button", class "flex-init button icon-only mark-read" ] [ text "Mark read" ]
+                    , button [ onClick (Bookmark record), type_ "button", class "flex-init button icon-only bookmark" ] [ text "Save for later" ]
+                    , button [ onClick (Read record), type_ "button", class "flex-init button icon-only mark-read" ] [ text "Mark read" ]
                     ]
                 , p [ class "date" ] [ text <| DateFormat.tryFormat model.timeZone record.date ]
                 , div [ class "content" ] <| RawHtml.fromString record.content
@@ -80,7 +82,13 @@ articleView model record =
         Article.Read ->
             article [ class "card row read" ]
                 [ h3 [] <| RawHtml.parseEntities record.title
-                , button [ onClick (MarkUnread record), type_ "button", class "button icon-only undo flex-init" ] [ text "Undo" ]
+                , button [ onClick (Unread record), type_ "button", class "button icon-only undo flex-init" ] [ text "Undo" ]
+                ]
+
+        Article.Bookmarked ->
+            article [ class "card row bookmarked" ]
+                [ h3 [] [ a [ href record.url, target "_blank" ] <| RawHtml.parseEntities record.title ]
+                , button [ onClick (RemoveBookmark record), type_ "button", class "button icon-only bookmarked flex-init" ] [ text "Remove bookmark" ]
                 ]
 
 
@@ -162,7 +170,7 @@ view model =
             ]
         , header [ class "page" ]
             [ h2 [] [ text "Articles" ]
-            , h1 [] [ text "Your reading list" ]
+            , h1 [] [ text "Recent" ]
             , nav []
                 [ div [ class "styled-select" ]
                     [ select [ onSelect FilterByFeed ] (feedOptions model)
@@ -206,46 +214,37 @@ update msg model =
             in
             ( { model | articles = Loading }, Cmd.batch [ Nav.pushUrl model.navKey feedUrl, loadFeed feedId ] )
 
-        UpdateTimeZone timeZone ->
-            ( { model | timeZone = Just timeZone }, Cmd.none )
-
-        MarkRead record ->
-            ( model
-            , Http.send (MarkReadResult record) (Article.markReadRequest record)
-            )
-
-        MarkReadResult record (Ok _) ->
-            let
-                updatedArticles =
-                    model.articles
-                        |> RemoteData.map (Article.setState Article.Read record)
-            in
-            ( { model | articles = updatedArticles }, Cmd.none )
-
-        MarkReadResult record (Err _) ->
-            ( model, Cmd.none )
-
-        MarkUnread record ->
-            ( model
-            , Http.send (MarkUnreadResult record) (Article.markUnreadRequest record)
-            )
-
-        MarkUnreadResult record (Ok _) ->
-            let
-                updatedArticles =
-                    model.articles
-                        |> RemoteData.map (Article.setState Article.Unread record)
-            in
-            ( { model | articles = updatedArticles }, Cmd.none )
-
-        MarkUnreadResult record (Err _) ->
-            ( model, Cmd.none )
-
         ReceivedArticles (Ok articles) ->
             ( { model | articles = Loaded (List.map Article.fromJson articles) }, Cmd.none )
 
         ReceivedArticles (Err err) ->
             ( { model | articles = RemoteData.errorFromHttp err }, Cmd.none )
+
+        UpdateTimeZone timeZone ->
+            ( { model | timeZone = Just timeZone }, Cmd.none )
+
+        Bookmark record ->
+            ( model, Http.send (ChangeArticleStateResult record Article.Bookmarked) (Article.bookmarkRequest record) )
+
+        RemoveBookmark record ->
+            ( model, Http.send (ChangeArticleStateResult record Article.Unread) (Article.removeBookmarkRequest record) )
+
+        Read record ->
+            ( model, Http.send (ChangeArticleStateResult record Article.Read) (Article.readRequest record) )
+
+        Unread record ->
+            ( model, Http.send (ChangeArticleStateResult record Article.Unread) (Article.unreadRequest record) )
+
+        ChangeArticleStateResult record newState (Ok _) ->
+            let
+                updatedArticles =
+                    model.articles
+                        |> RemoteData.map (Article.setState newState record)
+            in
+            ( { model | articles = updatedArticles }, Cmd.none )
+
+        ChangeArticleStateResult _ _ (Err _) ->
+            ( model, Cmd.none )
 
 
 main : Program Flags Model Msg

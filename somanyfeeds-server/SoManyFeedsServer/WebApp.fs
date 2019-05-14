@@ -5,6 +5,7 @@ open Suave.Filters
 open Suave.Operators
 open Suave.RequestErrors
 open SoManyFeedsServer
+open SoManyFeedsServer.UserArticlesDataGateway
 open SoManyFeedsServer.Json
 
 
@@ -18,11 +19,6 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
     let createFeed = FeedsService.createFeed maxFeeds user.Id
     let updateFeed = FeedsDataGateway.updateFeed user.Id
     let deleteFeed = FeedsDataGateway.deleteFeed user.Id
-
-    let createReadArticle articleId =
-        UserArticlesDataGateway.createReadArticle { UserId = user.Id ; ArticleId = articleId }
-    let deleteReadArticle articleId =
-        UserArticlesDataGateway.deleteReadArticle { UserId = user.Id ; ArticleId = articleId }
 
 
     let readPage _ =
@@ -62,11 +58,26 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
 
         ArticlesApi.list (UserArticlesService.listRecent user maybeFeedId)
 
-    let createReadArticleApi articleId =
-        ArticlesApi.update (createReadArticle articleId)
 
-    let deleteReadArticleApi articleId =
-        ArticlesApi.update (deleteReadArticle articleId)
+    let createReadArticle articleId =
+        { UserId = user.Id ; ArticleId = articleId }
+        |> UserArticlesDataGateway.createReadArticle
+        |> ArticlesApi.update
+
+    let deleteReadArticle articleId =
+        { UserId = user.Id ; ArticleId = articleId }
+        |> UserArticlesDataGateway.deleteReadArticle
+        |> ArticlesApi.update
+
+    let createBookmark articleId =
+        { UserId = user.Id ; ArticleId = articleId }
+        |> UserArticlesDataGateway.createBookmark
+        |> ArticlesApi.update
+
+    let deleteBookmark articleId =
+        { UserId = user.Id ; ArticleId = articleId }
+        |> UserArticlesDataGateway.deleteBookmark
+        |> ArticlesApi.update
 
 
     choose [
@@ -80,8 +91,10 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
         DELETE >=> pathScan "/api/feeds/%d" deleteFeedApi
 
         GET >=> path "/api/articles/recent" >=> request listRecentArticlesApi
-        POST >=> pathScan "/api/articles/%d/read" createReadArticleApi
-        DELETE >=> pathScan "/api/articles/%d/read" deleteReadArticleApi
+        POST >=> pathScan "/api/articles/%d/read" createReadArticle
+        DELETE >=> pathScan "/api/articles/%d/read" deleteReadArticle
+        POST >=> pathScan "/api/articles/%d/bookmark" createBookmark
+        DELETE >=> pathScan "/api/articles/%d/bookmark" deleteBookmark
 
         NOT_FOUND "not found"
     ]

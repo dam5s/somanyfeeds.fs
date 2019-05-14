@@ -22,7 +22,7 @@ let executeAllSql (sql : string list) =
 
 let queryDataContext queryFn =
     asyncResult {
-        let! ctx = DataSource.dataContext
+        let! ctx = DataSource.asyncDataContext
         return queryFn ctx |> Seq.map id
     }
     |> Async.RunSynchronously

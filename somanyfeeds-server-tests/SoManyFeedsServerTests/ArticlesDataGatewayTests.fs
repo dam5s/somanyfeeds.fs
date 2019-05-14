@@ -28,7 +28,12 @@ let private find id =
 [<Test>]
 let ``creating then updating an article`` () =
     setTestDbConnectionString ()
-    executeSql "delete from articles"
+    executeAllSql
+        [
+        "delete from bookmarks"
+        "delete from read_articles"
+        "delete from articles"
+        ]
 
     let fields: ArticleFields =
         { Url = "http://example.com/my/articles/1"

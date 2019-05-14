@@ -46,10 +46,10 @@ type ArticleEntity = SoManyFeedsDb.dataContext.``public.articlesEntity``
 type FeedJobEntity = SoManyFeedsDb.dataContext.``public.feed_jobsEntity``
 
 
-type DataContext = AsyncResult<SoManyFeedsDb.dataContext>
+type DataContext = SoManyFeedsDb.dataContext
 
 
-let dataContext : DataContext =
+let asyncDataContext : AsyncResult<DataContext> =
     async {
        return unsafeOperation "Get data context" { return fun _ ->
            Environment.SetEnvironmentVariable ("PGTZ", "UTC")
@@ -60,7 +60,7 @@ let dataContext : DataContext =
 
 let dataAccessOperation f =
     asyncResult {
-        let! ctx = dataContext
+        let! ctx = asyncDataContext
 
         return! unsafeAsyncOperation "Data access" { return fun _ ->
             f ctx

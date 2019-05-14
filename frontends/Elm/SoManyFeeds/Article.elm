@@ -1,4 +1,4 @@
-module SoManyFeeds.Article exposing (Article, Json, State(..), fromJson, listAllRequest, listByFeedRequest, markReadRequest, markUnreadRequest, setState)
+module SoManyFeeds.Article exposing (Article, Json, State(..), bookmarkRequest, fromJson, listAllRequest, listByFeedRequest, readRequest, removeBookmarkRequest, setState, unreadRequest)
 
 import Http
 import Json.Decode
@@ -8,6 +8,7 @@ import Time
 type State
     = Unread
     | Read
+    | Bookmarked
 
 
 type alias Article =
@@ -18,6 +19,7 @@ type alias Article =
     , content : String
     , date : Time.Posix
     , readUrl : String
+    , bookmarkUrl : String
     , state : State
     }
 
@@ -30,6 +32,7 @@ type alias Json =
     , content : String
     , date : Int
     , readUrl : String
+    , bookmarkUrl : String
     }
 
 
@@ -42,6 +45,7 @@ fromJson json =
     , content = json.content
     , date = Time.millisToPosix json.date
     , readUrl = json.readUrl
+    , bookmarkUrl = json.bookmarkUrl
     , state = Unread
     }
 
@@ -71,25 +75,33 @@ simpleRequest options =
         }
 
 
-markReadRequest : Article -> Http.Request String
-markReadRequest article =
-    simpleRequest
-        { method = "POST"
-        , url = article.readUrl
-        }
+simplePostRequest url =
+    simpleRequest { method = "POST", url = url }
 
 
-markUnreadRequest : Article -> Http.Request String
-markUnreadRequest article =
-    simpleRequest
-        { method = "DELETE"
-        , url = article.readUrl
-        }
+simpleDeleteRequest url =
+    simpleRequest { method = "DELETE", url = url }
+
+
+readRequest article =
+    simplePostRequest article.readUrl
+
+
+unreadRequest article =
+    simpleDeleteRequest article.readUrl
+
+
+bookmarkRequest article =
+    simplePostRequest article.bookmarkUrl
+
+
+removeBookmarkRequest article =
+    simpleDeleteRequest article.bookmarkUrl
 
 
 decoder : Json.Decode.Decoder Json
 decoder =
-    Json.Decode.map7 Json
+    Json.Decode.map8 Json
         (Json.Decode.field "feedName" Json.Decode.string)
         (Json.Decode.field "url" Json.Decode.string)
         (Json.Decode.field "title" Json.Decode.string)
@@ -97,6 +109,7 @@ decoder =
         (Json.Decode.field "content" Json.Decode.string)
         (Json.Decode.field "date" Json.Decode.int)
         (Json.Decode.field "readUrl" Json.Decode.string)
+        (Json.Decode.field "bookmarkUrl" Json.Decode.string)
 
 
 listAllRequest : Http.Request (List Json)

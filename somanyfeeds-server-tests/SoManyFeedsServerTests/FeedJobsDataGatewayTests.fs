@@ -11,6 +11,8 @@ let ``standard background processing flow`` () =
 
     executeAllSql
         [
+        "delete from bookmarks"
+        "delete from read_articles"
         "delete from feed_jobs"
         "delete from feeds"
         "delete from users"

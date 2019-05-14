@@ -2,6 +2,7 @@ module ``UserArticlesDataGateway tests``
 
 open NUnit.Framework
 open FsUnit
+open FsUnitTyped
 open SoManyFeedsServer
 open SoManyFeedsServer.ArticlesDataGateway
 
@@ -11,6 +12,7 @@ let ``recent unread articles`` () =
     setTestDbConnectionString ()
     executeAllSql
         [
+        "delete from bookmarks"
         "delete from read_articles"
         "delete from articles"
         "delete from feeds"
@@ -49,18 +51,32 @@ let ``recent unread articles`` () =
         |> Result.defaultValue []
 
 
-    UserArticlesDataGateway.listRecentUnreadArticles (int64 10) None
-    |> articleIds
-    |> should equal [ 310 ; 312 ; 313 ]
+    UserArticlesDataGateway.listRecentUnreadArticles 10L None
+    |> articleIds |> should equal [ 310L ; 312L ; 313L ]
 
-    UserArticlesDataGateway.listRecentUnreadArticles (int64 11) None
-    |> articleIds
-    |> should equal [ 313 ; 314 ]
+    UserArticlesDataGateway.listRecentUnreadArticles 11L None
+    |> articleIds |> should equal [ 313L ; 314L ]
 
-    UserArticlesDataGateway.listRecentUnreadArticles (int64 10) (Some (int64 101))
-    |> articleIds
-    |> should equal [ 310 ; 312 ]
+    UserArticlesDataGateway.listRecentUnreadArticles 10L (Some 101L)
+    |> articleIds |> should equal [ 310L ; 312L ]
 
-    UserArticlesDataGateway.listRecentUnreadArticles (int64 12) None
-    |> articleIds
-    |> should equal []
+    UserArticlesDataGateway.listRecentUnreadArticles 12L None
+    |> articleIds |> should equal []
+
+    UserArticlesDataGateway.deleteReadArticle { UserId = 10L ; ArticleId = 311L }
+    |> Async.RunSynchronously |> ignore
+
+    UserArticlesDataGateway.listRecentUnreadArticles 10L None
+    |> articleIds |> should contain 311L
+
+    UserArticlesDataGateway.createBookmark { UserId = 10L ; ArticleId = 311L }
+    |> Async.RunSynchronously |> ignore
+
+    UserArticlesDataGateway.listRecentUnreadArticles 10L None
+    |> articleIds |> shouldNotContain 311L
+
+    UserArticlesDataGateway.deleteBookmark { UserId = 10L ; ArticleId = 311L }
+    |> Async.RunSynchronously |> ignore
+
+    UserArticlesDataGateway.listRecentUnreadArticles 10L None
+    |> articleIds |> should contain 311L

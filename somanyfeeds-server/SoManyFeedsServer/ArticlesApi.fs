@@ -24,6 +24,7 @@ module Encoders =
         *> Json.write "content" article.Content
         *> Json.write "date" (Option.map Posix.milliseconds article.Date)
         *> Json.write "readUrl" (sprintf "/api/articles/%d/read" article.Id)
+        *> Json.write "bookmarkUrl" (sprintf "/api/articles/%d/bookmark" article.Id)
 
 
 let list (listArticles : AsyncResult<FeedRecord seq * ArticleRecord seq>) : WebPart =
