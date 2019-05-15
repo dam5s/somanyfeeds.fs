@@ -4,6 +4,7 @@ open Suave
 open Suave.Filters
 open Suave.Operators
 open Suave.RequestErrors
+open Suave.Redirection
 open SoManyFeedsServer
 open SoManyFeedsServer.UserArticlesDataGateway
 open SoManyFeedsServer.Json
@@ -21,11 +22,11 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
     let deleteFeed = FeedsDataGateway.deleteFeed user.Id
 
 
-    let readPage _ =
-        ReadPage.page UserArticlesService.listRecent user None
+    let readPage innerPage _ =
+        ReadPage.page UserArticlesService.listRecent user innerPage
 
     let readFeedPage feedId =
-        ReadPage.page UserArticlesService.listRecent user (Some feedId)
+        ReadPage.page UserArticlesService.listRecent user (ReadPage.Recent (Some feedId))
 
     let managePage _ =
         ManagePage.page maxFeeds listFeeds user
@@ -51,12 +52,16 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
         unsafeOperation "Reading id query param" { return fun _ -> int64 param }
 
     let listRecentArticlesApi (request : HttpRequest) =
-        let maybeFeedId = request.queryParam "feedId"
-                          |> Result.ofChoice
-                          |> Result.bind paramToId
-                          |> Result.toOption
+        let maybeFeedId =
+            request.queryParam "feedId"
+            |> Result.ofChoice
+            |> Result.bind paramToId
+            |> Result.toOption
 
         ArticlesApi.list (UserArticlesService.listRecent user maybeFeedId)
+
+    let listBookmarksApi _ =
+        ArticlesApi.list (UserArticlesService.listBookmarks user)
 
 
     let createReadArticle articleId =
@@ -81,8 +86,10 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
 
 
     choose [
-        GET >=> path "/read" >=> request readPage
-        GET >=> pathScan "/read/feed/%d" readFeedPage
+        GET >=> path "/read" >=> redirect "/read/recent"
+        GET >=> path "/read/recent" >=> request (readPage (ReadPage.Recent None))
+        GET >=> pathScan "/read/recent/feed/%d" readFeedPage
+        GET >=> path "/read/bookmarks" >=> request (readPage ReadPage.Bookmarks)
         GET >=> path "/manage" >=> request managePage
 
         GET >=> path "/api/feeds" >=> request listFeedsApi
@@ -91,6 +98,7 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
         DELETE >=> pathScan "/api/feeds/%d" deleteFeedApi
 
         GET >=> path "/api/articles/recent" >=> request listRecentArticlesApi
+        GET >=> path "/api/articles/bookmarks" >=> request listBookmarksApi
         POST >=> pathScan "/api/articles/%d/read" createReadArticle
         DELETE >=> pathScan "/api/articles/%d/read" deleteReadArticle
         POST >=> pathScan "/api/articles/%d/bookmark" createBookmark

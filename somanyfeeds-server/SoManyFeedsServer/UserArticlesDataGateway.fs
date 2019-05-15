@@ -63,6 +63,20 @@ let listRecentUnreadArticles (userId : int64) (maybeFeedId : int64 option) : Asy
     )
 
 
+let listBookmarks (userId : int64) : AsyncResult<ArticleRecord seq> =
+    dataAccessOperation (fun ctx ->
+        query {
+            for article in ctx.Public.Articles do
+            join bookmark in ctx.Public.Bookmarks on (article.Id = bookmark.ArticleId)
+            where ( bookmark.UserId = userId )
+
+            sortByDescending article.Date
+            select article
+        }
+        |> Seq.map ArticlesDataGateway.entityToRecord
+    )
+
+
 type UserArticleRecord =
     { UserId : int64
       ArticleId : int64

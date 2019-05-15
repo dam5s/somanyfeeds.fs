@@ -7,8 +7,9 @@
 <script>
     var app = Elm.SoManyFeeds.Read.init({flags: {
         userName: "{{ model.UserName }}",
-        articles: {{ model.ArticlesJson }},
+        recents: {{ model.RecentsJson }},
         feeds: {{ model.FeedsJson }},
+        page: "{{ model.Page }}",
         selectedFeedId : {{ model.SelectedFeedId }}
     }});
 

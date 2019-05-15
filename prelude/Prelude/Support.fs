@@ -24,3 +24,8 @@ module Choice =
         match choice with
         | Choice1Of2 value -> value
         | Choice2Of2 _ -> other
+
+    let toOption (choice : Choice<'a, 'b>) : 'a option =
+        match choice with
+        | Choice1Of2 value -> Some value
+        | Choice2Of2 _ -> None

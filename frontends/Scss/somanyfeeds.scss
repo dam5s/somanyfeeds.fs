@@ -46,6 +46,7 @@ $bookmark-icon-path: 'M17,18L12,15.82L7,18V5H17M17,3H7A2,2 0 0,0 5,5V21L12,18L19
 $bookmarked-icon-path: 'M17,3A2,2 0 0,1 19,5V21L12,18L5,21V5C5,3.89 5.9,3 7,3H17M11,14L17.25,7.76L15.84,6.34L11,11.18L8.41,8.59L7,10L11,14Z';
 $undo-icon-path: 'M12.5,8C9.85,8 7.45,9 5.6,10.6L2,7V16H11L7.38,12.38C8.77,11.22 10.54,10.5 12.5,10.5C16.04,10.5 19.05,12.81 20.1,16L22.47,15.22C21.08,11.03 17.15,8 12.5,8Z';
 $chevron-down-icon-path: 'M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z';
+$dots-vertical-icon-path: 'M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z';
 
 
 html, body {
@@ -183,6 +184,7 @@ header.page {
   h2 {
     color: $contrast-color;
     text-transform: uppercase;
+    margin: 0;
   }
 
   h1 {
@@ -193,10 +195,63 @@ header.page {
   }
 
   nav {
-    padding: 0;
+    position: relative;
+    margin: -1rem 0;
 
     @media (min-width: $small-screen-width) {
-      padding: 0 2rem;
+      margin: 0;
+    }
+
+    a:link, a:active, a:visited, a:hover {
+      display: block;
+      color: $bg-color;
+      padding: .5rem 1rem;
+      border-radius: 2px;
+    }
+
+    a:hover {
+      background-color: rgba(0, 0, 0, .5);
+    }
+  }
+
+  .toggle {
+    @include icon(icon-light-svg($dots-vertical-icon-path));
+    color: $bg-color;
+    background-position: 1rem center;
+    padding: .5rem 1rem .5rem 2.5rem;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    display: inline-block;
+
+    &.open {
+      border-color: $bg-color;
+    }
+
+    &.closed:hover {
+      border-radius: 2px;
+      background-color: rgba(255, 255, 255, .2);
+    }
+  }
+
+  menu {
+    display: none;
+    background-color: darken($accent-color, 10%);
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+    padding: 0;
+    margin: 0 -1.5rem -1rem;
+    z-index: 10;
+
+    @media (min-width: $small-screen-width) {
+      position: absolute;
+      right: -1rem;
+      width: auto;
+      margin: 0;
+      min-width: 16rem;
+      border-radius: 2px;
+    }
+
+    &.open {
+      display: block;
     }
   }
 }
@@ -355,6 +410,10 @@ article.read, article.bookmarked {
   display: flex;
   justify-content: space-between;
   align-items: start;
+
+  &.align-end {
+    align-items: end;
+  }
 
   &.responsive {
     display: block;

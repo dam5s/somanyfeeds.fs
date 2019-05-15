@@ -12,3 +12,11 @@ let listRecent (user : User) (maybeFeedId : int64 option) : AsyncResult<FeedReco
 
         return feeds, articles
     }
+
+let listBookmarks (user : User) : AsyncResult<FeedRecord seq * ArticleRecord seq> =
+    asyncResult {
+        let! feeds = FeedsDataGateway.listFeeds user.Id
+        let! articles = UserArticlesDataGateway.listBookmarks user.Id
+
+        return feeds, articles
+    }

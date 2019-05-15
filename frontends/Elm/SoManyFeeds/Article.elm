@@ -1,7 +1,8 @@
-module SoManyFeeds.Article exposing (Article, Json, State(..), bookmarkRequest, fromJson, listAllRequest, listByFeedRequest, readRequest, removeBookmarkRequest, setState, unreadRequest)
+module SoManyFeeds.Article exposing (Article, Json, State(..), bookmarkRequest, fromJson, listAllRequest, listBookmarksRequest, listByFeedRequest, readRequest, removeBookmarkRequest, setState, unreadRequest)
 
 import Http
 import Json.Decode
+import SoManyFeeds.Feed exposing (Feed)
 import Time
 
 
@@ -117,10 +118,15 @@ listAllRequest =
     Http.get "/api/articles/recent" (Json.Decode.list decoder)
 
 
-listByFeedRequest : String -> Http.Request (List Json)
-listByFeedRequest feedId =
+listBookmarksRequest : Http.Request (List Json)
+listBookmarksRequest =
+    Http.get "/api/articles/bookmarks" (Json.Decode.list decoder)
+
+
+listByFeedRequest : Feed -> Http.Request (List Json)
+listByFeedRequest feed =
     let
         path =
-            "/api/articles/recent?feedId=" ++ feedId
+            "/api/articles/recent?feedId=" ++ String.fromInt feed.id
     in
     Http.get path (Json.Decode.list decoder)

@@ -4,7 +4,8 @@ import Http
 
 
 type RemoteData a
-    = Loading
+    = NotLoaded
+    | Loading
     | Loaded a
     | Error String
 
@@ -35,6 +36,9 @@ map function remoteData =
     case remoteData of
         Loaded data ->
             Loaded (function data)
+
+        NotLoaded ->
+            NotLoaded
 
         Loading ->
             Loading
