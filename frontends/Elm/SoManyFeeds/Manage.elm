@@ -189,8 +189,10 @@ view model =
                 ]
             ]
         , header [ class "page" ]
-            [ h2 [] [ text "Feeds" ]
-            , h1 [] [ text "Manage your subscriptions" ]
+            [ div [ class "page-content" ]
+                [ h2 [] [ text "Feeds" ]
+                , h1 [] [ text "Manage your subscriptions" ]
+                ]
             ]
         , div [ class "main" ]
             [ overlay model
