@@ -1,4 +1,4 @@
-module SoManyFeeds.RemoteData exposing (RemoteData(..), errorFromHttp, map)
+module SoManyFeeds.Support.RemoteData exposing (RemoteData(..), errorFromHttp, map)
 
 import Http
 

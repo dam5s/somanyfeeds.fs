@@ -1,4 +1,4 @@
-module SoManyFeeds.RegistrationForm exposing (RegistrationForm, ValidRegistrationForm, applyHttpError, email, emailError, isValid, name, nameError, new, password, passwordConfirmation, passwordConfirmationError, passwordError, request, serverError, updateEmail, updateName, updatePassword, updatePasswordConfirmation, validate, validateEmail, validateName, validatePassword, validatePasswordConfirmation)
+module SoManyFeeds.Components.RegistrationForm exposing (RegistrationForm, ValidRegistrationForm, applyHttpError, email, emailError, isValid, name, nameError, new, password, passwordConfirmation, passwordConfirmationError, passwordError, request, serverError, updateEmail, updateName, updatePassword, updatePasswordConfirmation, validate, validateEmail, validateName, validatePassword, validatePasswordConfirmation)
 
 import Http
 import Json.Decode

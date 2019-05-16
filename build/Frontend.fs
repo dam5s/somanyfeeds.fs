@@ -4,6 +4,7 @@ open Fake.Core
 open Fake.IO
 open SharpScss
 open Support
+open System.IO
 
 
 let private generateCss (filePath : string) : string =
@@ -36,8 +37,13 @@ let private buildScss _ =
 
 
 let private buildElm _ =
+    let somanyfeedsApps =
+        Directory.GetFiles("frontends/Elm/SoManyFeeds/Applications", "*.elm")
+        |> Array.map (String.replaceFirst "frontends/Elm/" "")
+        |> String.concat " "
+
     runElm "make --optimize --output ../../damo-io-server/Resources/public/damo-io.js DamoIO/App.elm"
-    runElm "make --optimize --output ../../somanyfeeds-server/Resources/public/somanyfeeds.js SoManyFeeds/Read.elm SoManyFeeds/Manage.elm SoManyFeeds/Register.elm"
+    runElm (sprintf "make --optimize --output ../../somanyfeeds-server/Resources/public/somanyfeeds.js %s" somanyfeedsApps)
 
 
 let private copyFonts _ =

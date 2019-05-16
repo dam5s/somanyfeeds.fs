@@ -1,4 +1,4 @@
-module SoManyFeeds.Feed exposing (Feed, Fields, createRequest, deleteRequest, emptyFields)
+module SoManyFeeds.Components.Feed exposing (Feed, Fields, createRequest, deleteRequest, emptyFields)
 
 import Http
 import Json.Decode as Decode

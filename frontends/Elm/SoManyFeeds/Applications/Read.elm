@@ -8,11 +8,11 @@ import Html.Events exposing (onClick)
 import Http
 import Keyboard exposing (RawKey)
 import List.Extra
-import SoManyFeeds.Article as Article exposing (Article)
-import SoManyFeeds.Feed exposing (Feed)
-import SoManyFeeds.Keyboard as Keyboard
-import SoManyFeeds.Logo as Logo
-import SoManyFeeds.RemoteData as RemoteData exposing (RemoteData(..))
+import SoManyFeeds.Components.Article as Article exposing (Article)
+import SoManyFeeds.Components.Feed exposing (Feed)
+import SoManyFeeds.Components.Logo as Logo
+import SoManyFeeds.Support.Keyboard as Keyboard
+import SoManyFeeds.Support.RemoteData as RemoteData exposing (RemoteData(..))
 import Support.DateFormat as DateFormat
 import Support.RawHtml as RawHtml
 import Task

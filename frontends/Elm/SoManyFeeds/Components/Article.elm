@@ -1,8 +1,8 @@
-module SoManyFeeds.Article exposing (Article, Json, State(..), bookmarkRequest, fromJson, listAllRequest, listBookmarksRequest, listByFeedRequest, readRequest, removeBookmarkRequest, setState, unreadRequest)
+module SoManyFeeds.Components.Article exposing (Article, Json, State(..), bookmarkRequest, fromJson, listAllRequest, listBookmarksRequest, listByFeedRequest, readRequest, removeBookmarkRequest, setState, unreadRequest)
 
 import Http
 import Json.Decode
-import SoManyFeeds.Feed exposing (Feed)
+import SoManyFeeds.Components.Feed exposing (Feed)
 import Time
 
 

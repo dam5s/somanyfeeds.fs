@@ -1,13 +1,13 @@
-module SoManyFeeds.Register exposing (main)
+module SoManyFeeds.Applications.Register exposing (main)
 
 import Browser exposing (Document)
 import Html exposing (Html, a, button, div, form, h1, h2, header, input, label, nav, p, section, text)
 import Html.Attributes exposing (autofocus, class, href, name, placeholder, type_, value)
 import Html.Events exposing (onBlur, onInput, onSubmit)
 import Http
-import SoManyFeeds.Logo as Logo
-import SoManyFeeds.RedirectTo exposing (redirectTo)
-import SoManyFeeds.RegistrationForm as RegistrationForm exposing (RegistrationForm, ValidRegistrationForm)
+import SoManyFeeds.Components.Logo as Logo
+import SoManyFeeds.Components.RegistrationForm as RegistrationForm exposing (RegistrationForm, ValidRegistrationForm)
+import SoManyFeeds.Support.RedirectTo exposing (redirectTo)
 
 
 type alias Flags =

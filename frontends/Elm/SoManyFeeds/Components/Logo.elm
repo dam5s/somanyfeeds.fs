@@ -1,4 +1,4 @@
-module SoManyFeeds.Logo exposing (view)
+module SoManyFeeds.Components.Logo exposing (view)
 
 import Html exposing (Html, a)
 import Html.Attributes exposing (href)

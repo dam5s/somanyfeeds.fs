@@ -1,4 +1,4 @@
-module SoManyFeeds.Manage exposing (main)
+module SoManyFeeds.Applications.Manage exposing (main)
 
 import Browser exposing (Document)
 import Html exposing (Attribute, Html, a, button, dd, div, dl, dt, form, h1, h2, h3, header, input, label, nav, p, section, text)
@@ -8,8 +8,8 @@ import Http
 import Keyboard
 import List.Extra
 import Result
-import SoManyFeeds.Feed as Feed exposing (Feed)
-import SoManyFeeds.Logo as Logo
+import SoManyFeeds.Components.Feed as Feed exposing (Feed)
+import SoManyFeeds.Components.Logo as Logo
 
 
 type alias Flags =

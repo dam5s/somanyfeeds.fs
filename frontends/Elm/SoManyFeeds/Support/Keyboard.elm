@@ -1,4 +1,4 @@
-module SoManyFeeds.Keyboard exposing (isEscape)
+module SoManyFeeds.Support.Keyboard exposing (isEscape)
 
 import Keyboard exposing (Key, RawKey)
 
