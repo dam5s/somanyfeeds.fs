@@ -6,38 +6,56 @@ open Suave
 open Suave.DotLiquid
 
 
-type ReadViewModel =
-    { UserName : string
-      RecentsJson : string
-      FeedsJson : string
-      Page : string
-      SelectedFeedId : string
-    }
-
-
 type FrontendPage =
     | Recent of feedId : int64 option
     | Bookmarks
 
 
-let private maybeFeedId (page : FrontendPage) =
-    match page with
-    | Recent maybeFeedId -> maybeFeedId
-    | Bookmarks -> None
+type private Flags =
+    { UserName : string
+      Recents : ArticleRecord seq
+      Feeds : FeedRecord seq
+      Page : FrontendPage
+    }
 
 
-let private pageJson (page : FrontendPage) =
-    match page with
-    | Recent _ -> "Recent"
-    | Bookmarks -> "Bookmarks"
+type ReadViewModel =
+    { Flags : string
+    }
 
 
-let private feedIdJson (maybeFeedId : int64 option) =
-    maybeFeedId
-   |> Option.map (sprintf "%d")
-   |> Option.defaultValue "null"
+module private Encoders =
+    open Chiron
+    open Chiron.Operators
 
+    let articlesEncoder (feeds : FeedRecord seq) (articles : ArticleRecord seq) : Json =
+        articles
+        |> Seq.map (Json.serializeWith (ArticlesApi.Encoders.article feeds))
+        |> Seq.toList
+        |> Json.Array
 
+    let feedsEncoder (feeds : FeedRecord seq) : Json =
+        feeds
+        |> Seq.map (Json.serializeWith FeedsApi.Encoders.feed)
+        |> Seq.toList
+        |> Json.Array
+
+    let maybeFeedId (page : FrontendPage) =
+        match page with
+        | Recent maybeFeedId -> maybeFeedId
+        | Bookmarks -> None
+
+    let pageJson (page : FrontendPage) =
+        match page with
+        | Recent _ -> "Recent"
+        | Bookmarks -> "Bookmarks"
+
+    let flags (flags : Flags) : Json<unit> =
+        Json.write "userName" flags.UserName
+        *> Json.writeWith (articlesEncoder flags.Feeds) "recents" flags.Recents
+        *> Json.writeWith feedsEncoder "feeds" flags.Feeds
+        *> Json.write "page" (pageJson flags.Page)
+        *> Json.write "selectedFeedId" (maybeFeedId flags.Page)
 
 
 let page
@@ -46,18 +64,20 @@ let page
     (frontendPage : FrontendPage) : WebPart =
 
     fun ctx -> async {
-        let maybeFeedId = maybeFeedId frontendPage
+        let maybeFeedId = Encoders.maybeFeedId frontendPage
         let! listResult = listFeedsAndArticles user maybeFeedId
 
         match listResult with
         | Ok (feeds, articles) ->
-            let viewModel =
+            let flags =
                 { UserName = user.Name
-                  RecentsJson = Json.serializeList (ArticlesApi.Encoders.article feeds) articles
-                  FeedsJson = Json.serializeList FeedsApi.Encoders.feed feeds
-                  Page = pageJson frontendPage
-                  SelectedFeedId = feedIdJson maybeFeedId
+                  Recents = articles
+                  Feeds = feeds
+                  Page = frontendPage
                 }
+            let viewModel =
+                { Flags = Json.serializeObject Encoders.flags flags }
+
             return! page "read.html.liquid" viewModel ctx
         | Error message ->
             return! ErrorPage.page message ctx

@@ -4,13 +4,7 @@
 <body>
 
 <script src="/somanyfeeds.js?v={%  include "_assets_version.html.liquid" %}"></script>
-<script>
-    Elm.SoManyFeeds.Manage.init({ flags: {
-        userName: "{{ model.UserName }}",
-        maxFeeds : {{ model.MaxFeeds }},
-        feeds: {{ model.FeedsJson }}
-    }});
-</script>
+<script>Elm.SoManyFeeds.Manage.init({ flags: {{ model.Flags }} });</script>
 
 </body>
 </html>

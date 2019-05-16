@@ -5,13 +5,7 @@
 
 <script src="/somanyfeeds.js?v={% include "_assets_version.html.liquid" %}"></script>
 <script>
-    var app = Elm.SoManyFeeds.Read.init({flags: {
-        userName: "{{ model.UserName }}",
-        recents: {{ model.RecentsJson }},
-        feeds: {{ model.FeedsJson }},
-        page: "{{ model.Page }}",
-        selectedFeedId : {{ model.SelectedFeedId }}
-    }});
+    var app = Elm.SoManyFeeds.Read.init({ flags: {{ model.Flags }} });
 
     app.ports.redirectTo.subscribe(function (destination) {
         window.location = destination;

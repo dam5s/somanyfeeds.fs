@@ -28,8 +28,11 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
     let readFeedPage feedId =
         ReadPage.page UserArticlesService.listRecent user (ReadPage.Recent (Some feedId))
 
-    let managePage _ =
-        ManagePage.page maxFeeds listFeeds user
+    let managePage frontendPage _ =
+        ManagePage.page maxFeeds listFeeds user frontendPage
+
+    let managePageSearch searchText =
+        ManagePage.page maxFeeds listFeeds user (ManagePage.Search (Some searchText))
 
     let listFeedsApi _ =
         FeedsApi.list listFeeds
@@ -90,7 +93,11 @@ let private authenticatedPage (user : Authentication.User) : WebPart =
         GET >=> path "/read/recent" >=> request (readPage (ReadPage.Recent None))
         GET >=> pathScan "/read/recent/feed/%d" readFeedPage
         GET >=> path "/read/bookmarks" >=> request (readPage ReadPage.Bookmarks)
-        GET >=> path "/manage" >=> request managePage
+
+        GET >=> path "/manage" >=> redirect "/manage/list"
+        GET >=> path "/manage/list" >=> request (managePage ManagePage.List)
+        GET >=> path "/manage/search" >=> request (managePage (ManagePage.Search None))
+        GET >=> pathScan "/manage/search/%s" managePageSearch
 
         GET >=> path "/api/feeds" >=> request listFeedsApi
         POST >=> path "/api/feeds" >=> createFeedApi

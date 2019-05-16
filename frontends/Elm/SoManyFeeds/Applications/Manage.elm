@@ -16,6 +16,8 @@ type alias Flags =
     { userName : String
     , maxFeeds : Int
     , feeds : List Feed
+    , page : String
+    , searchText : Maybe String
     }
 
 
@@ -23,6 +25,11 @@ type Dialog a
     = Initial
     | Opened a
     | Closed
+
+
+type Page
+    = List
+    | Search
 
 
 type alias Model =
@@ -113,7 +120,7 @@ newFeedForm model =
     in
     section []
         [ form [ class "card", onSubmit CreateFeed ]
-            [ h3 [] [ text "Add a feed" ]
+            [ h3 [] [ text "Ad" ]
             , label []
                 [ text "Name"
                 , input [ placeholder "Le Monde", type_ "text", name "name", value nameValue, onInput UpdateFormName, disabled model.creationInProgress ] []
@@ -191,7 +198,7 @@ view model =
         , header [ class "page" ]
             [ div [ class "page-content" ]
                 [ h2 [] [ text "Feeds" ]
-                , h1 [] [ text "Manage your subscriptions" ]
+                , h1 [] [ text "Your subscriptions" ]
                 ]
             ]
         , div [ class "main" ]
