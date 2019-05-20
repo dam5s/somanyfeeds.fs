@@ -1,4 +1,4 @@
-module SoManyFeeds.Read exposing (main)
+module SoManyFeeds.Applications.Read exposing (main)
 
 import Browser exposing (Document, UrlRequest)
 import Browser.Navigation as Nav exposing (Key)
@@ -261,13 +261,11 @@ menuOptions model =
         feedPage feed =
             Recent (Just feed)
 
-        pages =
-            [ Recent Nothing, Bookmarks ] ++ List.map feedPage model.feeds
-
         pageLink page =
             a [ href (pagePath page) ] [ text (pageTitle page) ]
     in
-    pages
+    model.feeds
+        |> List.map feedPage
         |> List.filter (\p -> p /= model.page)
         |> List.map pageLink
 
@@ -303,7 +301,9 @@ view model =
                     , h1 [] [ text (pageTitle model.page) ]
                     ]
                 , nav [ class "flex-init" ]
-                    [ div [ class ("toggle " ++ dropdownClass), onClick ToggleDropdown ] [ text "Filters" ]
+                    [ a [ href (pagePath Bookmarks) ] [ text "Bookmarks" ]
+                    , a [ href (pagePath (Recent Nothing)) ] [ text "Recent" ]
+                    , div [ class ("toggle " ++ dropdownClass), onClick ToggleDropdown ] [ text "Feeds" ]
                     , menu [ class dropdownClass ] (menuOptions model)
                     ]
                 ]
