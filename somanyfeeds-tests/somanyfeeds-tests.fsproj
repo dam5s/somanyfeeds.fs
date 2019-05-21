@@ -22,9 +22,9 @@
     <ProjectReference Include="../somanyfeeds-server/somanyfeeds-server.fsproj" />
 
     <Compile Include="DatabaseSupport.fs" />
-    <Compile Include="SoManyFeedsServerTests/FeedJobsDataGatewayTests.fs" />
-    <Compile Include="SoManyFeedsServerTests/ArticlesDataGatewayTests.fs" />
-    <Compile Include="SoManyFeedsServerTests/UserArticlesDataGatewayTests.fs" />
+    <Compile Include="SoManyFeedsTests/FeedJobsDataGatewayTests.fs" />
+    <Compile Include="SoManyFeedsTests/ArticlesDataGatewayTests.fs" />
+    <Compile Include="SoManyFeedsTests/UserArticlesDataGatewayTests.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 </Project>

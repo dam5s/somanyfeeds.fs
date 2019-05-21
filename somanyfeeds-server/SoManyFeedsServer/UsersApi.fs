@@ -1,11 +1,11 @@
 module SoManyFeedsServer.UsersApi
 
 open Suave
+open SoManyFeeds.Registration
+open SoManyFeeds.UsersDataGateway
+open SoManyFeeds.UsersService
 open SoManyFeedsServer
 open SoManyFeedsServer.Json
-open SoManyFeedsServer.Registration
-open SoManyFeedsServer.UsersDataGateway
-open SoManyFeedsServer.UsersService
 
 
 module Encoders =

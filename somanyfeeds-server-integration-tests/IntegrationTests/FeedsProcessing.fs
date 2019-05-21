@@ -2,7 +2,7 @@ module IntegrationTests.FeedsProcessing
 
 open System.IO
 open FsUnitTyped.TopLevelOperators
-open SoManyFeedsServer.FeedsProcessor
+open SoManyFeeds.FeedsProcessor
 open System.Threading
 open Suave
 open Suave.Filters
@@ -62,7 +62,6 @@ let all () =
         Async.RunSynchronously backgroundProcessingOnce
 
 
-        let count = queryDataContext (fun ctx -> query { for a in ctx.Public.Articles do select a.Id })
-                    |> Seq.length
-
-        count |> shouldEqual 13
+        queryDataContext (fun ctx -> query { for a in ctx.Public.Articles do select a.Id } )
+        |> Seq.length
+        |> shouldEqual 13

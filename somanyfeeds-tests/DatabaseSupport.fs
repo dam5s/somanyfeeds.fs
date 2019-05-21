@@ -3,7 +3,7 @@ module DatabaseSupport
 
 open Npgsql
 open System
-open SoManyFeedsServer
+open SoManyFeeds
 
 
 let setTestDbConnectionString _ =

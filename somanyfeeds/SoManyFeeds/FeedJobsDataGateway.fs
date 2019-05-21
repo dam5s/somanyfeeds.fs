@@ -1,9 +1,9 @@
-module SoManyFeedsServer.FeedJobsDataGateway
+module SoManyFeeds.FeedJobsDataGateway
 
 open System
 open FSharp.Data.Sql
 open FeedsProcessing.Feeds
-open SoManyFeedsServer.DataSource
+open SoManyFeeds.DataSource
 
 
 type JobFailure =

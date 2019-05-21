@@ -3,8 +3,8 @@ module ``UserArticlesDataGateway tests``
 open NUnit.Framework
 open FsUnit
 open FsUnitTyped
-open SoManyFeedsServer
-open SoManyFeedsServer.ArticlesDataGateway
+open SoManyFeeds
+open SoManyFeeds.ArticlesDataGateway
 
 [<Test>]
 let ``recent unread articles`` () =

@@ -2,8 +2,8 @@ module SoManyFeedsServer.ArticlesApi
 
 open Time
 open Suave
-open SoManyFeedsServer.ArticlesDataGateway
-open SoManyFeedsServer.FeedsDataGateway
+open SoManyFeeds.ArticlesDataGateway
+open SoManyFeeds.FeedsDataGateway
 open SoManyFeedsServer.Json
 
 

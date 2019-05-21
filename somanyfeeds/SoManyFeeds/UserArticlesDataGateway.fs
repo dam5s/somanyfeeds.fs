@@ -1,8 +1,8 @@
-module SoManyFeedsServer.UserArticlesDataGateway
+module SoManyFeeds.UserArticlesDataGateway
 
-open SoManyFeedsServer
-open SoManyFeedsServer.ArticlesDataGateway
-open SoManyFeedsServer.DataSource
+open SoManyFeeds
+open SoManyFeeds.ArticlesDataGateway
+open SoManyFeeds.DataSource
 open FSharp.Data.Sql
 
 

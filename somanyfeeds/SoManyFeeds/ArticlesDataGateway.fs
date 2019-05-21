@@ -1,7 +1,7 @@
-module SoManyFeedsServer.ArticlesDataGateway
+module SoManyFeeds.ArticlesDataGateway
 
 open Time
-open SoManyFeedsServer.DataSource
+open SoManyFeeds.DataSource
 
 
 type ArticleRecord =

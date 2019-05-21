@@ -1,9 +1,9 @@
-module SoManyFeedsServer.UsersDataGateway
+module SoManyFeeds.UsersDataGateway
 
-open SoManyFeedsServer.Passwords
-open SoManyFeedsServer.Registration
-open SoManyFeedsServer.DataSource
-open SoManyFeedsServer
+open SoManyFeeds.Passwords
+open SoManyFeeds.Registration
+open SoManyFeeds.DataSource
+open SoManyFeeds
 
 
 type UserRecord =

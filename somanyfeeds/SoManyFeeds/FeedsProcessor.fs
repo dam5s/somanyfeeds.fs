@@ -1,4 +1,4 @@
-module SoManyFeedsServer.FeedsProcessor
+module SoManyFeeds.FeedsProcessor
 
 open FSharp.Control
 open FeedJobsDataGateway
@@ -6,8 +6,7 @@ open FeedsProcessing
 open FeedsProcessing.Article
 open FeedsProcessing.DataGateway
 open FeedsProcessing.Feeds
-open SoManyFeedsServer.ArticlesDataGateway
-open SoManyFeedsServer.DataSource
+open SoManyFeeds.ArticlesDataGateway
 
 
 type private Logs = Logs

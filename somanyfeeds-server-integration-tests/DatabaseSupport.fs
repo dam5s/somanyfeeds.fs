@@ -2,7 +2,7 @@
 module DatabaseSupport
 
 open Npgsql
-open SoManyFeedsServer
+open SoManyFeeds
 
 
 let executeSql (sql : string) =

@@ -1,6 +1,6 @@
-module SoManyFeedsServer.FeedsDataGateway
+module SoManyFeeds.FeedsDataGateway
 
-open SoManyFeedsServer.DataSource
+open SoManyFeeds.DataSource
 open AsyncResult.Operators
 
 

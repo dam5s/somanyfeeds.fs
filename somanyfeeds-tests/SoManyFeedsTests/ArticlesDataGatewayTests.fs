@@ -4,8 +4,8 @@ open FsUnit
 open System
 open NUnit.Framework
 open Time
-open SoManyFeedsServer
-open SoManyFeedsServer.ArticlesDataGateway
+open SoManyFeeds
+open SoManyFeeds.ArticlesDataGateway
 
 
 let private fieldsOf (record : ArticleRecord) =

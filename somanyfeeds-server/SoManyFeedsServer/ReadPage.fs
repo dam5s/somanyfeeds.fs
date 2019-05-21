@@ -1,7 +1,8 @@
 module SoManyFeedsServer.ReadPage
 
-open SoManyFeedsServer.ArticlesDataGateway
-open SoManyFeedsServer.FeedsDataGateway
+open SoManyFeeds.ArticlesDataGateway
+open SoManyFeeds.FeedsDataGateway
+open SoManyFeeds.User
 open Suave
 open Suave.DotLiquid
 
@@ -59,8 +60,8 @@ module private Encoders =
 
 
 let page
-    (listFeedsAndArticles : Authentication.User -> int64 option -> AsyncResult<FeedRecord seq * ArticleRecord seq>)
-    (user : Authentication.User)
+    (listFeedsAndArticles : User -> int64 option -> AsyncResult<FeedRecord seq * ArticleRecord seq>)
+    (user : User)
     (frontendPage : FrontendPage) : WebPart =
 
     fun ctx -> async {

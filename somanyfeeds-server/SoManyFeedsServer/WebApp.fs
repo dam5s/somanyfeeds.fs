@@ -5,8 +5,10 @@ open Suave.Filters
 open Suave.Operators
 open Suave.RequestErrors
 open Suave.Redirection
+open SoManyFeeds
+open SoManyFeeds.User
+open SoManyFeeds.UserArticlesDataGateway
 open SoManyFeedsServer
-open SoManyFeedsServer.UserArticlesDataGateway
 open SoManyFeedsServer.Json
 
 
@@ -14,7 +16,7 @@ let private maxFeeds : int =
     Env.varDefaultParse int "MAX_FEEDS" (always "20")
 
 
-let private authenticatedPage (user : Authentication.User) : WebPart =
+let private authenticatedPage (user : User) : WebPart =
 
     let listFeeds = FeedsDataGateway.listFeeds user.Id
     let createFeed = FeedsService.createFeed maxFeeds user.Id

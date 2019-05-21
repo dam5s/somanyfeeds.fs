@@ -1,8 +1,8 @@
-module SoManyFeedsServer.UserArticlesService
+module SoManyFeeds.UserArticlesService
 
-open SoManyFeedsServer.ArticlesDataGateway
-open SoManyFeedsServer.Authentication
-open SoManyFeedsServer.FeedsDataGateway
+open SoManyFeeds.ArticlesDataGateway
+open SoManyFeeds.User
+open SoManyFeeds.FeedsDataGateway
 
 
 let listRecent (user : User) (maybeFeedId : int64 option) : AsyncResult<FeedRecord seq * ArticleRecord seq> =

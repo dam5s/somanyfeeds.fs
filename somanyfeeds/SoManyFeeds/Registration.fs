@@ -1,6 +1,6 @@
-module SoManyFeedsServer.Registration
+module SoManyFeeds.Registration
 
-open SoManyFeedsServer.Passwords
+open Passwords
 
 
 type Registration =

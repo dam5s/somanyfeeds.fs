@@ -2,8 +2,9 @@ module SoManyFeedsServer.ManagePage
 
 open Suave
 open Suave.DotLiquid
+open SoManyFeeds.User
+open SoManyFeeds.FeedsDataGateway
 open SoManyFeedsServer
-open SoManyFeedsServer.FeedsDataGateway
 
 
 type FrontendPage =
@@ -52,7 +53,7 @@ module private Encoders =
         *> Json.write "searchText" (searchText flags.Page)
 
 
-let page (maxFeeds : int) (listFeeds : AsyncResult<FeedRecord seq>) (user : Authentication.User) (frontendPage : FrontendPage) : WebPart =
+let page (maxFeeds : int) (listFeeds : AsyncResult<FeedRecord seq>) (user : User) (frontendPage : FrontendPage) : WebPart =
     fun ctx -> async {
         let! listResult = listFeeds
 

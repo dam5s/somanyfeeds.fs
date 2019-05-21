@@ -4,47 +4,24 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <OutputType>Exe</OutputType>
     <ServerGarbageCollection>true</ServerGarbageCollection>
-    <DotnetFscCompilerPath></DotnetFscCompilerPath>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <FscToolPath>/usr/bin</FscToolPath>
-    <FscToolExe>fsharpc</FscToolExe>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Update="FSharp.Core" Version="4.6.2" />
 
-    <PackageReference Include="BCrypt.Net-Next.StrongName" Version="3.1.2" />
-    <PackageReference Include="FSharp.Control.AsyncSeq" Version="2.0.21" />
     <PackageReference Include="DotLiquid" Version="2.0.298" />
     <PackageReference Include="Logary" Version="5.0.0-rc.1" />
     <PackageReference Include="Logary.Adapters.Facade" Version="5.0.0-rc.1" />
     <PackageReference Include="Suave" Version="2.5.3" />
     <PackageReference Include="Suave.DotLiquid" Version="2.5.3" />
     <PackageReference Include="Chiron" Version="6.3.1" />
-    <PackageReference Include="Npgsql" Version="4.0.5" />
-    <PackageReference Include="SQLProvider" Version="1.1.59" />
 
     <ProjectReference Include="../prelude/prelude.fsproj" />
     <ProjectReference Include="../feeds-processing/feeds-processing.fsproj" />
-
-    <Compile Include="SoManyFeedsServer/Passwords.fs" />
-    <Compile Include="SoManyFeedsServer/Registration.fs" />
-
-    <Compile Include="SoManyFeedsServer/DataSource.fs" />
-    <Compile Include="SoManyFeedsServer/FeedsDataGateway.fs" />
-    <Compile Include="SoManyFeedsServer/ArticlesDataGateway.fs" />
-    <Compile Include="SoManyFeedsServer/UsersDataGateway.fs" />
-    <Compile Include="SoManyFeedsServer/UserArticlesDataGateway.fs" />
-    <Compile Include="SoManyFeedsServer/FeedJobsDataGateway.fs" />
+    <ProjectReference Include="../somanyfeeds/somanyfeeds.fsproj" />
 
     <Compile Include="SoManyFeedsServer/ErrorPage.fs" />
     <Compile Include="SoManyFeedsServer/Authentication.fs" />
-
-    <Compile Include="SoManyFeedsServer/FeedsService.fs" />
-    <Compile Include="SoManyFeedsServer/UsersService.fs" />
-    <Compile Include="SoManyFeedsServer/UserArticlesService.fs" />
 
     <Compile Include="SoManyFeedsServer/Json.fs" />
     <Compile Include="SoManyFeedsServer/UsersApi.fs" />
@@ -53,7 +30,6 @@
     <Compile Include="SoManyFeedsServer/ReadPage.fs" />
     <Compile Include="SoManyFeedsServer/ManagePage.fs" />
 
-    <Compile Include="SoManyFeedsServer/FeedsProcessor.fs" />
     <Compile Include="SoManyFeedsServer/WebApp.fs" />
     <Compile Include="SoManyFeedsServer/WebConfig.fs" />
     <Compile Include="SoManyFeedsServer/LoggingConfig.fs" />

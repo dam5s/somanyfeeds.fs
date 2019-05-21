@@ -1,9 +1,9 @@
-module SoManyFeedsServer.UsersService
+module SoManyFeeds.UsersService
 
+open SoManyFeeds
 open SoManyFeeds.UsersDataGateway
 open SoManyFeeds.Registration
 open SoManyFeeds.DataSource
-open SoManyFeedsServer
 
 
 type UserCreationResult =

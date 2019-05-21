@@ -2,7 +2,7 @@ module ``FeedJobsDataGateway tests``
 
 open NUnit.Framework
 open FsUnit
-open SoManyFeedsServer
+open SoManyFeeds
 
 
 [<Test>]

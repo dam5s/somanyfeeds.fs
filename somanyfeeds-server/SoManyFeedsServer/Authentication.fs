@@ -8,14 +8,11 @@ open Suave.Redirection
 open Suave.DotLiquid
 open Suave.Response
 open Suave.State.CookieStateStore
-open SoManyFeedsServer.DataSource
-open SoManyFeedsServer.UsersDataGateway
+open SoManyFeeds
+open SoManyFeeds.User
+open SoManyFeeds.DataSource
+open SoManyFeeds.UsersDataGateway
 
-
-type User =
-    { Id : int64
-      Name : string
-    }
 
 
 module private User =
@@ -75,7 +72,7 @@ let doLogin (findByEmail : string -> Async<FindResult<UserRecord>>) (request : H
         match findResult with
         | NotFound ->
             return! loginError ctx
-        | FindError msg ->
+        | FindError _ ->
             return! ErrorPage.page "There was a database access error, please try again later." ctx
         | Found user ->
             if Passwords.verify (formData "password") user.PasswordHash

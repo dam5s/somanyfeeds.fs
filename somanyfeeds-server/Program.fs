@@ -1,6 +1,7 @@
 ﻿module Program
 
 open Suave
+open SoManyFeeds
 open SoManyFeedsServer
 
 
