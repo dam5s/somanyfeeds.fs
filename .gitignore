@@ -10,3 +10,5 @@ elm-stuff
 *.DotSettings.user
 manifest.yml
 .ionide
+node_modules
+.fable

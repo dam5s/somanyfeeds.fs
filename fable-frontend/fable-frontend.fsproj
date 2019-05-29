@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <WarningsAsErrors>25</WarningsAsErrors>
+    <RootNamespace>fabulous-frontend</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Fable.Core" Version="2.0.3" />
+    <PackageReference Include="Fable.Elmish.React" Version="2.2.0" />
+
+    <Compile Include="FableFrontend\App.fs" />
+  </ItemGroup>
+</Project>
