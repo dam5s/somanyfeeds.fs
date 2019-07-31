@@ -58,7 +58,7 @@ let private tweetToArticle (TwitterHandle handle) (tweet : Tweet) : Article =
         None
         (sprintf "https://twitter.com/%s" handle)
         (Some tweet.Text)
-        (tweet.CreatedAt |> Option.map (fun d -> new DateTimeOffset (d)))
+        (tweet.CreatedAt |> Option.map DateTimeOffset)
 
 
 

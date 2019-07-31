@@ -28,7 +28,7 @@ let main _ =
     setTemplatesDir templatesFolder
     setCSharpNamingConvention ()
 
-    let binding = Http.HttpBinding.createSimple HTTP "0.0.0.0" portFromEnv
+    let binding = HttpBinding.createSimple HTTP "0.0.0.0" portFromEnv
     let config =
         { defaultConfig with
             homeFolder = Some publicFolder

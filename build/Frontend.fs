@@ -8,7 +8,7 @@ open System.IO
 
 
 let private generateCss (filePath : string) : string =
-    let scssOptions = new ScssOptions (OutputStyle = ScssOutputStyle.Compressed)
+    let scssOptions = ScssOptions (OutputStyle = ScssOutputStyle.Compressed)
     let result = Scss.ConvertFileToCss (filePath, scssOptions)
     result.Css
 
@@ -20,7 +20,7 @@ let private runElm elmArgs =
       Args = []
     }
     |> Process.shellExec
-    |> Support.ensureSuccessExitCode
+    |> ensureSuccessExitCode
 
 
 let private clean _ =
@@ -32,8 +32,8 @@ let private clean _ =
 
 
 let private buildScss _ =
-    generateCss "frontends/Scss/damo-io.scss" |> Support.writeToFile "damo-io-server/Resources/public/damo-io.css"
-    generateCss "frontends/Scss/somanyfeeds.scss" |> Support.writeToFile "somanyfeeds-server/Resources/public/somanyfeeds.css"
+    generateCss "frontends/Scss/damo-io.scss" |> writeToFile "damo-io-server/Resources/public/damo-io.css"
+    generateCss "frontends/Scss/somanyfeeds.scss" |> writeToFile "somanyfeeds-server/Resources/public/somanyfeeds.css"
 
 
 let private buildElm _ =
@@ -56,7 +56,7 @@ let loadTasks _ =
     Target.create "frontend:scss" buildScss
     Target.create "frontend:elm" buildElm
     Target.create "frontend:fonts" copyFonts
-    Target.create "frontend:build" (fun _ -> ())
+    Target.create "frontend:build" ignore
 
     "frontend:build" |> dependsOn [ "frontend:scss" ; "frontend:elm" ; "frontend:fonts" ]
     "frontend:scss" |> mustRunAfter "frontend:clean"

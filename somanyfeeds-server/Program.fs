@@ -11,7 +11,7 @@ let main args =
 
     args
     |> Array.tryHead
-    |> Option.bind (fun name -> Tasks.run name)
+    |> Option.bind Tasks.run
     |> Option.defaultWith (fun _ ->
         Async.Start FeedsProcessor.backgroundProcessingInfinite
         startWebServer WebConfig.create WebApp.webPart

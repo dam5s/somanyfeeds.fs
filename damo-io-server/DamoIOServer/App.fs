@@ -21,7 +21,7 @@ let private updatesSequence : AsyncSeq<ArticleRecord list> =
 
 let backgroundProcessing =
     AsyncSeq.iter
-        ArticlesDataGateway.Repository.updateAll
+        Repository.updateAll
         updatesSequence
 
 
@@ -29,7 +29,7 @@ let handler =
     choose [
         enforceSsl
 
-        path "/" >=> GET >=> ArticlesHandler.list ArticlesDataGateway.Repository.findAll
+        path "/" >=> GET >=> ArticlesHandler.list Repository.findAll
 
         GET >=> Files.browseHome
         NOT_FOUND "not found"

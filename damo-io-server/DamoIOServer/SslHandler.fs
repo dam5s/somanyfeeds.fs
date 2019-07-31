@@ -7,7 +7,7 @@ open Suave.Operators
 
 
 let private httpsUrlOf (request: HttpRequest) : string =
-    let builder = new UriBuilder ()
+    let builder = UriBuilder ()
     builder.Scheme <- "https"
     builder.Host <- request.host
     builder.Path <- request.path

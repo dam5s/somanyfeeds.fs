@@ -10,7 +10,7 @@ type Posix =
 module Posix =
     let fromDateTimeOffset (d : DateTimeOffset) = Posix (d.ToUnixTimeMilliseconds ())
 
-    let fromDateTime (d : DateTime) = fromDateTimeOffset (new DateTimeOffset (d, TimeSpan.Zero))
+    let fromDateTime (d : DateTime) = fromDateTimeOffset (DateTimeOffset (d, TimeSpan.Zero))
 
     let toDateTimeOffset (Posix m) = DateTimeOffset.FromUnixTimeMilliseconds m
 

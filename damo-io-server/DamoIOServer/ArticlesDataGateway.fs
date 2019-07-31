@@ -1,6 +1,5 @@
 module DamoIOServer.ArticlesDataGateway
 
-open System
 open Time
 open DamoIOServer.Sources
 

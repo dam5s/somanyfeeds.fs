@@ -41,7 +41,8 @@ let ``with github Atom XML``() =
         List.length records |> should equal 7
 
         let article = List.head records
-        let expectedTimeUtc = new DateTimeOffset (2018, 04, 14, 21, 30, 17, TimeSpan.Zero)
+        let expectedTimeUtc = (2018, 04, 14, 21, 30, 17, TimeSpan.Zero)
+                              |> DateTimeOffset
                               |> Posix.fromDateTimeOffset
 
         Article.title article |> should equal (Some "dam5s pushed to master in dam5s/somanyfeeds.fs")
@@ -66,7 +67,8 @@ let ``with RSS XML``() =
         List.length records |> should equal 6
 
         let firstArticle = List.head records
-        let expectedTimeUtc = new DateTimeOffset (2016, 09, 20, 12, 54, 44, TimeSpan.Zero)
+        let expectedTimeUtc = (2016, 09, 20, 12, 54, 44, TimeSpan.Zero)
+                              |> DateTimeOffset
                               |> Posix.fromDateTimeOffset
 
         Article.title firstArticle |> should equal (Some "First title!")
@@ -97,7 +99,8 @@ let ``processFeed with slashdot RDF XML``() =
         List.length records |> should equal 15
 
         let article = List.head records
-        let expectedTimeUtc = new DateTimeOffset (2018, 12, 28, 20, 55, 0, TimeSpan.Zero)
+        let expectedTimeUtc = (2018, 12, 28, 20, 55, 0, TimeSpan.Zero)
+                              |> DateTimeOffset
                               |> Posix.fromDateTimeOffset
 
         Article.title article |> should equal (Some "Netflix Permanently Pulls iTunes Billing For New and Returning Users")

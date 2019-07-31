@@ -39,7 +39,7 @@ let private somanyfeedsServerIntegrationTests _ =
 let private setupCacheBustingLinks _ =
     let timestamp = DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()
     let timestampPath = "somanyfeeds-server/bin/Release/netcoreapp2.2/publish/Resources/templates/_assets_version.html.liquid"
-    Support.writeToFile timestampPath timestamp
+    writeToFile timestampPath timestamp
     ()
 
 

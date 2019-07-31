@@ -32,7 +32,7 @@ let private consumerSecret =
 
 let private processFeed (feed : Feed) : ProcessingResult =
     match feed with
-    | Xml (source, url) -> Result.bind processXmlFeed (downloadFeed url)
+    | Xml (_, url) -> Result.bind processXmlFeed (downloadFeed url)
     | Twitter (handle) -> Result.bind (processTweets handle) (downloadTwitterTimeline consumerKey consumerSecret handle)
 
 
