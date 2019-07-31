@@ -23,10 +23,10 @@ let private contentRoot : string =
     Env.varDefault "CONTENT_ROOT" Directory.GetCurrentDirectory
 
 let private templatesFolder : string =
-    Path.Combine (contentRoot, "Resources/templates")
+    Path.Combine (contentRoot, "Resources", "templates")
 
 let private publicFolder : string =
-    Path.Combine (contentRoot, "Resources/public")
+    Path.Combine (contentRoot, "Resources", "public")
 
 
 let port : int =

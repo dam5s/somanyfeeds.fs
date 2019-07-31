@@ -3,6 +3,7 @@ obj
 .vs
 .idea
 .env
+.env.ps1
 .fake
 public
 elm-stuff

@@ -1,5 +1,8 @@
 #!/usr/bin/env sh
 
 set -e
-dotnet restore build/build.fsproj
-dotnet run -p build
+source .env
+dotnet build build
+mkdir -p bin
+cp -r build/bin/Debug/netcoreapp2.2/* bin/
+dotnet bin/build.dll

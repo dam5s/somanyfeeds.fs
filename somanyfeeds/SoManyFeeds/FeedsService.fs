@@ -1,6 +1,5 @@
 module SoManyFeeds.FeedsService
 
-open DataSource
 open FeedsDataGateway
 
 

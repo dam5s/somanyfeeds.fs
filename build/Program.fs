@@ -7,8 +7,22 @@ open Fake.Core
 open Fake.IO
 
 
+let private allProjects =
+    [
+      "prelude"
+      "damo-io-server" 
+      "somanyfeeds" 
+      "somanyfeeds-tests" 
+      "somanyfeeds-server" 
+      "somanyfeeds-server-integration-tests" 
+      "feeds-processing"
+      "feeds-processing-tests" 
+      "frontends"
+    ]
+
+
 let private clean _ =
-    ["." ; "prelude" ; "damo-io-server" ; "somanyfeeds-server" ; "somanyfeeds-tests" ; "somanyfeeds-server-integration-tests" ; "feeds-processing"; "feeds-processing-tests" ; "frontends" ]
+    allProjects
     |> List.collect (fun p -> [ Path.Combine (p, "bin") ; Path.Combine (p, "obj") ])
     |> List.map Directory.delete
     |> ignore
