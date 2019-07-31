@@ -29,18 +29,14 @@ module Encoders =
 
 let list (listArticles : AsyncResult<FeedRecord seq * ArticleRecord seq>) : WebPart =
     fun ctx -> async {
-        let! articlesResult = listArticles
-
-        match articlesResult with
+        match! listArticles with
         | Ok (feeds, articles) -> return! listResponse HTTP_200 (Encoders.article feeds) articles ctx
         | Error message -> return! serverErrorResponse message ctx
     }
 
 let update (updateOperation : AsyncResult<unit>) : WebPart =
     fun ctx -> async {
-        let! updateResult = updateOperation
-
-        match updateResult with
+        match! updateOperation with
         | Ok _ -> return! jsonResponse HTTP_200 "" ctx
         | Error message -> return! serverErrorResponse message ctx
     }

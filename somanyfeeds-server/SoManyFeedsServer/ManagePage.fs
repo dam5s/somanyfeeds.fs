@@ -55,9 +55,7 @@ module private Encoders =
 
 let page (maxFeeds : int) (listFeeds : AsyncResult<FeedRecord seq>) (user : User) (frontendPage : FrontendPage) : WebPart =
     fun ctx -> async {
-        let! listResult = listFeeds
-
-        match listResult with
+        match! listFeeds with
         | Ok records ->
             let flags =
                 { UserName = user.Name

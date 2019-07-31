@@ -14,9 +14,7 @@ type FindResult<'T> =
 module FindResult =
     let asyncFromAsyncResultOfOption (result : AsyncResult<'T option>) : Async<FindResult<'T>> =
         async {
-            let! r = result
-
-            match r with
+            match! result with
             | Ok (Some value) -> return Found value
             | Ok None -> return NotFound
             | Error message -> return FindError message

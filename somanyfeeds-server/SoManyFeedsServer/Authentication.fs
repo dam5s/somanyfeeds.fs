@@ -67,9 +67,7 @@ let doLogin (findByEmail : string -> Async<FindResult<UserRecord>>) (request : H
                             |> request.formData
                             |> Choice.defaultValue ""
 
-        let! findResult = findByEmail (formData "email")
-
-        match findResult with
+        match! findByEmail (formData "email") with
         | NotFound ->
             return! loginError ctx
         | FindError _ ->

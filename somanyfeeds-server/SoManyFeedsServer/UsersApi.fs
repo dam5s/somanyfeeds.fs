@@ -44,9 +44,7 @@ module Decoders =
 
 let create (createUser : Registration -> Async<UserCreationResult>) (registration : Registration) : WebPart =
     fun ctx -> async {
-        let! createResult = createUser registration
-
-        match createResult with
+        match! createUser registration with
         | CreationSuccess record -> return! objectResponse HTTP_201 Encoders.user record ctx
         | CreationFailure errors -> return! objectResponse HTTP_400 Encoders.validationErrors errors ctx
         | CreationError message -> return! serverErrorResponse message ctx

@@ -66,9 +66,8 @@ let page
 
     fun ctx -> async {
         let maybeFeedId = Encoders.maybeFeedId frontendPage
-        let! listResult = listFeedsAndArticles user maybeFeedId
 
-        match listResult with
+        match! listFeedsAndArticles user maybeFeedId with
         | Ok (feeds, articles) ->
             let flags =
                 { UserName = user.Name

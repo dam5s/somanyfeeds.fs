@@ -16,9 +16,7 @@ let create (registration : Registration) : Async<UserCreationResult> =
     async {
         match Registration.validate registration with
         | Ok validReg ->
-            let! findResult = UsersDataGateway.findByEmail (Registration.email validReg)
-
-            match findResult with
+            match! UsersDataGateway.findByEmail (Registration.email validReg) with
             | Found _ ->
                 return CreationFailure
                     { NameError = None
@@ -29,9 +27,7 @@ let create (registration : Registration) : Async<UserCreationResult> =
             | FindError message ->
                 return CreationError message
             | _ ->
-                let! createResult = UsersDataGateway.create validReg
-
-                match createResult with
+                match! UsersDataGateway.create validReg with
                 | Ok record -> return CreationSuccess record
                 | Error message -> return CreationError message
         | Error errors ->

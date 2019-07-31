@@ -20,36 +20,28 @@ module AsyncResult =
 
     let map (mapping : 'T -> 'U) (result : AsyncResult<'T>) : AsyncResult<'U> =
         async {
-            let! r = result
-
-            match r with
+            match! result with
             | Ok value -> return Ok (mapping value)
             | Error err -> return Error err
         }
 
     let bind (mapping : 'T -> AsyncResult<'U>) (result : AsyncResult<'T>) : AsyncResult<'U> =
         async {
-            let! r = result
-
-            match r with
+            match! result with
             | Ok value -> return! mapping value
             | Error err -> return Error err
         }
 
     let mapError (mapping : string -> string) (result : AsyncResult<'T>) : AsyncResult<'T> =
         async {
-            let! r = result
-
-            match r with
+            match! result with
             | Ok value -> return Ok value
             | Error err -> return Error (mapping err)
         }
 
     let defaultValue (value : 'T) (result : AsyncResult<'T>) : Async<'T> =
         async {
-            let! r = result
-
-            match r with
+            match! result with
             | Ok x -> return x
             | Error _ -> return value
         }
