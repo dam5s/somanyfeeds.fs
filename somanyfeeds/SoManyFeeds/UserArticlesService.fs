@@ -5,7 +5,7 @@ open SoManyFeeds.User
 open SoManyFeeds.FeedsDataGateway
 
 
-let listRecent (user : User) (maybeFeedId : int64 option) : AsyncResult<FeedRecord seq * ArticleRecord seq> =
+let listRecent (user : User) maybeFeedId : AsyncResult<FeedRecord seq * ArticleRecord seq> =
     asyncResult {
         let! feeds = FeedsDataGateway.listFeeds user.Id
         let! articles = UserArticlesDataGateway.listRecentUnreadArticles user.Id maybeFeedId

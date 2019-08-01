@@ -28,7 +28,7 @@ let content (Article fields) = fields.Content
 let date (Article fields) = fields.Date
 
 
-let create (title : string option) (link : string) (content : string option) (date : DateTimeOffset option) : Article =
+let create title link content date =
     Article
         { Title =
               title

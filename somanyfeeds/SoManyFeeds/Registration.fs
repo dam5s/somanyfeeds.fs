@@ -32,13 +32,13 @@ type ValidationErrors =
     }
 
 
-let private nameValidation (registration : Registration) : string option =
+let private nameValidation (registration : Registration) =
     if String.isEmpty registration.Name
     then Some "cannot be blank"
     else None
 
 
-let private emailValidation (registration : Registration) : string option =
+let private emailValidation (registration : Registration) =
     let isEmpty = String.isEmpty registration.Email
     let isNotEmail = not (String.contains "@" registration.Email)
 
@@ -47,24 +47,24 @@ let private emailValidation (registration : Registration) : string option =
     else None
 
 
-let private passwordValidation (registration : Registration) : string option =
+let private passwordValidation registration =
     if String.length registration.Password < 8
     then Some "must be at least 8 characters long"
     else None
 
 
-let private passwordConfirmationValidation (registration : Registration) : string option =
+let private passwordConfirmationValidation registration =
     if not (String.equals registration.PasswordConfirmation registration.Password)
     then Some "confirmation mismatched"
     else None
 
 
-let private anyError (errors : ValidationErrors) : bool =
+let private anyError errors =
     [ errors.NameError; errors.EmailError; errors.PasswordError; errors.PasswordConfirmationError ]
     |> List.exists Option.isSome
 
 
-let private buildFields (registration : Registration) : RegistrationFields =
+let private buildFields (registration : Registration) =
     { Name = registration.Name
              |> String.trim
       Email = registration.Email
@@ -74,7 +74,7 @@ let private buildFields (registration : Registration) : RegistrationFields =
     }
 
 
-let validate (registration : Registration) : Result<ValidRegistration, ValidationErrors> =
+let validate registration =
     let errors =
         { NameError = nameValidation registration
           EmailError = emailValidation registration

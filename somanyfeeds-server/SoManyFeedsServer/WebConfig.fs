@@ -19,21 +19,21 @@ type private JsonCookieSerialiser () =
             |> Json.deserializeSimpleMap
 
 
-let private contentRoot : string =
+let private contentRoot =
     Env.varDefault "CONTENT_ROOT" Directory.GetCurrentDirectory
 
-let private templatesFolder : string =
+let private templatesFolder =
     Path.Combine (contentRoot, "Resources", "templates")
 
-let private publicFolder : string =
+let private publicFolder =
     Path.Combine (contentRoot, "Resources", "public")
 
 
-let port : int =
+let port =
     Env.varDefaultParse int "PORT" (always "8080")
 
 
-let create : SuaveConfig =
+let create =
     setTemplatesDir templatesFolder
     setCSharpNamingConvention ()
 

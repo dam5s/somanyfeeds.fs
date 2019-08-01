@@ -5,7 +5,7 @@ open Npgsql
 open SoManyFeeds
 
 
-let executeSql (sql : string) =
+let executeSql sql =
     use connection = new NpgsqlConnection (Env.varRequired "DB_CONNECTION")
     connection.Open ()
 
@@ -14,7 +14,7 @@ let executeSql (sql : string) =
     command.ExecuteNonQuery () |> ignore
 
 
-let executeAllSql (sql : string list) =
+let executeAllSql sql =
     sql
     |> List.map executeSql
     |> ignore

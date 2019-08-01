@@ -3,7 +3,7 @@ module Assertions
 
 open canopy.classic
 
-let expectToFind (cssSelector : string) (containingText : string) =
+let expectToFind cssSelector containingText =
     let message = sprintf "Expected to find css '%s' containing text '%s'." cssSelector containingText
 
     waitFor2 message (fun () ->

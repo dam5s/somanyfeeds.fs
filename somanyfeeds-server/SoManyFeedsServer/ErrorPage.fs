@@ -9,5 +9,5 @@ type ErrorViewModel =
     { Message : string }
 
 
-let page (message : string) : WebPart =
+let page message : WebPart =
     Writers.setStatus HTTP_500 >=> page "error.html.liquid" { Message = message }

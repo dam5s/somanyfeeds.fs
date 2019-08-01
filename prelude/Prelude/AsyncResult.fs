@@ -2,44 +2,44 @@
 module AsyncResult
 
 
-type AsyncResult<'T> =
-    Async<Result<'T, string>>
+type AsyncResult<'a> =
+    Async<Result<'a, string>>
 
 
 [<RequireQualifiedAccess>]
 module AsyncResult =
 
-    let result (value: 'T) : AsyncResult<'T> =
+    let result value : AsyncResult<'a> =
         async { return Ok value }
 
-    let error (message: string) : AsyncResult<'T> =
+    let error message : AsyncResult<'a> =
         async { return Error message }
 
-    let fromResult (result : Result<'T, string>) : AsyncResult<'T> =
+    let fromResult result : AsyncResult<'a> =
         async { return result }
 
-    let map (mapping : 'T -> 'U) (result : AsyncResult<'T>) : AsyncResult<'U> =
+    let map mapping (result : AsyncResult<'a>) : AsyncResult<'b> =
         async {
             match! result with
             | Ok value -> return Ok (mapping value)
             | Error err -> return Error err
         }
 
-    let bind (mapping : 'T -> AsyncResult<'U>) (result : AsyncResult<'T>) : AsyncResult<'U> =
+    let bind (mapping : 'a -> AsyncResult<'b>) (result : AsyncResult<'a>) : AsyncResult<'b> =
         async {
             match! result with
             | Ok value -> return! mapping value
             | Error err -> return Error err
         }
 
-    let mapError (mapping : string -> string) (result : AsyncResult<'T>) : AsyncResult<'T> =
+    let mapError mapping (result : AsyncResult<'a>) : AsyncResult<'a> =
         async {
             match! result with
             | Ok value -> return Ok value
             | Error err -> return Error (mapping err)
         }
 
-    let defaultValue (value : 'T) (result : AsyncResult<'T>) : Async<'T> =
+    let defaultValue value (result : AsyncResult<'a>) =
         async {
             match! result with
             | Ok x -> return x

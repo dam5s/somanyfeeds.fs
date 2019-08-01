@@ -8,5 +8,5 @@ let private sanitizer =
     s.AllowedAttributes.Add("class") |> ignore
     s
 
-let sanitize (html : string) : string =
-    sanitizer.Sanitize html
+let sanitize =
+    sanitizer.Sanitize

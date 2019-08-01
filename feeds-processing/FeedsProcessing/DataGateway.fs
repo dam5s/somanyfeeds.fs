@@ -13,18 +13,21 @@ open FeedsProcessing.Download
 type private BasicAuthHeader = BasicAuthHeader of string
 type private BearerToken = BearerToken of string
 
-let private urlEncode (value : string) : string = HttpUtility.UrlEncode value
-let private base64encode (value : string) : string = Convert.ToBase64String (Text.Encoding.UTF8.GetBytes value)
-let private bearerTokenHeader (BearerToken s) : string = sprintf "Bearer %s" s
+let private urlEncode (value : string) : string =
+    HttpUtility.UrlEncode value
+let private base64encode (value : string) : string =
+    Convert.ToBase64String (Text.Encoding.UTF8.GetBytes value)
+let private bearerTokenHeader (BearerToken s) =
+    sprintf "Bearer %s" s
 
-let private basicAuthHeader (username : string) (password : string) : BasicAuthHeader =
+let private basicAuthHeader username password =
     sprintf "%s:%s" username password
     |> base64encode
     |> sprintf "Basic %s"
     |> BasicAuthHeader
 
 
-let private parseToken (jsonString : string) : Result<BearerToken, string> =
+let private parseToken jsonString =
     unsafeOperation "Parse token json" { return! fun _ ->
         let responseJson = JsonValue.Parse jsonString
         let accessTokenOption =
@@ -40,7 +43,7 @@ let private parseToken (jsonString : string) : Result<BearerToken, string> =
     }
 
 
-let private requestToken (BasicAuthHeader authHeader) : Result<BearerToken, string> =
+let private requestToken (BasicAuthHeader authHeader) =
     unsafeOperation "Request token" { return! fun _ ->
         let responseString = Http.RequestString
                                 ( "https://api.twitter.com/oauth2/token",
@@ -55,7 +58,7 @@ let private requestToken (BasicAuthHeader authHeader) : Result<BearerToken, stri
     }
 
 
-let private requestTweets (TwitterHandle handle) (token : BearerToken) : DownloadResult =
+let private requestTweets (TwitterHandle handle) token : DownloadResult =
     unsafeOperation "Request tweets" { return fun _ ->
         Http.RequestString
             ( "https://api.twitter.com/1.1/statuses/user_timeline.json",
@@ -70,7 +73,7 @@ let private requestTweets (TwitterHandle handle) (token : BearerToken) : Downloa
     }
 
 
-let downloadTwitterTimeline (consumerKey : string) (consumerSecret : string) (handle : TwitterHandle) : DownloadResult =
+let downloadTwitterTimeline consumerKey consumerSecret handle : DownloadResult =
     let auth = basicAuthHeader (urlEncode consumerKey) (urlEncode consumerSecret)
     Result.bind (requestTweets handle) (requestToken auth)
 

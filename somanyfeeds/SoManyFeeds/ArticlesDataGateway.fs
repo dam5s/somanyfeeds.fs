@@ -23,7 +23,7 @@ type ArticleFields =
     }
 
 
-let entityToRecord (entity : ArticleEntity) : ArticleRecord =
+let entityToRecord (entity : ArticleEntity) =
     { Id = entity.Id
       Url = entity.Url
       Title = entity.Title
@@ -33,7 +33,7 @@ let entityToRecord (entity : ArticleEntity) : ArticleRecord =
     }
 
 
-let createOrUpdateArticle (fields : ArticleFields) : AsyncResult<ArticleRecord> =
+let createOrUpdateArticle fields : AsyncResult<ArticleRecord> =
     dataAccessOperation (fun ctx ->
         let maybeExisting =
             query {

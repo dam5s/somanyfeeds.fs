@@ -3,7 +3,7 @@ module SoManyFeeds.FeedsService
 open FeedsDataGateway
 
 
-let createFeed (maxFeeds : int) (userId : int64) (fields : FeedFields) : AsyncResult<FeedRecord> =
+let createFeed maxFeeds userId fields : AsyncResult<FeedRecord> =
     asyncResult {
         let! count = FeedsDataGateway.countFeeds userId
 

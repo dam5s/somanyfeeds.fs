@@ -7,7 +7,7 @@ open Support
 open System.IO
 
 
-let private generateCss (filePath : string) : string =
+let private generateCss filePath =
     let scssOptions = ScssOptions (OutputStyle = ScssOutputStyle.Compressed)
     let result = Scss.ConvertFileToCss (filePath, scssOptions)
     result.Css

@@ -9,18 +9,18 @@ open System.IO
 exception ProcessException
 
 
-let ensureSuccessExitCode (exitCode : int) =
+let ensureSuccessExitCode exitCode =
     match exitCode with
     | 0 -> ()
     | _ -> raise ProcessException
 
 
-let writeToFile (filePath : string) (content : string) =
+let writeToFile filePath content =
     Directory.GetParent(filePath).Create()
     File.writeString false filePath content
 
 
-let fakeExecutionContext (args : string list) =
+let fakeExecutionContext args =
     let fakeArgs =
         match args with
         | [] -> []
@@ -29,9 +29,9 @@ let fakeExecutionContext (args : string list) =
     FakeExecutionContext.Create false "Program.fs" fakeArgs
 
 
-let dependsOn (dependencies : string list) (task : string) =
+let dependsOn dependencies task =
     task <== dependencies
 
 
-let mustRunAfter (afterTask : string) (beforeTask : string) =
+let mustRunAfter afterTask beforeTask =
     beforeTask <=? afterTask |> ignore

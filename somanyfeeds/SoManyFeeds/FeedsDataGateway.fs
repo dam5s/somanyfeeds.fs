@@ -18,7 +18,7 @@ type FeedFields =
     }
 
 
-let private entityToRecord (entity : FeedEntity) : FeedRecord =
+let private entityToRecord (entity : FeedEntity) =
     { Id = entity.Id
       UserId = entity.UserId
       Name = entity.Name
@@ -26,7 +26,7 @@ let private entityToRecord (entity : FeedEntity) : FeedRecord =
     }
 
 
-let listFeeds (userId : int64) : AsyncResult<FeedRecord seq> =
+let listFeeds userId : AsyncResult<FeedRecord seq> =
     dataAccessOperation (fun ctx ->
         query {
             for feed in ctx.Public.Feeds do
@@ -36,7 +36,7 @@ let listFeeds (userId : int64) : AsyncResult<FeedRecord seq> =
     )
 
 
-let findFeed (userId : int64) (feedId : int64) : Async<FindResult<FeedRecord>> =
+let findFeed userId feedId =
     dataAccessOperation (fun ctx ->
         query {
             for feed in ctx.Public.Feeds do
@@ -49,7 +49,7 @@ let findFeed (userId : int64) (feedId : int64) : Async<FindResult<FeedRecord>> =
     |> FindResult.asyncFromAsyncResultOfOption
 
 
-let countFeeds (userId : int64) : AsyncResult<int64> =
+let countFeeds userId : AsyncResult<int64> =
     dataAccessOperation (fun ctx ->
         query {
             for feed in ctx.Public.Feeds do
@@ -60,7 +60,7 @@ let countFeeds (userId : int64) : AsyncResult<int64> =
     )
 
 
-let createFeed (userId : int64) (fields : FeedFields) : AsyncResult<FeedRecord> =
+let createFeed userId fields : AsyncResult<FeedRecord> =
     dataAccessOperation (fun ctx ->
         let entity = ctx.Public.Feeds.Create ()
         entity.UserId <- userId
@@ -73,7 +73,7 @@ let createFeed (userId : int64) (fields : FeedFields) : AsyncResult<FeedRecord> 
     )
 
 
-let updateFeed (userId : int64) (feedId : int64) (fields : FeedFields) : AsyncResult<FeedRecord> =
+let updateFeed userId feedId fields : AsyncResult<FeedRecord> =
     let entityOptionToAsyncResult result =
         match result with
         | Some e -> AsyncResult.result (entityToRecord e)
@@ -98,7 +98,7 @@ let updateFeed (userId : int64) (feedId : int64) (fields : FeedFields) : AsyncRe
     |> AsyncResult.bind entityOptionToAsyncResult
 
 
-let deleteFeed (userId : int64) (feedId : int64) : AsyncResult<unit> =
+let deleteFeed userId feedId : AsyncResult<unit> =
     dataAccessOperation (fun ctx ->
         query {
             for feed in ctx.Public.Feeds do

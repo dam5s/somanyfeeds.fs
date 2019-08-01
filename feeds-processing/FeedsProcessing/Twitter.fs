@@ -19,7 +19,7 @@ type private Tweet =
     }
 
 
-let private parseDate (dateValue : string) : DateTime option =
+let private parseDate dateValue =
     unsafeOperation "Date parsing" { return fun _ ->
         DateTime.ParseExact (dateValue, "ddd MMM dd HH:mm:ss zzz yyyy", CultureInfo.InvariantCulture)
     }
@@ -29,7 +29,7 @@ let private parseDate (dateValue : string) : DateTime option =
 type TwitterTimelineProvider = JsonProvider<"../feeds-processing/Resources/samples/twitter.timeline.sample">
 
 
-let private mapTweet (json : TwitterTimelineProvider.Root) : Tweet =
+let private mapTweet (json : TwitterTimelineProvider.Root) =
     let createdAtString = json.CreatedAt
     let replyToScreenName = json.InReplyToScreenName
     let retweetedStatus = json.RetweetedStatus
@@ -44,7 +44,7 @@ let private mapTweet (json : TwitterTimelineProvider.Root) : Tweet =
     }
 
 
-let private parseTweets (DownloadedFeed downloaded) : Result<Tweet list, string> =
+let private parseTweets (DownloadedFeed downloaded) =
     unsafeOperation "Parse tweets" { return fun _ ->
         downloaded
         |> TwitterTimelineProvider.Parse
@@ -53,7 +53,7 @@ let private parseTweets (DownloadedFeed downloaded) : Result<Tweet list, string>
     }
 
 
-let private tweetToArticle (TwitterHandle handle) (tweet : Tweet) : Article =
+let private tweetToArticle (TwitterHandle handle) tweet =
     Article.create
         None
         (sprintf "https://twitter.com/%s" handle)
@@ -62,11 +62,11 @@ let private tweetToArticle (TwitterHandle handle) (tweet : Tweet) : Article =
 
 
 
-let private tweetsToArticles (handle : TwitterHandle) (tweets : Tweet list) : Article list =
+let private tweetsToArticles handle tweets =
     tweets
     |> List.filter (fun t -> not t.IsRetweet && not t.IsReply)
     |> List.map (tweetToArticle handle)
 
 
-let processTweets (handle : TwitterHandle) (downloaded : DownloadedFeed) : ProcessingResult =
+let processTweets handle downloaded : ProcessingResult =
     Result.map (tweetsToArticles handle) (parseTweets downloaded)

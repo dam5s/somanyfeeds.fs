@@ -14,7 +14,7 @@ type UserRecord =
     }
 
 
-let private entityToRecord (entity : UserEntity) : UserRecord =
+let private entityToRecord (entity : UserEntity) =
     { Id = entity.Id
       Name = entity.Name
       Email = entity.Email
@@ -22,7 +22,7 @@ let private entityToRecord (entity : UserEntity) : UserRecord =
     }
 
 
-let findByEmail (email : string) : Async<FindResult<UserRecord>> =
+let findByEmail email : Async<FindResult<UserRecord>> =
     dataAccessOperation (fun ctx ->
         query {
             for user in ctx.Public.Users do
@@ -35,7 +35,7 @@ let findByEmail (email : string) : Async<FindResult<UserRecord>> =
     |> FindResult.asyncFromAsyncResultOfOption
 
 
-let create (registration : ValidRegistration) : AsyncResult<UserRecord> =
+let create registration : AsyncResult<UserRecord> =
     dataAccessOperation (fun ctx ->
         let fields = Registration.fields registration
         let entity = ctx.Public.Users.Create ()

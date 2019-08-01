@@ -6,7 +6,7 @@ open Suave.Redirection
 open Suave.Operators
 
 
-let private httpsUrlOf (request: HttpRequest) : string =
+let private httpsUrlOf (request: HttpRequest) =
     let builder = UriBuilder ()
     builder.Scheme <- "https"
     builder.Host <- request.host

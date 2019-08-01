@@ -10,7 +10,7 @@ type JobFailure =
     JobFailure of message:string
 
 
-let createMissing : AsyncResult<int> =
+let createMissing =
     dataAccessOperation (fun ctx ->
         let existingUrls =
             query {
@@ -36,7 +36,7 @@ let createMissing : AsyncResult<int> =
     )
 
 
-let startSome (howMany : int): AsyncResult<FeedUrl seq> =
+let startSome howMany : AsyncResult<FeedUrl seq> =
     dataAccessOperation (fun ctx ->
         let now = DateTime.UtcNow
         let tenMinutesAgo = now.AddMinutes(-10.0)
@@ -65,7 +65,7 @@ let startSome (howMany : int): AsyncResult<FeedUrl seq> =
     )
 
 
-let private updateJob (FeedUrl url)  updateFunction : AsyncResult<int> =
+let private updateJob (FeedUrl url)  updateFunction =
     dataAccessOperation (fun ctx ->
         let updatesCount =
             query {
@@ -81,7 +81,7 @@ let private updateJob (FeedUrl url)  updateFunction : AsyncResult<int> =
     )
 
 
-let complete (url : FeedUrl): AsyncResult<int> =
+let complete url : AsyncResult<int> =
     let setCompleted (entity : FeedJobEntity) =
         entity.CompletedAt <- Some DateTime.UtcNow
         entity.LockedUntil <- None
@@ -89,7 +89,7 @@ let complete (url : FeedUrl): AsyncResult<int> =
     updateJob url setCompleted
 
 
-let fail (url : FeedUrl) (JobFailure message): AsyncResult<int> =
+let fail url (JobFailure message) : AsyncResult<int> =
     let setFailed (entity : FeedJobEntity) =
         entity.LastFailedAt <- Some DateTime.UtcNow
         entity.LastFailure <- message

@@ -18,8 +18,8 @@ let private log logger lvl msg =
 ///
 /// type private Logs = Logs
 /// let private logger = createLogger<Logs>
-let createLogger<'T> =
-    let t = typeof<'T>
+let createLogger<'a> =
+    let t = typeof<'a>
     Log.create(t.DeclaringType)
 
 

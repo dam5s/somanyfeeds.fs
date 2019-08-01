@@ -12,7 +12,7 @@ type private Logs = Logs
 let private logger = createLogger<Logs>
 
 
-let serializeSimpleMap (map : Map<string, obj>) : string =
+let serializeSimpleMap map =
     map
     |> Map.map (fun k (value : obj) ->
         match value with
@@ -30,7 +30,7 @@ let serializeSimpleMap (map : Map<string, obj>) : string =
     |> Json.format
 
 
-let deserializeSimpleMap (json : string) : Map<string, obj> =
+let deserializeSimpleMap json =
     let convertJsonMap (map : Map<string, Json>) : Map<string, obj> =
         map |> Map.map (fun key (value : Json) ->
             match value with
@@ -51,13 +51,13 @@ let deserializeSimpleMap (json : string) : Map<string, obj> =
                 | _ -> Map.empty
 
 
-let serializeObject (encoder : 'a -> Json<unit>) (record : 'a) : string =
+let serializeObject encoder record =
     record
     |> Json.serializeWith encoder
     |> Json.format
 
 
-let serializeList (encoder : 'a -> Json<unit>) (records : 'a seq) : string =
+let serializeList encoder records =
     records
     |> Seq.map (Json.serializeWith encoder)
     |> Seq.toList
@@ -65,31 +65,31 @@ let serializeList (encoder : 'a -> Json<unit>) (records : 'a seq) : string =
     |> Json.format
 
 
-let jsonResponse (status : HttpCode) (json : string) : WebPart =
+let jsonResponse status json : WebPart =
     setMimeType "application/json"
         >=> response status (UTF8.bytes json)
 
 
-let objectResponse (status : HttpCode) (encoder : 'a -> Json<unit>) (object : 'a) : WebPart =
+let objectResponse status encoder object : WebPart =
     object
     |> serializeObject encoder
     |> jsonResponse status
 
 
-let listResponse (status : HttpCode) (encoder : 'a -> Json<unit>) (list : 'a seq) : WebPart =
+let listResponse status encoder list : WebPart =
     list
     |> serializeList encoder
     |> jsonResponse status
 
 
-let private decodeToChoice (decoder : Json -> JsonResult<'a> * Json) (json: Json) : Choice<'a, string> =
+let private decodeToChoice (decoder : Json -> JsonResult<'a> * Json) json =
     decoder json
     |> fst
     |> function | Value value -> Choice1Of2 value
                 | Error msg -> Choice2Of2 msg
 
 
-let private deserializationErrorJson (message : string) : string =
+let private deserializationErrorJson message =
     let encoder message =
         Json.write "error" "Json deserialization error"
         *> Json.write "message" message
@@ -97,7 +97,7 @@ let private deserializationErrorJson (message : string) : string =
     serializeObject encoder message
 
 
-let deserializeBody (decoder : Json -> JsonResult<'a> * Json) (next : 'a -> WebPart) : WebPart =
+let deserializeBody decoder (next : 'a -> WebPart) : WebPart =
     request (fun r ->
         r.rawForm
         |> UTF8.toString
@@ -108,7 +108,7 @@ let deserializeBody (decoder : Json -> JsonResult<'a> * Json) (next : 'a -> WebP
     )
 
 
-let private errorEncoder (message : string) : Json<unit> =
+let private errorEncoder message =
     Json.write "error" "An error occured"
     *> Json.write "message" message
 

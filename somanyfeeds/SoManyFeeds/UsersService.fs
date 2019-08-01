@@ -12,7 +12,7 @@ type UserCreationResult =
     | CreationError of message:string
 
 
-let create (registration : Registration) : Async<UserCreationResult> =
+let create registration : Async<UserCreationResult> =
     async {
         match Registration.validate registration with
         | Ok validReg ->

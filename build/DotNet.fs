@@ -4,7 +4,7 @@ module DotNet
 open Fake.DotNet
 
 
-let private dotnet (command : string) (args : string) =
+let private dotnet command args =
     let result = DotNet.exec id command args
     Support.ensureSuccessExitCode result.ExitCode
 

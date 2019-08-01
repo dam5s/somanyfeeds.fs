@@ -11,7 +11,7 @@ open FeedsProcessing.DataGateway
 open FeedsProcessing.Twitter
 
 
-let private articleToRecord (sourceType : SourceType) (article : Article) : ArticleRecord =
+let private articleToRecord sourceType article =
     { Title = Article.title article
       Link = Article.link article
       Content = Article.content article
@@ -20,7 +20,7 @@ let private articleToRecord (sourceType : SourceType) (article : Article) : Arti
     }
 
 
-let private resultToList (sourceType : SourceType) (result : ProcessingResult) : ArticleRecord list =
+let private resultToList sourceType (result : ProcessingResult) =
     List.map (articleToRecord sourceType) (Result.defaultValue [] result)
 
 let private consumerKey =
@@ -30,13 +30,13 @@ let private consumerSecret =
     Env.varRequired "TWITTER_CONSUMER_SECRET"
 
 
-let private processFeed (feed : Feed) : ProcessingResult =
+let private processFeed feed : ProcessingResult =
     match feed with
     | Xml (_, url) -> Result.bind processXmlFeed (downloadFeed url)
     | Twitter (handle) -> Result.bind (processTweets handle) (downloadTwitterTimeline consumerKey consumerSecret handle)
 
 
-let processFeeds (sources : Source list) : ArticleRecord list =
+let processFeeds (sources : Source list) =
     List.collect
         (fun (sourceType, feed) -> processFeed feed |> resultToList sourceType)
         sources

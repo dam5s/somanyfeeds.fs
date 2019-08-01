@@ -29,23 +29,23 @@ module private Encoders =
     open Chiron
     open Chiron.Operators
 
-    let feedsEncoder (feeds : FeedRecord seq) : Json =
+    let private feedsEncoder feeds =
         feeds
         |> Seq.map (Json.serializeWith FeedsApi.Encoders.feed)
         |> Seq.toList
         |> Json.Array
 
-    let pageJson (page : FrontendPage) =
+    let private pageJson page =
         match page with
         | List -> "List"
         | Search _ -> "Search"
 
-    let searchText (page : FrontendPage) =
+    let private searchText page =
         match page with
         | List -> None
         | Search textOption -> textOption
 
-    let flags (flags : Flags) : Json<unit> =
+    let flags flags =
         Json.write "userName" flags.UserName
         *> Json.write "maxFeeds" flags.MaxFeeds
         *> Json.writeWith feedsEncoder "feeds" flags.Feeds
@@ -53,7 +53,7 @@ module private Encoders =
         *> Json.write "searchText" (searchText flags.Page)
 
 
-let page (maxFeeds : int) (listFeeds : AsyncResult<FeedRecord seq>) (user : User) (frontendPage : FrontendPage) : WebPart =
+let page maxFeeds (listFeeds : AsyncResult<FeedRecord seq>) (user : User) frontendPage =
     fun ctx -> async {
         match! listFeeds with
         | Ok records ->

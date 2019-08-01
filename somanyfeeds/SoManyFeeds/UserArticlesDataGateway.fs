@@ -63,7 +63,7 @@ let listRecentUnreadArticles (userId : int64) (maybeFeedId : int64 option) : Asy
     )
 
 
-let listBookmarks (userId : int64) : AsyncResult<ArticleRecord seq> =
+let listBookmarks userId : AsyncResult<ArticleRecord seq> =
     dataAccessOperation (fun ctx ->
         query {
             for article in ctx.Public.Articles do
@@ -83,7 +83,7 @@ type UserArticleRecord =
     }
 
 
-let createReadArticle (record : UserArticleRecord) : AsyncResult<unit> =
+let createReadArticle record : AsyncResult<unit> =
     dataAccessOperation (fun ctx ->
         let entity = ctx.Public.ReadArticles.Create ()
         entity.UserId <- record.UserId
@@ -92,7 +92,7 @@ let createReadArticle (record : UserArticleRecord) : AsyncResult<unit> =
     )
 
 
-let deleteReadArticle (record : UserArticleRecord) : AsyncResult<unit> =
+let deleteReadArticle record : AsyncResult<unit> =
     dataAccessOperation (fun ctx ->
         query {
             for readArticle in ctx.Public.ReadArticles do
@@ -105,7 +105,7 @@ let deleteReadArticle (record : UserArticleRecord) : AsyncResult<unit> =
     )
 
 
-let createBookmark (record : UserArticleRecord) : AsyncResult<unit> =
+let createBookmark record : AsyncResult<unit> =
     dataAccessOperation (fun ctx ->
         let entity = ctx.Public.Bookmarks.Create ()
         entity.UserId <- record.UserId
@@ -114,7 +114,7 @@ let createBookmark (record : UserArticleRecord) : AsyncResult<unit> =
     )
 
 
-let deleteBookmark (record : UserArticleRecord) : AsyncResult<unit> =
+let deleteBookmark record : AsyncResult<unit> =
     dataAccessOperation (fun ctx ->
         query {
             for bookmark in ctx.Public.Bookmarks do

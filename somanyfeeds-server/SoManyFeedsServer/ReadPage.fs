@@ -29,29 +29,29 @@ module private Encoders =
     open Chiron
     open Chiron.Operators
 
-    let articlesEncoder (feeds : FeedRecord seq) (articles : ArticleRecord seq) : Json =
+    let private articlesEncoder feeds articles =
         articles
         |> Seq.map (Json.serializeWith (ArticlesApi.Encoders.article feeds))
         |> Seq.toList
         |> Json.Array
 
-    let feedsEncoder (feeds : FeedRecord seq) : Json =
+    let private feedsEncoder feeds =
         feeds
         |> Seq.map (Json.serializeWith FeedsApi.Encoders.feed)
         |> Seq.toList
         |> Json.Array
 
-    let maybeFeedId (page : FrontendPage) =
-        match page with
-        | Recent maybeFeedId -> maybeFeedId
-        | Bookmarks -> None
-
-    let pageJson (page : FrontendPage) =
+    let private pageJson page =
         match page with
         | Recent _ -> "Recent"
         | Bookmarks -> "Bookmarks"
 
-    let flags (flags : Flags) : Json<unit> =
+    let maybeFeedId page =
+        match page with
+        | Recent maybeFeedId -> maybeFeedId
+        | Bookmarks -> None
+
+    let flags flags =
         Json.write "userName" flags.UserName
         *> Json.writeWith (articlesEncoder flags.Feeds) "recents" flags.Recents
         *> Json.writeWith feedsEncoder "feeds" flags.Feeds
@@ -61,8 +61,8 @@ module private Encoders =
 
 let page
     (listFeedsAndArticles : User -> int64 option -> AsyncResult<FeedRecord seq * ArticleRecord seq>)
-    (user : User)
-    (frontendPage : FrontendPage) : WebPart =
+    user
+    frontendPage =
 
     fun ctx -> async {
         let maybeFeedId = Encoders.maybeFeedId frontendPage

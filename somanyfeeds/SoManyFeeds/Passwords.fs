@@ -11,5 +11,5 @@ let hashedValue (HashedPassword value) = value
 let generateHash =
     BCrypt.HashPassword >> HashedPassword
 
-let verify (clearPassword : string) (HashedPassword passwordHash) : bool =
+let verify clearPassword (HashedPassword passwordHash) =
     BCrypt.Verify (clearPassword, passwordHash)

@@ -11,7 +11,7 @@ let setTestDbConnectionString _ =
                                         "Host=localhost;Username=somanyfeeds;Password=secret;Database=somanyfeeds_tests")
 
 
-let executeSql (sql : string) =
+let executeSql sql =
     use connection = new NpgsqlConnection (Env.varRequired "DB_CONNECTION")
     connection.Open ()
 

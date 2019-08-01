@@ -12,12 +12,12 @@ module Encoders =
     open Chiron
     open Chiron.Operators
 
-    let user (record : UserRecord) : Json<unit> =
+    let user record =
         Json.write "id" record.Id
         *> Json.write "name" record.Name
         *> Json.write "email" record.Email
 
-    let validationErrors (errors : ValidationErrors) : Json<unit> =
+    let validationErrors errors =
         Json.write "nameError" errors.NameError
         *> Json.write "emailError" errors.EmailError
         *> Json.write "passwordError" errors.PasswordError
@@ -28,7 +28,7 @@ module Decoders =
     open Chiron
     open Chiron.Operators
 
-    let registration (json : Json) : JsonResult<Registration> * Json =
+    let registration json =
         let constructor name email password confirmation =
             { Name = name; Email = email; Password = password; PasswordConfirmation = confirmation }
 
@@ -42,7 +42,7 @@ module Decoders =
         decoder json
 
 
-let create (createUser : Registration -> Async<UserCreationResult>) (registration : Registration) : WebPart =
+let create createUser (registration : Registration) : WebPart =
     fun ctx -> async {
         match! createUser registration with
         | CreationSuccess record -> return! objectResponse HTTP_201 Encoders.user record ctx

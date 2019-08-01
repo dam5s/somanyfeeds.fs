@@ -30,7 +30,7 @@ let private sequence : AsyncSeq<FeedUrl> =
     }
 
 
-let private everyFiveMinutes (s : AsyncSeq<'T>) : AsyncSeq<'T> =
+let private everyFiveMinutes (s : AsyncSeq<'a>) =
     asyncSeq {
         let oneMinute = 1000 * 60
 
@@ -42,26 +42,26 @@ let private everyFiveMinutes (s : AsyncSeq<'T>) : AsyncSeq<'T> =
     }
 
 
-let private logFeedError (FeedUrl url) (msg : string) : string =
+let private logFeedError (FeedUrl url) msg =
     sprintf "There was an error while processing the feed with url %s: %s" url msg
     |> logError logger
     |> always msg
 
 
-let private logArticleError (url : string) (msg : string) : string =
+let private logArticleError url msg =
     sprintf "There was an error while persisting the article with url %s: %s" url msg
     |> logError logger
     |> always msg
 
 
-let private completeJob (feedUrl : FeedUrl) =
+let private completeJob feedUrl =
     feedUrl
     |> FeedJobsDataGateway.complete
     |> Async.RunSynchronously
     |> ignore
 
 
-let private failJob (feedUrl : FeedUrl) (message : string) =
+let private failJob feedUrl message =
     message
     |> logFeedError feedUrl
     |> JobFailure
@@ -70,7 +70,7 @@ let private failJob (feedUrl : FeedUrl) (message : string) =
     |> ignore
 
 
-let private articleToFields (FeedUrl feedUrl) (article : Article) : ArticleFields =
+let private articleToFields (FeedUrl feedUrl) article =
     { Url = (Article.link article) |> Option.defaultValue ""
       Title = (Article.title article) |> Option.defaultValue ""
       FeedUrl = feedUrl
@@ -79,7 +79,7 @@ let private articleToFields (FeedUrl feedUrl) (article : Article) : ArticleField
     }
 
 
-let private persistArticle (fields : ArticleFields) : Async<unit> =
+let private persistArticle fields =
     async {
         let! result = createOrUpdateArticle fields
                       |> AsyncResult.mapError (logArticleError fields.Url)
@@ -88,7 +88,7 @@ let private persistArticle (fields : ArticleFields) : Async<unit> =
     }
 
 
-let private processFeed (feedUrl : FeedUrl) : ArticleFields seq =
+let private processFeed feedUrl =
     sprintf "Processing feed %A" feedUrl
     |> logInfo logger
     |> ignore
@@ -112,7 +112,7 @@ let private processFeed (feedUrl : FeedUrl) : ArticleFields seq =
         Seq.empty
 
 
-let private backgroundProcessing (sequenceModifier : AsyncSeq<FeedUrl> -> AsyncSeq<FeedUrl>) : Async<unit> =
+let private backgroundProcessing (sequenceModifier : AsyncSeq<FeedUrl> -> AsyncSeq<FeedUrl>) =
     sequence
     |> sequenceModifier
     |> AsyncSeq.map processFeed
@@ -120,9 +120,9 @@ let private backgroundProcessing (sequenceModifier : AsyncSeq<FeedUrl> -> AsyncS
     |> AsyncSeq.iterAsyncParallel persistArticle
 
 
-let backgroundProcessingOnce : Async<unit> =
+let backgroundProcessingOnce =
     backgroundProcessing id
 
 
-let backgroundProcessingInfinite : Async<unit> =
+let backgroundProcessingInfinite =
     backgroundProcessing everyFiveMinutes

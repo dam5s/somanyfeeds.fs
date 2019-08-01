@@ -10,7 +10,7 @@ open DamoIOServer.Sources
 open DamoIOServer.ArticlesDataGateway
 
 
-let private source (record : ArticleRecord) : string =
+let private source record =
     match record.Source with
     | About -> "About"
     | Social -> "Social"
@@ -18,7 +18,7 @@ let private source (record : ArticleRecord) : string =
     | Blog -> "Blog"
 
 
-let private toJson (record : ArticleRecord): Json<unit> =
+let private toJson record =
     Json.write "title" record.Title
     *> Json.write "link" record.Link
     *> Json.write "content" record.Content
@@ -30,7 +30,7 @@ type ArticlesListViewModel =
     { ArticlesJson : string }
 
 
-let list (findAllRecords : unit -> ArticleRecord list) (ctx : HttpContext): Async<HttpContext option> =
+let list findAllRecords ctx =
     async {
         let now =
             Posix.fromDateTimeOffset DateTimeOffset.UtcNow

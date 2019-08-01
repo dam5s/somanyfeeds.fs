@@ -26,7 +26,7 @@ module private User =
         { Id = id ; Name = name }
 
 
-    let tryGet (ctx: HttpContext) : User option =
+    let tryGet ctx =
         ctx
         |> HttpContext.state
         |> Option.bind (fun store ->
@@ -61,7 +61,7 @@ let registrationPage (request : HttpRequest) : WebPart =
     page "register.html.liquid" ()
 
 
-let doLogin (findByEmail : string -> Async<FindResult<UserRecord>>) (request : HttpRequest) : WebPart =
+let doLogin findByEmail (request : HttpRequest) : WebPart =
     fun ctx -> async {
         let formData name = name
                             |> request.formData

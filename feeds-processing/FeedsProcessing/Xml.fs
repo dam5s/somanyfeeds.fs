@@ -17,21 +17,21 @@ module private Rss =
 
     type private RssProvider = XmlProvider<"../feeds-processing/Resources/samples/rss.sample">
 
-    let private itemToArticle (item : RssProvider.Item) : Article =
+    let private itemToArticle (item : RssProvider.Item) =
         Article.create
           (Some item.Title)
           item.Link
           (item.Encoded |> Option.orElse item.Description)
           (Some item.PubDate)
 
-    let private toArticles (rss : RssProvider.Rss) : Result<Article list, string> =
+    let private toArticles (rss : RssProvider.Rss) =
         unsafeOperation "Rss to articles" { return fun _ ->
             rss.Channel.Items
             |> Seq.map itemToArticle
             |> Seq.toList
         }
 
-    let private parse (xml : string) : Result<RssProvider.Rss, string> =
+    let private parse xml : Result<RssProvider.Rss, string> =
         unsafeOperation "Rss parse" { return fun _ -> RssProvider.Parse xml }
 
     let processRss (DownloadedFeed downloaded) : ProcessingResult =
@@ -42,14 +42,14 @@ module private Atom =
 
     type private AtomProvider = XmlProvider<"../feeds-processing/Resources/samples/github.atom.sample">
 
-    let private entryToArticle (entry : AtomProvider.Entry) : Article =
+    let private entryToArticle (entry : AtomProvider.Entry) =
         Article.create
             (Some entry.Title.Value)
             entry.Link.Href
             (Some entry.Content.Value)
             (Some entry.Published)
 
-    let private toArticles (atom : AtomProvider.Feed) : Result<Article list, string> =
+    let private toArticles (atom : AtomProvider.Feed) =
         unsafeOperation "Atom to articles" { return! fun _ ->
             match atom.Entries with
             | [||] ->
@@ -61,7 +61,7 @@ module private Atom =
                 |> Ok
         }
 
-    let private parse (xml : string) : Result<AtomProvider.Feed, string> =
+    let private parse xml : Result<AtomProvider.Feed, string> =
         unsafeOperation "Atom parse" { return fun _ -> AtomProvider.Parse xml }
 
     let processAtom (DownloadedFeed downloaded) : ProcessingResult =
@@ -72,7 +72,7 @@ module private Rdf =
 
     type private RdfProvider = XmlProvider<"../feeds-processing/Resources/samples/slashdot.rdf.sample">
 
-    let private itemToArticle (item : RdfProvider.Item) : Article =
+    let private itemToArticle (item : RdfProvider.Item) =
         Article.create
             (Some item.Title)
             item.Link
@@ -98,7 +98,11 @@ module private Rdf =
         parse downloaded |> Result.bind toArticles
 
 
-let private tryProcessor (downloaded : DownloadedFeed) (previousState : ProcessingResult) (processor : DownloadedFeed -> ProcessingResult) : ProcessingResult =
+type private Processor =
+    DownloadedFeed -> ProcessingResult
+
+
+let private tryProcessor downloaded (previousState : ProcessingResult) (processor : Processor) : ProcessingResult =
     match previousState with
     | Ok articles -> Ok articles
     | Error msg ->
@@ -107,7 +111,7 @@ let private tryProcessor (downloaded : DownloadedFeed) (previousState : Processi
         | Error nextMsg -> Error (sprintf "%s, %s" msg nextMsg)
 
 
-let private processors =
+let private processors : Processor list =
     [ Rss.processRss
       Atom.processAtom
       Rdf.processRdf

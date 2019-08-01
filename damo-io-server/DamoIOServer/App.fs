@@ -9,7 +9,7 @@ open DamoIOServer.ArticlesDataGateway
 open DamoIOServer.SslHandler
 
 
-let private updatesSequence : AsyncSeq<ArticleRecord list> =
+let private updatesSequence =
     asyncSeq {
         let tenMinutes = 10 * 1000 * 60
 

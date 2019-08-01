@@ -4,15 +4,15 @@ open System
 open FSharp.Data.Sql
 
 
-type FindResult<'T> =
-    | Found of 'T
+type FindResult<'a> =
+    | Found of 'a
     | NotFound
     | FindError of message:string
 
 
 [<RequireQualifiedAccess>]
 module FindResult =
-    let asyncFromAsyncResultOfOption (result : AsyncResult<'T option>) : Async<FindResult<'T>> =
+    let asyncFromAsyncResultOfOption (result : AsyncResult<'a option>) =
         async {
             match! result with
             | Ok (Some value) -> return Found value

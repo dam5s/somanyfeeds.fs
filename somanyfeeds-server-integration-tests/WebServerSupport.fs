@@ -4,7 +4,7 @@ open Suave
 open System.Threading
 
 
-let start (config : SuaveConfig) (webPart : WebPart<HttpContext>) : CancellationTokenSource =
+let start config webPart =
     let listening, server = Web.startWebServerAsync config webPart
     let tokenSource = new CancellationTokenSource ()
 

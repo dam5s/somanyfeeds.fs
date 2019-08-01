@@ -12,11 +12,11 @@ open SoManyFeedsServer
 open SoManyFeedsServer.Json
 
 
-let private maxFeeds : int =
+let private maxFeeds =
     Env.varDefaultParse int "MAX_FEEDS" (always "20")
 
 
-let private authenticatedPage (user : User) : WebPart =
+let private authenticatedPage user : WebPart =
 
     let listFeeds = FeedsDataGateway.listFeeds user.Id
     let createFeed = FeedsService.createFeed maxFeeds user.Id

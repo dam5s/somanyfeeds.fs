@@ -7,7 +7,7 @@ open Suave.DotLiquid
 open DamoIOServer
 
 
-let private portFromEnv: int =
+let private portFromEnv =
     try
         "PORT"
         |> Environment.GetEnvironmentVariable
