@@ -22,20 +22,20 @@ module FindResult =
 
 
 [<Literal>]
-let private resolutionPath = __SOURCE_DIRECTORY__ + "/../Libraries"
+let private ResolutionPath = __SOURCE_DIRECTORY__ + "/../Libraries"
 
 [<Literal>]
-let private defaultConnectionString = "User ID=somanyfeeds;Host=localhost;Port=5432;Database=somanyfeeds_dev;Password=secret"
+let private DefaultConnectionString = "User ID=somanyfeeds;Host=localhost;Port=5432;Database=somanyfeeds_dev;Password=secret"
 
 
 let private connectionString =
-    Env.varDefault "DB_CONNECTION" (always defaultConnectionString)
+    Env.varDefault "DB_CONNECTION" (always DefaultConnectionString)
 
 
 type private SoManyFeedsDb =
     SqlDataProvider<Common.DatabaseProviderTypes.POSTGRESQL,
-                    defaultConnectionString,
-                    ResolutionPath = resolutionPath,
+                    DefaultConnectionString,
+                    ResolutionPath = ResolutionPath,
                     UseOptionTypes = true>
 
 type FeedEntity = SoManyFeedsDb.dataContext.``public.feedsEntity``
