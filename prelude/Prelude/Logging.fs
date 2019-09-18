@@ -20,7 +20,7 @@ let private log logger lvl msg =
 /// let private logger = createLogger<Logs>
 let createLogger<'a> =
     let t = typeof<'a>
-    Log.create(t.DeclaringType)
+    Log.create (t.DeclaringType)
 
 
 let logError logger msg =

@@ -8,20 +8,20 @@ open Suave.DotLiquid
 
 
 type FrontendPage =
-    | Recent of feedId : int64 option
+    | Recent of feedId: int64 option
     | Bookmarks
 
 
 type private Flags =
-    { UserName : string
-      Recents : ArticleRecord seq
-      Feeds : FeedRecord seq
-      Page : FrontendPage
+    { UserName: string
+      Recents: ArticleRecord seq
+      Feeds: FeedRecord seq
+      Page: FrontendPage
     }
 
 
 type ReadViewModel =
-    { Flags : string
+    { Flags: string
     }
 
 
@@ -60,7 +60,7 @@ module private Encoders =
 
 
 let page
-    (listFeedsAndArticles : User -> int64 option -> AsyncResult<FeedRecord seq * ArticleRecord seq>)
+    (listFeedsAndArticles: User -> int64 option -> AsyncResult<FeedRecord seq * ArticleRecord seq>)
     user
     frontendPage =
 
@@ -68,7 +68,7 @@ let page
         let maybeFeedId = Encoders.maybeFeedId frontendPage
 
         match! listFeedsAndArticles user maybeFeedId with
-        | Ok (feeds, articles) ->
+        | Ok(feeds, articles) ->
             let flags =
                 { UserName = user.Name
                   Recents = articles

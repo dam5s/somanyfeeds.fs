@@ -1,27 +1,27 @@
 module FeedsProcessing.Twitter
 
 
-open System
 open FSharp.Data
-
 open FeedsProcessing.Article
-open FeedsProcessing.ProcessingResult
+
 open FeedsProcessing.Download
 open FeedsProcessing.Feeds
+open FeedsProcessing.ProcessingResult
+open System
 open System.Globalization
 
 
 type private Tweet =
-    { Text : string
-      CreatedAt : DateTime option
-      IsRetweet : bool
-      IsReply : bool
+    { Text: string
+      CreatedAt: DateTime option
+      IsRetweet: bool
+      IsReply: bool
     }
 
 
 let private parseDate dateValue =
     unsafeOperation "Date parsing" { return fun _ ->
-        DateTime.ParseExact (dateValue, "ddd MMM dd HH:mm:ss zzz yyyy", CultureInfo.InvariantCulture)
+        DateTime.ParseExact(dateValue, "ddd MMM dd HH:mm:ss zzz yyyy", CultureInfo.InvariantCulture)
     }
     |> Result.toOption
 
@@ -29,7 +29,7 @@ let private parseDate dateValue =
 type TwitterTimelineProvider = JsonProvider<"../feeds-processing/Resources/samples/twitter.timeline.sample">
 
 
-let private mapTweet (json : TwitterTimelineProvider.Root) =
+let private mapTweet (json: TwitterTimelineProvider.Root) =
     let createdAtString = json.CreatedAt
     let replyToScreenName = json.InReplyToScreenName
     let retweetedStatus = json.RetweetedStatus
@@ -68,5 +68,5 @@ let private tweetsToArticles handle tweets =
     |> List.map (tweetToArticle handle)
 
 
-let processTweets handle downloaded : ProcessingResult =
+let processTweets handle downloaded: ProcessingResult =
     Result.map (tweetsToArticles handle) (parseTweets downloaded)

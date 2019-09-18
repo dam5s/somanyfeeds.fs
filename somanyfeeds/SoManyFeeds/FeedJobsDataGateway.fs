@@ -1,13 +1,13 @@
 module SoManyFeeds.FeedJobsDataGateway
 
-open System
 open FSharp.Data.Sql
 open FeedsProcessing.Feeds
 open SoManyFeeds.DataSource
+open System
 
 
 type JobFailure =
-    JobFailure of message:string
+    JobFailure of message: string
 
 
 let createMissing =
@@ -26,17 +26,17 @@ let createMissing =
         let updatesCount =
             missingUrls
             |> Seq.map (fun url ->
-                let entity = ctx.Public.FeedJobs.Create ()
+                let entity = ctx.Public.FeedJobs.Create()
                 entity.FeedUrl <- url
             )
             |> Seq.length
 
-        ctx.SubmitUpdates ()
+        ctx.SubmitUpdates()
         updatesCount
     )
 
 
-let startSome howMany : AsyncResult<FeedUrl seq> =
+let startSome howMany: AsyncResult<FeedUrl seq> =
     dataAccessOperation (fun ctx ->
         let now = DateTime.UtcNow
         let tenMinutesAgo = now.AddMinutes(-10.0)
@@ -56,7 +56,7 @@ let startSome howMany : AsyncResult<FeedUrl seq> =
                 job.StartedAt <- Some now
                 job.LockedUntil <- Some twoMinutesFromNow
 
-                ctx.SubmitUpdates ()
+                ctx.SubmitUpdates()
 
                 FeedUrl job.FeedUrl
             )
@@ -65,7 +65,7 @@ let startSome howMany : AsyncResult<FeedUrl seq> =
     )
 
 
-let private updateJob (FeedUrl url)  updateFunction =
+let private updateJob (FeedUrl url) updateFunction =
     dataAccessOperation (fun ctx ->
         let updatesCount =
             query {
@@ -76,21 +76,21 @@ let private updateJob (FeedUrl url)  updateFunction =
             |> Seq.map updateFunction
             |> Seq.length
 
-        ctx.SubmitUpdates ()
+        ctx.SubmitUpdates()
         updatesCount
     )
 
 
-let complete url : AsyncResult<int> =
-    let setCompleted (entity : FeedJobEntity) =
+let complete url: AsyncResult<int> =
+    let setCompleted (entity: FeedJobEntity) =
         entity.CompletedAt <- Some DateTime.UtcNow
         entity.LockedUntil <- None
 
     updateJob url setCompleted
 
 
-let fail url (JobFailure message) : AsyncResult<int> =
-    let setFailed (entity : FeedJobEntity) =
+let fail url (JobFailure message): AsyncResult<int> =
+    let setFailed (entity: FeedJobEntity) =
         entity.LastFailedAt <- Some DateTime.UtcNow
         entity.LastFailure <- message
         entity.LockedUntil <- None

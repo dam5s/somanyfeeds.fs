@@ -1,14 +1,14 @@
 module ``ArticlesDataGateway tests``
 
 open FsUnit
-open System
 open NUnit.Framework
-open Time
 open SoManyFeeds
 open SoManyFeeds.ArticlesDataGateway
+open System
+open Time
 
 
-let private fieldsOf (record : ArticleRecord) =
+let private fieldsOf (record: ArticleRecord) =
     { Url = record.Url
       Title = record.Title
       FeedUrl = record.FeedUrl
@@ -26,8 +26,8 @@ let private find id =
 
 
 [<Test>]
-let ``creating then updating an article`` () =
-    setTestDbConnectionString ()
+let ``creating then updating an article``() =
+    setTestDbConnectionString()
     executeAllSql
         [
         "delete from bookmarks"
@@ -40,7 +40,7 @@ let ``creating then updating an article`` () =
           Title = "My Article"
           FeedUrl = "http://example.com/my/feed"
           Content = "This my article v1"
-          Date = Some (Posix.fromDateTimeOffset DateTimeOffset.UtcNow)
+          Date = Some(Posix.fromDateTimeOffset DateTimeOffset.UtcNow)
         }
 
 
@@ -59,7 +59,7 @@ let ``creating then updating an article`` () =
         { fields with
             Title = "My Article v2"
             Content = "This my article v2"
-            Date = Some (Posix.fromDateTimeOffset DateTimeOffset.UtcNow)
+            Date = Some(Posix.fromDateTimeOffset DateTimeOffset.UtcNow)
         }
 
     let updateResult = updatedFields

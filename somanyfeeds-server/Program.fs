@@ -1,13 +1,13 @@
 ﻿module Program
 
-open Suave
 open SoManyFeeds
 open SoManyFeedsServer
+open Suave
 
 
 [<EntryPoint>]
 let main args =
-    LoggingConfig.configure ()
+    LoggingConfig.configure()
 
     args
     |> Array.tryHead

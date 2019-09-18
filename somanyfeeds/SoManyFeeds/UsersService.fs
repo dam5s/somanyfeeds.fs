@@ -1,18 +1,18 @@
 module SoManyFeeds.UsersService
 
 open SoManyFeeds
-open SoManyFeeds.UsersDataGateway
-open SoManyFeeds.Registration
 open SoManyFeeds.DataSource
+open SoManyFeeds.Registration
+open SoManyFeeds.UsersDataGateway
 
 
 type UserCreationResult =
     | CreationSuccess of UserRecord
     | CreationFailure of ValidationErrors
-    | CreationError of message:string
+    | CreationError of message: string
 
 
-let create registration : Async<UserCreationResult> =
+let create registration: Async<UserCreationResult> =
     async {
         match Registration.validate registration with
         | Ok validReg ->

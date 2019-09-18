@@ -1,8 +1,8 @@
 module FeedsProcessing.Article
 
 open FeedsProcessing
-open Time
 open System
+open Time
 
 
 let private stringToOption text =
@@ -15,10 +15,10 @@ type Article =
     private Article of Fields
 
 and private Fields =
-    { Title : string option
-      Link : string option
-      Content : string
-      Date : Posix option
+    { Title: string option
+      Link: string option
+      Content: string
+      Date: Posix option
     }
 
 

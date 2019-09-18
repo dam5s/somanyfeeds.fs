@@ -1,20 +1,20 @@
 module SoManyFeeds.UsersDataGateway
 
+open SoManyFeeds
+open SoManyFeeds.DataSource
 open SoManyFeeds.Passwords
 open SoManyFeeds.Registration
-open SoManyFeeds.DataSource
-open SoManyFeeds
 
 
 type UserRecord =
-    { Id : int64
-      Name : string
-      Email : string
-      PasswordHash : HashedPassword
+    { Id: int64
+      Name: string
+      Email: string
+      PasswordHash: HashedPassword
     }
 
 
-let private entityToRecord (entity : UserEntity) =
+let private entityToRecord (entity: UserEntity) =
     { Id = entity.Id
       Name = entity.Name
       Email = entity.Email
@@ -22,7 +22,7 @@ let private entityToRecord (entity : UserEntity) =
     }
 
 
-let findByEmail email : Async<FindResult<UserRecord>> =
+let findByEmail email: Async<FindResult<UserRecord>> =
     dataAccessOperation (fun ctx ->
         query {
             for user in ctx.Public.Users do
@@ -35,15 +35,15 @@ let findByEmail email : Async<FindResult<UserRecord>> =
     |> FindResult.asyncFromAsyncResultOfOption
 
 
-let create registration : AsyncResult<UserRecord> =
+let create registration: AsyncResult<UserRecord> =
     dataAccessOperation (fun ctx ->
         let fields = Registration.fields registration
-        let entity = ctx.Public.Users.Create ()
+        let entity = ctx.Public.Users.Create()
         entity.Name <- fields.Name
         entity.Email <- fields.Email
         entity.PasswordHash <- Passwords.hashedValue fields.PasswordHash
 
-        ctx.SubmitUpdates ()
+        ctx.SubmitUpdates()
 
         entityToRecord entity
     )

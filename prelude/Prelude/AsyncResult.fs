@@ -9,37 +9,37 @@ type AsyncResult<'a> =
 [<RequireQualifiedAccess>]
 module AsyncResult =
 
-    let result value : AsyncResult<'a> =
+    let result value: AsyncResult<'a> =
         async { return Ok value }
 
-    let error message : AsyncResult<'a> =
+    let error message: AsyncResult<'a> =
         async { return Error message }
 
-    let fromResult result : AsyncResult<'a> =
+    let fromResult result: AsyncResult<'a> =
         async { return result }
 
-    let map mapping (result : AsyncResult<'a>) : AsyncResult<'b> =
+    let map mapping (result: AsyncResult<'a>): AsyncResult<'b> =
         async {
             match! result with
-            | Ok value -> return Ok (mapping value)
+            | Ok value -> return Ok(mapping value)
             | Error err -> return Error err
         }
 
-    let bind (mapping : 'a -> AsyncResult<'b>) (result : AsyncResult<'a>) : AsyncResult<'b> =
+    let bind (mapping: 'a -> AsyncResult<'b>) (result: AsyncResult<'a>): AsyncResult<'b> =
         async {
             match! result with
             | Ok value -> return! mapping value
             | Error err -> return Error err
         }
 
-    let mapError mapping (result : AsyncResult<'a>) : AsyncResult<'a> =
+    let mapError mapping (result: AsyncResult<'a>): AsyncResult<'a> =
         async {
             match! result with
             | Ok value -> return Ok value
-            | Error err -> return Error (mapping err)
+            | Error err -> return Error(mapping err)
         }
 
-    let defaultValue value (result : AsyncResult<'a>) =
+    let defaultValue value (result: AsyncResult<'a>) =
         async {
             match! result with
             | Ok x -> return x
@@ -50,7 +50,7 @@ module AsyncResult =
         try
             func resource
         finally
-            resource.Dispose ()
+            resource.Dispose()
 
     module Operators =
         let (<!>) result mapping = map mapping result

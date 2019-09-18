@@ -1,16 +1,16 @@
 module IntegrationTests.FeedsProcessing
 
-open System.IO
 open FsUnitTyped.TopLevelOperators
 open SoManyFeeds.FeedsProcessor
-open System.Threading
 open Suave
 open Suave.Filters
 open Suave.Operators
+open System.IO
+open System.Threading
 open canopy.runner.classic
 
 
-let mutable private tokenSource : CancellationTokenSource option =
+let mutable private tokenSource: CancellationTokenSource option =
     None
 
 let private startFeedsServer _ =
@@ -31,16 +31,16 @@ let private startFeedsServer _ =
     WebServerSupport.start config (GET >=> Files.browseHome)
 
 
-let all () =
+let all() =
     context "Feeds Processing"
 
     before (fun _ ->
-        tokenSource <- Some <| startFeedsServer ()
+        tokenSource <- Some <| startFeedsServer()
     )
 
     after (fun _ ->
         tokenSource
-        |> Option.map (fun src -> src.Cancel ())
+        |> Option.map (fun src -> src.Cancel())
         |> ignore
     )
 
@@ -62,6 +62,6 @@ let all () =
         Async.RunSynchronously backgroundProcessingOnce
 
 
-        queryDataContext (fun ctx -> query { for a in ctx.Public.Articles do select a.Id } )
+        queryDataContext (fun ctx -> query { for a in ctx.Public.Articles do select a.Id })
         |> Seq.length
         |> shouldEqual 13

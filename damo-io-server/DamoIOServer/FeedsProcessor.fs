@@ -4,11 +4,11 @@ open DamoIOServer.ArticlesDataGateway
 open DamoIOServer.Sources
 open FeedsProcessing
 open FeedsProcessing.Article
+open FeedsProcessing.DataGateway
 open FeedsProcessing.Feeds
 open FeedsProcessing.ProcessingResult
-open FeedsProcessing.Xml
-open FeedsProcessing.DataGateway
 open FeedsProcessing.Twitter
+open FeedsProcessing.Xml
 
 
 let private articleToRecord sourceType article =
@@ -20,7 +20,7 @@ let private articleToRecord sourceType article =
     }
 
 
-let private resultToList sourceType (result : ProcessingResult) =
+let private resultToList sourceType (result: ProcessingResult) =
     List.map (articleToRecord sourceType) (Result.defaultValue [] result)
 
 let private consumerKey =
@@ -30,13 +30,13 @@ let private consumerSecret =
     Env.varRequired "TWITTER_CONSUMER_SECRET"
 
 
-let private processFeed feed : ProcessingResult =
+let private processFeed feed: ProcessingResult =
     match feed with
-    | Xml (_, url) -> Result.bind processXmlFeed (downloadFeed url)
-    | Twitter (handle) -> Result.bind (processTweets handle) (downloadTwitterTimeline consumerKey consumerSecret handle)
+    | Xml(_, url) -> Result.bind processXmlFeed (downloadFeed url)
+    | Twitter(handle) -> Result.bind (processTweets handle) (downloadTwitterTimeline consumerKey consumerSecret handle)
 
 
-let processFeeds (sources : Source list) =
+let processFeeds (sources: Source list) =
     List.collect
         (fun (sourceType, feed) -> processFeed feed |> resultToList sourceType)
         sources

@@ -1,29 +1,29 @@
 module SoManyFeeds.ArticlesDataGateway
 
-open Time
 open SoManyFeeds.DataSource
+open Time
 
 
 type ArticleRecord =
-    { Id : int64
-      Url : string
-      Title : string
-      FeedUrl : string
-      Content : string
-      Date : Posix option
+    { Id: int64
+      Url: string
+      Title: string
+      FeedUrl: string
+      Content: string
+      Date: Posix option
     }
 
 
 type ArticleFields =
-    { Url : string
-      Title : string
-      FeedUrl : string
-      Content : string
-      Date : Posix option
+    { Url: string
+      Title: string
+      FeedUrl: string
+      Content: string
+      Date: Posix option
     }
 
 
-let entityToRecord (entity : ArticleEntity) =
+let entityToRecord (entity: ArticleEntity) =
     { Id = entity.Id
       Url = entity.Url
       Title = entity.Title
@@ -33,7 +33,7 @@ let entityToRecord (entity : ArticleEntity) =
     }
 
 
-let createOrUpdateArticle fields : AsyncResult<ArticleRecord> =
+let createOrUpdateArticle fields: AsyncResult<ArticleRecord> =
     dataAccessOperation (fun ctx ->
         let maybeExisting =
             query {
@@ -46,7 +46,7 @@ let createOrUpdateArticle fields : AsyncResult<ArticleRecord> =
         let entity =
             match maybeExisting with
             | Some e -> e
-            | None -> ctx.Public.Articles.Create ()
+            | None -> ctx.Public.Articles.Create()
 
         entity.Url <- fields.Url
         entity.FeedUrl <- fields.FeedUrl
@@ -54,6 +54,6 @@ let createOrUpdateArticle fields : AsyncResult<ArticleRecord> =
         entity.Content <- fields.Content
         entity.Date <- fields.Date |> Option.map Posix.toDateTime
 
-        ctx.SubmitUpdates ()
+        ctx.SubmitUpdates()
         entityToRecord entity
     )

@@ -4,7 +4,7 @@ open Ganss.XSS
 
 
 let private sanitizer =
-    let s = HtmlSanitizer ()
+    let s = HtmlSanitizer()
     s.AllowedAttributes.Add("class") |> ignore
     s
 

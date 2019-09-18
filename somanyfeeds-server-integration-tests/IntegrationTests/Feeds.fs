@@ -1,18 +1,18 @@
 module IntegrationTests.Feeds
 
-open System.Threading
-open canopy.runner.classic
-open canopy.classic
 open SoManyFeedsServer
+open System.Threading
+open canopy.classic
+open canopy.runner.classic
 
-let mutable private tokenSource : CancellationTokenSource option =
+let mutable private tokenSource: CancellationTokenSource option =
     None
 
-let all () =
+let all() =
     context "Feeds"
 
     before (fun () ->
-        LoggingConfig.configure ()
+        LoggingConfig.configure()
 
         let config = SoManyFeedsServer.WebConfig.create
         let webPart = SoManyFeedsServer.WebApp.webPart
@@ -22,7 +22,7 @@ let all () =
 
     after (fun () ->
         tokenSource
-        |> Option.map (fun src -> src.Cancel ())
+        |> Option.map (fun src -> src.Cancel())
         |> ignore
     )
 

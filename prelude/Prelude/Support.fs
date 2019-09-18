@@ -39,7 +39,7 @@ module Env =
         Environment.GetEnvironmentVariable(name) |> Option.ofObj
 
     let varDefault name producer =
-        var name |> Option.defaultValue (producer ())
+        var name |> Option.defaultValue (producer())
 
 [<RequireQualifiedAccess>]
 module String =
@@ -49,14 +49,14 @@ module String =
         | "" -> true
         | _ -> false
 
-    let contains subString (it : string) =
+    let contains subString (it: string) =
         it.Contains(subString)
 
-    let equals other (it : string) =
+    let equals other (it: string) =
         it.Equals(other)
 
-    let trim (it : string) =
-        it.Trim ()
+    let trim (it: string) =
+        it.Trim()
 
-    let toLowerInvariant (it : string) =
-        it.ToLowerInvariant ()
+    let toLowerInvariant (it: string) =
+        it.ToLowerInvariant()

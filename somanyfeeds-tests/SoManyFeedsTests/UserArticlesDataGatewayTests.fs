@@ -1,15 +1,15 @@
 module ``UserArticlesDataGateway tests``
 
-open NUnit.Framework
 open FsUnit
 open FsUnitTyped
+open NUnit.Framework
 open SoManyFeeds
 open SoManyFeeds.ArticlesDataGateway
 
 [<Test>]
-let ``recent unread articles`` () =
+let ``recent unread articles``() =
 
-    setTestDbConnectionString ()
+    setTestDbConnectionString()
     executeAllSql
         [
         "delete from bookmarks"
@@ -44,7 +44,7 @@ let ``recent unread articles`` () =
         ]
 
 
-    let articleIds (asyncRes : AsyncResult<ArticleRecord seq>) : int64 list =
+    let articleIds (asyncRes: AsyncResult<ArticleRecord seq>): int64 list =
         asyncRes
         |> Async.RunSynchronously
         |> Result.map (Seq.map (fun a -> a.Id) >> Seq.toList >> List.sort)
@@ -52,30 +52,30 @@ let ``recent unread articles`` () =
 
 
     UserArticlesDataGateway.listRecentUnreadArticles 10L None
-    |> articleIds |> should equal [ 310L ; 312L ; 313L ]
+    |> articleIds |> should equal [ 310L; 312L; 313L ]
 
     UserArticlesDataGateway.listRecentUnreadArticles 11L None
-    |> articleIds |> should equal [ 313L ; 314L ]
+    |> articleIds |> should equal [ 313L; 314L ]
 
     UserArticlesDataGateway.listRecentUnreadArticles 10L (Some 101L)
-    |> articleIds |> should equal [ 310L ; 312L ]
+    |> articleIds |> should equal [ 310L; 312L ]
 
     UserArticlesDataGateway.listRecentUnreadArticles 12L None
     |> articleIds |> should equal []
 
-    UserArticlesDataGateway.deleteReadArticle { UserId = 10L ; ArticleId = 311L }
+    UserArticlesDataGateway.deleteReadArticle { UserId = 10L; ArticleId = 311L }
     |> Async.RunSynchronously |> ignore
 
     UserArticlesDataGateway.listRecentUnreadArticles 10L None
     |> articleIds |> should contain 311L
 
-    UserArticlesDataGateway.createBookmark { UserId = 10L ; ArticleId = 311L }
+    UserArticlesDataGateway.createBookmark { UserId = 10L; ArticleId = 311L }
     |> Async.RunSynchronously |> ignore
 
     UserArticlesDataGateway.listRecentUnreadArticles 10L None
     |> articleIds |> shouldNotContain 311L
 
-    UserArticlesDataGateway.deleteBookmark { UserId = 10L ; ArticleId = 311L }
+    UserArticlesDataGateway.deleteBookmark { UserId = 10L; ArticleId = 311L }
     |> Async.RunSynchronously |> ignore
 
     UserArticlesDataGateway.listRecentUnreadArticles 10L None

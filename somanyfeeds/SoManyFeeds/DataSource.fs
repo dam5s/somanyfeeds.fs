@@ -1,21 +1,21 @@
 module SoManyFeeds.DataSource
 
-open System
 open FSharp.Data.Sql
+open System
 
 
 type FindResult<'a> =
     | Found of 'a
     | NotFound
-    | FindError of message:string
+    | FindError of message: string
 
 
 [<RequireQualifiedAccess>]
 module FindResult =
-    let asyncFromAsyncResultOfOption (result : AsyncResult<'a option>) =
+    let asyncFromAsyncResultOfOption (result: AsyncResult<'a option>) =
         async {
             match! result with
-            | Ok (Some value) -> return Found value
+            | Ok(Some value) -> return Found value
             | Ok None -> return NotFound
             | Error message -> return FindError message
         }
@@ -35,8 +35,8 @@ let private connectionString =
 type private SoManyFeedsDb =
     SqlDataProvider<Common.DatabaseProviderTypes.POSTGRESQL,
                     DefaultConnectionString,
-                    ResolutionPath = ResolutionPath,
-                    UseOptionTypes = true>
+                    ResolutionPath=ResolutionPath,
+                    UseOptionTypes=true>
 
 type FeedEntity = SoManyFeedsDb.dataContext.``public.feedsEntity``
 type UserEntity = SoManyFeedsDb.dataContext.``public.usersEntity``
@@ -47,10 +47,10 @@ type FeedJobEntity = SoManyFeedsDb.dataContext.``public.feed_jobsEntity``
 type DataContext = SoManyFeedsDb.dataContext
 
 
-let asyncDataContext : AsyncResult<DataContext> =
+let asyncDataContext: AsyncResult<DataContext> =
     async {
        return unsafeOperation "Get data context" { return fun _ ->
-           Environment.SetEnvironmentVariable ("PGTZ", "UTC")
+           Environment.SetEnvironmentVariable("PGTZ", "UTC")
            SoManyFeedsDb.GetDataContext(connectionString)
        }
     }

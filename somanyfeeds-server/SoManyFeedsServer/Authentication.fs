@@ -1,17 +1,17 @@
 module SoManyFeedsServer.Authentication
 
-open System
+open SoManyFeeds
+open SoManyFeeds.DataSource
+open SoManyFeeds.User
+open SoManyFeeds.UsersDataGateway
 open Suave
 open Suave.Cookie
+open Suave.DotLiquid
 open Suave.Operators
 open Suave.Redirection
-open Suave.DotLiquid
 open Suave.Response
 open Suave.State.CookieStateStore
-open SoManyFeeds
-open SoManyFeeds.User
-open SoManyFeeds.DataSource
-open SoManyFeeds.UsersDataGateway
+open System
 
 
 
@@ -19,11 +19,11 @@ module private User =
 
     open Option.Operators
 
-    let private cookieStoreError : WebPart =
+    let private cookieStoreError: WebPart =
         response HTTP_500 (UTF8.bytes "Cookie store error")
 
     let private constructor id name =
-        { Id = id ; Name = name }
+        { Id = id; Name = name }
 
 
     let tryGet ctx =
@@ -36,7 +36,7 @@ module private User =
         )
 
 
-    let set (user: User) : WebPart =
+    let set (user: User): WebPart =
         context
             (fun ctx ->
                 match HttpContext.state ctx with
@@ -45,23 +45,23 @@ module private User =
             )
 
 
-let private usingSession : WebPart =
-    stateful (CookieLife.MaxAge (TimeSpan.FromDays 2.0)) true
+let private usingSession: WebPart =
+    stateful (CookieLife.MaxAge(TimeSpan.FromDays 2.0)) true
 
 type LoginViewModel =
-    { Error : bool }
+    { Error: bool }
 
-let private loginError : WebPart =
+let private loginError: WebPart =
     page "login.html.liquid" { Error = true }
 
-let loginPage (request : HttpRequest) : WebPart =
+let loginPage (request: HttpRequest): WebPart =
     page "login.html.liquid" { Error = false }
 
-let registrationPage (request : HttpRequest) : WebPart =
+let registrationPage (request: HttpRequest): WebPart =
     page "register.html.liquid" ()
 
 
-let doLogin findByEmail (request : HttpRequest) : WebPart =
+let doLogin findByEmail (request: HttpRequest): WebPart =
     fun ctx -> async {
         let formData name = name
                             |> request.formData
@@ -76,7 +76,7 @@ let doLogin findByEmail (request : HttpRequest) : WebPart =
             if Passwords.verify (formData "password") user.PasswordHash
             then
                 return! usingSession
-                        >=> User.set { Id = user.Id ; Name = user.Name }
+                        >=> User.set { Id = user.Id; Name = user.Name }
                         >=> redirect "/read"
                         |> fun wp -> wp ctx
             else
@@ -84,13 +84,13 @@ let doLogin findByEmail (request : HttpRequest) : WebPart =
     }
 
 
-let doLogout (request : HttpRequest) : WebPart =
+let doLogout (request: HttpRequest): WebPart =
     usingSession
     >=> unsetCookie StateCookie
     >=> redirect "/"
 
 
-let authenticate (f : User -> WebPart) (request : HttpRequest) : WebPart =
+let authenticate (f: User -> WebPart) (request: HttpRequest): WebPart =
     usingSession
     >=> context
         (fun ctx ->

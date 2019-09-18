@@ -1,10 +1,10 @@
 module SoManyFeedsServer.ManagePage
 
+open SoManyFeeds.FeedsDataGateway
+open SoManyFeeds.User
+open SoManyFeedsServer
 open Suave
 open Suave.DotLiquid
-open SoManyFeeds.User
-open SoManyFeeds.FeedsDataGateway
-open SoManyFeedsServer
 
 
 type FrontendPage =
@@ -13,15 +13,15 @@ type FrontendPage =
 
 
 type private Flags =
-    { UserName : string
-      MaxFeeds : int
-      Feeds : FeedRecord seq
-      Page : FrontendPage
+    { UserName: string
+      MaxFeeds: int
+      Feeds: FeedRecord seq
+      Page: FrontendPage
     }
 
 
 type ManageViewModel =
-    { Flags : string
+    { Flags: string
     }
 
 
@@ -53,7 +53,7 @@ module private Encoders =
         *> Json.write "searchText" (searchText flags.Page)
 
 
-let page maxFeeds (listFeeds : AsyncResult<FeedRecord seq>) (user : User) frontendPage =
+let page maxFeeds (listFeeds: AsyncResult<FeedRecord seq>) (user: User) frontendPage =
     fun ctx -> async {
         match! listFeeds with
         | Ok records ->

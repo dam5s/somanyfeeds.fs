@@ -1,29 +1,29 @@
 ﻿module Program
 
-open System
-open System.IO
-open Support
 open Fake.Core
 open Fake.IO
+open Support
+open System
+open System.IO
 
 
 let private allProjects =
     [
       "prelude"
-      "damo-io-server" 
-      "somanyfeeds" 
-      "somanyfeeds-tests" 
-      "somanyfeeds-server" 
-      "somanyfeeds-server-integration-tests" 
+      "damo-io-server"
+      "somanyfeeds"
+      "somanyfeeds-tests"
+      "somanyfeeds-server"
+      "somanyfeeds-server-integration-tests"
       "feeds-processing"
-      "feeds-processing-tests" 
+      "feeds-processing-tests"
       "frontends"
     ]
 
 
 let private clean _ =
     allProjects
-    |> List.collect (fun p -> [ Path.Combine (p, "bin") ; Path.Combine (p, "obj") ])
+    |> List.collect (fun p -> [ Path.Combine(p, "bin"); Path.Combine(p, "obj") ])
     |> List.map Directory.delete
     |> ignore
 
@@ -48,8 +48,8 @@ let main args =
     use ctxt = fakeExecutionContext (Array.toList args)
     Context.setExecutionContext (Context.RuntimeContext.Fake ctxt)
 
-    Frontend.loadTasks ()
-    Database.loadTasks ()
+    Frontend.loadTasks()
+    Database.loadTasks()
 
     Target.create "clean" clean
     Target.create "build" DotNet.build
@@ -59,7 +59,7 @@ let main args =
     Target.create "release" (fun _ ->
         DotNet.release "damo-io-server" ()
         DotNet.release "somanyfeeds-server" ()
-        setupCacheBustingLinks ()
+        setupCacheBustingLinks()
     )
 
 
@@ -70,7 +70,7 @@ let main args =
 
     "test" |> dependsOn [ "build" ]
     "integration-tests" |> dependsOn [ "build" ]
-    "release" |> dependsOn [ "test" ; "integration-tests" ; "build" ; "clean" ]
+    "release" |> dependsOn [ "test"; "integration-tests"; "build"; "clean" ]
 
     Target.runOrDefault "release"
 

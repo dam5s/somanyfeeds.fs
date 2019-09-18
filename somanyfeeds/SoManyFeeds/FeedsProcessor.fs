@@ -17,12 +17,12 @@ let private createMissing _ = FeedJobsDataGateway.createMissing
 let private startJobs _ = FeedJobsDataGateway.startSome 5
 
 
-let private sequence : AsyncSeq<FeedUrl> =
+let private sequence: AsyncSeq<FeedUrl> =
     asyncSeq {
-        let! _ = createMissing ()
+        let! _ = createMissing()
 
         let! feedUrls =
-            startJobs ()
+            startJobs()
             |> AsyncResult.defaultValue Seq.empty
 
         for url in feedUrls do
@@ -30,7 +30,7 @@ let private sequence : AsyncSeq<FeedUrl> =
     }
 
 
-let private everyFiveMinutes (s : AsyncSeq<'a>) =
+let private everyFiveMinutes (s: AsyncSeq<'a>) =
     asyncSeq {
         let oneMinute = 1000 * 60
 
@@ -38,7 +38,7 @@ let private everyFiveMinutes (s : AsyncSeq<'a>) =
             for element in s do
                 yield element
 
-            do! Async.Sleep (oneMinute * 5)
+            do! Async.Sleep(oneMinute * 5)
     }
 
 
@@ -112,7 +112,7 @@ let private processFeed feedUrl =
         Seq.empty
 
 
-let private backgroundProcessing (sequenceModifier : AsyncSeq<FeedUrl> -> AsyncSeq<FeedUrl>) =
+let private backgroundProcessing (sequenceModifier: AsyncSeq<FeedUrl> -> AsyncSeq<FeedUrl>) =
     sequence
     |> sequenceModifier
     |> AsyncSeq.map processFeed

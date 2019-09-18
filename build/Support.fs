@@ -24,7 +24,7 @@ let fakeExecutionContext args =
     let fakeArgs =
         match args with
         | [] -> []
-        | x::xs -> [ "--target" ; x ]
+        | x :: xs -> [ "--target"; x ]
 
     FakeExecutionContext.Create false "Program.fs" fakeArgs
 

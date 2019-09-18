@@ -1,22 +1,22 @@
 module SoManyFeedsServer.WebApp
 
-open Suave
-open Suave.Filters
-open Suave.Operators
-open Suave.RequestErrors
-open Suave.Redirection
 open SoManyFeeds
 open SoManyFeeds.User
 open SoManyFeeds.UserArticlesDataGateway
 open SoManyFeedsServer
 open SoManyFeedsServer.Json
+open Suave
+open Suave.Filters
+open Suave.Operators
+open Suave.Redirection
+open Suave.RequestErrors
 
 
 let private maxFeeds =
     Env.varDefaultParse int "MAX_FEEDS" (always "20")
 
 
-let private authenticatedPage user : WebPart =
+let private authenticatedPage user: WebPart =
 
     let listFeeds = FeedsDataGateway.listFeeds user.Id
     let createFeed = FeedsService.createFeed maxFeeds user.Id
@@ -28,13 +28,13 @@ let private authenticatedPage user : WebPart =
         ReadPage.page UserArticlesService.listRecent user innerPage
 
     let readFeedPage feedId =
-        ReadPage.page UserArticlesService.listRecent user (ReadPage.Recent (Some feedId))
+        ReadPage.page UserArticlesService.listRecent user (ReadPage.Recent(Some feedId))
 
     let managePage frontendPage _ =
         ManagePage.page maxFeeds listFeeds user frontendPage
 
     let managePageSearch searchText =
-        ManagePage.page maxFeeds listFeeds user (ManagePage.Search (Some searchText))
+        ManagePage.page maxFeeds listFeeds user (ManagePage.Search(Some searchText))
 
     let listFeedsApi _ =
         FeedsApi.list listFeeds
@@ -56,7 +56,7 @@ let private authenticatedPage user : WebPart =
     let paramToId param =
         unsafeOperation "Reading id query param" { return fun _ -> int64 param }
 
-    let listRecentArticlesApi (request : HttpRequest) =
+    let listRecentArticlesApi (request: HttpRequest) =
         let maybeFeedId =
             request.queryParam "feedId"
             |> Result.ofChoice
@@ -70,22 +70,22 @@ let private authenticatedPage user : WebPart =
 
 
     let createReadArticle articleId =
-        { UserId = user.Id ; ArticleId = articleId }
+        { UserId = user.Id; ArticleId = articleId }
         |> UserArticlesDataGateway.createReadArticle
         |> ArticlesApi.update
 
     let deleteReadArticle articleId =
-        { UserId = user.Id ; ArticleId = articleId }
+        { UserId = user.Id; ArticleId = articleId }
         |> UserArticlesDataGateway.deleteReadArticle
         |> ArticlesApi.update
 
     let createBookmark articleId =
-        { UserId = user.Id ; ArticleId = articleId }
+        { UserId = user.Id; ArticleId = articleId }
         |> UserArticlesDataGateway.createBookmark
         |> ArticlesApi.update
 
     let deleteBookmark articleId =
-        { UserId = user.Id ; ArticleId = articleId }
+        { UserId = user.Id; ArticleId = articleId }
         |> UserArticlesDataGateway.deleteBookmark
         |> ArticlesApi.update
 
@@ -133,7 +133,7 @@ let webPart =
         POST >=> path "/login" >=> request (Authentication.doLogin findByEmail)
         GET >=> path "/logout" >=> request Authentication.doLogout
 
-        request (Authentication.authenticate authenticatedPage)
+        request (SoManyFeedsServer.Authentication.authenticate authenticatedPage)
 
         UNAUTHORIZED "unauthorized"
     ]

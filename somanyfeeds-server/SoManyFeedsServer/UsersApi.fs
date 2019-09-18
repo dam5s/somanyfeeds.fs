@@ -1,11 +1,11 @@
 module SoManyFeedsServer.UsersApi
 
-open Suave
 open SoManyFeeds.Registration
 open SoManyFeeds.UsersDataGateway
 open SoManyFeeds.UsersService
 open SoManyFeedsServer
 open SoManyFeedsServer.Json
+open Suave
 
 
 module Encoders =
@@ -42,7 +42,7 @@ module Decoders =
         decoder json
 
 
-let create createUser (registration : Registration) : WebPart =
+let create createUser (registration: Registration): WebPart =
     fun ctx -> async {
         match! createUser registration with
         | CreationSuccess record -> return! objectResponse HTTP_201 Encoders.user record ctx

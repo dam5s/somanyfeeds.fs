@@ -8,8 +8,8 @@ open System.IO
 
 
 let private generateCss filePath =
-    let scssOptions = ScssOptions (OutputStyle = ScssOutputStyle.Compressed)
-    let result = Scss.ConvertFileToCss (filePath, scssOptions)
+    let scssOptions = ScssOptions(OutputStyle = ScssOutputStyle.Compressed)
+    let result = Scss.ConvertFileToCss(filePath, scssOptions)
     result.Css
 
 
@@ -58,7 +58,7 @@ let loadTasks _ =
     Target.create "frontend:fonts" copyFonts
     Target.create "frontend:build" ignore
 
-    "frontend:build" |> dependsOn [ "frontend:scss" ; "frontend:elm" ; "frontend:fonts" ]
+    "frontend:build" |> dependsOn [ "frontend:scss"; "frontend:elm"; "frontend:fonts" ]
     "frontend:scss" |> mustRunAfter "frontend:clean"
     "frontend:elm" |> mustRunAfter "frontend:clean"
     "frontend:fonts" |> mustRunAfter "frontend:clean"

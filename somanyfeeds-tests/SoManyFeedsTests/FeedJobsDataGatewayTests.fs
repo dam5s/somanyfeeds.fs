@@ -1,13 +1,13 @@
 module ``FeedJobsDataGateway tests``
 
-open NUnit.Framework
 open FsUnit
+open NUnit.Framework
 open SoManyFeeds
 
 
 [<Test>]
-let ``standard background processing flow`` () =
-    setTestDbConnectionString ()
+let ``standard background processing flow``() =
+    setTestDbConnectionString()
 
     executeAllSql
         [

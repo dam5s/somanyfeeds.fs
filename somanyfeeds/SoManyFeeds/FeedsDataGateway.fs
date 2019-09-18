@@ -1,24 +1,24 @@
 module SoManyFeeds.FeedsDataGateway
 
-open SoManyFeeds.DataSource
 open AsyncResult.Operators
+open SoManyFeeds.DataSource
 
 
 type FeedRecord =
-    { Id : int64
-      UserId : int64
-      Name : string
-      Url : string
+    { Id: int64
+      UserId: int64
+      Name: string
+      Url: string
     }
 
 
 type FeedFields =
-    { Name : string
-      Url : string
+    { Name: string
+      Url: string
     }
 
 
-let private entityToRecord (entity : FeedEntity) =
+let private entityToRecord (entity: FeedEntity) =
     { Id = entity.Id
       UserId = entity.UserId
       Name = entity.Name
@@ -26,7 +26,7 @@ let private entityToRecord (entity : FeedEntity) =
     }
 
 
-let listFeeds userId : AsyncResult<FeedRecord seq> =
+let listFeeds userId: AsyncResult<FeedRecord seq> =
     dataAccessOperation (fun ctx ->
         query {
             for feed in ctx.Public.Feeds do
@@ -49,7 +49,7 @@ let findFeed userId feedId =
     |> FindResult.asyncFromAsyncResultOfOption
 
 
-let countFeeds userId : AsyncResult<int64> =
+let countFeeds userId: AsyncResult<int64> =
     dataAccessOperation (fun ctx ->
         query {
             for feed in ctx.Public.Feeds do
@@ -60,20 +60,20 @@ let countFeeds userId : AsyncResult<int64> =
     )
 
 
-let createFeed userId fields : AsyncResult<FeedRecord> =
+let createFeed userId fields: AsyncResult<FeedRecord> =
     dataAccessOperation (fun ctx ->
-        let entity = ctx.Public.Feeds.Create ()
+        let entity = ctx.Public.Feeds.Create()
         entity.UserId <- userId
         entity.Name <- fields.Name
         entity.Url <- fields.Url
 
-        ctx.SubmitUpdates ()
+        ctx.SubmitUpdates()
 
         entityToRecord entity
     )
 
 
-let updateFeed userId feedId fields : AsyncResult<FeedRecord> =
+let updateFeed userId feedId fields: AsyncResult<FeedRecord> =
     let entityOptionToAsyncResult result =
         match result with
         | Some e -> AsyncResult.result (entityToRecord e)
@@ -90,7 +90,7 @@ let updateFeed userId feedId fields : AsyncResult<FeedRecord> =
             entity.Name <- fields.Name
             entity.Url <- fields.Url
 
-            ctx.SubmitUpdates ()
+            ctx.SubmitUpdates()
 
             entity
         )
@@ -98,7 +98,7 @@ let updateFeed userId feedId fields : AsyncResult<FeedRecord> =
     |> AsyncResult.bind entityOptionToAsyncResult
 
 
-let deleteFeed userId feedId : AsyncResult<unit> =
+let deleteFeed userId feedId: AsyncResult<unit> =
     dataAccessOperation (fun ctx ->
         query {
             for feed in ctx.Public.Feeds do
@@ -106,9 +106,9 @@ let deleteFeed userId feedId : AsyncResult<unit> =
             take 1
         }
         |> Seq.tryHead
-        |> Option.map (fun entity -> entity.Delete ())
+        |> Option.map (fun entity -> entity.Delete())
         |> ignore
 
-        ctx.SubmitUpdates ()
+        ctx.SubmitUpdates()
     )
-    <!> always ()
+    <!> always()

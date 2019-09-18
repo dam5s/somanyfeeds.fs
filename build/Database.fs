@@ -7,7 +7,7 @@ open Npgsql
 
 
 let private evolve connection =
-    let e = Evolve (connection, fun s -> printfn "%s" s)
+    let e = Evolve(connection, fun s -> printfn "%s" s)
     e.IsEraseDisabled <- true
     e.Command <- CommandOptions.Migrate
     e.Locations <- List.toSeq [ "somanyfeeds-database/migrations" ]

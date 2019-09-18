@@ -4,19 +4,19 @@ open Passwords
 
 
 type Registration =
-    { Name : string
-      Email : string
-      Password : string
-      PasswordConfirmation : string
+    { Name: string
+      Email: string
+      Password: string
+      PasswordConfirmation: string
     }
 
 type ValidRegistration =
     private ValidRegistration of RegistrationFields
 
 and RegistrationFields =
-    { Name : string
-      Email : string
-      PasswordHash : HashedPassword
+    { Name: string
+      Email: string
+      PasswordHash: HashedPassword
     }
 
 
@@ -25,20 +25,20 @@ let email (ValidRegistration f) = f.Email
 
 
 type ValidationErrors =
-    { NameError : string option
-      EmailError : string option
-      PasswordError : string option
-      PasswordConfirmationError : string option
+    { NameError: string option
+      EmailError: string option
+      PasswordError: string option
+      PasswordConfirmationError: string option
     }
 
 
-let private nameValidation (registration : Registration) =
+let private nameValidation (registration: Registration) =
     if String.isEmpty registration.Name
     then Some "cannot be blank"
     else None
 
 
-let private emailValidation (registration : Registration) =
+let private emailValidation (registration: Registration) =
     let isEmpty = String.isEmpty registration.Email
     let isNotEmail = not (String.contains "@" registration.Email)
 
@@ -64,7 +64,7 @@ let private anyError errors =
     |> List.exists Option.isSome
 
 
-let private buildFields (registration : Registration) =
+let private buildFields (registration: Registration) =
     { Name = registration.Name
              |> String.trim
       Email = registration.Email

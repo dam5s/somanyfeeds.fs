@@ -2,8 +2,8 @@
 module DatabaseSupport
 
 open Npgsql
-open System
 open SoManyFeeds
+open System
 
 
 let setTestDbConnectionString _ =
@@ -12,15 +12,15 @@ let setTestDbConnectionString _ =
 
 
 let executeSql sql =
-    use connection = new NpgsqlConnection (Env.varRequired "DB_CONNECTION")
-    connection.Open ()
+    use connection = new NpgsqlConnection(Env.varRequired "DB_CONNECTION")
+    connection.Open()
 
-    use command = connection.CreateCommand ()
+    use command = connection.CreateCommand()
     command.CommandText <- sql
-    command.ExecuteNonQuery () |> ignore
+    command.ExecuteNonQuery() |> ignore
 
 
-let executeAllSql (sql : string list) =
+let executeAllSql (sql: string list) =
     sql
     |> List.map executeSql
     |> ignore

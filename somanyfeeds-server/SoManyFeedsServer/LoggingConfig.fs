@@ -15,7 +15,7 @@ let configure _ =
   |> Config.ilogger (ILogger.LiterateConsole Info)
   |> Config.middleware threadId
   |> Config.target (LiterateConsole.create LiterateConsole.empty "console")
-  |> Config.processing (Events.events |> Events.sink ["console"])
+  |> Config.processing (Events.events |> Events.sink [ "console" ])
   |> Config.build
   |> Hopac.Hopac.run
   |> ignore

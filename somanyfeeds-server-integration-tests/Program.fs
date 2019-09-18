@@ -4,19 +4,19 @@ open IntegrationTests
 open OpenQA.Selenium.Chrome
 open System
 open canopy
-open canopy.runner.classic
 open canopy.classic
+open canopy.runner.classic
 open canopy.types
 open configuration
 
 
-let private homeDir : string =
+let private homeDir: string =
     Environment.GetFolderPath Environment.SpecialFolder.UserProfile
 
 
 let private chromeOptions =
-    let chromeOptions = new ChromeOptions ()
-    chromeOptions.AddArguments ("--headless", "--disable-gpu", "--disable-ipv6")
+    let chromeOptions = new ChromeOptions()
+    chromeOptions.AddArguments("--headless", "--disable-gpu", "--disable-ipv6")
     chromeOptions
 
 
@@ -28,10 +28,10 @@ let main (_) =
     |> ChromeWithOptionsAndTimeSpan
     |> start
 
-    Feeds.all ()
-    FeedsProcessing.all ()
+    Feeds.all()
+    FeedsProcessing.all()
 
-    run ()
-    quit ()
+    run()
+    quit()
 
     failedCount

@@ -12,4 +12,4 @@ let generateHash =
     BCrypt.HashPassword >> HashedPassword
 
 let verify clearPassword (HashedPassword passwordHash) =
-    BCrypt.Verify (clearPassword, passwordHash)
+    BCrypt.Verify(clearPassword, passwordHash)

@@ -1,14 +1,13 @@
 module SoManyFeedsServer.WebConfig
 
 open Suave
-open DotLiquid
 open System.IO
 
 
-type private JsonCookieSerialiser () =
+type private JsonCookieSerialiser() =
     interface CookieSerialiser with
 
-        member x.serialise (map: Map<string, obj>) : byte[] =
+        member x.serialise (map: Map<string, obj>): byte [] =
             map
             |> Json.serializeSimpleMap
             |> UTF8.bytes
@@ -23,10 +22,10 @@ let private contentRoot =
     Env.varDefault "CONTENT_ROOT" Directory.GetCurrentDirectory
 
 let private templatesFolder =
-    Path.Combine (contentRoot, "Resources", "templates")
+    Path.Combine(contentRoot, "Resources", "templates")
 
 let private publicFolder =
-    Path.Combine (contentRoot, "Resources", "public")
+    Path.Combine(contentRoot, "Resources", "public")
 
 
 let port =
@@ -34,8 +33,8 @@ let port =
 
 
 let create =
-    setTemplatesDir templatesFolder
-    setCSharpNamingConvention ()
+    DotLiquid.setTemplatesDir templatesFolder
+    DotLiquid.setCSharpNamingConvention()
 
     let binding = Http.HttpBinding.createSimple HTTP "0.0.0.0" port
 

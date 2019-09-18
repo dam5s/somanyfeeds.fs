@@ -9,22 +9,22 @@ let private logger = createLogger<Logs>
 
 module private UnsafeOperation =
     let error description (ex: Exception) =
-        let msg = sprintf "%s error: %s" description (ex.Message.Trim ())
+        let msg = sprintf "%s error: %s" description (ex.Message.Trim())
                   |> logError logger
 
-        sprintf "Exception details %s" (ex.ToString ())
+        sprintf "Exception details %s" (ex.ToString())
         |> logError logger
         |> ignore
 
         Error msg
 
     let doTry description func =
-        try func () |> Ok
-        with | ex -> error description ex
+        try func() |> Ok
+        with ex -> error description ex
 
     let returnFrom description func =
-        try func ()
-        with | ex -> error description ex
+        try func()
+        with ex -> error description ex
 
 type UnsafeOperationBuilder(description: string) =
     member x.Error(ex: Exception) =

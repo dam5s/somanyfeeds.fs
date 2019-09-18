@@ -1,19 +1,19 @@
 module ``Twitter Processor Tests``
 
-open NUnit.Framework
-open FsUnit
-open System
-open System.IO
-open Time
-
 open FeedsProcessing
 open FeedsProcessing.Download
 open FeedsProcessing.Feeds
 open FeedsProcessing.Twitter
+open FsUnit
+
+open NUnit.Framework
+open System
+open System.IO
+open Time
 
 
 [<Test>]
-let ``processFeed twitter timeline`` () =
+let ``processFeed twitter timeline``() =
     let downloadedFeed = "../../../../feeds-processing/Resources/samples/twitter.timeline.sample"
                          |> File.ReadAllText
                          |> DownloadedFeed

@@ -3,9 +3,9 @@ module SoManyFeedsServer.Json
 open Chiron
 open Chiron.Operators
 open Suave
-open Suave.Writers
 open Suave.Operators
 open Suave.Response
+open Suave.Writers
 
 
 type private Logs = Logs
@@ -14,25 +14,25 @@ let private logger = createLogger<Logs>
 
 let serializeSimpleMap map =
     map
-    |> Map.map (fun k (value : obj) ->
+    |> Map.map (fun k (value: obj) ->
         match value with
-        | null -> Json.Null ()
+        | null -> Json.Null()
         | :? Json as x -> x
         | :? bool as x -> Json.Bool x
-        | :? int64 as x -> Json.Number (decimal x)
+        | :? int64 as x -> Json.Number(decimal x)
         | :? string as x -> Json.String x
         | _ ->
             sprintf "Unsupported value for session: %A" value
             |> logError logger
-            |> always (Json.Null ())
+            |> always (Json.Null())
     )
     |> Json.Object
     |> Json.format
 
 
 let deserializeSimpleMap json =
-    let convertJsonMap (map : Map<string, Json>) : Map<string, obj> =
-        map |> Map.map (fun key (value : Json) ->
+    let convertJsonMap (map: Map<string, Json>): Map<string, obj> =
+        map |> Map.map (fun key (value: Json) ->
             match value with
             | Json.Null _ -> null
             | Json.Bool b -> b :> obj
@@ -65,24 +65,24 @@ let serializeList encoder records =
     |> Json.format
 
 
-let jsonResponse status json : WebPart =
+let jsonResponse status json: WebPart =
     setMimeType "application/json"
         >=> response status (UTF8.bytes json)
 
 
-let objectResponse status encoder object : WebPart =
+let objectResponse status encoder object: WebPart =
     object
     |> serializeObject encoder
     |> jsonResponse status
 
 
-let listResponse status encoder list : WebPart =
+let listResponse status encoder list: WebPart =
     list
     |> serializeList encoder
     |> jsonResponse status
 
 
-let private decodeToChoice (decoder : Json -> JsonResult<'a> * Json) json =
+let private decodeToChoice (decoder: Json -> (JsonResult<'a> * Json)) json =
     decoder json
     |> fst
     |> function | Value value -> Choice1Of2 value
@@ -97,7 +97,7 @@ let private deserializationErrorJson message =
     serializeObject encoder message
 
 
-let deserializeBody decoder (next : 'a -> WebPart) : WebPart =
+let deserializeBody decoder (next: 'a -> WebPart): WebPart =
     request (fun r ->
         r.rawForm
         |> UTF8.toString
@@ -113,5 +113,5 @@ let private errorEncoder message =
     *> Json.write "message" message
 
 
-let serverErrorResponse (message : string) : WebPart =
+let serverErrorResponse (message: string): WebPart =
     objectResponse HTTP_500 errorEncoder message

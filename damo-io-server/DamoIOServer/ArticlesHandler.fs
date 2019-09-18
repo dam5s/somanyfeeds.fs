@@ -1,13 +1,13 @@
 module DamoIOServer.ArticlesHandler
 
-open System
-open Suave
-open Suave.DotLiquid
 open Chiron
 open Chiron.Operators
-open Time
-open DamoIOServer.Sources
 open DamoIOServer.ArticlesDataGateway
+open DamoIOServer.Sources
+open Suave
+open Suave.DotLiquid
+open System
+open Time
 
 
 let private source record =
@@ -27,7 +27,7 @@ let private toJson record =
 
 
 type ArticlesListViewModel =
-    { ArticlesJson : string }
+    { ArticlesJson: string }
 
 
 let list findAllRecords ctx =
@@ -36,7 +36,7 @@ let list findAllRecords ctx =
             Posix.fromDateTimeOffset DateTimeOffset.UtcNow
 
         let recordsJson =
-            findAllRecords ()
+            findAllRecords()
             |> List.sortByDescending (fun r -> Option.defaultValue now r.Date)
             |> List.map (Json.serializeWith toJson)
             |> Json.Array

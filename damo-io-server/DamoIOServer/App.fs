@@ -1,12 +1,12 @@
 module DamoIOServer.App
 
+open DamoIOServer.ArticlesDataGateway
+open DamoIOServer.SslHandler
 open FSharp.Control
 open Suave
 open Suave.Filters
 open Suave.Operators
 open Suave.RequestErrors
-open DamoIOServer.ArticlesDataGateway
-open DamoIOServer.SslHandler
 
 
 let private updatesSequence =
@@ -14,7 +14,7 @@ let private updatesSequence =
         let tenMinutes = 10 * 1000 * 60
 
         while true do
-            yield FeedsProcessor.processFeeds (Sources.Repository.findAll ())
+            yield FeedsProcessor.processFeeds (Sources.Repository.findAll())
             do! Async.Sleep tenMinutes
     }
 

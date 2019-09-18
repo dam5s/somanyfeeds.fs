@@ -1,14 +1,14 @@
 module ``Xml Processor Tests``
 
-open NUnit.Framework
-open FsUnit
-open FsUnitTyped
-open System
-open System.IO
-open Time
 open FeedsProcessing
 open FeedsProcessing.Download
 open FeedsProcessing.Xml
+open FsUnit
+open FsUnitTyped
+open NUnit.Framework
+open System
+open System.IO
+open Time
 
 
 [<Test>]

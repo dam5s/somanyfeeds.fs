@@ -1,10 +1,10 @@
 module Program
 
+open DamoIOServer
 open System
 open System.IO
 open Suave
 open Suave.DotLiquid
-open DamoIOServer
 
 
 let private portFromEnv =
@@ -21,12 +21,12 @@ let private portFromEnv =
 let main _ =
     Async.Start App.backgroundProcessing
 
-    let contentRoot = Directory.GetCurrentDirectory ()
-    let templatesFolder = Path.Combine (contentRoot, "Resources/templates")
-    let publicFolder = Path.Combine (contentRoot, "Resources/public")
+    let contentRoot = Directory.GetCurrentDirectory()
+    let templatesFolder = Path.Combine(contentRoot, "Resources/templates")
+    let publicFolder = Path.Combine(contentRoot, "Resources/public")
 
     setTemplatesDir templatesFolder
-    setCSharpNamingConvention ()
+    setCSharpNamingConvention()
 
     let binding = HttpBinding.createSimple HTTP "0.0.0.0" portFromEnv
     let config =
