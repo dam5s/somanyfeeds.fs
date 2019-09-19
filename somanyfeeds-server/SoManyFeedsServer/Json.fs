@@ -65,6 +65,14 @@ let serializeList encoder records =
     |> Json.format
 
 
+let serializeSimpleList (records: string list): string =
+    records
+    |> Seq.map Json.serialize
+    |> Seq.toList
+    |> Json.Array
+    |> Json.format
+
+
 let jsonResponse status json: WebPart =
     setMimeType "application/json"
         >=> response status (UTF8.bytes json)
@@ -79,6 +87,12 @@ let objectResponse status encoder object: WebPart =
 let listResponse status encoder list: WebPart =
     list
     |> serializeList encoder
+    |> jsonResponse status
+
+
+let simpleListResponse status list: WebPart =
+    list
+    |> serializeSimpleList
     |> jsonResponse status
 
 

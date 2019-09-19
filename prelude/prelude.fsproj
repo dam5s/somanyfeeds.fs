@@ -12,6 +12,7 @@
     <Compile Include="Prelude/Logging.fs" />
     <Compile Include="Prelude/UnsafeOperation.fs" />
     <Compile Include="Prelude/Time.fs" />
+    <Compile Include="Prelude/Validation.fs" />
   </ItemGroup>
 
   <ItemGroup>
