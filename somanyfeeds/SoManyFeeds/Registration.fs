@@ -33,11 +33,14 @@ type ValidationError =
     | PasswordConfirmationMismatched
 
 
+let private error fieldName validationError =
+    Error (Validation.error fieldName validationError)
+
 let private nameValidation (registration: Registration): Validation<string, ValidationError> =
     let name = registration.Name |> String.trim
 
     if String.isEmpty name
-        then Error [NameCannotBeBlank]
+        then error "name" NameCannotBeBlank
         else Ok name
 
 let private emailValidation (registration: Registration) =
@@ -47,16 +50,16 @@ let private emailValidation (registration: Registration) =
     let isNotEmail = not (String.contains "@" email)
 
     if isEmpty
-        then Error [EmailCannotBeBlank]
+        then error "email" EmailCannotBeBlank
         else if isNotEmail
-            then Error [EmailMustResembleAnEmail]
+            then error "email" EmailMustResembleAnEmail
             else Ok email
 
 let private passwordValidation registration =
     if String.length registration.Password < 8
-        then Error [PasswordMustBeAtLeastEightCharacters]
+        then error "password" PasswordMustBeAtLeastEightCharacters
         else if not (String.equals registration.PasswordConfirmation registration.Password)
-            then Error [PasswordConfirmationMismatched]
+            then error "passwordConfirmation" PasswordConfirmationMismatched
             else Ok (Passwords.generateHash registration.Password)
 
 let private buildRegistration name email passwordHash =

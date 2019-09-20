@@ -8,7 +8,7 @@ open SoManyFeeds.UsersDataGateway
 
 type UserCreationResult =
     | CreationSuccess of UserRecord
-    | CreationFailure of ValidationError list
+    | CreationFailure of FieldError<ValidationError> list
     | CreationError of message: string
 
 
@@ -18,7 +18,7 @@ let create registration: Async<UserCreationResult> =
         | Ok validReg ->
             match! UsersDataGateway.findByEmail (Registration.email validReg) with
             | Found _ ->
-                return CreationFailure [EmailAlreadyInUse]
+                return CreationFailure (Validation.error "email" EmailAlreadyInUse)
             | FindError message ->
                 return CreationError message
             | NotFound ->

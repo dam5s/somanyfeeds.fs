@@ -10,6 +10,12 @@ type Error
     = Error String
 
 
+type alias ErrorJson =
+    { fieldName : String
+    , error : String
+    }
+
+
 type alias Field =
     { value : String
     , error : Maybe Error
@@ -18,7 +24,7 @@ type alias Field =
 
 type RegistrationForm
     = RegistrationForm
-        { serverErrors : List Error
+        { serverError : Maybe Error
         , name : Field
         , email : Field
         , password : Field
@@ -42,7 +48,7 @@ new =
             { value = "", error = Nothing }
     in
     RegistrationForm
-        { serverErrors = []
+        { serverError = Nothing
         , name = newField
         , email = newField
         , password = newField
@@ -55,30 +61,17 @@ fields (RegistrationForm form) =
 
 
 maybeErrorToString : Maybe Error -> String
-maybeErrorToString maybeErr =
-    case maybeErr of
-        Nothing ->
-            ""
-
+maybeErrorToString maybeError =
+    case maybeError of
         Just (Error value) ->
             value
 
-
-errorListToString : List Error -> String
-errorListToString listErr =
-    case listErr of
-        [] ->
+        Nothing ->
             ""
-
-        [ Error value ] ->
-            value ++ "."
-
-        (Error value) :: xs ->
-            value ++ ", " ++ errorListToString xs
 
 
 serverError =
-    fields >> .serverErrors >> errorListToString
+    fields >> .serverError >> maybeErrorToString
 
 
 name =
@@ -156,32 +149,57 @@ request (ValidRegistrationForm form) =
         }
 
 
-defaultErrors : List Error
-defaultErrors =
-    [ Error "An error occured while contacting our server, please try again later." ]
-
-
-parseErrors : String -> List Error
+parseErrors : String -> List ErrorJson
 parseErrors body =
     let
+        fieldErrorDecoder =
+            Json.Decode.map2 ErrorJson
+                (Json.Decode.field "fieldName" Json.Decode.string)
+                (Json.Decode.field "error" Json.Decode.string)
+
         errorsDecoder =
-            Json.Decode.array Json.Decode.string
+            Json.Decode.array fieldErrorDecoder
     in
     Json.Decode.decodeString errorsDecoder body
-        |> Result.map (Array.toList >> List.map Error)
-        |> Result.withDefault defaultErrors
+        |> Result.map Array.toList
+        |> Result.withDefault []
+
+
+applyFieldErrors : RegistrationForm -> List ErrorJson -> RegistrationForm
+applyFieldErrors (RegistrationForm form) errors =
+    let
+        errorMsgByFieldName fieldName =
+            errors
+                |> List.filter (\e -> e.fieldName == fieldName)
+                |> List.head
+                |> Maybe.map (.error >> Error)
+
+        fieldWithError fieldName field =
+            { field | error = errorMsgByFieldName fieldName }
+    in
+    RegistrationForm
+        { form
+            | name = fieldWithError "name" form.name
+            , email = fieldWithError "email" form.email
+            , password = fieldWithError "password" form.password
+            , passwordConfirmation = fieldWithError "passwordConfirmation" form.passwordConfirmation
+        }
+
+
+defaultServerError =
+    Error "An error occured while contacting our server, please try again later."
 
 
 applyHttpError : Http.Error -> RegistrationForm -> RegistrationForm
 applyHttpError err (RegistrationForm form) =
     case err of
         Http.BadStatus response ->
-            RegistrationForm
-                { form | serverErrors = parseErrors response.body }
+            response.body
+                |> parseErrors
+                |> applyFieldErrors (RegistrationForm form)
 
         _ ->
-            RegistrationForm
-                { form | serverErrors = defaultErrors }
+            RegistrationForm { form | serverError = Just defaultServerError }
 
 
 validate : RegistrationForm -> Result RegistrationForm ValidRegistrationForm
@@ -211,7 +229,7 @@ validate form =
 
 
 removeServerError (RegistrationForm form) =
-    RegistrationForm { form | serverErrors = [] }
+    RegistrationForm { form | serverError = Nothing }
 
 
 validateName (RegistrationForm form) =

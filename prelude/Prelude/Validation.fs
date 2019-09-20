@@ -1,12 +1,21 @@
 namespace global
 
 
+type FieldError<'Error> =
+    { FieldName: string
+      Error: 'Error
+    }
+
+
 type Validation<'Success, 'Failure> =
-    Result<'Success, 'Failure list>
+    Result<'Success, FieldError<'Failure> list>
 
 
 [<RequireQualifiedAccess>]
 module Validation =
+
+    let error name err =
+        [{ FieldName = name; Error = err }]
 
     let map f (x: Validation<_, _>): Validation<_, _> =
         Result.map f x

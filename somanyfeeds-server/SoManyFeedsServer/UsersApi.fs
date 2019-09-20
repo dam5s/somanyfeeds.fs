@@ -26,8 +26,9 @@ module Encoders =
         | PasswordMustBeAtLeastEightCharacters -> "Password must be at least 8 characters"
         | PasswordConfirmationMismatched -> "Password confirmation does not match"
 
-    let errorsToString errors =
-        List.map errorToString errors
+    let fieldError err =
+        Json.write "fieldName" err.FieldName
+        *> Json.write "error" (errorToString err.Error)
 
 
 
@@ -53,6 +54,6 @@ let create createUser (registration: Registration): WebPart =
     fun ctx -> async {
         match! createUser registration with
         | CreationSuccess record -> return! objectResponse HTTP_201 Encoders.user record ctx
-        | CreationFailure errors -> return! simpleListResponse HTTP_400 (Encoders.errorsToString errors) ctx
+        | CreationFailure errors -> return! listResponse HTTP_400 Encoders.fieldError errors ctx
         | CreationError message -> return! serverErrorResponse message ctx
     }
