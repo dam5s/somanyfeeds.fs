@@ -2,13 +2,18 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <WarningsAsErrors>25</WarningsAsErrors>
-    <RootNamespace>fabulous-frontend</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Fable.Core" Version="2.0.3" />
-    <PackageReference Include="Fable.Elmish.React" Version="2.2.0" />
+    <PackageReference Include="Fable.Core" Version="3.1.4" />
+    <PackageReference Include="Fable.Elmish.React" Version="3.0.1" />
+    <PackageReference Include="Fable.SimpleHttp" Version="3.0.0" />
+    <PackageReference Include="Fable.SimpleJson" Version="3.8.2" />
 
-    <Compile Include="FableFrontend\App.fs" />
+    <ProjectReference Include="../prelude/prelude.fsproj" />
+
+    <Compile Include="FableFrontend/Logo.fs" />
+    <Compile Include="FableFrontend/RegistrationForm.fs" />
+    <Compile Include="FableFrontend/RegistrationApp.fs" />
   </ItemGroup>
 </Project>

@@ -4,6 +4,7 @@ module Support
 
 let always a _ = a
 
+let curry f a b = f (a, b)
 
 [<RequireQualifiedAccess>]
 module Result =
@@ -32,16 +33,6 @@ module Choice =
 
 
 [<RequireQualifiedAccess>]
-module Env =
-    open System
-
-    let var name =
-        Environment.GetEnvironmentVariable(name) |> Option.ofObj
-
-    let varDefault name producer =
-        var name |> Option.defaultValue (producer())
-
-[<RequireQualifiedAccess>]
 module String =
 
     let isEmpty value =
@@ -60,3 +51,10 @@ module String =
 
     let toLowerInvariant (it: string) =
         it.ToLowerInvariant()
+
+[<RequireQualifiedAccess>]
+module List =
+
+    let all predicate list =
+        let filtered = List.filter predicate list
+        List.length filtered = List.length list

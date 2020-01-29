@@ -6,19 +6,15 @@ var path = require("path");
 
 module.exports = {
     mode: "development",
-    entry: "./fabulous-frontend.fsproj",
+    entry: "./fable-frontend.fsproj",
     output: {
-        path: path.join(__dirname, "./Public"),
-        filename: "bundle.js",
-    },
-    devServer: {
-        contentBase: "./Public",
-        port: 8080,
+        path: path.join(__dirname, "..", "somanyfeeds-server", "Resources", "public"),
+        filename: "somanyfeeds-fable.js",
     },
     module: {
         rules: [{
             test: /\.fs(x|proj)?$/,
-            use: "fable-loader"
+            use: "fable-loader",
         }]
     }
-}
+};
