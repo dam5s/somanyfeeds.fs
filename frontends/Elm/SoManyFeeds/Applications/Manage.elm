@@ -120,7 +120,7 @@ newFeedForm model =
     in
     section []
         [ form [ class "card", onSubmit CreateFeed ]
-            [ h3 [] [ text "Ad" ]
+            [ h3 [] [ text "Add a feed" ]
             , label []
                 [ text "Name"
                 , input [ placeholder "Le Monde", type_ "text", name "name", value nameValue, onInput UpdateFormName, disabled model.creationInProgress ] []
