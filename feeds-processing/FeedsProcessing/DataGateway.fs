@@ -80,7 +80,12 @@ let downloadTwitterTimeline consumerKey consumerSecret handle: DownloadResult =
 
 let downloadFeed (FeedUrl url): DownloadResult =
     unsafeOperation "Download feed" { return fun _ ->
-        (new HttpClient())
+        use client = new HttpClient()
+        let headers = client.DefaultRequestHeaders
+
+        headers.Add ("User-Agent", "somanyfeeds.com")
+
+        client
             .GetStringAsync(url)
             .GetAwaiter()
             .GetResult()
