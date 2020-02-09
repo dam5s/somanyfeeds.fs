@@ -8,6 +8,7 @@
 bin
 obj
 public
+WebRoot
 elm-stuff
 node_modules
 *.DotSettings.user
