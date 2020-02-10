@@ -8,19 +8,27 @@
 
   <ItemGroup>
     <PackageReference Include="Giraffe" Version="4.0.*" />
+    <PackageReference Include="JWT" Version="6.0.1" />
+    <PackageReference Include="TaskBuilder.fs" Version="2.1.*" />
+    <ProjectReference Include="../somanyfeeds/somanyfeeds.fsproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Logo.fs" />
-    <Compile Include="Layout.fs" />
-    <Compile Include="HomePage.fs" />
-    <Compile Include="WebApp.fs" />
-    <Compile Include="Program.fs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="WebRoot\**\*">
+    <Content Include="WebRoot/**/*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="SoManyFeedsServer/Logo.fs" />
+    <Compile Include="SoManyFeedsServer/Layout.fs" />
+    <Compile Include="SoManyFeedsServer/ErrorPage.fs" />
+    <Compile Include="SoManyFeedsServer/Auth/JWT.fs" />
+    <Compile Include="SoManyFeedsServer/Auth/Payload.fs" />
+    <Compile Include="SoManyFeedsServer/Auth/Session.fs" />
+    <Compile Include="SoManyFeedsServer/Auth/Web.fs" />
+    <Compile Include="SoManyFeedsServer/HomePage.fs" />
+    <Compile Include="SoManyFeedsServer/WebApp.fs" />
+    <Compile Include="Program.fs" />
   </ItemGroup>
 </Project>

@@ -42,5 +42,5 @@ let create =
         homeFolder = Some publicFolder
         bindings = [ binding ]
         serverKey = ServerKey.fromBase64 (Env.varRequired "COOKIE_ENCRYPTION_KEY")
-        cookieSerialiser = new JsonCookieSerialiser()
+        cookieSerialiser = JsonCookieSerialiser()
     }

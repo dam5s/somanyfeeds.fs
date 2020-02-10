@@ -1,15 +1,17 @@
-module SoManyFeedsServer.Program
+module Program
 
-open System
-open System.IO
+open Giraffe
+open Microsoft.AspNetCore.Authentication.Cookies
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
-open Microsoft.Extensions.Logging
-open Microsoft.Extensions.DependencyInjection
-open Giraffe
 open Microsoft.Extensions.Configuration
+open Microsoft.Extensions.DependencyInjection
+open Microsoft.Extensions.Logging
+open System
+open System.IO
+open SoManyFeedsServer
 
-let private configureApp (app : IApplicationBuilder) =
+let private configureErrorHandling (app: IApplicationBuilder) =
     let config = app.ApplicationServices.GetService<IConfiguration>()
 
     let enableExceptionPage =
@@ -17,26 +19,34 @@ let private configureApp (app : IApplicationBuilder) =
         | "true" -> true
         | _ -> false
 
-    (match enableExceptionPage with
-    | true  -> app.UseDeveloperExceptionPage()
-    | false -> app.UseGiraffeErrorHandler WebApp.errorHandler)
+    match enableExceptionPage with
+    | true -> app.UseDeveloperExceptionPage()
+    | false -> app.UseGiraffeErrorHandler WebApp.errorHandler
+
+let private configureApp (app: IApplicationBuilder) =
+    (configureErrorHandling app)
         .UseHttpsRedirection()
         .UseStaticFiles()
         .UseGiraffe(WebApp.handler)
 
-let private configureServices (services : IServiceCollection) =
-    services.AddGiraffe() |> ignore
+let private configureServices (services: IServiceCollection) =
+    services
+        .AddGiraffe()
+        |> ignore
 
-let private configureLogging (builder : ILoggingBuilder) =
-    builder.AddFilter(fun l -> l.Equals LogLevel.Error)
-           .AddConsole()
-           .AddDebug() |> ignore
+let private configureLogging (builder: ILoggingBuilder) =
+    builder
+        .AddFilter(fun l -> l.Equals LogLevel.Error)
+        .AddConsole()
+        .AddDebug()
+        |> ignore
 
 
 [<EntryPoint>]
 let main _ =
     let contentRoot = Directory.GetCurrentDirectory()
-    let webRoot     = Path.Combine(contentRoot, "WebRoot")
+    let webRoot = Path.Combine(contentRoot, "WebRoot")
+
     WebHostBuilder()
         .UseKestrel()
         .UseContentRoot(contentRoot)
