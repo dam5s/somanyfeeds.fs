@@ -7,24 +7,12 @@ open System
 open System.IO
 
 
-let private allProjects =
-    [
-      "prelude"
-      "damo-io-server"
-      "somanyfeeds"
-      "somanyfeeds-tests"
-      "somanyfeeds-server"
-      "somanyfeeds-server-integration-tests"
-      "feeds-processing"
-      "feeds-processing-tests"
-      "frontends"
-    ]
-
-
 let private clean _ =
-    allProjects
-    |> List.collect (fun p -> [ Path.Combine(p, "bin"); Path.Combine(p, "obj") ])
-    |> List.map Directory.delete
+    let findAll name =
+        DirectoryInfo(".").GetDirectories(name, SearchOption.AllDirectories)
+
+    Array.append (findAll "bin") (findAll "obj")
+    |> Array.map (fun dir -> dir.Delete(true))
     |> ignore
 
 
