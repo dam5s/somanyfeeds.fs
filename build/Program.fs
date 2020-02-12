@@ -38,9 +38,13 @@ let private somanyfeedsServerIntegrationTests _ =
 
 let private setupCacheBustingLinks _ =
     let timestamp = DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()
-    let timestampPath = "somanyfeeds-server/bin/Release/netcoreapp2.2/publish/Resources/templates/_assets_version.html.liquid"
-    writeToFile timestampPath timestamp
-    ()
+    let timestampPaths = [
+        "somanyfeeds-server/bin/Release/netcoreapp2.2/publish/Resources/templates/_assets_version.html.liquid"
+        "somanyfeeds-giraffe-server/WebRoot/assets.version"
+    ]
+    timestampPaths
+    |> List.map (fun path -> writeToFile path timestamp)
+    |> ignore
 
 
 [<EntryPoint>]
@@ -52,14 +56,16 @@ let main args =
     Database.loadTasks()
 
     Target.create "clean" clean
-    Target.create "build" DotNet.build
+    Target.create "build" (fun _ ->
+        setupCacheBustingLinks()
+        DotNet.build ()
+    )
     Target.create "test" DotNet.test
     Target.create "integration-tests" somanyfeedsServerIntegrationTests
 
     Target.create "release" (fun _ ->
         DotNet.release "damo-io-server" ()
         DotNet.release "somanyfeeds-server" ()
-        setupCacheBustingLinks()
     )
 
 
