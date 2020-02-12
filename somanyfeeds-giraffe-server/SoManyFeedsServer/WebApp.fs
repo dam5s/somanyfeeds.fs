@@ -13,6 +13,7 @@ let handler: HttpHandler =
           GET >=> route "/login" >=> htmlView (Auth.Web.loginPage false)
           POST >=> route "/login" >=> (Auth.Web.doLogin UsersDataGateway.findByEmail)
           GET >=> route "/logout" >=> Auth.Web.doLogout
+          GET >=> route "/register" >=> Auth.Web.registrationPage
 
           Auth.Web.authenticate (fun user -> choose [
               GET >=> route "/read" >=> text (sprintf "Read %s" user.Name)

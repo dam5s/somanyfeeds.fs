@@ -9,6 +9,7 @@ open SoManyFeeds.User
 open SoManyFeeds.UsersDataGateway
 open SoManyFeedsServer
 open SoManyFeedsServer.Auth
+open SoManyFeedsServer.CacheBusting
 
 
 module private Views =
@@ -23,32 +24,44 @@ module private Views =
         [ header [ _class "page" ]
               [ div [ _class "page-content" ]
                     [ h2 [] [ rawText "Login" ]
-                      h1 [] [ rawText "Authentication required" ] ] ]
+                      h1 [] [ rawText "Authentication required" ]
+                    ]
+              ]
           div [ _class "main" ]
               [ section []
-                    [ form
-                        [ _method "post"
-                          _class "card" ]
+                    [ form [ _method "post"; _class "card" ]
                           [ errorView
                             label []
                                 [ rawText "Email"
-                                  input
-                                      [ _type "email"
-                                        _name "email"
-                                        _placeholder "john@example.com" ] ]
+                                  input [ _type "email"; _name "email"; _placeholder "john@example.com" ]
+                                ]
                             label []
                                 [ rawText "Password"
-                                  input
-                                      [ _type "password"
-                                        _name "password"
-                                        _placeholder "******************" ] ]
-                            nav [] [ button [ _class "button primary" ] [ rawText "Sign in" ] ] ] ]
+                                  input [ _type "password"; _name "password"; _placeholder "******************" ]
+                                ]
+                            nav [] [ button [ _class "button primary" ] [ rawText "Sign in" ] ]
+                          ]
+                    ]
                 section []
                     [ div [ _class "card" ]
                           [ p [ _class "message" ]
-                                [ rawText "Don't have an account?"
+                                [ rawText "Don't have an account? "
                                   a [ _href "/register" ] [ rawText "Sign up now" ]
-                                  rawText "." ] ] ] ] ]
+                                  rawText "."
+                                ]
+                          ]
+                    ]
+              ]
+        ]
+
+    let registration =
+        [ div [ _id "registration-app" ] []
+          script [ _src (assetPath "/somanyfeeds.js") ] []
+          script []
+              [ rawText "var app = Elm.SoManyFeeds.Applications.Register.init({flags: {}});"
+                rawText "app.ports.redirectTo.subscribe(function (dest) { window.location = dest; });"
+              ]
+        ]
 
 let loginPage error =
     Layout.main (Views.login error)
@@ -89,6 +102,9 @@ let doLogout: HttpHandler =
         ctx
         |> Session.clear
         |> redirectTo false "/" next
+
+let registrationPage: HttpHandler =
+    htmlView (Layout.main Views.registration)
 
 let authenticate (withUser: User -> HttpHandler): HttpHandler =
     fun next ctx ->

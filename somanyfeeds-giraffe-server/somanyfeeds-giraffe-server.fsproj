@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="SoManyFeedsServer/CacheBusting.fs" />
     <Compile Include="SoManyFeedsServer/Logo.fs" />
     <Compile Include="SoManyFeedsServer/Layout.fs" />
     <Compile Include="SoManyFeedsServer/ErrorPage.fs" />
