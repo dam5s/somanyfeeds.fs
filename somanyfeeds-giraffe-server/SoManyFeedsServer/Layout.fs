@@ -6,7 +6,36 @@ open GiraffeViewEngine
 open SoManyFeedsServer
 open SoManyFeedsServer.CacheBusting
 
-let main (content: XmlNode list) =
+type Tab =
+    | Home
+    | Read
+    | Manage
+
+let tabLink (active: Tab) href tab =
+    let activeClass =
+        if tab = active
+        then "current"
+        else ""
+    a [ _href href ; _class activeClass ] [ encodedText (sprintf "%A" tab) ]
+
+let private headerView (activeTab: Tab option) =
+    let tabs =
+        match activeTab with
+        | None -> []
+        | Some tab ->
+            [ tabLink tab "/" Home
+              tabLink tab "/read" Read
+              tabLink tab "/manage" Manage
+            ]
+    
+    header [ _class "app-header" ]
+        [ div []
+            [ a [_href "/"] [ Logo.view ]
+              nav [] tabs
+            ]
+        ]
+
+let private main (activeTab: Tab option) (content: XmlNode list) =
     html [ _lang "en" ]
         [ head []
               [ meta [ _charset "utf-8" ]
@@ -21,33 +50,11 @@ let main (content: XmlNode list) =
                 link [ _rel "stylesheet"; _type "text/css"; _href (assetPath "/somanyfeeds.css") ]
                 title [] [ encodedText "SoManyFeeds - A feed aggregator by Damien Le Berrigaud." ]
               ]
-          body [] content
+          body [] ([ headerView activeTab ] @ content)
         ]
 
-type Tab =
-    | Home
-    | Read
-    | Manage
+let withoutTabs =
+    main None
 
-let tabLink (active: Tab) href tab =
-    let activeClass =
-        if tab = active
-        then "current"
-        else ""
-    a [ _href href ; _class activeClass ] [ encodedText (sprintf "%A" tab) ]
-
-let private tabsHeader (active: Tab) =
-    header [ _class "app-header" ]
-        [ div []
-            [ a [_href "/"] [ Logo.view ]
-              nav []
-                  [ tabLink active "/" Home
-                    tabLink active "/read" Read
-                    tabLink active "/manage" Manage
-                  ]
-            ]
-        ]
-
-let withTabs (active: Tab) (content: XmlNode list) =
-    [ tabsHeader active ] @ content
-    |> main
+let withTabs tab =
+    main (Some tab)

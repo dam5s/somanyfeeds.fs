@@ -26,5 +26,5 @@ module private Views =
 let page message =
     message
     |> Views.error
-    |> Layout.main
+    |> Layout.withoutTabs
     |> htmlView

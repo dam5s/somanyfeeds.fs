@@ -64,7 +64,7 @@ module private Views =
         ]
 
 let loginPage error =
-    Layout.main (Views.login error)
+    Layout.withoutTabs (Views.login error)
 
 let private loginError =
     htmlView (loginPage true)
@@ -104,7 +104,7 @@ let doLogout: HttpHandler =
         |> redirectTo false "/" next
 
 let registrationPage: HttpHandler =
-    htmlView (Layout.main Views.registration)
+    htmlView (Layout.withoutTabs Views.registration)
 
 let authenticate (withUser: User -> HttpHandler): HttpHandler =
     fun next ctx ->

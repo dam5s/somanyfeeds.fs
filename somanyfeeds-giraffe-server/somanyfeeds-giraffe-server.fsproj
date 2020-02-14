@@ -20,6 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="SoManyFeedsServer/Json.fs" />
+    <Compile Include="SoManyFeedsServer/UsersApi.fs" />
     <Compile Include="SoManyFeedsServer/CacheBusting.fs" />
     <Compile Include="SoManyFeedsServer/Logo.fs" />
     <Compile Include="SoManyFeedsServer/Layout.fs" />

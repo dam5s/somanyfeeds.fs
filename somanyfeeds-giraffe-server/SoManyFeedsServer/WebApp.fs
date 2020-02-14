@@ -14,6 +14,7 @@ let handler: HttpHandler =
           POST >=> route "/login" >=> (Auth.Web.doLogin UsersDataGateway.findByEmail)
           GET >=> route "/logout" >=> Auth.Web.doLogout
           GET >=> route "/register" >=> Auth.Web.registrationPage
+          POST >=> route "/api/users" >=> bindJson (UsersApi.create UsersService.create)
 
           Auth.Web.authenticate (fun user -> choose [
               GET >=> route "/read" >=> text (sprintf "Read %s" user.Name)
