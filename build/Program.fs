@@ -12,6 +12,7 @@ let private clean _ =
         DirectoryInfo(".").GetDirectories(name, SearchOption.AllDirectories)
 
     Array.append (findAll "bin") (findAll "obj")
+    |> Array.filter (fun dir -> dir.Parent.Name <> "build")
     |> Array.map (fun dir -> dir.Delete(true))
     |> ignore
 
