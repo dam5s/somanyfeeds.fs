@@ -14,9 +14,9 @@ type Tab =
 let tabLink (active: Tab) href tab =
     let activeClass =
         if tab = active
-        then "current"
-        else ""
-    a [ _href href ; _class activeClass ] [ encodedText (sprintf "%A" tab) ]
+            then "current"
+            else ""
+    a [ _href href; _class activeClass ] [ encodedText (sprintf "%A" tab) ]
 
 let private headerView (activeTab: Tab option) =
     let tabs =
@@ -25,17 +25,14 @@ let private headerView (activeTab: Tab option) =
         | Some tab ->
             [ tabLink tab "/" Home
               tabLink tab "/read" Read
-              tabLink tab "/manage" Manage
-            ]
-    
+              tabLink tab "/manage" Manage ]
+
     header [ _class "app-header" ]
         [ div []
-            [ a [_href "/"] [ Logo.view ]
-              nav [] tabs
-            ]
-        ]
+              [ a [ _href "/" ] [ Logo.view ]
+                nav [] tabs ] ]
 
-let private main (activeTab: Tab option) (content: XmlNode list) =
+let private withoutHeader (content: XmlNode list) =
     html [ _lang "en" ]
         [ head []
               [ meta [ _charset "utf-8" ]
@@ -50,11 +47,19 @@ let private main (activeTab: Tab option) (content: XmlNode list) =
                 link [ _rel "stylesheet"; _type "text/css"; _href (assetPath "/somanyfeeds.css") ]
                 title [] [ encodedText "SoManyFeeds - A feed aggregator by Damien Le Berrigaud." ]
               ]
-          body [] ([ headerView activeTab ] @ content)
+          body [] content
         ]
 
-let withoutTabs =
-    main None
+let withoutTabs content =
+    withoutHeader
+        ([ headerView None ] @ content)
 
-let withTabs tab =
-    main (Some tab)
+let withTabs tab content =
+    withoutHeader
+        ([ headerView (Some tab) ] @ content)
+
+let startElmApp js =
+    withoutHeader
+        [ script [ _src (assetPath "/somanyfeeds.js") ] []
+          script [] [ rawText js ]
+        ]

@@ -5,13 +5,15 @@ open Giraffe
 open SoManyFeeds.Registration
 open SoManyFeeds.UsersDataGateway
 open SoManyFeeds.UsersService
-open SoManyFeedsServer.Json
+open SoManyFeedsServer.Api
 
 
 [<RequireQualifiedAccess>]
 module Json =
     let user record =
-        {| id = record.Id; name = record.Name; email = record.Email |}
+        {| id = record.Id
+           name = record.Name
+           email = record.Email |}
 
     let private errorToString error =
         match error with
@@ -23,16 +25,18 @@ module Json =
         | PasswordConfirmationMismatched -> "Password confirmation does not match"
 
     let private fieldError error =
-        {|fieldName = error.FieldName; error = errorToString error.Error|}
+        {| fieldName = error.FieldName
+           error = errorToString error.Error |}
 
-    let fieldErrors list =
-        list |> List.map fieldError
+    let fieldErrors =
+        List.map fieldError
 
 
 let create (createUser: Registration -> Async<UserCreationResult>) (registration: Registration): HttpHandler =
-    fun next ctx -> task {
-        match! createUser registration with
-        | CreationSuccess record -> return! objectResponse 201 (Json.user record) next ctx
-        | CreationFailure errors -> return! objectResponse 400 (Json.fieldErrors errors) next ctx
-        | CreationError message -> return! serverErrorResponse message next ctx
-    }
+    fun next ctx ->
+        task {
+            match! createUser registration with
+            | CreationSuccess record -> return! jsonResponse 201 (Json.user record) next ctx
+            | CreationFailure errors -> return! jsonResponse 400 (Json.fieldErrors errors) next ctx
+            | CreationError message -> return! serverErrorResponse message next ctx
+        }
