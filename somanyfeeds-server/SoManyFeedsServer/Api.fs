@@ -69,7 +69,7 @@ let action (asyncRes: AsyncResult<unit>) =
     operationWithoutInput asyncRes onSuccess
 
 let delete (asyncFunc: unit -> AsyncResult<unit>) =
-    let onSuccess =
-        jsonResponse 204
+    let onSuccess _ =
+        setStatusCode 204
 
     operationWithInput asyncFunc onSuccess ()
