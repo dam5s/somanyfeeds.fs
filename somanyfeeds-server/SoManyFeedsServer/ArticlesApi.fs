@@ -1,42 +1,34 @@
+[<RequireQualifiedAccess>]
 module SoManyFeedsServer.ArticlesApi
 
+open Giraffe
+open Time
 open SoManyFeeds.ArticlesDataGateway
 open SoManyFeeds.FeedsDataGateway
-open SoManyFeedsServer.Json
-open Suave
-open Time
 
 
-module Encoders =
-    open Chiron
-    open Chiron.Operators
+module Json =
+    let article (feeds: FeedRecord seq) (article: ArticleRecord) =
+        let feedName =
+            feeds
+            |> Seq.tryFind (fun f -> f.Url = article.FeedUrl)
+            |> Option.map (fun f -> f.Name)
+            |> Option.defaultValue ""
 
-    let article (feeds: FeedRecord seq) (article: ArticleRecord): Json<unit> =
-        let feedName = feeds
-                       |> Seq.tryFind (fun f -> f.Url = article.FeedUrl)
-                       |> Option.map (fun f -> f.Name)
-                       |> Option.defaultValue ""
+        {| feedName = feedName
+           url = article.Url
+           title = article.Title
+           feedUrl = article.FeedUrl
+           content = article.Content
+           date = (Option.map Posix.milliseconds article.Date)
+           readUrl = (sprintf "/api/articles/%d/read" article.Id)
+           bookmarkUrl = (sprintf "/api/articles/%d/bookmark" article.Id) |}
 
-        Json.write "feedName" feedName
-        *> Json.write "url" article.Url
-        *> Json.write "title" article.Title
-        *> Json.write "feedUrl" article.FeedUrl
-        *> Json.write "content" article.Content
-        *> Json.write "date" (Option.map Posix.milliseconds article.Date)
-        *> Json.write "readUrl" (sprintf "/api/articles/%d/read" article.Id)
-        *> Json.write "bookmarkUrl" (sprintf "/api/articles/%d/bookmark" article.Id)
+let list (listArticles: AsyncResult<FeedRecord seq * ArticleRecord seq>): HttpHandler =
+    let jsonMapping (feeds, articles) =
+        Seq.map (Json.article feeds) articles
 
+    listArticles |> Api.view jsonMapping
 
-let list (listArticles: AsyncResult<FeedRecord seq * ArticleRecord seq>): WebPart =
-    fun ctx -> async {
-        match! listArticles with
-        | Ok(feeds, articles) -> return! listResponse HTTP_200 (Encoders.article feeds) articles ctx
-        | Error message -> return! serverErrorResponse message ctx
-    }
-
-let update (updateOperation: AsyncResult<unit>): WebPart =
-    fun ctx -> async {
-        match! updateOperation with
-        | Ok _ -> return! jsonResponse HTTP_200 "" ctx
-        | Error message -> return! serverErrorResponse message ctx
-    }
+let update (updateOperation: AsyncResult<unit>): HttpHandler =
+    updateOperation |> Api.action

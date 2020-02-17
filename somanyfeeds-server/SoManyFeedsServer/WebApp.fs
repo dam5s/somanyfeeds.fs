@@ -1,139 +1,149 @@
+[<RequireQualifiedAccess>]
 module SoManyFeedsServer.WebApp
 
+open System
+open Giraffe
+open Microsoft.AspNetCore.Http
+open Microsoft.Extensions.Logging
 open SoManyFeeds
 open SoManyFeeds.User
 open SoManyFeeds.UserArticlesDataGateway
 open SoManyFeedsServer
-open SoManyFeedsServer.Json
-open Suave
-open Suave.Filters
-open Suave.Operators
-open Suave.Redirection
-open Suave.RequestErrors
-
 
 let private maxFeeds =
-    Env.varDefaultParse int "MAX_FEEDS" (always "20")
+    Env.var "MAX_FEEDS"
+    |> Option.map int
+    |> Option.defaultValue 20
 
 
-let private authenticatedPage user: WebPart =
-
-    let listFeeds = FeedsDataGateway.listFeeds user.Id
-    let createFeed = FeedsService.createFeed maxFeeds user.Id
-    let updateFeed = FeedsDataGateway.updateFeed user.Id
-    let deleteFeed = FeedsDataGateway.deleteFeed user.Id
+let private paramToId param =
+    unsafeOperation "Reading id query param" { return fun _ -> int64 param } |> Result.toOption
 
 
-    let readPage innerPage _ =
-        ReadPage.page UserArticlesService.listRecent user innerPage
+type private UserFeeds(user: User) =
+    member this.List = FeedsDataGateway.listFeeds user.Id
+    member this.Create = FeedsService.createFeed maxFeeds user.Id
+    member this.Update = FeedsDataGateway.updateFeed user.Id
+    member this.Delete = FeedsDataGateway.deleteFeed user.Id
 
-    let readFeedPage feedId =
-        ReadPage.page UserArticlesService.listRecent user (ReadPage.Recent(Some feedId))
+    member this.ListApi _ =
+        FeedsApi.list this.List
 
-    let managePage frontendPage _ =
-        ManagePage.page maxFeeds listFeeds user frontendPage
+    member this.CreateApi =
+        this.Create
+        |> FeedsApi.create
+        |> bindJson
 
-    let managePageSearch searchText =
-        ManagePage.page maxFeeds listFeeds user (ManagePage.Search(Some searchText))
+    member this.UpdateApi feedId =
+        feedId
+        |> this.Update
+        |> FeedsApi.update
+        |> bindJson
 
-    let listFeedsApi _ =
-        FeedsApi.list listFeeds
+    member this.DeleteApi feedId =
+        FeedsApi.delete (fun _ -> this.Delete feedId)
 
-    let createFeedApi =
-        deserializeBody
-            FeedsApi.Decoders.feedFields
-            (FeedsApi.create createFeed)
 
-    let updateFeedApi feedId =
-        deserializeBody
-            FeedsApi.Decoders.feedFields
-            (updateFeed feedId |> FeedsApi.update)
+type private UserArticles(user: User) =
+    member this.ListRecent =
+        UserArticlesService.listRecent user
 
-    let deleteFeedApi feedId =
-        FeedsApi.delete
-            (fun _ -> deleteFeed feedId)
-
-    let paramToId param =
-        unsafeOperation "Reading id query param" { return fun _ -> int64 param }
-
-    let listRecentArticlesApi (request: HttpRequest) =
+    member this.ListRecentApi(_, ctx: HttpContext) =
         let maybeFeedId =
-            request.queryParam "feedId"
-            |> Result.ofChoice
-            |> Result.bind paramToId
-            |> Result.toOption
+            ctx.TryGetQueryStringValue "feedId" |> Option.bind paramToId
 
-        ArticlesApi.list (UserArticlesService.listRecent user maybeFeedId)
+        maybeFeedId
+        |> this.ListRecent
+        |> ArticlesApi.list
 
-    let listBookmarksApi _ =
+    member this.ListBookmarksApi _ =
         ArticlesApi.list (UserArticlesService.listBookmarks user)
 
-
-    let createReadArticle articleId =
-        { UserId = user.Id; ArticleId = articleId }
+    member this.CreateReadArticle articleId =
+        { UserId = user.Id
+          ArticleId = articleId }
         |> UserArticlesDataGateway.createReadArticle
         |> ArticlesApi.update
 
-    let deleteReadArticle articleId =
-        { UserId = user.Id; ArticleId = articleId }
+    member this.DeleteReadArticle articleId =
+        { UserId = user.Id
+          ArticleId = articleId }
         |> UserArticlesDataGateway.deleteReadArticle
         |> ArticlesApi.update
 
-    let createBookmark articleId =
-        { UserId = user.Id; ArticleId = articleId }
+    member this.CreateBookmark articleId =
+        { UserId = user.Id
+          ArticleId = articleId }
         |> UserArticlesDataGateway.createBookmark
         |> ArticlesApi.update
 
-    let deleteBookmark articleId =
-        { UserId = user.Id; ArticleId = articleId }
+    member this.DeleteBookmark articleId =
+        { UserId = user.Id
+          ArticleId = articleId }
         |> UserArticlesDataGateway.deleteBookmark
         |> ArticlesApi.update
 
 
-    choose [
-        GET >=> path "/read" >=> redirect "/read/recent"
-        GET >=> path "/read/recent" >=> request (readPage (ReadPage.Recent None))
-        GET >=> pathScan "/read/recent/feed/%d" readFeedPage
-        GET >=> path "/read/bookmarks" >=> request (readPage ReadPage.Bookmarks)
-
-        GET >=> path "/manage" >=> redirect "/manage/list"
-        GET >=> path "/manage/list" >=> request (managePage ManagePage.List)
-        GET >=> path "/manage/search" >=> request (managePage (ManagePage.Search None))
-        GET >=> pathScan "/manage/search/%s" managePageSearch
-
-        GET >=> path "/api/feeds" >=> request listFeedsApi
-        POST >=> path "/api/feeds" >=> createFeedApi
-        PUT >=> pathScan "/api/feeds/%d" updateFeedApi
-        DELETE >=> pathScan "/api/feeds/%d" deleteFeedApi
-
-        GET >=> path "/api/articles/recent" >=> request listRecentArticlesApi
-        GET >=> path "/api/articles/bookmarks" >=> request listBookmarksApi
-        POST >=> pathScan "/api/articles/%d/read" createReadArticle
-        DELETE >=> pathScan "/api/articles/%d/read" deleteReadArticle
-        POST >=> pathScan "/api/articles/%d/bookmark" createBookmark
-        DELETE >=> pathScan "/api/articles/%d/bookmark" deleteBookmark
-
-        NOT_FOUND "not found"
-    ]
+type private UserReadPage(articles: UserArticles, user: User) =
+    member this.Read innerPage _ =
+        ReadPage.page articles.ListRecent user innerPage
+    member this.ReadFeed feedId =
+        ReadPage.page articles.ListRecent user (ReadPage.Recent(Some feedId))
 
 
-let webPart =
-    let findByEmail = UsersDataGateway.findByEmail
-    let createUser = deserializeBody
-                         UsersApi.Decoders.registration
-                         (UsersApi.create UsersService.create)
-    let homePage = DotLiquid.page "home.html.liquid" ()
+type private UserManagePage(feeds: UserFeeds, user: User) =
+    member this.List _ =
+        ManagePage.page maxFeeds feeds.List user ManagePage.List
+    member this.SearchNone _ =
+        ManagePage.page maxFeeds feeds.List user (ManagePage.Search None)
+    member this.SearchSome text =
+        ManagePage.page maxFeeds feeds.List user (ManagePage.Search (Some text))
 
-    choose [
-        GET >=> path "/" >=> homePage
-        GET >=> Files.browseHome
-        GET >=> path "/register" >=> request Authentication.registrationPage
-        POST >=> path "/api/users" >=> createUser
-        GET >=> path "/login" >=> request Authentication.loginPage
-        POST >=> path "/login" >=> request (Authentication.doLogin findByEmail)
-        GET >=> path "/logout" >=> request Authentication.doLogout
 
-        request (SoManyFeedsServer.Authentication.authenticate authenticatedPage)
+let private authenticatedHandler (user: User) =
+    let userFeeds = UserFeeds user
+    let userArticles = UserArticles user
+    let userReadPage = UserReadPage(userArticles, user)
+    let userManagePage = UserManagePage(userFeeds, user)
 
-        UNAUTHORIZED "unauthorized"
-    ]
+    choose
+        [ GET >=> route "/read" >=> redirectTo false "/read/recent"
+          GET >=> route "/read/recent" >=> warbler (userReadPage.Read(ReadPage.Recent None))
+          GET >=> routef "/read/recent/feed/%d" userReadPage.ReadFeed
+          GET >=> route "/read/bookmarks" >=> warbler (userReadPage.Read ReadPage.Bookmarks)
+
+          GET >=> route "/manage" >=> redirectTo false "/manage/list"
+          GET >=> route "/manage/list" >=> warbler userManagePage.List
+          GET >=> route "/manage/search" >=> warbler userManagePage.SearchNone
+          GET >=> routef "/manage/search/%s" userManagePage.SearchSome
+
+          GET >=> route "/api/feeds" >=> warbler userFeeds.ListApi
+          POST >=> route "/api/feeds" >=> userFeeds.CreateApi
+          PUT >=> routef "/api/feeds/%d" userFeeds.UpdateApi
+          DELETE >=> routef "/api/feeds/%d" userFeeds.DeleteApi
+
+          GET >=> route "/api/articles/recent" >=> warbler userArticles.ListRecentApi
+          GET >=> route "/api/articles/bookmarks" >=> warbler userArticles.ListBookmarksApi
+          POST >=> routef "/api/articles/%d/read" userArticles.CreateReadArticle
+          DELETE >=> routef "/api/articles/%d/read" userArticles.DeleteReadArticle
+          POST >=> routef "/api/articles/%d/bookmark" userArticles.CreateBookmark
+          DELETE >=> routef "/api/articles/%d/bookmark" userArticles.DeleteBookmark
+
+          setStatusCode 404 >=> text "Not Found" ]
+
+let handler: HttpHandler =
+    choose
+        [ GET >=> route "/" >=> htmlView HomePage.view
+          GET >=> route "/login" >=> htmlView (Auth.Web.loginPage false)
+          POST >=> route "/login" >=> (Auth.Web.doLogin UsersDataGateway.findByEmail)
+          GET >=> route "/logout" >=> Auth.Web.doLogout
+          GET >=> route "/register" >=> Auth.Web.registrationPage
+          POST >=> route "/api/users" >=> bindJson (UsersApi.create UsersService.create)
+
+          Auth.Web.authenticate authenticatedHandler
+
+          setStatusCode 403 >=> text "Unauthorized" ]
+
+let errorHandler (ex: Exception) (logger: ILogger): HttpHandler =
+    logger.LogError(ex, "An unhandled exception has occurred while executing the request.")
+    clearResponse >=> setStatusCode 500 >=> text ex.Message

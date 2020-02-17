@@ -22,20 +22,14 @@ let private runCmd cmd workingDir args =
 let private clean _ =
     File.delete "damo-io-server/Resources/public/damo-io.js"
     File.delete "damo-io-server/Resources/public/damo-io.css"
-    File.delete "somanyfeeds-server/Resources/public/somanyfeeds.css"
-    File.delete "somanyfeeds-server/Resources/public/somanyfeeds.js"
-    File.delete "somanyfeeds-server/Resources/public/somanyfeeds-fable.js"
-    File.delete "somanyfeeds-giraffe-server/WebRoot/somanyfeeds.css"
-    File.delete "somanyfeeds-giraffe-server/WebRoot/somanyfeeds.js"
+    File.delete "somanyfeeds-server/WebRoot/somanyfeeds.css"
+    File.delete "somanyfeeds-server/WebRoot/somanyfeeds.js"
     Directory.delete "frontends/Elm/elm-stuff/0.19.0"
 
 
 let private buildScss _ =
     generateCss "frontends/Scss/damo-io.scss" |> writeToFile "damo-io-server/Resources/public/damo-io.css"
-    generateCss "frontends/Scss/somanyfeeds.scss" |> writeToFile "somanyfeeds-server/Resources/public/somanyfeeds.css"
-    Shell.copy
-        "somanyfeeds-giraffe-server/WebRoot/"
-        ["somanyfeeds-server/Resources/public/somanyfeeds.css"]
+    generateCss "frontends/Scss/somanyfeeds.scss" |> writeToFile "somanyfeeds-server/WebRoot/somanyfeeds.css"
 
 let private buildElm _ =
     let somanyfeedsApps =
@@ -44,10 +38,7 @@ let private buildElm _ =
         |> String.concat " "
 
     runCmd "elm" "frontends/Elm" "make --optimize --output ../../damo-io-server/Resources/public/damo-io.js DamoIO/App.elm"
-    runCmd "elm" "frontends/Elm" (sprintf "make --optimize --output ../../somanyfeeds-server/Resources/public/somanyfeeds.js %s" somanyfeedsApps)
-    Shell.copy
-        "somanyfeeds-giraffe-server/WebRoot/"
-        ["somanyfeeds-server/Resources/public/somanyfeeds.js"]
+    runCmd "elm" "frontends/Elm" (sprintf "make --optimize --output ../../somanyfeeds-server/WebRoot/somanyfeeds.js %s" somanyfeedsApps)
 
 
 let private buildFable _ =
@@ -57,8 +48,7 @@ let private buildFable _ =
 
 let private copyFonts _ =
     Shell.copyDir "damo-io-server/Resources/public/fonts" "frontends/Fonts" (fun _ -> true)
-    Shell.copyDir "somanyfeeds-server/Resources/public/fonts" "frontends/Fonts" (fun _ -> true)
-    Shell.copyDir "somanyfeeds-giraffe-server/WebRoot/fonts" "frontends/Fonts" (fun _ -> true)
+    Shell.copyDir "somanyfeeds-server/WebRoot/fonts" "frontends/Fonts" (fun _ -> true)
 
 
 let loadTasks _ =

@@ -1,29 +1,25 @@
 module IntegrationTests.Feeds
 
-open SoManyFeedsServer
 open System.Threading
 open canopy.classic
 open canopy.runner.classic
+open Microsoft.AspNetCore.Hosting
 
-let mutable private tokenSource: CancellationTokenSource option =
-    None
+let private tokenSource = new CancellationTokenSource()
+let private webHostBuilder = Program.webHostBuilder()
 
 let all() =
     context "Feeds"
 
     before (fun () ->
-        LoggingConfig.configure()
-
-        let config = SoManyFeedsServer.WebConfig.create
-        let webPart = SoManyFeedsServer.WebApp.webPart
-
-        tokenSource <- Some <| WebServerSupport.start config webPart
+        webHostBuilder
+            .UseUrls("http://localhost:9090")
+            .Build()
+            .RunAsync(tokenSource.Token) |> ignore
     )
 
     after (fun () ->
-        tokenSource
-        |> Option.map (fun src -> src.Cancel())
-        |> ignore
+        tokenSource.Cancel()
     )
 
     "CRUD" &&& fun _ ->
@@ -31,7 +27,7 @@ let all() =
             [ "delete from feeds"
               "delete from users" ]
 
-        url (sprintf "http://localhost:%d" WebConfig.port)
+        url "http://localhost:9090"
 
         expectToFind "h1" "Welcome"
         click "Read"

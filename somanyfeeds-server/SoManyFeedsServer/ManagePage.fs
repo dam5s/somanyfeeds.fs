@@ -1,10 +1,11 @@
+[<RequireQualifiedAccess>]
 module SoManyFeedsServer.ManagePage
 
+open FSharp.Control.Tasks.V2.ContextInsensitive
+open Giraffe
 open SoManyFeeds.FeedsDataGateway
 open SoManyFeeds.User
 open SoManyFeedsServer
-open Suave
-open Suave.DotLiquid
 
 
 type FrontendPage =
@@ -16,25 +17,10 @@ type private Flags =
     { UserName: string
       MaxFeeds: int
       Feeds: FeedRecord seq
-      Page: FrontendPage
-    }
+      Page: FrontendPage }
 
 
-type ManageViewModel =
-    { Flags: string
-    }
-
-
-module private Encoders =
-    open Chiron
-    open Chiron.Operators
-
-    let private feedsEncoder feeds =
-        feeds
-        |> Seq.map (Json.serializeWith FeedsApi.Encoders.feed)
-        |> Seq.toList
-        |> Json.Array
-
+module private Json =
     let private pageJson page =
         match page with
         | List -> "List"
@@ -46,28 +32,36 @@ module private Encoders =
         | Search textOption -> textOption
 
     let flags flags =
-        Json.write "userName" flags.UserName
-        *> Json.write "maxFeeds" flags.MaxFeeds
-        *> Json.writeWith feedsEncoder "feeds" flags.Feeds
-        *> Json.write "page" (pageJson flags.Page)
-        *> Json.write "searchText" (searchText flags.Page)
+        {| userName = flags.UserName
+           maxFeeds = flags.MaxFeeds
+           feeds =
+               flags.Feeds
+               |> Seq.map FeedsApi.Json.feed
+               |> Seq.toList
+           page = pageJson flags.Page
+           searchText = searchText flags.Page |}
+
+
+module private View =
+    let render (flagsJson: string) =
+        sprintf "Elm.SoManyFeeds.Applications.Manage.init({ flags: %s });" flagsJson
+        |> Layout.startElmApp
 
 
 let page maxFeeds (listFeeds: AsyncResult<FeedRecord seq>) (user: User) frontendPage =
-    fun ctx -> async {
-        match! listFeeds with
-        | Ok records ->
-            let flags =
-                { UserName = user.Name
-                  MaxFeeds = maxFeeds
-                  Feeds = records
-                  Page = frontendPage
-                }
+    fun next ctx ->
+        task {
+            match! listFeeds with
+            | Ok records ->
+                let flags =
+                    { UserName = user.Name
+                      MaxFeeds = maxFeeds
+                      Feeds = records
+                      Page = frontendPage }
 
-            let viewModel =
-                { Flags = Json.serializeObject Encoders.flags flags }
+                let flagsJson = Api.serializeObject (Json.flags flags) ctx
 
-            return! page "manage.html.liquid" viewModel ctx
-        | Error message ->
-            return! ErrorPage.page message ctx
-    }
+                return! htmlView (View.render flagsJson) next ctx
+            | Error message ->
+                return! ErrorPage.page message next ctx
+        }

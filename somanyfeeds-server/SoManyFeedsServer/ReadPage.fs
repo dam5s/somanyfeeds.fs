@@ -1,10 +1,11 @@
+[<RequireQualifiedAccess>]
 module SoManyFeedsServer.ReadPage
 
+open FSharp.Control.Tasks.V2.ContextInsensitive
+open Giraffe
 open SoManyFeeds.ArticlesDataGateway
 open SoManyFeeds.FeedsDataGateway
 open SoManyFeeds.User
-open Suave
-open Suave.DotLiquid
 
 
 type FrontendPage =
@@ -16,30 +17,19 @@ type private Flags =
     { UserName: string
       Recents: ArticleRecord seq
       Feeds: FeedRecord seq
-      Page: FrontendPage
-    }
+      Page: FrontendPage }
 
 
-type ReadViewModel =
-    { Flags: string
-    }
-
-
-module private Encoders =
-    open Chiron
-    open Chiron.Operators
-
-    let private articlesEncoder feeds articles =
+module private Json =
+    let private articleList feeds articles =
         articles
-        |> Seq.map (Json.serializeWith (ArticlesApi.Encoders.article feeds))
+        |> Seq.map (ArticlesApi.Json.article feeds)
         |> Seq.toList
-        |> Json.Array
 
-    let private feedsEncoder feeds =
+    let private feedList feeds =
         feeds
-        |> Seq.map (Json.serializeWith FeedsApi.Encoders.feed)
+        |> Seq.map FeedsApi.Json.feed
         |> Seq.toList
-        |> Json.Array
 
     let private pageJson page =
         match page with
@@ -52,33 +42,43 @@ module private Encoders =
         | Bookmarks -> None
 
     let flags flags =
-        Json.write "userName" flags.UserName
-        *> Json.writeWith (articlesEncoder flags.Feeds) "recents" flags.Recents
-        *> Json.writeWith feedsEncoder "feeds" flags.Feeds
-        *> Json.write "page" (pageJson flags.Page)
-        *> Json.write "selectedFeedId" (maybeFeedId flags.Page)
+        {| userName = flags.UserName
+           recents = articleList flags.Feeds flags.Recents
+           feeds = feedList flags.Feeds
+           page = pageJson flags.Page
+           selectedFeedId = maybeFeedId flags.Page |}
+
+
+module private View =
+    let render (flagsJson: string) =
+        sprintf "
+        var app = Elm.SoManyFeeds.Applications.Read.init({ flags: %s });
+
+        app.ports.redirectTo.subscribe(function (destination) {
+            window.location = destination;
+        })
+        " flagsJson
+        |> Layout.startElmApp 
 
 
 let page
-    (listFeedsAndArticles: User -> int64 option -> AsyncResult<FeedRecord seq * ArticleRecord seq>)
-    user
-    frontendPage =
+    (listFeedsAndArticles: int64 option -> AsyncResult<FeedRecord seq * ArticleRecord seq>)
+    (user: User)
+    (frontendPage: FrontendPage): HttpHandler =
 
-    fun ctx -> async {
-        let maybeFeedId = Encoders.maybeFeedId frontendPage
+    fun next ctx ->
+        task {
+            let maybeFeedId = Json.maybeFeedId frontendPage
 
-        match! listFeedsAndArticles user maybeFeedId with
-        | Ok(feeds, articles) ->
-            let flags =
-                { UserName = user.Name
-                  Recents = articles
-                  Feeds = feeds
-                  Page = frontendPage
-                }
-            let viewModel =
-                { Flags = Json.serializeObject Encoders.flags flags }
-
-            return! page "read.html.liquid" viewModel ctx
-        | Error message ->
-            return! ErrorPage.page message ctx
-    }
+            match! listFeedsAndArticles maybeFeedId with
+            | Ok(feeds, articles) ->
+                let flags =
+                    { UserName = user.Name
+                      Recents = articles
+                      Feeds = feeds
+                      Page = frontendPage }
+                let flagsJson = Api.serializeObject (Json.flags flags) ctx
+                return! htmlView (View.render flagsJson) next ctx
+            | Error message ->
+                return! ErrorPage.page message next ctx
+        }

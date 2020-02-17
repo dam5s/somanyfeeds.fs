@@ -1,47 +1,48 @@
 module IntegrationTests.FeedsProcessing
 
-open FsUnitTyped.TopLevelOperators
-open SoManyFeeds.FeedsProcessor
-open Suave
-open Suave.Filters
-open Suave.Operators
+open System
 open System.IO
 open System.Threading
+
 open canopy.runner.classic
+open FsUnitTyped.TopLevelOperators
+open Microsoft.AspNetCore.Builder
+open Microsoft.AspNetCore.Hosting
+
+open SoManyFeeds
+open SoManyFeeds.FeedsProcessor
 
 
-let mutable private tokenSource: CancellationTokenSource option =
-    None
+let private tokenSource = new CancellationTokenSource()
 
 let private startFeedsServer _ =
-    let binding =
-        Http.HttpBinding.createSimple HTTP "0.0.0.0" 9091
+    let contentRoot = Env.varDefault "FEEDS_CONTENT_ROOT" Directory.GetCurrentDirectory
+    let webRoot = Path.Combine(contentRoot, "Resources")
 
-    let homeFolder =
-        (__SOURCE_DIRECTORY__, "../Resources")
-        |> Path.Combine
-        |> Path.GetFullPath
-
-    let config =
-        { defaultConfig with
-            homeFolder = Some homeFolder
-            bindings = [ binding ]
-        }
-
-    WebServerSupport.start config (GET >=> Files.browseHome)
+    WebHostBuilder()
+        .UseKestrel()
+        .UseIISIntegration()
+        .UseUrls("http://localhost:9092")
+        .UseContentRoot(contentRoot)
+        .UseWebRoot(webRoot)
+        .Configure(Action<IApplicationBuilder> (fun app ->
+            app.UseStaticFiles()
+            |> ignore
+        ))
+        .Build()
+        .RunAsync(tokenSource.Token)
+        |> ignore
 
 
 let all() =
     context "Feeds Processing"
 
     before (fun _ ->
-        tokenSource <- Some <| startFeedsServer()
+        startFeedsServer()
     )
 
     after (fun _ ->
-        tokenSource
-        |> Option.map (fun src -> src.Cancel())
-        |> ignore
+        tokenSource.Cancel()
     )
 
     "Running background jobs" &&& fun _ ->
@@ -53,14 +54,12 @@ let all() =
             "delete from users"
             "insert into users (id, email, name, password_hash) values (10, 'john@example.com', 'Johnny', '')"
             """ insert into feeds (id, user_id, name, url) values
-                (101, 10, 'Rss Feed', 'http://localhost:9091/rss.xml'),
-                (102, 10, 'Atom Feed', 'http://localhost:9091/atom.xml')
+                (101, 10, 'Rss Feed', 'http://localhost:9092/rss.xml'),
+                (102, 10, 'Atom Feed', 'http://localhost:9092/atom.xml')
             """
             ]
 
-
         Async.RunSynchronously backgroundProcessingOnce
-
 
         queryDataContext (fun ctx -> query { for a in ctx.Public.Articles do select a.Id })
         |> Seq.length

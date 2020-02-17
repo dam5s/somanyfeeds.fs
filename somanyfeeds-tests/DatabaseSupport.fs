@@ -12,7 +12,7 @@ let setTestDbConnectionString _ =
 
 
 let executeSql sql =
-    use connection = new NpgsqlConnection(Env.varRequired "DB_CONNECTION")
+    use connection = new NpgsqlConnection(Env.requireVar "DB_CONNECTION")
     connection.Open()
 
     use command = connection.CreateCommand()

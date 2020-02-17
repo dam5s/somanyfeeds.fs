@@ -1,21 +1,19 @@
 module SoManyFeedsServer.UsersApi
 
+open FSharp.Control.Tasks.V2.ContextInsensitive
+open Giraffe
 open SoManyFeeds.Registration
 open SoManyFeeds.UsersDataGateway
 open SoManyFeeds.UsersService
-open SoManyFeedsServer
-open SoManyFeedsServer.Json
-open Suave
+open SoManyFeedsServer.Api
 
 
-module Encoders =
-    open Chiron
-    open Chiron.Operators
-
+[<RequireQualifiedAccess>]
+module Json =
     let user record =
-        Json.write "id" record.Id
-        *> Json.write "name" record.Name
-        *> Json.write "email" record.Email
+        {| id = record.Id
+           name = record.Name
+           email = record.Email |}
 
     let private errorToString error =
         match error with
@@ -26,34 +24,19 @@ module Encoders =
         | PasswordMustBeAtLeastEightCharacters -> "Password must be at least 8 characters"
         | PasswordConfirmationMismatched -> "Password confirmation does not match"
 
-    let fieldError err =
-        Json.write "fieldName" err.FieldName
-        *> Json.write "error" (errorToString err.Error)
+    let private fieldError error =
+        {| fieldName = error.FieldName
+           error = errorToString error.Error |}
+
+    let fieldErrors =
+        List.map fieldError
 
 
-
-module Decoders =
-    open Chiron
-    open Chiron.Operators
-
-    let registration json =
-        let constructor name email password confirmation =
-            { Name = name; Email = email; Password = password; PasswordConfirmation = confirmation }
-
-        let decoder =
-            constructor
-            <!> Json.read "name"
-            <*> Json.read "email"
-            <*> Json.read "password"
-            <*> Json.read "passwordConfirmation"
-
-        decoder json
-
-
-let create createUser (registration: Registration): WebPart =
-    fun ctx -> async {
-        match! createUser registration with
-        | CreationSuccess record -> return! objectResponse HTTP_201 Encoders.user record ctx
-        | CreationFailure errors -> return! listResponse HTTP_400 Encoders.fieldError errors ctx
-        | CreationError message -> return! serverErrorResponse message ctx
-    }
+let create (createUser: Registration -> Async<UserCreationResult>) (registration: Registration): HttpHandler =
+    fun next ctx ->
+        task {
+            match! createUser registration with
+            | CreationSuccess record -> return! jsonResponse 201 (Json.user record) next ctx
+            | CreationFailure errors -> return! jsonResponse 400 (Json.fieldErrors errors) next ctx
+            | CreationError message -> return! serverErrorResponse message next ctx
+        }

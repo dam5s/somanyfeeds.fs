@@ -1,10 +1,10 @@
 ﻿module Program
 
+open System
+open System.IO
 open Fake.Core
 open Fake.IO
 open Support
-open System
-open System.IO
 
 
 let private clean _ =
@@ -18,8 +18,8 @@ let private clean _ =
 
 
 let private somanyfeedsServerIntegrationTests _ =
-    Environment.setEnvironVar "PORT" "9090"
     Environment.setEnvironVar "CONTENT_ROOT" (Path.GetFullPath "somanyfeeds-server")
+    Environment.setEnvironVar "FEEDS_CONTENT_ROOT" (Path.GetFullPath "somanyfeeds-server-integration-tests")
     Environment.setEnvironVar "DB_CONNECTION" "Host=localhost;Username=somanyfeeds;Password=secret;Database=somanyfeeds_integration_tests"
     DotNet.run "somanyfeeds-server-integration-tests" ()
     ()
@@ -27,13 +27,7 @@ let private somanyfeedsServerIntegrationTests _ =
 
 let private setupCacheBustingLinks _ =
     let timestamp = DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()
-    let timestampPaths = [
-        "somanyfeeds-server/bin/Release/netcoreapp2.2/publish/Resources/templates/_assets_version.html.liquid"
-        "somanyfeeds-giraffe-server/WebRoot/assets.version"
-    ]
-    timestampPaths
-    |> List.map (fun path -> writeToFile path timestamp)
-    |> ignore
+    writeToFile "somanyfeeds-server/WebRoot/assets.version" timestamp
 
 
 [<EntryPoint>]

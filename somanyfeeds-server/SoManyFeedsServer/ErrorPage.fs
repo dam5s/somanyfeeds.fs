@@ -1,13 +1,30 @@
 module SoManyFeedsServer.ErrorPage
 
-open Suave
-open Suave.DotLiquid
-open Suave.Operators
+open Giraffe
 
+module private Views =
+    open GiraffeViewEngine
 
-type ErrorViewModel =
-    { Message: string }
+    let error message =
+        let fullMessage = sprintf "Oops, there was an error: %s" message
 
+        [ header [ _class "page" ]
+              [ div [ _class "page-content" ]
+                    [ h2 [] [ rawText "Error" ]
+                      h1 [] [ rawText "There was a server error" ]
+                    ]
+              ]
+          div [ _class "main" ]
+              [ section []
+                    [ div [ _class "card" ]
+                          [ p [ _class "message" ] [ encodedText fullMessage ]
+                          ]
+                    ]
+              ]
+        ]
 
-let page message: WebPart =
-    Writers.setStatus HTTP_500 >=> page "error.html.liquid" { Message = message }
+let page message =
+    message
+    |> Views.error
+    |> Layout.withoutTabs
+    |> htmlView

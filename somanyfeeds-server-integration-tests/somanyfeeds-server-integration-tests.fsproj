@@ -1,13 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="4.6.2" />
-
     <PackageReference Include="canopy" Version="2.1.0" />
     <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="2.45.0" />
     <PackageReference Include="FsUnit" Version="3.4.0" />
@@ -15,7 +13,6 @@
     <ProjectReference Include="../somanyfeeds-server/somanyfeeds-server.fsproj" />
 
     <Compile Include="DatabaseSupport.fs" />
-    <Compile Include="WebServerSupport.fs" />
     <Compile Include="Assertions.fs" />
     <Compile Include="IntegrationTests/Feeds.fs" />
     <Compile Include="IntegrationTests/FeedsProcessing.fs" />

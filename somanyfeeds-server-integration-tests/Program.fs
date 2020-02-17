@@ -9,20 +9,17 @@ open canopy.runner.classic
 open canopy.types
 open configuration
 
-
-let private homeDir: string =
-    Environment.GetFolderPath Environment.SpecialFolder.UserProfile
+open SoManyFeeds
 
 
 let private chromeOptions =
-    let chromeOptions = new ChromeOptions()
+    let chromeOptions = ChromeOptions()
     chromeOptions.AddArguments("--headless", "--disable-gpu", "--disable-ipv6")
     chromeOptions
 
-
 [<EntryPoint>]
 let main (_) =
-    chromeDir <- Env.varRequired "CHROME_DRIVER_DIR"
+    chromeDir <- Env.requireVar "CHROME_DRIVER_DIR"
 
     (chromeOptions, TimeSpan.FromSeconds 20.0)
     |> ChromeWithOptionsAndTimeSpan

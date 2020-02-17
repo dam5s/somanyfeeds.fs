@@ -5,8 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="4.6.2" />
-
     <Compile Include="Prelude/Support.fs" />
     <Compile Include="Prelude/AsyncResult.fs" />
     <Compile Include="Prelude/Logging.fs" />
