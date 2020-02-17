@@ -1,7 +1,6 @@
 module Program
 
 open Giraffe
-open Microsoft.AspNetCore.Authentication.Cookies
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Configuration
@@ -9,6 +8,7 @@ open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Logging
 open System
 open System.IO
+open SoManyFeeds
 open SoManyFeedsServer
 
 let private configureErrorHandling (app: IApplicationBuilder) =
@@ -40,10 +40,8 @@ let private configureLogging (builder: ILoggingBuilder) =
         .AddConsole()
         .AddDebug()
         |> ignore
-
-
-[<EntryPoint>]
-let main _ =
+        
+let private runServer _ =
     let contentRoot = Directory.GetCurrentDirectory()
     let webRoot = Path.Combine(contentRoot, "WebRoot")
 
@@ -57,4 +55,14 @@ let main _ =
         .ConfigureLogging(configureLogging)
         .Build()
         .Run()
+
+[<EntryPoint>]
+let main args =
+    args
+    |> Array.tryHead
+    |> Option.bind Tasks.run
+    |> Option.defaultWith (fun _ ->
+        Async.Start FeedsProcessor.backgroundProcessingInfinite
+        runServer ()
+    )
     0

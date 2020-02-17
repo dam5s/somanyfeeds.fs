@@ -36,6 +36,7 @@
     <Compile Include="SoManyFeedsServer/ReadPage.fs" />
     <Compile Include="SoManyFeedsServer/HomePage.fs" />
     <Compile Include="SoManyFeedsServer/WebApp.fs" />
+    <Compile Include="Tasks.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 </Project>
