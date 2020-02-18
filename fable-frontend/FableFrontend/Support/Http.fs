@@ -1,4 +1,4 @@
-module FableFrontend.HttpSupport
+module FableFrontend.Support.Http
 
 open Elmish
 open Fable.SimpleHttp

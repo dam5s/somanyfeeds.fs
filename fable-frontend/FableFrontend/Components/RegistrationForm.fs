@@ -1,6 +1,6 @@
-module FableFrontend.RegistrationForm
+module FableFrontend.Components.RegistrationForm
 
-open FableFrontend.HttpSupport
+open FableFrontend.Support.Http
 
 
 type private FormError = FormError of string
@@ -133,7 +133,7 @@ module RegistrationForm =
         match err with
             | ApiError ->
                 { form with ServerError = Some (FormError "Validation on the server failed") }
-                
+
             | ParseError _ ->
                 { form with ServerError = Some (FormError "Response parsing failed") }
 

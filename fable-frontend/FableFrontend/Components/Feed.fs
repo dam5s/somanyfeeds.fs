@@ -1,4 +1,4 @@
-module FableFrontend.Feed
+module FableFrontend.Components.Feed
 
 type Feed =
     { Id: int
@@ -25,7 +25,7 @@ module Feed =
           Name = json.name
           Url = json.url }
 
-    open FableFrontend.HttpSupport
+    open FableFrontend.Support.Http
 
     let createRequest (fields: Fields) =
         HttpRequest.post "/api/feeds" fields

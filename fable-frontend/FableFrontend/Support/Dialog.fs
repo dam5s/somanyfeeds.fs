@@ -1,4 +1,4 @@
-module FableFrontend.Dialog
+module FableFrontend.Support.Dialog
 
 type Dialog<'a> =
     | Initial

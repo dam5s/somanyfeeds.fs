@@ -4,9 +4,10 @@ open Elmish
 open Browser
 open Browser.Types
 open Fable.SimpleHttp
-open FableFrontend.Dialog
-open FableFrontend.Feed
-open FableFrontend.HttpSupport
+open FableFrontend.Support.Dialog
+open FableFrontend.Support.Http
+open FableFrontend.Components.Feed
+open FableFrontend.Components.Logo
 
 
 type Flags =

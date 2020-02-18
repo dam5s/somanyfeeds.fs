@@ -5,8 +5,9 @@ open Fable.React
 open Fable.React.Props
 open Fable.Import
 open Fable.SimpleHttp
-open FableFrontend.HttpSupport
-open FableFrontend.RegistrationForm
+open FableFrontend.Support.Http
+open FableFrontend.Components.Logo
+open FableFrontend.Components.RegistrationForm
 
 
 type Model =
