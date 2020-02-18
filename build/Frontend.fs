@@ -6,27 +6,24 @@ open SharpScss
 open Support
 open System.IO
 
-
 let private generateCss filePath =
     let scssOptions = ScssOptions(OutputStyle = ScssOutputStyle.Compressed)
     let result = Scss.ConvertFileToCss(filePath, scssOptions)
     result.Css
-
 
 let private runCmd cmd workingDir args =
     { Program = cmd; WorkingDir = workingDir; CommandLine = args; Args = [] }
     |> Process.shellExec
     |> ensureSuccessExitCode
 
-
 let private clean _ =
     File.delete "damo-io-server/Resources/public/damo-io.js"
     File.delete "damo-io-server/Resources/public/damo-io.css"
     File.delete "somanyfeeds-server/WebRoot/somanyfeeds.css"
     File.delete "somanyfeeds-server/WebRoot/somanyfeeds.js"
+    File.delete "somanyfeeds-server/WebRoot/somanyfeeds-fable.js"
     Directory.delete "frontends/Elm/elm-stuff/0.19.0"
     Directory.delete "fable-frontend/Public"
-
 
 let private buildScss _ =
     generateCss "frontends/Scss/damo-io.scss" |> writeToFile "damo-io-server/Resources/public/damo-io.css"
@@ -34,23 +31,21 @@ let private buildScss _ =
 
 let private buildElm _ =
     let somanyfeedsApps =
-        Directory.GetFiles("frontends/Elm/SoManyFeeds/Applications", "*.elm")
+        ("frontends/Elm/SoManyFeeds/Applications", "*.elm")
+        |> Directory.GetFiles
         |> Array.map (String.replaceFirst "frontends/Elm/" "")
         |> String.concat " "
 
     runCmd "elm" "frontends/Elm" "make --optimize --output ../../damo-io-server/Resources/public/damo-io.js DamoIO/App.elm"
     runCmd "elm" "frontends/Elm" (sprintf "make --optimize --output ../../somanyfeeds-server/WebRoot/somanyfeeds.js %s" somanyfeedsApps)
 
-
 let private buildFable _ =
     runCmd "yarn.cmd" "fable-frontend" "install -s"
     runCmd "yarn.cmd" "fable-frontend" "run build"
 
-
 let private copyFonts _ =
     Shell.copyDir "damo-io-server/Resources/public/fonts" "frontends/Fonts" (fun _ -> true)
     Shell.copyDir "somanyfeeds-server/WebRoot/fonts" "frontends/Fonts" (fun _ -> true)
-
 
 let loadTasks _ =
     Target.create "frontend:clean" clean

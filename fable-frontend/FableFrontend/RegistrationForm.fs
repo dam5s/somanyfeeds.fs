@@ -1,5 +1,7 @@
 module FableFrontend.RegistrationForm
 
+open FableFrontend.HttpSupport
+
 
 type private FormError = FormError of string
 
@@ -37,11 +39,6 @@ type ValidRegistrationForm =
               Password: string
               PasswordConfirmation: string
             }
-
-
-type RegistrationApiError =
-    | CmdError
-    | ApiValidationError
 
 
 [<RequireQualifiedAccess>]
@@ -85,19 +82,8 @@ module RegistrationForm =
 
     let serverError (form: RegistrationForm): string = FormError.optionToString form.ServerError
 
-    open Fable.SimpleHttp
-    open Fable.SimpleJson
-
     let request (form: ValidRegistrationForm) =
-        let body =
-            form
-            |> Json.stringify
-            |> BodyContent.Text
-
-        Http.request "/api/users"
-        |> Http.method POST
-        |> Http.headers [ Headers.contentType "application/json" ]
-        |> Http.content body
+        HttpRequest.post "/api/users" form
 
     let private removeServerError form = { form with ServerError = None }
 
@@ -143,10 +129,13 @@ module RegistrationForm =
                 }
         else Error validatedForm
 
-    let applyErrors (err: RegistrationApiError) (form: RegistrationForm): RegistrationForm =
+    let applyErrors (err: RequestError) (form: RegistrationForm): RegistrationForm =
         match err with
-            | ApiValidationError ->
+            | ApiError ->
                 { form with ServerError = Some (FormError "Validation on the server failed") }
+                
+            | ParseError _ ->
+                { form with ServerError = Some (FormError "Response parsing failed") }
 
             | CmdError ->
                 { form with ServerError = Some (FormError "An error occured while contacting our server, please try again later.") }

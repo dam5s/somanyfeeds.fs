@@ -1,12 +1,11 @@
 module FableFrontend.RegistrationApp
 
-
 open Elmish
-open Elmish.React
 open Fable.React
 open Fable.React.Props
 open Fable.Import
-open Fable.Core.JsInterop
+open Fable.SimpleHttp
+open FableFrontend.HttpSupport
 open FableFrontend.RegistrationForm
 
 
@@ -17,15 +16,12 @@ type Msg =
     | Register
     | UpdateForm of (RegistrationForm -> string -> RegistrationForm) * string
     | ValidateField of (RegistrationForm -> RegistrationForm)
-    | RegistrationResult of Result<unit, RegistrationApiError>
+    | RegistrationResult of Result<unit, RequestError>
 
 let init () =
     { Form = RegistrationForm.create }, Cmd.none
 
-
-open Fable.SimpleHttp
-
-let sendRequest form =
+let private sendRequest form =
     async {
         let! response =
             form
@@ -35,10 +31,10 @@ let sendRequest form =
         return
             if response.statusCode = 201
                 then Ok ()
-                else Error ApiValidationError
+                else Error ApiError
     }
 
-let redirectTo destination =
+let private redirectTo destination =
     Browser.Dom.window.location.assign destination
     Cmd.none
 
@@ -47,12 +43,7 @@ let update msg model =
     | Register ->
         match RegistrationForm.validate model.Form with
         | Ok validForm ->
-            ( model, Cmd.OfAsync.either
-                         sendRequest
-                            validForm
-                            RegistrationResult
-                            (fun _ -> RegistrationResult (Error CmdError))
-            )
+            ( model, Cmd.ofRequest sendRequest validForm RegistrationResult )
         | Error formWithErrors ->
             { model with Form = formWithErrors }, Cmd.none
 
@@ -67,7 +58,6 @@ let update msg model =
 
     | RegistrationResult (Ok _) ->
         model, redirectTo "/read"
-
 
 let view model dispatch =
   let serverErrorView =
@@ -152,12 +142,3 @@ let view model dispatch =
                   ]
             ]
       ]
-
-
-let startRegistrationApp _ =
-    Program.mkProgram init update view
-    |> Program.withReactBatched "somanyfeeds-body"
-    |> Program.withConsoleTrace
-    |> Program.run
-
-Browser.Dom.window?SoManyFeeds <- {| StartRegistrationApp = startRegistrationApp |}

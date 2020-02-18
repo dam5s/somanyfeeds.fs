@@ -47,7 +47,7 @@ let private withoutHeader (content: XmlNode list) =
                 link [ _rel "stylesheet"; _type "text/css"; _href (assetPath "/somanyfeeds.css") ]
                 title [] [ encodedText "SoManyFeeds - A feed aggregator by Damien Le Berrigaud." ]
               ]
-          body [ _id "somanyfeeds-body" ] content
+          body [] content
         ]
 
 let withoutTabs content =
@@ -66,6 +66,7 @@ let startElmApp js =
 
 let startFableApp js =
     withoutHeader
-        [ script [ _src (assetPath "/somanyfeeds-fable.js") ] []
+        [ div [ _id "somanyfeeds-body" ] []
+          script [ _src (assetPath "/somanyfeeds-fable.js") ] []
           script [] [ rawText js ]
         ]

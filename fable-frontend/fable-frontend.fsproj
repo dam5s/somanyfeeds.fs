@@ -12,8 +12,15 @@
 
     <ProjectReference Include="../prelude/prelude.fsproj" />
 
+    <Compile Include="FableFrontend\HttpSupport.fs" />
+
+    <Compile Include="FableFrontend\Dialog.fs" />
+
     <Compile Include="FableFrontend/Logo.fs" />
     <Compile Include="FableFrontend/RegistrationForm.fs" />
     <Compile Include="FableFrontend/RegistrationApp.fs" />
+    <Compile Include="FableFrontend/Feed.fs" />
+    <Compile Include="FableFrontend/ManageApp.fs" />
+    <Compile Include="FableFrontend/Library.fs" />
   </ItemGroup>
 </Project>

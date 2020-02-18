@@ -44,8 +44,9 @@ module private Json =
 
 module private View =
     let render (flagsJson: string) =
-        sprintf "Elm.SoManyFeeds.Applications.Manage.init({ flags: %s });" flagsJson
-        |> Layout.startElmApp
+        flagsJson
+        |> sprintf "SoManyFeeds.StartManageApp(%s);"
+        |> Layout.startFableApp
 
 
 let page maxFeeds (listFeeds: AsyncResult<FeedRecord seq>) (user: User) frontendPage =
