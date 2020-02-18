@@ -8,7 +8,7 @@ module.exports = {
     mode: "development",
     entry: "./fable-frontend.fsproj",
     output: {
-        path: path.join(__dirname, "..", "somanyfeeds-server", "Resources", "public"),
+        path: path.join(__dirname, "..", "somanyfeeds-server", "WebRoot"),
         filename: "somanyfeeds-fable.js",
     },
     module: {

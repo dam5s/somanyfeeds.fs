@@ -34,8 +34,8 @@ let sendRequest form =
 
         return
             if response.statusCode = 201
-            then Ok ()
-            else Error ApiValidationError
+                then Ok ()
+                else Error ApiValidationError
     }
 
 let redirectTo destination =
@@ -75,7 +75,7 @@ let view model dispatch =
       | "" -> div [] []
       | message -> p [ Class "error message" ] [ str message ]
 
-  let onSubmit msg = OnSubmit (fun _ -> dispatch msg)
+  let onSubmit msg = OnSubmit (fun event -> event.preventDefault(); dispatch msg)
   let onInput msg = OnInput (fun event -> dispatch (msg event.Value))
   let onBlur msg = OnBlur (fun _ -> dispatch msg)
 
@@ -83,11 +83,7 @@ let view model dispatch =
       [ header [ Class "app-header" ]
             [ div []
                   [ Logo.view
-                    nav []
-                        [ a [ Href "/"; Class "current" ] [ str "Home" ]
-                          a [ Href "/read" ] [ str "Read" ]
-                          a [ Href "manage" ] [ str "Manage" ]
-                        ]
+                    nav [] []
                   ]
             ]
         header [ Class "page" ]
@@ -98,57 +94,57 @@ let view model dispatch =
             ]
         div [ Class "main" ]
             [ section []
-                  [ form [ Class "card"; onSubmit Register ]
+                  [ form [ Class "card"; Method "post"; onSubmit Register ]
                         [ serverErrorView
                           label []
-                            [ str "Name"
-                              input
-                                  [ Placeholder "John"
-                                    Name "name"
-                                    Value (RegistrationForm.name model.Form)
-                                    onInput (curry UpdateForm RegistrationForm.updateName)
-                                    onBlur (ValidateField RegistrationForm.validateName)
-                                    AutoFocus true
-                                    Type "text"
-                                  ]
-                              p [ Class "field-error" ] [ str (RegistrationForm.nameError model.Form) ]
-                            ]
+                              [ str "Name"
+                                input
+                                    [ Placeholder "John"
+                                      Name "name"
+                                      Value (RegistrationForm.name model.Form)
+                                      onInput (curry UpdateForm RegistrationForm.updateName)
+                                      onBlur (ValidateField RegistrationForm.validateName)
+                                      AutoFocus true
+                                      Type "text"
+                                    ]
+                                p [ Class "field-error" ] [ str (RegistrationForm.nameError model.Form) ]
+                              ]
                           label []
-                            [ str "Email"
-                              input
-                                  [ Placeholder "john@example.com"
-                                    Name "email"
-                                    Value (RegistrationForm.email model.Form)
-                                    onInput (curry UpdateForm RegistrationForm.updateEmail)
-                                    onBlur (ValidateField RegistrationForm.validateEmail)
-                                    Type "email"
-                                  ]
-                              p [ Class "field-error" ] [ str (RegistrationForm.emailError model.Form) ]
-                            ]
+                              [ str "Email"
+                                input
+                                    [ Placeholder "john@example.com"
+                                      Name "email"
+                                      Value (RegistrationForm.email model.Form)
+                                      onInput (curry UpdateForm RegistrationForm.updateEmail)
+                                      onBlur (ValidateField RegistrationForm.validateEmail)
+                                      Type "email"
+                                    ]
+                                p [ Class "field-error" ] [ str (RegistrationForm.emailError model.Form) ]
+                              ]
                           label []
-                            [ str "Password"
-                              input
-                                  [ Placeholder "******************"
-                                    Name "password"
-                                    Value (RegistrationForm.password model.Form)
-                                    onInput (curry UpdateForm RegistrationForm.updatePassword)
-                                    onBlur (ValidateField RegistrationForm.validatePassword)
-                                    Type "password"
-                                  ]
-                              p [ Class "field-error" ] [ str (RegistrationForm.passwordError model.Form) ]
-                            ]
+                              [ str "Password"
+                                input
+                                    [ Placeholder "******************"
+                                      Name "password"
+                                      Value (RegistrationForm.password model.Form)
+                                      onInput (curry UpdateForm RegistrationForm.updatePassword)
+                                      onBlur (ValidateField RegistrationForm.validatePassword)
+                                      Type "password"
+                                    ]
+                                p [ Class "field-error" ] [ str (RegistrationForm.passwordError model.Form) ]
+                              ]
                           label []
-                            [ str "Password confirmation"
-                              input
-                                  [ Placeholder "******************"
-                                    Name "passwordConfirmation"
-                                    Value (RegistrationForm.passwordConfirmation model.Form)
-                                    onInput (curry UpdateForm RegistrationForm.updatePasswordConfirmation)
-                                    onBlur (ValidateField RegistrationForm.validatePasswordConfirmation)
-                                    Type "password"
-                                  ]
-                              p [ Class "field-error" ] [ str (RegistrationForm.passwordConfirmationError model.Form) ]
-                            ]
+                              [ str "Password confirmation"
+                                input
+                                    [ Placeholder "******************"
+                                      Name "passwordConfirmation"
+                                      Value (RegistrationForm.passwordConfirmation model.Form)
+                                      onInput (curry UpdateForm RegistrationForm.updatePasswordConfirmation)
+                                      onBlur (ValidateField RegistrationForm.validatePasswordConfirmation)
+                                      Type "password"
+                                    ]
+                                p [ Class "field-error" ] [ str (RegistrationForm.passwordConfirmationError model.Form) ]
+                              ]
                           nav []
                               [ button [ Class "button primary" ] [ str "Sign up" ]
                               ]
@@ -158,9 +154,9 @@ let view model dispatch =
       ]
 
 
-let startRegistrationApp elementId =
+let startRegistrationApp _ =
     Program.mkProgram init update view
-    |> Program.withReactBatched elementId
+    |> Program.withReactBatched "somanyfeeds-body"
     |> Program.withConsoleTrace
     |> Program.run
 

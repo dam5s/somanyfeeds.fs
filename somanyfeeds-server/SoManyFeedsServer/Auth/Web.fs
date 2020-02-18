@@ -54,15 +54,6 @@ module private Views =
               ]
         ]
 
-    let registration =
-        [ div [ _id "registration-app" ] []
-          script [ _src (assetPath "/somanyfeeds.js") ] []
-          script []
-              [ rawText "var app = Elm.SoManyFeeds.Applications.Register.init({flags: {}});"
-                rawText "app.ports.redirectTo.subscribe(function (dest) { window.location = dest; });"
-              ]
-        ]
-
 let loginPage error =
     Layout.withoutTabs (Views.login error)
 
@@ -104,7 +95,7 @@ let doLogout: HttpHandler =
         |> redirectTo false "/" next
 
 let registrationPage: HttpHandler =
-    htmlView (Layout.withoutTabs Views.registration)
+    htmlView (Layout.startFableApp "SoManyFeeds.StartRegistrationApp();")
 
 let authenticate (withUser: User -> HttpHandler): HttpHandler =
     fun next ctx ->

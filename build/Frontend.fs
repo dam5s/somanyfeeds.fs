@@ -25,6 +25,7 @@ let private clean _ =
     File.delete "somanyfeeds-server/WebRoot/somanyfeeds.css"
     File.delete "somanyfeeds-server/WebRoot/somanyfeeds.js"
     Directory.delete "frontends/Elm/elm-stuff/0.19.0"
+    Directory.delete "fable-frontend/Public"
 
 
 let private buildScss _ =
@@ -59,7 +60,7 @@ let loadTasks _ =
     Target.create "frontend:fonts" copyFonts
     Target.create "frontend:build" ignore
 
-    "frontend:build" |> dependsOn [ "frontend:scss"; "frontend:elm"; "frontend:fonts" ]
+    "frontend:build" |> dependsOn [ "frontend:scss"; "frontend:elm"; "frontend:fable"; "frontend:fonts" ]
     "frontend:scss" |> mustRunAfter "frontend:clean"
     "frontend:elm" |> mustRunAfter "frontend:clean"
     "frontend:fable" |> mustRunAfter "frontend:clean"
