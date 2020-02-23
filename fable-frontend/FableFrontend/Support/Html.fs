@@ -10,11 +10,8 @@ let link href txt =
 let extLink href txt =
     a [ Href href; Target "_blank" ] [ str txt ]
 
-let rawInnerHtml html =
-    // TODO sanitize html
-    // add _blank target to links
-    // see RawHtml.elm
-    DangerouslySetInnerHTML { __html = html }
+let rawInnerHtml (html: string) =
+    DangerouslySetInnerHTML { __html = html.Replace("<a href", "<a target=\"_blank\" href") }
 
 type Dispatcher<'msg>(dispatch: 'msg -> unit) =
     member this.OnClick msg = OnClick (fun _ -> dispatch msg)
