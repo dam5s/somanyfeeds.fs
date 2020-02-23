@@ -1,9 +1,9 @@
 module FableFrontend.Applications.Read
 
 open Elmish
-open Fable.SimpleHttp
 open Fable.React
 open Fable.React.Props
+open Fable.SimpleHttp
 open FableFrontend.Components
 open FableFrontend.Components.Article
 open FableFrontend.Components.Feed
@@ -34,6 +34,8 @@ type Model =
 
 type Msg =
     | EscapePressed
+    | NavigateTo of path:string
+    | NavigateToAndPushState of path:string
     | ToggleDropdown
     | CloseDropdown
     | ReceivedRecents of Result<Article list, RequestError>
@@ -56,9 +58,29 @@ let private pageFromFlags flags =
         |> Recent
     | _ -> Bookmarks
 
-let private loadBookmarks() =
-    async {
-        let! response = Http.send Article.listBookmarksRequest
+let private (|RecentFeed|_|) (path: string) =
+    let prefix = "/read/recent/feed/"
+
+    if path.StartsWith prefix then
+        match System.Int64.TryParse(path.Replace(prefix, "")) with
+        | true, feedId -> Some feedId
+        | false, _ -> None
+    else
+        None
+
+let private tryFindFeed model feedId =
+    model.Feeds |> List.tryFind (fun f -> feedId = f.Id)
+
+let private pageFromPath (model: Model) (path: string) =
+    match path with
+    | RecentFeed feedId -> Some (Recent(tryFindFeed model feedId))
+    | "/read/recent" -> Some (Recent None)
+    | "/read/bookmarks" -> Some Bookmarks
+    | _ -> None
+
+let private loadArticles request msg =
+    let load = fun _ -> async {
+        let! response = Http.send request
 
         return if response.statusCode <> 200 then
                    Error ApiError
@@ -67,13 +89,23 @@ let private loadBookmarks() =
                    |> HttpResponse.parse<Article.Json list>
                    |> Result.map (List.map Article.fromJson)
     }
+    Cmd.ofRequest load () msg
+
+let private loadBookmarks =
+    loadArticles Article.listBookmarksRequest ReceivedBookmarks
+
+let private loadAllFeeds =
+    loadArticles Article.listAllRequest ReceivedRecents
+
+let private loadOneFeed feed =
+    loadArticles (Article.listByFeedRequest feed) ReceivedRecents
 
 let init flags =
     let page = pageFromFlags flags
 
     let (bookmarks, cmd) =
         match page with
-        | Bookmarks -> Loading, Cmd.ofRequest loadBookmarks () ReceivedBookmarks
+        | Bookmarks -> Loading, loadBookmarks
         | _ -> NotLoaded, Cmd.none
 
     { UserName = flags.userName
@@ -102,7 +134,7 @@ let private pagePath page =
     | Recent(Some feed) -> sprintf "/read/recent/feed/%d" feed.Id
     | Bookmarks -> "/read/bookmarks"
 
-let menuOptions model =
+let menuOptions model (dispatch: Html.Dispatcher<Msg>) =
     let feedPage feed = Recent(Some feed)
 
     let pages =
@@ -110,7 +142,11 @@ let menuOptions model =
           Bookmarks ]
         @ (List.map feedPage model.Feeds)
 
-    let pageLink page = Html.link (pagePath page) (pageTitle page)
+    let pageLink page =
+        let path = pagePath page
+        let title = pageTitle page
+        let msg = NavigateToAndPushState path
+        a [ Href path ; dispatch.OnClickPreventingDefault msg ] [ str title ]
 
     pages
     |> List.filter (fun p -> p <> model.Page)
@@ -236,7 +272,7 @@ let view model d =
                           [ div
                               [ Class("toggle " + dropdownClass)
                                 dispatch.OnClick ToggleDropdown ] [ str "Filters" ]
-                            menu [ Class dropdownClass ] (menuOptions model) ] ] ]
+                            menu [ Class dropdownClass ] (menuOptions model dispatch) ] ] ]
           div [ Class "main" ]
               [ match model.Page with
                 | Recent _ -> recentArticleList model dispatch
@@ -254,34 +290,89 @@ let private deleteBookmark = Article.deleteBookmarkRequest >> doSimpleRequest
 let private createReadArticle = Article.createReadArticleRequest >> doSimpleRequest
 let private deleteReadArticle = Article.deleteReadArticleRequest >> doSimpleRequest
 
+let private changePage model (withPush: bool) newPath =
+    match pageFromPath model newPath with
+    | Some newPage ->
+        let newPageModel = { model with DropdownOpen = false; Page = newPage }
+        let batch cmd =
+            if withPush then
+                Cmd.batch [ Navigation.pushPath newPath ; cmd ]
+            else
+                cmd
+
+        match newPage with
+        | Recent None ->
+            { newPageModel with Recents = Loading },
+            batch loadAllFeeds
+        | Recent (Some feed) ->
+            { newPageModel with Recents = Loading },
+            batch (loadOneFeed feed)
+        | Bookmarks ->
+            { newPageModel with Bookmarks = Loading },
+            batch loadBookmarks
+    | None ->
+        model, Navigation.goTo newPath
+
 let update msg model =
     match msg with
-    | EscapePressed -> { model with DropdownOpen = false }, Cmd.none
-    | ToggleDropdown -> { model with DropdownOpen = not model.DropdownOpen }, Cmd.none
-    | CloseDropdown -> { model with DropdownOpen = false }, Cmd.none
-    | ReceivedRecents(Ok articles) -> { model with Recents = Loaded articles }, Cmd.none
-    | ReceivedRecents(Error err) -> { model with Recents = RemoteError(RequestError.userMessage err) }, Cmd.none
-    | ReceivedBookmarks(Ok articles) -> { model with Bookmarks = Loaded articles }, Cmd.none
-    | ReceivedBookmarks(Error err) -> { model with Bookmarks = RemoteError(RequestError.userMessage err) }, Cmd.none
+    | EscapePressed ->
+        { model with DropdownOpen = false },
+        Cmd.none
+    | NavigateTo newPath ->
+        changePage model false newPath
+    | NavigateToAndPushState newPath ->
+        changePage model true newPath
+    | ToggleDropdown ->
+        { model with DropdownOpen = not model.DropdownOpen },
+         Cmd.none
+    | CloseDropdown ->
+        { model with DropdownOpen = false },
+         Cmd.none
+    | ReceivedRecents(Ok articles) ->
+        { model with Recents = Loaded articles },
+         Cmd.none
+    | ReceivedRecents(Error err) ->
+        { model with Recents = RemoteError(RequestError.userMessage err) },
+         Cmd.none
+    | ReceivedBookmarks(Ok articles) ->
+        { model with Bookmarks = Loaded articles },
+         Cmd.none
+    | ReceivedBookmarks(Error err) ->
+        { model with Bookmarks = RemoteError(RequestError.userMessage err) },
+         Cmd.none
     | Bookmark record ->
-        model, Cmd.ofRequest createBookmark record (curry2 ChangeArticleStateResult record Article.Bookmarked)
+        model,
+         Cmd.ofRequest createBookmark record (curry2 ChangeArticleStateResult record Article.Bookmarked)
     | UndoBookmark record ->
-        model, Cmd.ofRequest deleteBookmark record (curry2 ChangeArticleStateResult record Article.Unread)
-    | RemoveBookmark record -> model, Cmd.ofRequest deleteBookmark record (curry BookmarkRemoved record)
+        model,
+         Cmd.ofRequest deleteBookmark record (curry2 ChangeArticleStateResult record Article.Unread)
+    | RemoveBookmark record ->
+        model,
+         Cmd.ofRequest deleteBookmark record (curry BookmarkRemoved record)
     | Read record ->
-        model, Cmd.ofRequest createReadArticle record (curry2 ChangeArticleStateResult record Article.Read)
+        model,
+         Cmd.ofRequest createReadArticle record (curry2 ChangeArticleStateResult record Article.Read)
     | Unread record ->
-        model, Cmd.ofRequest deleteReadArticle record (curry2 ChangeArticleStateResult record Article.Unread)
+        model,
+         Cmd.ofRequest deleteReadArticle record (curry2 ChangeArticleStateResult record Article.Unread)
     | ChangeArticleStateResult(record, newState, Ok _) ->
-        { model with Recents = RemoteData.map (Article.setState newState record) model.Recents }, Cmd.none
-    | ChangeArticleStateResult(_, _, Error _) -> model, Cmd.none
+        { model with Recents = RemoteData.map (Article.setState newState record) model.Recents },
+         Cmd.none
+    | ChangeArticleStateResult(_, _, Error _) ->
+        model,
+        Cmd.none
     | BookmarkRemoved(record, Ok _) ->
-        { model with Bookmarks = RemoteData.map (List.filter (fun r -> r <> record)) model.Bookmarks }, Cmd.none
-    | BookmarkRemoved(_, Error _) -> model, Cmd.none
+        { model with Bookmarks = RemoteData.map (List.filter (fun r -> r <> record)) model.Bookmarks },
+        Cmd.none
+    | BookmarkRemoved(_, Error _) ->
+        model,
+        Cmd.none
 
 open Browser
 
 let subscriptions _ =
-    let sub dispatch = window.onkeyup <- Keyboard.onEscape EscapePressed dispatch
+    let sub dispatch =
+        window.onkeyup <- Keyboard.onEscape EscapePressed dispatch
+        window.onpopstate <- Navigation.onPathChanged NavigateTo dispatch
 
     Cmd.ofSub sub

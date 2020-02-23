@@ -1,5 +1,6 @@
 module FableFrontend.Components.Article
 
+open FableFrontend.Components.Feed
 open FableFrontend.Support.Http
 open Time
 
@@ -48,6 +49,8 @@ module Article =
             if a = article then { a with State = newState } else a)
 
     let listBookmarksRequest = HttpRequest.get "/api/articles/bookmarks"
+    let listAllRequest = HttpRequest.get "/api/articles/recent"
+    let listByFeedRequest (feed: Feed) = HttpRequest.get (sprintf "/api/articles/recent?feedId=%d" feed.Id)
     let createBookmarkRequest article = HttpRequest.post article.BookmarkUrl
     let deleteBookmarkRequest article = HttpRequest.delete article.BookmarkUrl
     let createReadArticleRequest article = HttpRequest.post article.ReadUrl

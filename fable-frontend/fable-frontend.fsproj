@@ -18,6 +18,7 @@
     <Compile Include="FableFrontend/Support/Html.fs" />
     <Compile Include="FableFrontend/Support/Keyboard.fs" />
     <Compile Include="FableFrontend/Support/Posix.fs" />
+    <Compile Include="FableFrontend/Support/Navigation.fs" />
     <Compile Include="FableFrontend/Components/Logo.fs" />
     <Compile Include="FableFrontend/Components/Feed.fs" />
     <Compile Include="FableFrontend/Components/RegistrationForm.fs" />
