@@ -51,14 +51,9 @@ module private Json =
 
 module private View =
     let render (flagsJson: string) =
-        sprintf "
-        var app = Elm.SoManyFeeds.Applications.Read.init({ flags: %s });
-
-        app.ports.redirectTo.subscribe(function (destination) {
-            window.location = destination;
-        })
-        " flagsJson
-        |> Layout.startElmApp 
+        flagsJson
+        |> sprintf "SoManyFeeds.StartReadApp(%s);"
+        |> Layout.startFableApp
 
 
 let page

@@ -1,7 +1,7 @@
 module FableFrontend.Components.Feed
 
 type Feed =
-    { Id: int
+    { Id: int64
       Name: string
       Url: string }
 
@@ -16,7 +16,7 @@ module Feed =
           Url = "" }
 
     type Json =
-        { id: int
+        { id: int64
           name: string
           url: string }
 
@@ -28,7 +28,7 @@ module Feed =
     open FableFrontend.Support.Http
 
     let createRequest (fields: Fields) =
-        HttpRequest.post "/api/feeds" fields
+        HttpRequest.postJson "/api/feeds" fields
 
     let deleteRequest (feed: Feed) =
         HttpRequest.delete (sprintf "/api/feeds/%d" feed.Id)

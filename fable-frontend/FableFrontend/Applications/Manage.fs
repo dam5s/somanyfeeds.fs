@@ -1,9 +1,9 @@
-module FableFrontend.ManageApp
+module FableFrontend.Applications.Manage
 
 open Elmish
 open Browser
-open Browser.Types
 open Fable.SimpleHttp
+open FableFrontend.Support
 open FableFrontend.Support.Dialog
 open FableFrontend.Support.Http
 open FableFrontend.Components.Feed
@@ -136,18 +136,15 @@ let update msg model =
 
 open Fable.React
 open Fable.React.Props
+open FableFrontend.Components
 
-let private overlay model dispatch =
-    let onClick msg = OnClick(fun _ -> dispatch msg)
-
+let private overlay model (dispatch: Html.Dispatcher<Msg>) =
     match model.DeleteDialog with
     | Initial -> div [] []
-    | Opened _ -> div [ Class "overlay"; onClick CloseDeleteDialog ] []
+    | Opened _ -> div [ Class "overlay"; dispatch.OnClick CloseDeleteDialog ] []
     | Closed -> div [ Class "overlay closed" ] []
 
-let private deleteDialog model dispatch =
-    let onClick msg = OnClick(fun _ -> dispatch msg)
-
+let private deleteDialog model (dispatch: Html.Dispatcher<Msg>) =
     match model.DeleteDialog with
     | Opened feed ->
         div [ Class "dialog" ]
@@ -155,13 +152,17 @@ let private deleteDialog model dispatch =
               p [] [ str(sprintf "Are you sure you want to unsubscribe from \"%s\"?" feed.Name) ]
               nav []
                   [ button
-                      [ Class "button primary"
-                        Disabled model.DeletionInProgress
-                        onClick DeleteFeed ] [ str "Yes, unsubscribe" ]
+                        [ Class "button primary"
+                          Disabled model.DeletionInProgress
+                          dispatch.OnClick DeleteFeed
+                        ] [ str "Yes, unsubscribe" ]
                     button
                         [ Class "button secondary"
                           Disabled model.DeletionInProgress
-                          onClick CloseDeleteDialog ] [ str "No, cancel" ] ] ]
+                          dispatch.OnClick CloseDeleteDialog
+                        ] [ str "No, cancel" ]
+                  ]
+            ]
     | _ ->
         div [] []
 
@@ -176,18 +177,11 @@ let private maxFeedsView =
                     [ str "You have reached your feed subscription limit. "
                       str "You will need to unsubscribe a feed before you can create a new one." ] ] ]
 
-let private newFeedForm model dispatch =
-    let onSubmit msg =
-        OnSubmit(fun event ->
-            event.preventDefault()
-            dispatch msg)
-
-    let onChange msg = OnChange(fun event -> dispatch (msg event.Value))
-
+let private newFeedForm model (dispatch: Html.Dispatcher<Msg>) =
     section []
         [ form
             [ Class "card"
-              onSubmit CreateFeed ]
+              dispatch.OnSubmit CreateFeed ]
               [ h3 [] [ str "Add a feed" ]
                 label []
                     [ str "Name"
@@ -196,7 +190,7 @@ let private newFeedForm model dispatch =
                             Type "text"
                             Name "name"
                             Value model.Form.Name
-                            onChange UpdateFormName
+                            dispatch.OnChange UpdateFormName
                             Disabled model.CreationInProgress ] ]
                 label []
                     [ str "Url"
@@ -205,14 +199,14 @@ let private newFeedForm model dispatch =
                             Type "text"
                             Name "url"
                             Value model.Form.Url
-                            onChange UpdateFormUrl
+                            dispatch.OnChange UpdateFormUrl
                             Disabled model.CreationInProgress ] ]
                 nav []
                     [ button
                         [ Class "button primary"
                           Disabled model.CreationInProgress ] [ str "Subscribe" ] ] ] ]
 
-let private formView model dispatch =
+let private formView model (dispatch: Html.Dispatcher<Msg>) =
     if hasReachedMaxFeeds model then maxFeedsView
     else newFeedForm model dispatch
 
@@ -220,9 +214,7 @@ let private noFeedsView =
     [ h3 [] [ str "Your feeds" ]
       p [ Class "message" ] [ str "You have not subscribed to any feeds yet." ] ]
 
-let private feedView dispatch feed =
-    let onClick msg = OnClick(fun _ -> dispatch msg)
-
+let private feedView (dispatch: Html.Dispatcher<Msg>) feed =
     div [ Class "card" ]
         [ dl []
               [ dt [] [ str "Name" ]
@@ -230,17 +222,17 @@ let private feedView dispatch feed =
               ]
           dl []
               [ dt [] [ str "Url" ]
-                dd [] [ a [ Href feed.Url; Target "_blank" ] [ str feed.Url ] ]
+                dd [] [ Html.extLink feed.Url feed.Url ]
               ]
           dl []
               [ dt [] []
                 dd [ Class "actions" ]
-                    [ button [ Class "button secondary"; onClick (OpenDeleteDialog feed) ] [ str "Unsubscribe" ]
+                    [ button [ Class "button secondary"; dispatch.OnClick (OpenDeleteDialog feed) ] [ str "Unsubscribe" ]
                     ]
               ]
         ]
 
-let private feedList model dispatch  =
+let private feedList model (dispatch: Html.Dispatcher<Msg>)  =
     let feedsView =
         if List.isEmpty model.Feeds
             then noFeedsView
@@ -248,39 +240,32 @@ let private feedList model dispatch  =
 
     section [] [ div [ Class "card-list" ] feedsView ]
 
-let view model dispatch =
+let view model d =
+    let dispatch = Html.Dispatcher(d)
+
     div []
         [ header [ Class "app-header" ]
               [ div []
                     [ Logo.view
-                      nav []
-                          [ a [ Href "/" ] [ str "Home" ]
-                            a [ Href "/read" ] [ str "Read" ]
-                            a
-                                [ Href "/manage"
-                                  Class "current" ] [ str "Manage" ] ] ] ]
+                      Tabs.view Tabs.Manage
+                    ]
+              ]
           header [ Class "page" ]
               [ div [ Class "page-content" ]
                     [ h2 [] [ str "Feeds" ]
-                      h1 [] [ str "Your subscriptions" ] ] ]
+                      h1 [] [ str "Your subscriptions" ]
+                    ]
+              ]
           div [ Class "main" ]
               [ overlay model dispatch
                 deleteDialog model dispatch
                 formView model dispatch
-                feedList model dispatch ] ]
-
-let private onKeyUp dispatch (event: KeyboardEvent) =
-    match event.key with
-    | "Escape"
-    | "Esc" -> dispatch EscapePressed
-    | _ ->
-        match event.keyCode with
-        | 27.0 -> dispatch EscapePressed
-        | _ ->
-            ()
+                feedList model dispatch
+              ]
+        ]
 
 let subscriptions _ =
     let sub dispatch =
-        window.onkeyup <- onKeyUp dispatch
+        window.onkeyup <- Keyboard.onEscape EscapePressed dispatch
 
     Cmd.ofSub sub

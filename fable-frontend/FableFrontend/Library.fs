@@ -3,21 +3,31 @@ module FableFrontend.Library
 open Elmish
 open Elmish.React
 open Fable.Core.JsInterop
+open FableFrontend.Applications
 
-let private makeFullScreenApp init update view =
-    Program.mkProgram init update view
+let private makeFullScreenApp (init: 'flags -> ('model * Cmd<'msg>)) update view =
+    (init, update, view)
+    |||> Program.mkProgram
     |> Program.withReactBatched "somanyfeeds-body"
 
 let private startRegistrationApp _ =
-    (RegistrationApp.init, RegistrationApp.update, RegistrationApp.view)
+    (Registration.init, Registration.update, Registration.view)
     |||> makeFullScreenApp
     |> Program.run
 
 let private startManageApp flags =
-    (ManageApp.init, ManageApp.update, ManageApp.view)
+    (Manage.init, Manage.update, Manage.view)
     |||> makeFullScreenApp
-    |> Program.withSubscription ManageApp.subscriptions
+    |> Program.withSubscription Manage.subscriptions
+    |> Program.runWith flags
+
+let private startReadApp flags =
+    (Read.init, Read.update, Read.view)
+    |||> makeFullScreenApp
+    |> Program.withSubscription Read.subscriptions
+    |> Program.withConsoleTrace
     |> Program.runWith flags
 
 Browser.Dom.window?SoManyFeeds <- {| StartRegistrationApp = startRegistrationApp
-                                     StartManageApp = startManageApp |}
+                                     StartManageApp = startManageApp
+                                     StartReadApp = startReadApp |}

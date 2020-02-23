@@ -1,4 +1,4 @@
-module FableFrontend.RegistrationApp
+module FableFrontend.Applications.Registration
 
 open Elmish
 open Fable.React
@@ -8,6 +8,7 @@ open Fable.SimpleHttp
 open FableFrontend.Support.Http
 open FableFrontend.Components.Logo
 open FableFrontend.Components.RegistrationForm
+open FableFrontend.Support
 
 
 type Model =
@@ -60,15 +61,12 @@ let update msg model =
     | RegistrationResult (Ok _) ->
         model, redirectTo "/read"
 
-let view model dispatch =
+let view model d =
+  let dispatch = Html.Dispatcher(d)
   let serverErrorView =
       match RegistrationForm.serverError model.Form with
       | "" -> div [] []
       | message -> p [ Class "error message" ] [ str message ]
-
-  let onSubmit msg = OnSubmit (fun event -> event.preventDefault(); dispatch msg)
-  let onInput msg = OnInput (fun event -> dispatch (msg event.Value))
-  let onBlur msg = OnBlur (fun _ -> dispatch msg)
 
   div []
       [ header [ Class "app-header" ]
@@ -85,7 +83,7 @@ let view model dispatch =
             ]
         div [ Class "main" ]
             [ section []
-                  [ form [ Class "card"; Method "post"; onSubmit Register ]
+                  [ form [ Class "card"; Method "post"; dispatch.OnSubmit Register ]
                         [ serverErrorView
                           label []
                               [ str "Name"
@@ -93,8 +91,8 @@ let view model dispatch =
                                     [ Placeholder "John"
                                       Name "name"
                                       Value (RegistrationForm.name model.Form)
-                                      onInput (curry UpdateForm RegistrationForm.updateName)
-                                      onBlur (ValidateField RegistrationForm.validateName)
+                                      dispatch.OnChange (curry UpdateForm RegistrationForm.updateName)
+                                      dispatch.OnBlur (ValidateField RegistrationForm.validateName)
                                       AutoFocus true
                                       Type "text"
                                     ]
@@ -106,8 +104,8 @@ let view model dispatch =
                                     [ Placeholder "john@example.com"
                                       Name "email"
                                       Value (RegistrationForm.email model.Form)
-                                      onInput (curry UpdateForm RegistrationForm.updateEmail)
-                                      onBlur (ValidateField RegistrationForm.validateEmail)
+                                      dispatch.OnChange (curry UpdateForm RegistrationForm.updateEmail)
+                                      dispatch.OnBlur (ValidateField RegistrationForm.validateEmail)
                                       Type "email"
                                     ]
                                 p [ Class "field-error" ] [ str (RegistrationForm.emailError model.Form) ]
@@ -118,8 +116,8 @@ let view model dispatch =
                                     [ Placeholder "******************"
                                       Name "password"
                                       Value (RegistrationForm.password model.Form)
-                                      onInput (curry UpdateForm RegistrationForm.updatePassword)
-                                      onBlur (ValidateField RegistrationForm.validatePassword)
+                                      dispatch.OnChange (curry UpdateForm RegistrationForm.updatePassword)
+                                      dispatch.OnBlur (ValidateField RegistrationForm.validatePassword)
                                       Type "password"
                                     ]
                                 p [ Class "field-error" ] [ str (RegistrationForm.passwordError model.Form) ]
@@ -130,8 +128,8 @@ let view model dispatch =
                                     [ Placeholder "******************"
                                       Name "passwordConfirmation"
                                       Value (RegistrationForm.passwordConfirmation model.Form)
-                                      onInput (curry UpdateForm RegistrationForm.updatePasswordConfirmation)
-                                      onBlur (ValidateField RegistrationForm.validatePasswordConfirmation)
+                                      dispatch.OnChange (curry UpdateForm RegistrationForm.updatePasswordConfirmation)
+                                      dispatch.OnBlur (ValidateField RegistrationForm.validatePasswordConfirmation)
                                       Type "password"
                                     ]
                                 p [ Class "field-error" ] [ str (RegistrationForm.passwordConfirmationError model.Form) ]

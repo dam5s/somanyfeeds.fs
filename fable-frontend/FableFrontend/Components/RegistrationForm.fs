@@ -83,7 +83,7 @@ module RegistrationForm =
     let serverError (form: RegistrationForm): string = FormError.optionToString form.ServerError
 
     let request (form: ValidRegistrationForm) =
-        HttpRequest.post "/api/users" form
+        HttpRequest.postJson "/api/users" form
 
     let private removeServerError form = { form with ServerError = None }
 

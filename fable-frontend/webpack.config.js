@@ -5,7 +5,7 @@
 var path = require("path");
 
 module.exports = {
-    mode: "development",
+    mode: "production",
     entry: "./fable-frontend.fsproj",
     output: {
         path: path.join(__dirname, "..", "somanyfeeds-server", "WebRoot"),
