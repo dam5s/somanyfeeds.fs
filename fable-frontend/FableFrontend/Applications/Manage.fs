@@ -7,7 +7,6 @@ open FableFrontend.Support
 open FableFrontend.Support.Dialog
 open FableFrontend.Support.Http
 open FableFrontend.Components.Feed
-open FableFrontend.Components.Logo
 
 
 type Flags =
@@ -55,6 +54,7 @@ let init (flags: Flags) =
       DeleteDialog = Initial
       DeletionInProgress = false }, Cmd.none
 
+
 let private sendCreateRequest form =
     async {
         let! response = form
@@ -63,9 +63,7 @@ let private sendCreateRequest form =
 
         return if response.statusCode <> 201
                then Error ApiError
-               else response
-                    |> HttpResponse.parse<Feed.Json>
-                    |> Result.map Feed.fromJson
+               else response |> HttpResponse.parse Feed.decoder
     }
 
 let private sendDeleteRequest feed =
@@ -137,6 +135,7 @@ let update msg model =
 open Fable.React
 open Fable.React.Props
 open FableFrontend.Components
+open FableFrontend.Components.Logo
 
 let private overlay model (dispatch: Html.Dispatcher<Msg>) =
     match model.DeleteDialog with

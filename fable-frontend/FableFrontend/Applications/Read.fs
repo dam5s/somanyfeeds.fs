@@ -82,12 +82,10 @@ let private loadArticles request msg =
     let load = fun _ -> async {
         let! response = Http.send request
 
-        return if response.statusCode <> 200 then
-                   Error ApiError
+        return if response.statusCode <> 200
+               then Error ApiError
                else
-                   response
-                   |> HttpResponse.parse<Article.Json list>
-                   |> Result.map (List.map Article.fromJson)
+                   response |> HttpResponse.parse (Json.list Article.decoder)
     }
     Cmd.ofRequest load () msg
 

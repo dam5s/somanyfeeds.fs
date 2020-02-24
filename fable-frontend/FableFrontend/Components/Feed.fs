@@ -1,5 +1,10 @@
 module FableFrontend.Components.Feed
 
+open Fable.Core
+open FableFrontend.Support
+open FableFrontend.Support.Http
+open Result.Operators
+
 type Feed =
     { Id: int64
       Name: string
@@ -25,10 +30,14 @@ module Feed =
           Name = json.name
           Url = json.url }
 
-    open FableFrontend.Support.Http
+    let decoder (obj: JS.Object) =
+        (fun id name url -> { Id = id; Name = name; Url = url })
+            <!> (Json.property "id" obj)
+            <*> (Json.property "name" obj)
+            <*> (Json.property "url" obj)
 
     let createRequest (fields: Fields) =
-        HttpRequest.postJson "/api/feeds" fields
+        HttpRequest.postJson "/api/feeds" {|name = fields.Name; url = fields.Url|}
 
     let deleteRequest (feed: Feed) =
         HttpRequest.delete (sprintf "/api/feeds/%d" feed.Id)

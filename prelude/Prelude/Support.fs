@@ -5,6 +5,27 @@ module Support
 let always a _ = a
 let curry f a b = f (a, b)
 let curry2 f a b c = f (a, b, c)
+let tryCast<'a> (a: obj) =
+    try Some (a :?> 'a)
+    with | _ -> None
+
+
+[<RequireQualifiedAccess>]
+module Option =
+    let toResult err opt =
+        match opt with
+        | Some o -> Ok o
+        | None -> Error err
+
+    let apply (func: Option<'a -> 'b>) (value: Option<'a>): Option<'b> =
+        match func, value with
+        | Some f, Some a -> Some (f a)
+        | _, _ -> None
+
+    module Operators =
+        let (<!>) = Option.map
+        let (<*>) = apply
+
 
 [<RequireQualifiedAccess>]
 module Result =
@@ -17,6 +38,16 @@ module Result =
         match result with
         | Ok value -> Some value
         | Error _ -> None
+
+    let apply (func: Result<'a -> 'b, 'c>) (value: Result<'a, 'c>): Result<'b, 'c> =
+        match func, value with
+        | Ok f, Ok a -> Ok (f a)
+        | _, Error e -> Error e
+        | Error e, _ -> Error e
+
+    module Operators =
+        let (<!>) = Result.map
+        let (<*>) = apply
 
 
 [<RequireQualifiedAccess>]

@@ -3,12 +3,9 @@ module FableFrontend.Support.Navigation
 
 open Browser
 open Elmish
-open Fable.Core.JsInterop
-
-let private emptyObj = createObj []
 
 let pushPath (newPath: string) =
-    window.history.pushState(emptyObj, "", newPath)
+    window.history.pushState({||}, "", newPath)
     Cmd.none
 
 let onPathChanged (msg: string -> 'msg) (dispatch: 'msg -> unit) _ =

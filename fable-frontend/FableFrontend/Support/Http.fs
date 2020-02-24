@@ -1,8 +1,8 @@
 module FableFrontend.Support.Http
 
 open Elmish
+open Fable.Core
 open Fable.SimpleHttp
-open Fable.SimpleJson
 
 
 type RequestError =
@@ -40,7 +40,7 @@ module HttpRequest =
     let postJson path body =
         let json =
             body
-            |> Json.stringify
+            |> JS.JSON.stringify
             |> BodyContent.Text
 
         post path
@@ -60,7 +60,10 @@ module HttpRequest =
 
 [<RequireQualifiedAccess>]
 module HttpResponse =
-    let inline parse<'a> (response: HttpResponse): Result<'a, RequestError> =
+    let inline parse<'a, 'b> (decoder: 'b -> Result<'a, string>) (response: HttpResponse) : Result<'a, RequestError> =
         response.responseText
-        |> Json.tryParseAs<'a>
+        |> JS.JSON.parse
+        |> tryCast<'b>
+        |> Option.toResult "Invalid json"
+        |> Result.bind decoder
         |> Result.mapError ParseError

@@ -1,7 +1,10 @@
 module FableFrontend.Components.Article
 
+open Fable.Core
 open FableFrontend.Components.Feed
+open FableFrontend.Support
 open FableFrontend.Support.Http
+open Result.Operators
 open Time
 
 type Article =
@@ -43,6 +46,23 @@ module Article =
           ReadUrl = json.readUrl
           BookmarkUrl = json.bookmarkUrl
           State = Unread }
+
+    let decoder (obj: JS.Object) =
+        let constructor a b c d e f g h =
+            { feedName = a; url = b; title = c; feedUrl = d; content = e; date = f; readUrl = g; bookmarkUrl = h }
+
+        let result =
+            constructor
+            <!> (Json.property "feedName" obj)
+            <*> (Json.property "url" obj)
+            <*> (Json.property "title" obj)
+            <*> (Json.property "feedUrl" obj)
+            <*> (Json.property "content" obj)
+            <*> (Json.property "date" obj)
+            <*> (Json.property "readUrl" obj)
+            <*> (Json.property "bookmarkUrl" obj)
+
+        Result.map fromJson result
 
     let setState newState article =
         List.map (fun a ->

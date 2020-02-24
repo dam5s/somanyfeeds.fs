@@ -10,8 +10,8 @@ let private tryGet name (payload: IDictionary<string, obj>) f =
     |> Option.ofObj
     |> Option.bind f
 
-let private tryCastId (o: obj) = try Some (o :?> int64) with _ -> None
-let private tryCastName (o: obj) = try Some (o :?> string) with _ -> None
+let private tryCastId = tryCast<int64>
+let private tryCastName = tryCast<string>
 
 let tryGetUser (payload: IDictionary<string, obj>): User option =
     Option.map2
