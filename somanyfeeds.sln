@@ -15,7 +15,7 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "somanyfeeds-server-integrat
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "prelude", "prelude\prelude.fsproj", "{3ECDD435-CF99-49FA-A0CE-DB5C7A643B2E}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "somanyfeeds-tests", "somanyfeeds-tests\somanyfeeds-tests.fsproj", "{E5E94FD2-D150-4EF7-BC24-B3EBC181F6B5}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "somanyfeeds-persistence-tests", "somanyfeeds-persistence-tests\somanyfeeds-persistence-tests.fsproj", "{E5E94FD2-D150-4EF7-BC24-B3EBC181F6B5}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "somanyfeeds-domain", "somanyfeeds-domain\somanyfeeds-domain.fsproj", "{3C7B24AB-9FD0-4F52-9705-39978E8F1E4A}"
 EndProject

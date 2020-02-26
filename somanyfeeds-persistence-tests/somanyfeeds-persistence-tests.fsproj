@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <GenerateProgramFile>false</GenerateProgramFile>
+    <RootNamespace>somanyfeeds-tests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,9 +15,9 @@
     <ProjectReference Include="../somanyfeeds-server/somanyfeeds-server.fsproj" />
 
     <Compile Include="DatabaseSupport.fs" />
-    <Compile Include="SoManyFeedsTests/FeedJobsDataGatewayTests.fs" />
-    <Compile Include="SoManyFeedsTests/ArticlesDataGatewayTests.fs" />
-    <Compile Include="SoManyFeedsTests/UserArticlesDataGatewayTests.fs" />
+    <Compile Include="SoManyFeedsPersistenceTests\FeedJobsDataGatewayTests.fs" />
+    <Compile Include="SoManyFeedsPersistenceTests\ArticlesDataGatewayTests.fs" />
+    <Compile Include="SoManyFeedsPersistenceTests\UserArticlesDataGatewayTests.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 </Project>
