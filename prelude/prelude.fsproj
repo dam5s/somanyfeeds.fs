@@ -1,16 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Prelude/Support.fs" />
+    <Compile Include="Prelude\Extensions.fs" />
     <Compile Include="Prelude/AsyncResult.fs" />
     <Compile Include="Prelude/Logging.fs" />
     <Compile Include="Prelude/UnsafeOperation.fs" />
     <Compile Include="Prelude/Time.fs" />
     <Compile Include="Prelude/Validation.fs" />
+    <Compile Include="Prelude\EnvSupport.fs" />
   </ItemGroup>
 
   <ItemGroup>

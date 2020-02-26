@@ -1,8 +1,8 @@
-module SoManyFeeds.UserArticlesService
+module SoManyFeedsPersistence.UserArticlesService
 
-open SoManyFeeds.ArticlesDataGateway
-open SoManyFeeds.FeedsDataGateway
-open SoManyFeeds.User
+open SoManyFeedsPersistence.ArticlesDataGateway
+open SoManyFeedsPersistence.FeedsDataGateway
+open SoManyFeedsDomain.User
 
 
 let listRecent (user: User) maybeFeedId: AsyncResult<FeedRecord seq * ArticleRecord seq> =

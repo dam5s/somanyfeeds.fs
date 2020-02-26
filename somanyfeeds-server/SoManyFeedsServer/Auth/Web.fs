@@ -3,10 +3,10 @@ module SoManyFeedsServer.Auth.Web
 open FSharp.Control.Tasks.V2.ContextInsensitive
 open Giraffe
 open Microsoft.AspNetCore.Http
-open SoManyFeeds
-open SoManyFeeds.DataSource
-open SoManyFeeds.User
-open SoManyFeeds.UsersDataGateway
+open SoManyFeedsDomain
+open SoManyFeedsPersistence.DataSource
+open SoManyFeedsPersistence.UsersDataGateway
+open SoManyFeedsDomain.User
 open SoManyFeedsServer
 open SoManyFeedsServer.Auth
 open SoManyFeedsServer.CacheBusting

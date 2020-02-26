@@ -1,4 +1,4 @@
-module SoManyFeeds.Registration
+module SoManyFeedsDomain.Registration
 
 open Passwords
 

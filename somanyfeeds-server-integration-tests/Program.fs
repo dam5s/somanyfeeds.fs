@@ -9,8 +9,6 @@ open canopy.runner.classic
 open canopy.types
 open configuration
 
-open SoManyFeeds
-
 
 let private chromeOptions =
     let chromeOptions = ChromeOptions()

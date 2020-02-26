@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="../feeds-processing/feeds-processing.fsproj" />
+        <ProjectReference Include="../somanyfeeds-domain/somanyfeeds-domain.fsproj" />
+        <ProjectReference Include="../prelude/prelude.fsproj" />
+
+        <PackageReference Include="FSharp.Control.AsyncSeq" Version="2.0.21" />
+        <PackageReference Include="Npgsql" Version="4.0.8" />
+        <PackageReference Include="SQLProvider" Version="1.1.65" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Include="SoManyFeedsPersistence/DataSource.fs" />
+        <Compile Include="SoManyFeedsPersistence/FeedsDataGateway.fs" />
+        <Compile Include="SoManyFeedsPersistence/ArticlesDataGateway.fs" />
+        <Compile Include="SoManyFeedsPersistence/UsersDataGateway.fs" />
+        <Compile Include="SoManyFeedsPersistence/UserArticlesDataGateway.fs" />
+        <Compile Include="SoManyFeedsPersistence/FeedJobsDataGateway.fs" />
+        <Compile Include="SoManyFeedsPersistence/FeedsService.fs" />
+        <Compile Include="SoManyFeedsPersistence/UsersService.fs" />
+        <Compile Include="SoManyFeedsPersistence/UserArticlesService.fs" />
+        <Compile Include="SoManyFeedsPersistence/FeedsProcessor.fs" />
+    </ItemGroup>
+</Project>

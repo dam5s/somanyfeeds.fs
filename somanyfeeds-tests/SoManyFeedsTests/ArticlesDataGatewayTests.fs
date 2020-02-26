@@ -2,8 +2,8 @@ module ``ArticlesDataGateway tests``
 
 open FsUnit
 open NUnit.Framework
-open SoManyFeeds
-open SoManyFeeds.ArticlesDataGateway
+open SoManyFeedsPersistence
+open SoManyFeedsPersistence.ArticlesDataGateway
 open System
 open Time
 

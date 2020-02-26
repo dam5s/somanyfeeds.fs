@@ -1,7 +1,7 @@
 module SoManyFeedsServer.FeedsApi
 
 open Giraffe
-open SoManyFeeds.FeedsDataGateway
+open SoManyFeedsPersistence.FeedsDataGateway
 
 
 module Json =

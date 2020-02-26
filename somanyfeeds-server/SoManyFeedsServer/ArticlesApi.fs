@@ -3,8 +3,8 @@ module SoManyFeedsServer.ArticlesApi
 
 open Giraffe
 open Time
-open SoManyFeeds.ArticlesDataGateway
-open SoManyFeeds.FeedsDataGateway
+open SoManyFeedsPersistence.ArticlesDataGateway
+open SoManyFeedsPersistence.FeedsDataGateway
 
 
 module Json =

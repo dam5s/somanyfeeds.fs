@@ -1,12 +1,11 @@
-module SoManyFeeds.FeedsProcessor
+module SoManyFeedsPersistence.FeedsProcessor
 
 open FSharp.Control
 open FeedJobsDataGateway
 open FeedsProcessing
-open FeedsProcessing.Article
 open FeedsProcessing.DataGateway
 open FeedsProcessing.Feeds
-open SoManyFeeds.ArticlesDataGateway
+open SoManyFeedsPersistence.ArticlesDataGateway
 
 
 type private Logs = Logs

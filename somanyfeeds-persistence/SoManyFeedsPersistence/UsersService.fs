@@ -1,9 +1,9 @@
-module SoManyFeeds.UsersService
+module SoManyFeedsPersistence.UsersService
 
-open SoManyFeeds
-open SoManyFeeds.DataSource
-open SoManyFeeds.Registration
-open SoManyFeeds.UsersDataGateway
+open SoManyFeedsPersistence.DataSource
+open SoManyFeedsPersistence.UsersDataGateway
+open SoManyFeedsDomain.Registration
+open SoManyFeedsDomain
 
 
 type UserCreationResult =

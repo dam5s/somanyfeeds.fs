@@ -3,7 +3,6 @@ module DamoIOServer.FeedsProcessor
 open DamoIOServer.ArticlesDataGateway
 open DamoIOServer.Sources
 open FeedsProcessing
-open FeedsProcessing.Article
 open FeedsProcessing.DataGateway
 open FeedsProcessing.Feeds
 open FeedsProcessing.ProcessingResult

@@ -1,4 +1,4 @@
-module SoManyFeeds.User
+module SoManyFeedsDomain.User
 
 type User =
     { Id: int64

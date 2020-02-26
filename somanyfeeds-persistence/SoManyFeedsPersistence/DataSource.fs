@@ -1,4 +1,4 @@
-module SoManyFeeds.DataSource
+module SoManyFeedsPersistence.DataSource
 
 open FSharp.Data.Sql
 open System

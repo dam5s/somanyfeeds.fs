@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <WarningsAsErrors>25</WarningsAsErrors>
   </PropertyGroup>
 
@@ -10,6 +10,7 @@
     <PackageReference Include="Fable.SimpleHttp" Version="3.0.0" />
 
     <ProjectReference Include="../prelude/prelude.fsproj" />
+
     <Compile Include="FableFrontend/Support/Http.fs" />
     <Compile Include="FableFrontend/Support/Dialog.fs" />
     <Compile Include="FableFrontend/Support/RemoteData.fs" />

@@ -5,9 +5,9 @@ open System
 open Giraffe
 open Microsoft.AspNetCore.Http
 open Microsoft.Extensions.Logging
-open SoManyFeeds
-open SoManyFeeds.User
-open SoManyFeeds.UserArticlesDataGateway
+open SoManyFeedsDomain.User
+open SoManyFeedsPersistence
+open SoManyFeedsPersistence.UserArticlesDataGateway
 open SoManyFeedsServer
 
 let private maxFeeds =

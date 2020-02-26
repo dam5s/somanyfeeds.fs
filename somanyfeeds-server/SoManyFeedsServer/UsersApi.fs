@@ -2,9 +2,9 @@ module SoManyFeedsServer.UsersApi
 
 open FSharp.Control.Tasks.V2.ContextInsensitive
 open Giraffe
-open SoManyFeeds.Registration
-open SoManyFeeds.UsersDataGateway
-open SoManyFeeds.UsersService
+open SoManyFeedsDomain.Registration
+open SoManyFeedsPersistence.UsersDataGateway
+open SoManyFeedsPersistence.UsersService
 open SoManyFeedsServer.Api
 
 

@@ -1,8 +1,8 @@
-module SoManyFeeds.FeedJobsDataGateway
+module SoManyFeedsPersistence.FeedJobsDataGateway
 
 open FSharp.Data.Sql
 open FeedsProcessing.Feeds
-open SoManyFeeds.DataSource
+open SoManyFeedsPersistence.DataSource
 open System
 
 

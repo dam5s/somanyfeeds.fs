@@ -11,7 +11,7 @@ open Microsoft.FSharpLu.Json
 open Newtonsoft.Json
 open System
 open System.IO
-open SoManyFeeds
+open SoManyFeedsPersistence
 open SoManyFeedsServer
 
 let private configureErrorHandling (app: IApplicationBuilder) =
@@ -34,7 +34,7 @@ let private configureApp (app: IApplicationBuilder) =
 
 let private configureServices (services: IServiceCollection) =
     services .AddGiraffe() |> ignore
-    
+
     let customSettings = JsonSerializerSettings()
     customSettings.Converters.Add(CompactUnionJsonConverter(true))
 
@@ -46,7 +46,7 @@ let private configureLogging (builder: ILoggingBuilder) =
         .AddConsole()
         .AddDebug()
         |> ignore
-        
+
 let webHostBuilder _ =
     let contentRoot = Env.varDefault "CONTENT_ROOT" Directory.GetCurrentDirectory
     let webRoot = Path.Combine(contentRoot, "WebRoot")

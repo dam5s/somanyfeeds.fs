@@ -1,6 +1,6 @@
-module SoManyFeeds.ArticlesDataGateway
+module SoManyFeedsPersistence.ArticlesDataGateway
 
-open SoManyFeeds.DataSource
+open SoManyFeedsPersistence.DataSource
 open Time
 
 

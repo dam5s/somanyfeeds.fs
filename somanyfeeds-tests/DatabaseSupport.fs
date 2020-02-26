@@ -2,7 +2,7 @@
 module DatabaseSupport
 
 open Npgsql
-open SoManyFeeds
+open SoManyFeedsPersistence
 open System
 
 

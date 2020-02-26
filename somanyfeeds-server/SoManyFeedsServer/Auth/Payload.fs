@@ -1,8 +1,8 @@
 [<RequireQualifiedAccess>]
 module SoManyFeedsServer.Auth.Payload
 
-open SoManyFeeds
-open SoManyFeeds.User
+open SoManyFeedsDomain
+open SoManyFeedsDomain.User
 open System.Collections.Generic
 
 let private tryGet name (payload: IDictionary<string, obj>) f =

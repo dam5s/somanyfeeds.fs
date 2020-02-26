@@ -9,8 +9,7 @@ open FsUnitTyped.TopLevelOperators
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
 
-open SoManyFeeds
-open SoManyFeeds.FeedsProcessor
+open SoManyFeedsPersistence.FeedsProcessor
 
 
 let private tokenSource = new CancellationTokenSource()

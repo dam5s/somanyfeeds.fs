@@ -1,9 +1,8 @@
-module SoManyFeeds.UserArticlesDataGateway
+module SoManyFeedsPersistence.UserArticlesDataGateway
 
 open FSharp.Data.Sql
-open SoManyFeeds
-open SoManyFeeds.ArticlesDataGateway
-open SoManyFeeds.DataSource
+open SoManyFeedsPersistence.ArticlesDataGateway
+open SoManyFeedsPersistence.DataSource
 
 
 let private readArticleIds (ctx: DataContext) userId =

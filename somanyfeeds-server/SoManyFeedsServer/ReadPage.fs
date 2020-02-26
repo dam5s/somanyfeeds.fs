@@ -3,9 +3,9 @@ module SoManyFeedsServer.ReadPage
 
 open FSharp.Control.Tasks.V2.ContextInsensitive
 open Giraffe
-open SoManyFeeds.ArticlesDataGateway
-open SoManyFeeds.FeedsDataGateway
-open SoManyFeeds.User
+open SoManyFeedsPersistence.ArticlesDataGateway
+open SoManyFeedsPersistence.FeedsDataGateway
+open SoManyFeedsDomain.User
 
 
 type FrontendPage =

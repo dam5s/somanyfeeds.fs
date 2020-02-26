@@ -1,7 +1,7 @@
-module SoManyFeeds.FeedsDataGateway
+module SoManyFeedsPersistence.FeedsDataGateway
 
 open AsyncResult.Operators
-open SoManyFeeds.DataSource
+open SoManyFeedsPersistence.DataSource
 
 
 type FeedRecord =

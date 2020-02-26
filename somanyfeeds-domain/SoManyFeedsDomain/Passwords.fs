@@ -1,4 +1,4 @@
-module SoManyFeeds.Passwords
+module SoManyFeedsDomain.Passwords
 
 open BCrypt.Net
 

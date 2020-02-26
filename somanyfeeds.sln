@@ -17,11 +17,13 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "prelude", "prelude\prelude.
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "somanyfeeds-tests", "somanyfeeds-tests\somanyfeeds-tests.fsproj", "{E5E94FD2-D150-4EF7-BC24-B3EBC181F6B5}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "somanyfeeds", "somanyfeeds\somanyfeeds.fsproj", "{3C7B24AB-9FD0-4F52-9705-39978E8F1E4A}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "somanyfeeds-domain", "somanyfeeds-domain\somanyfeeds-domain.fsproj", "{3C7B24AB-9FD0-4F52-9705-39978E8F1E4A}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "fable-frontend", "fable-frontend\fable-frontend.fsproj", "{F409160E-3A71-4CA6-819E-400E73A06162}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "somanyfeeds-server", "somanyfeeds-server\somanyfeeds-server.fsproj", "{C59E4502-4566-4DF3-B5FC-92954AF16FD8}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "somanyfeeds-persistence", "somanyfeeds-persistence\somanyfeeds-persistence.fsproj", "{7BEE72D8-AF6D-46A8-8E93-516FA7A0C60E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -177,5 +179,17 @@ Global
 		{C59E4502-4566-4DF3-B5FC-92954AF16FD8}.Release|x64.Build.0 = Release|Any CPU
 		{C59E4502-4566-4DF3-B5FC-92954AF16FD8}.Release|x86.ActiveCfg = Release|Any CPU
 		{C59E4502-4566-4DF3-B5FC-92954AF16FD8}.Release|x86.Build.0 = Release|Any CPU
+		{7BEE72D8-AF6D-46A8-8E93-516FA7A0C60E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BEE72D8-AF6D-46A8-8E93-516FA7A0C60E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BEE72D8-AF6D-46A8-8E93-516FA7A0C60E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7BEE72D8-AF6D-46A8-8E93-516FA7A0C60E}.Debug|x64.Build.0 = Debug|Any CPU
+		{7BEE72D8-AF6D-46A8-8E93-516FA7A0C60E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7BEE72D8-AF6D-46A8-8E93-516FA7A0C60E}.Debug|x86.Build.0 = Debug|Any CPU
+		{7BEE72D8-AF6D-46A8-8E93-516FA7A0C60E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BEE72D8-AF6D-46A8-8E93-516FA7A0C60E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BEE72D8-AF6D-46A8-8E93-516FA7A0C60E}.Release|x64.ActiveCfg = Release|Any CPU
+		{7BEE72D8-AF6D-46A8-8E93-516FA7A0C60E}.Release|x64.Build.0 = Release|Any CPU
+		{7BEE72D8-AF6D-46A8-8E93-516FA7A0C60E}.Release|x86.ActiveCfg = Release|Any CPU
+		{7BEE72D8-AF6D-46A8-8E93-516FA7A0C60E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

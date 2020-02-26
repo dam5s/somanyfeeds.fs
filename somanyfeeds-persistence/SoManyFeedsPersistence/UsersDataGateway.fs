@@ -1,9 +1,8 @@
-module SoManyFeeds.UsersDataGateway
+module SoManyFeedsPersistence.UsersDataGateway
 
-open SoManyFeeds
-open SoManyFeeds.DataSource
-open SoManyFeeds.Passwords
-open SoManyFeeds.Registration
+open SoManyFeedsPersistence.DataSource
+open SoManyFeedsDomain.Passwords
+open SoManyFeedsDomain
 
 
 type UserRecord =

@@ -3,8 +3,8 @@ module SoManyFeedsServer.ManagePage
 
 open FSharp.Control.Tasks.V2.ContextInsensitive
 open Giraffe
-open SoManyFeeds.FeedsDataGateway
-open SoManyFeeds.User
+open SoManyFeedsPersistence.FeedsDataGateway
+open SoManyFeedsDomain.User
 open SoManyFeedsServer
 
 

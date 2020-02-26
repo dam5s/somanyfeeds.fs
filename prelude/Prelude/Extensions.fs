@@ -1,5 +1,5 @@
 [<AutoOpen>]
-module Support
+module Extensions
 
 
 let always a _ = a
@@ -71,7 +71,7 @@ module String =
         | "" -> true
         | _ -> false
 
-    let contains subString (it: string) =
+    let contains (subString: string) (it: string) =
         it.Contains(subString)
 
     let equals other (it: string) =

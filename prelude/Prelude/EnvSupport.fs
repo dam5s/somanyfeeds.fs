@@ -1,8 +1,11 @@
+#if !FABLE_COMPILER
+
 [<AutoOpen>]
-module SoManyFeeds.EnvSupport
+module EnvSupport
 
 [<RequireQualifiedAccess>]
 module Env =
+
     open System
 
     let var name =
@@ -15,3 +18,5 @@ module Env =
         match var name with
         | Some value -> value
         | None -> failwith (sprintf "Missing env variable with name %s" name)
+
+#endif

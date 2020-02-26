@@ -1,4 +1,4 @@
-module SoManyFeeds.FeedsService
+module SoManyFeedsPersistence.FeedsService
 
 open FeedsDataGateway
 
