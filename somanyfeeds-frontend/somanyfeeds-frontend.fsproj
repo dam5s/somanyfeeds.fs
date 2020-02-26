@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <WarningsAsErrors>25</WarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Fable.Core" Version="3.1.5" />
+    <PackageReference Include="Fable.Elmish.React" Version="3.0.1" />
+    <PackageReference Include="Fable.SimpleHttp" Version="3.0.0" />
+
+    <ProjectReference Include="../prelude/prelude.fsproj" />
+
+    <Compile Include="SoManyFeedsFrontend\Support\Http.fs" />
+    <Compile Include="SoManyFeedsFrontend\Support\Dialog.fs" />
+    <Compile Include="SoManyFeedsFrontend\Support\RemoteData.fs" />
+    <Compile Include="SoManyFeedsFrontend\Support\Html.fs" />
+    <Compile Include="SoManyFeedsFrontend\Support\Keyboard.fs" />
+    <Compile Include="SoManyFeedsFrontend\Support\Posix.fs" />
+    <Compile Include="SoManyFeedsFrontend\Support\Navigation.fs" />
+    <Compile Include="SoManyFeedsFrontend\Support\Json.fs" />
+    <Compile Include="SoManyFeedsFrontend\Components\Logo.fs" />
+    <Compile Include="SoManyFeedsFrontend\Components\Feed.fs" />
+    <Compile Include="SoManyFeedsFrontend\Components\RegistrationForm.fs" />
+    <Compile Include="SoManyFeedsFrontend\Components\Article.fs" />
+    <Compile Include="SoManyFeedsFrontend\Components\Tabs.fs" />
+    <Compile Include="SoManyFeedsFrontend\Applications\Registration.fs" />
+    <Compile Include="SoManyFeedsFrontend\Applications\Manage.fs" />
+    <Compile Include="SoManyFeedsFrontend\Applications\Read.fs" />
+    <Compile Include="SoManyFeedsFrontend\Library.fs" />
+  </ItemGroup>
+</Project>

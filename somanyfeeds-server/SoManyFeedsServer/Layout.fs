@@ -58,15 +58,9 @@ let withTabs tab content =
     withoutHeader
         ([ headerView (Some tab) ] @ content)
 
-let startElmApp js =
-    withoutHeader
-        [ script [ _src (assetPath "/somanyfeeds.js") ] []
-          script [] [ rawText js ]
-        ]
-
 let startFableApp js =
     withoutHeader
         [ div [ _id "somanyfeeds-body" ] []
-          script [ _src (assetPath "/somanyfeeds-fable.js") ] []
+          script [ _src (assetPath "/somanyfeeds.js") ] []
           script [] [ rawText js ]
         ]

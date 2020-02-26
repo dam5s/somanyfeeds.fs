@@ -21,27 +21,18 @@ let private clean _ =
     File.delete "damo-io-server/Resources/public/damo-io.css"
     File.delete "somanyfeeds-server/WebRoot/somanyfeeds.css"
     File.delete "somanyfeeds-server/WebRoot/somanyfeeds.js"
-    File.delete "somanyfeeds-server/WebRoot/somanyfeeds-fable.js"
-    Directory.delete "frontends/Elm/elm-stuff/0.19.0"
-    Directory.delete "fable-frontend/Public"
+    Directory.delete "damo-io-frontend/elm-stuff/0.19.1"
 
 let private buildScss _ =
-    generateCss "frontends/Scss/damo-io.scss" |> writeToFile "damo-io-server/Resources/public/damo-io.css"
-    generateCss "frontends/Scss/somanyfeeds.scss" |> writeToFile "somanyfeeds-server/WebRoot/somanyfeeds.css"
+    generateCss "shared-frontend/Scss/damo-io.scss" |> writeToFile "damo-io-server/Resources/public/damo-io.css"
+    generateCss "shared-frontend/Scss/somanyfeeds.scss" |> writeToFile "somanyfeeds-server/WebRoot/somanyfeeds.css"
 
-let private buildElm _ =
-    let somanyfeedsApps =
-        ("frontends/Elm/SoManyFeeds/Applications", "*.elm")
-        |> Directory.GetFiles
-        |> Array.map (String.replaceFirst "frontends/Elm/" "")
-        |> String.concat " "
+let private buildDamoIoFrontend _ =
+    runCmd "elm" "damo-io-frontend" "make --optimize --output ../../damo-io-server/Resources/public/damo-io.js DamoIO/App.elm"
 
-    runCmd "elm" "frontends/Elm" "make --optimize --output ../../damo-io-server/Resources/public/damo-io.js DamoIO/App.elm"
-    runCmd "elm" "frontends/Elm" (sprintf "make --optimize --output ../../somanyfeeds-server/WebRoot/somanyfeeds.js %s" somanyfeedsApps)
-
-let private buildFable _ =
-    runCmd "yarn.cmd" "fable-frontend" "install -s"
-    runCmd "yarn.cmd" "fable-frontend" "run build"
+let private buildSoManyFeedsFrontend _ =
+    runCmd "yarn.cmd" "somanyfeeds-frontend" "install -s"
+    runCmd "yarn.cmd" "somanyfeeds-frontend" "run build"
 
 let private copyFonts _ =
     Shell.copyDir "damo-io-server/Resources/public/fonts" "frontends/Fonts" (fun _ -> true)
@@ -50,13 +41,13 @@ let private copyFonts _ =
 let loadTasks _ =
     Target.create "frontend:clean" clean
     Target.create "frontend:scss" buildScss
-    Target.create "frontend:elm" buildElm
-    Target.create "frontend:fable" buildFable
+    Target.create "frontend:damo-io" buildDamoIoFrontend
+    Target.create "frontend:somanyfeeds" buildSoManyFeedsFrontend
     Target.create "frontend:fonts" copyFonts
     Target.create "frontend:build" ignore
 
-    "frontend:build" |> dependsOn [ "frontend:scss"; "frontend:elm"; "frontend:fable"; "frontend:fonts" ]
+    "frontend:build" |> dependsOn [ "frontend:scss"; "frontend:damo-io"; "frontend:somanyfeeds"; "frontend:fonts" ]
     "frontend:scss" |> mustRunAfter "frontend:clean"
-    "frontend:elm" |> mustRunAfter "frontend:clean"
-    "frontend:fable" |> mustRunAfter "frontend:clean"
+    "frontend:damo-io" |> mustRunAfter "frontend:clean"
+    "frontend:somanyfeeds" |> mustRunAfter "frontend:clean"
     "frontend:fonts" |> mustRunAfter "frontend:clean"

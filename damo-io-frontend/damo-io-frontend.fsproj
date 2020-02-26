@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>frontends</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Elm/**" />
+    <Content Include="Scss/**" />
+  </ItemGroup>
+</Project>
