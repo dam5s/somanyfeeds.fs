@@ -7,16 +7,6 @@ open Fake.IO
 open Support
 
 
-let private clean _ =
-    let findAll name =
-        DirectoryInfo(".").GetDirectories(name, SearchOption.AllDirectories)
-
-    Array.append (findAll "bin") (findAll "obj")
-    |> Array.filter (fun dir -> dir.Parent.Name <> "build")
-    |> Array.map (fun dir -> dir.Delete(true))
-    |> ignore
-
-
 let private somanyfeedsServerIntegrationTests _ =
     Environment.setEnvironVar "CONTENT_ROOT" (Path.GetFullPath "somanyfeeds-server")
     Environment.setEnvironVar "FEEDS_CONTENT_ROOT" (Path.GetFullPath "somanyfeeds-server-integration-tests")
@@ -38,7 +28,7 @@ let main args =
     Frontend.loadTasks()
     Database.loadTasks()
 
-    Target.create "clean" clean
+    Target.create "clean" DotNet.clean
     Target.create "build" (fun _ ->
         setupCacheBustingLinks()
         DotNet.build ()

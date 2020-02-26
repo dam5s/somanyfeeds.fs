@@ -1,6 +1,7 @@
 module DotNet
 
 
+open System.IO
 open Fake.DotNet
 
 
@@ -23,3 +24,23 @@ let run project _ =
 
 let release project _ =
     dotnet "publish" (sprintf "%s -c Release" project)
+
+
+let solutionProjects =
+    File.ReadAllLines("somanyfeeds.sln")
+    |> Array.filter (fun line -> line.StartsWith("Project"))
+    |> Array.map (fun line -> Array.get (line.Split "=") 1 )
+    |> Array.map (fun line -> Array.get (line.Split ",") 0 )
+    |> Array.map (fun line -> line.Trim().Replace("\"", "") )
+    |> Array.toList
+
+let projectSubFolder name projectName =
+    DirectoryInfo(sprintf "%s/%s" projectName name)
+
+let clean _ =
+    let binFolders = solutionProjects |> List.map (projectSubFolder "bin")
+    let objFolders = solutionProjects |> List.map (projectSubFolder "obj")
+
+    binFolders @ objFolders
+    |> List.map (fun dir -> dir.Delete(true))
+    |> ignore
