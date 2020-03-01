@@ -26,13 +26,13 @@ module Feed =
           url: string }
 
     let fromJson json =
-        { Id = json.id
+        { Id = int64 json.id
           Name = json.name
           Url = json.url }
 
     let decoder (obj: JS.Object) =
         (fun id name url -> { Id = id; Name = name; Url = url })
-            <!> (Json.property "id" obj)
+            <!> (Json.property "id" obj |> Result.map int64)
             <*> (Json.property "name" obj)
             <*> (Json.property "url" obj)
 

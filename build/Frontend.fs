@@ -30,13 +30,18 @@ let private buildScss _ =
 let private buildDamoIoFrontend _ =
     runCmd "elm" "damo-io-frontend" "make --optimize --output ../../damo-io-server/Resources/public/damo-io.js DamoIO/App.elm"
 
+let private yarn =
+    if Environment.isWindows
+        then "yarn.cmd"
+        else "yarn"
+
 let private buildSoManyFeedsFrontend _ =
-    runCmd "yarn.cmd" "somanyfeeds-frontend" "install -s"
-    runCmd "yarn.cmd" "somanyfeeds-frontend" "run build"
+    runCmd yarn "somanyfeeds-frontend" "install -s"
+    runCmd yarn "somanyfeeds-frontend" "run build"
 
 let private copyFonts _ =
-    Shell.copyDir "damo-io-server/Resources/public/fonts" "frontends/Fonts" (fun _ -> true)
-    Shell.copyDir "somanyfeeds-server/WebRoot/fonts" "frontends/Fonts" (fun _ -> true)
+    Shell.copyDir "damo-io-server/Resources/public/fonts" "shared-frontend/Fonts" (fun _ -> true)
+    Shell.copyDir "somanyfeeds-server/WebRoot/fonts" "shared-frontend/Fonts" (fun _ -> true)
 
 let loadTasks _ =
     Target.create "frontend:clean" clean

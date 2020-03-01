@@ -42,5 +42,6 @@ let clean _ =
     let objFolders = solutionProjects |> List.map (projectSubFolder "obj")
 
     binFolders @ objFolders
-    |> List.map (fun dir -> dir.Delete(true))
+    |> List.filter (fun dir -> dir.Exists)
+    |> List.map (fun dir -> dir.Delete true)
     |> ignore

@@ -2,20 +2,20 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <OutputType>Exe</OutputType>
+    <GenerateProgramFile>false</GenerateProgramFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="canopy" Version="2.1.0" />
-    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="2.45.0" />
-    <PackageReference Include="FsUnit" Version="3.4.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+    <PackageReference Include="NUnit" Version="3.12.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.16.1" />
+    <PackageReference Include="FsUnit" Version="3.8.0" />
 
     <ProjectReference Include="../somanyfeeds-server/somanyfeeds-server.fsproj" />
 
-    <Compile Include="DatabaseSupport.fs" />
-    <Compile Include="Assertions.fs" />
-    <Compile Include="IntegrationTests/Feeds.fs" />
-    <Compile Include="IntegrationTests/FeedsProcessing.fs" />
+    <Compile Include="IntegrationTests/DatabaseSupport.fs" />
+    <Compile Include="IntegrationTests/BrowserTests.fs" />
+    <Compile Include="IntegrationTests/FeedsProcessingTests.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 

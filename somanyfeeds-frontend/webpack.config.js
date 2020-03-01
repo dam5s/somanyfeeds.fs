@@ -9,7 +9,7 @@ module.exports = {
     entry: "./somanyfeeds-frontend.fsproj",
     output: {
         path: path.join(__dirname, "..", "somanyfeeds-server", "WebRoot"),
-        filename: "somanyfeeds-fable.js",
+        filename: "somanyfeeds.js",
     },
     module: {
         rules: [{

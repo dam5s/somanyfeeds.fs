@@ -7,14 +7,6 @@ open Fake.IO
 open Support
 
 
-let private somanyfeedsServerIntegrationTests _ =
-    Environment.setEnvironVar "CONTENT_ROOT" (Path.GetFullPath "somanyfeeds-server")
-    Environment.setEnvironVar "FEEDS_CONTENT_ROOT" (Path.GetFullPath "somanyfeeds-server-integration-tests")
-    Environment.setEnvironVar "DB_CONNECTION" "Host=localhost;Username=somanyfeeds;Password=secret;Database=somanyfeeds_integration_tests"
-    DotNet.run "somanyfeeds-server-integration-tests" ()
-    ()
-
-
 let private setupCacheBustingLinks _ =
     let timestamp = DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()
     writeToFile "somanyfeeds-server/WebRoot/assets.version" timestamp
@@ -33,8 +25,12 @@ let main args =
         setupCacheBustingLinks()
         DotNet.build ()
     )
-    Target.create "test" DotNet.test
-    Target.create "integration-tests" somanyfeedsServerIntegrationTests
+    Target.create "test" (fun _ ->
+        Environment.setEnvironVar "CONTENT_ROOT" (Path.GetFullPath "somanyfeeds-server")
+        Environment.setEnvironVar "FEEDS_CONTENT_ROOT" (Path.GetFullPath "somanyfeeds-server-integration-tests")
+        Environment.setEnvironVar "DB_CONNECTION" "Host=localhost;Username=somanyfeeds;Password=secret;Database=somanyfeeds_integration_tests"
+        DotNet.test ()
+    )
 
     Target.create "release" (fun _ ->
         DotNet.release "damo-io-server" ()
@@ -48,8 +44,7 @@ let main args =
     "build" |> mustRunAfter "clean"
 
     "test" |> dependsOn [ "build" ]
-    "integration-tests" |> dependsOn [ "build" ]
-    "release" |> dependsOn [ "test"; "integration-tests"; "build"; "clean" ]
+    "release" |> dependsOn [ "test"; "build"; "clean" ]
 
     Target.runOrDefault "release"
 

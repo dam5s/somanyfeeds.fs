@@ -9,6 +9,7 @@ let private makeFullScreenApp (init: 'flags -> ('model * Cmd<'msg>)) update view
     (init, update, view)
     |||> Program.mkProgram
     |> Program.withReactBatched "somanyfeeds-body"
+    |> Program.withConsoleTrace
 
 let private startRegistrationApp _ =
     (Registration.init, Registration.update, Registration.view)
@@ -25,7 +26,6 @@ let private startReadApp flags =
     (Read.init, Read.update, Read.view)
     |||> makeFullScreenApp
     |> Program.withSubscription Read.subscriptions
-    |> Program.withConsoleTrace
     |> Program.runWith flags
 
 Browser.Dom.window?SoManyFeeds <- {| StartRegistrationApp = startRegistrationApp

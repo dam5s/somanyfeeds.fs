@@ -2,6 +2,8 @@ module SoManyFeedsFrontend.Applications.Manage
 
 open Elmish
 open Browser
+open Browser
+open Browser
 open Fable.SimpleHttp
 open SoManyFeedsFrontend.Support
 open SoManyFeedsFrontend.Support.Dialog
@@ -90,7 +92,8 @@ let private removeFeed model feed =
     { model with
           DeletionInProgress = false
           DeleteDialog = Closed
-          Feeds = model.Feeds |> List.filter (fun f -> f.Id <> feed.Id) }
+          Feeds = model.Feeds
+                  |> List.filter (fun f -> f.Id <> feed.Id) }
 
 let update msg model =
     let form = model.Form
@@ -107,7 +110,7 @@ let update msg model =
         { model with CreationInProgress = true }, Cmd.ofRequest sendCreateRequest form CreateFeedResult
 
     | CreateFeedResult (Ok newFeed) ->
-        feedCreated model newFeed, Cmd.none
+        feedCreated model newFeed, Effects.clearFormInputs()
 
     | CreateFeedResult (Error _) ->
         { model with CreationInProgress = false }, Cmd.none
@@ -188,7 +191,7 @@ let private newFeedForm model (dispatch: Html.Dispatcher<Msg>) =
                           [ Placeholder "Le Monde"
                             Type "text"
                             Name "name"
-                            Value model.Form.Name
+                            DefaultValue model.Form.Name
                             dispatch.OnChange UpdateFormName
                             Disabled model.CreationInProgress ] ]
                 label []
@@ -197,7 +200,7 @@ let private newFeedForm model (dispatch: Html.Dispatcher<Msg>) =
                           [ Placeholder "https://www.lemonde.fr/rss/une.xml"
                             Type "text"
                             Name "url"
-                            Value model.Form.Url
+                            DefaultValue model.Form.Url
                             dispatch.OnChange UpdateFormUrl
                             Disabled model.CreationInProgress ] ]
                 nav []

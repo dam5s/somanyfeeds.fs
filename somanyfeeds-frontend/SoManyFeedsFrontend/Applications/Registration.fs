@@ -36,10 +36,6 @@ let private sendRequest form =
                 else Error ApiError
     }
 
-let private redirectTo destination =
-    Browser.Dom.window.location.assign destination
-    Cmd.none
-
 let update msg model =
     match msg with
     | Register ->
@@ -59,7 +55,7 @@ let update msg model =
         { model with Form = RegistrationForm.applyErrors err model.Form }, Cmd.none
 
     | RegistrationResult (Ok _) ->
-        model, redirectTo "/read"
+        model, Effects.redirectTo "/read"
 
 let view model d =
   let dispatch = Html.Dispatcher(d)
@@ -90,7 +86,7 @@ let view model d =
                                 input
                                     [ Placeholder "John"
                                       Name "name"
-                                      Value (RegistrationForm.name model.Form)
+                                      DefaultValue (RegistrationForm.name model.Form)
                                       dispatch.OnChange (curry UpdateForm RegistrationForm.updateName)
                                       dispatch.OnBlur (ValidateField RegistrationForm.validateName)
                                       AutoFocus true
@@ -103,7 +99,7 @@ let view model d =
                                 input
                                     [ Placeholder "john@example.com"
                                       Name "email"
-                                      Value (RegistrationForm.email model.Form)
+                                      DefaultValue (RegistrationForm.email model.Form)
                                       dispatch.OnChange (curry UpdateForm RegistrationForm.updateEmail)
                                       dispatch.OnBlur (ValidateField RegistrationForm.validateEmail)
                                       Type "email"
@@ -115,7 +111,7 @@ let view model d =
                                 input
                                     [ Placeholder "******************"
                                       Name "password"
-                                      Value (RegistrationForm.password model.Form)
+                                      DefaultValue (RegistrationForm.password model.Form)
                                       dispatch.OnChange (curry UpdateForm RegistrationForm.updatePassword)
                                       dispatch.OnBlur (ValidateField RegistrationForm.validatePassword)
                                       Type "password"
@@ -127,7 +123,7 @@ let view model d =
                                 input
                                     [ Placeholder "******************"
                                       Name "passwordConfirmation"
-                                      Value (RegistrationForm.passwordConfirmation model.Form)
+                                      DefaultValue (RegistrationForm.passwordConfirmation model.Form)
                                       dispatch.OnChange (curry UpdateForm RegistrationForm.updatePasswordConfirmation)
                                       dispatch.OnBlur (ValidateField RegistrationForm.validatePasswordConfirmation)
                                       Type "password"

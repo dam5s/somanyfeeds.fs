@@ -9,9 +9,8 @@
 ### Database setup
  1. Setup a local Postgresql database.
  1. Create a database user `somanyfeeds` with password `secret`
- 1. Create a database called `somanyfeeds_dev` that belongs to `somanyfeeds`
- 1. Create a database called `somanyfeeds_test` that belongs to `somanyfeeds`
- 1. Migrate the database `dotnet run -p build db:somanyfeeds:local:migrate`
+ 1. Create 3 local databases`somanyfeeds_dev`, `somanyfeeds_test`, `somanyfeeds_integration_tests` that belong to user `somanyfeeds`
+ 1. Migrate the databases `dotnet run -p build db:somanyfeeds:local:migrate`
 
 ### Chrome + Chrome driver.
 

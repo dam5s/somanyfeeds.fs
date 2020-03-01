@@ -13,3 +13,5 @@ elm-stuff
 node_modules
 *.DotSettings.user
 manifest.yml
+screenshots
+videos
