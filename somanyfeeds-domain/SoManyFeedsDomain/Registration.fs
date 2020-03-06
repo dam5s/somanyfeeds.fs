@@ -31,17 +31,27 @@ type ValidationError =
     | PasswordConfirmationMismatched
 
 
+let errorToString error =
+    match error with
+    | NameCannotBeBlank -> "Name cannot be blank"
+    | EmailCannotBeBlank -> "Email cannot be blank"
+    | EmailMustResembleAnEmail -> "Email is invalid"
+    | EmailAlreadyInUse -> "Email is already in use"
+    | PasswordMustBeAtLeastEightCharacters -> "Password must be at least 8 characters"
+    | PasswordConfirmationMismatched -> "Password confirmation does not match"
+
+
 let private error fieldName validationError =
     Error (Validation.error fieldName validationError)
 
-let private nameValidation (registration: Registration): Validation<string, ValidationError> =
+let nameValidation (registration: Registration): Validation<string, ValidationError> =
     let name = registration.Name |> String.trim
 
     if String.isEmpty name
         then error "name" NameCannotBeBlank
         else Ok name
 
-let private emailValidation (registration: Registration) =
+let emailValidation (registration: Registration) =
     let email = registration.Email |> String.trim |> String.toLowerInvariant
 
     let isEmpty = String.isEmpty email
@@ -53,14 +63,17 @@ let private emailValidation (registration: Registration) =
             then error "email" EmailMustResembleAnEmail
             else Ok email
 
-let private passwordValidation (registration: Registration) =
+let passwordValidation (registration: Registration) =
     if String.length registration.Password < 8
         then error "password" PasswordMustBeAtLeastEightCharacters
-        else if not (String.equals registration.PasswordConfirmation registration.Password)
-            then error "passwordConfirmation" PasswordConfirmationMismatched
-            else Ok registration.Password
+        else Ok registration.Password
 
-let private buildRegistration name email password =
+let passwordConfirmationValidation (registration: Registration) =
+    if not (String.equals registration.PasswordConfirmation registration.Password)
+        then error "passwordConfirmation" PasswordConfirmationMismatched
+        else Ok ()
+
+let private buildValidRegistration name email password () =
     ValidRegistration
         { Name = name
           Email = email
@@ -71,7 +84,8 @@ let private buildRegistration name email password =
 open Validation.Operators
 
 let validate registration =
-    buildRegistration
+    buildValidRegistration
         <!> nameValidation registration
         <*> emailValidation registration
         <*> passwordValidation registration
+        <*> passwordConfirmationValidation registration

@@ -2,6 +2,7 @@ module SoManyFeedsServer.UsersApi
 
 open FSharp.Control.Tasks.V2.ContextInsensitive
 open Giraffe
+open SoManyFeedsDomain
 open SoManyFeedsDomain.Registration
 open SoManyFeedsPersistence.UsersDataGateway
 open SoManyFeedsPersistence.UsersService
@@ -15,18 +16,9 @@ module Json =
            name = record.Name
            email = record.Email |}
 
-    let private errorToString error =
-        match error with
-        | NameCannotBeBlank -> "Name cannot be blank"
-        | EmailCannotBeBlank -> "Email cannot be blank"
-        | EmailMustResembleAnEmail -> "Email is invalid"
-        | EmailAlreadyInUse -> "Email is already in use"
-        | PasswordMustBeAtLeastEightCharacters -> "Password must be at least 8 characters"
-        | PasswordConfirmationMismatched -> "Password confirmation does not match"
-
-    let private fieldError error =
+    let private fieldError (error: FieldError<ValidationError>) =
         {| fieldName = error.FieldName
-           error = errorToString error.Error |}
+           error = Registration.errorToString error.Error |}
 
     let fieldErrors =
         List.map fieldError

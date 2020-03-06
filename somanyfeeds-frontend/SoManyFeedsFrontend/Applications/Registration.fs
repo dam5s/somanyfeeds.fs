@@ -3,7 +3,6 @@ module SoManyFeedsFrontend.Applications.Registration
 open Elmish
 open Fable.React
 open Fable.React.Props
-open Fable.Import
 open Fable.SimpleHttp
 open SoManyFeedsFrontend.Support.Http
 open SoManyFeedsFrontend.Components.Logo
@@ -16,7 +15,7 @@ type Model =
 
 type Msg =
     | Register
-    | UpdateForm of (RegistrationForm -> string -> RegistrationForm) * string
+    | UpdateForm of (string -> RegistrationForm -> RegistrationForm) * string
     | ValidateField of (RegistrationForm -> RegistrationForm)
     | RegistrationResult of Result<unit, RequestError>
 
@@ -46,13 +45,13 @@ let update msg model =
             { model with Form = formWithErrors }, Cmd.none
 
     | UpdateForm (updateFunction, newValue) ->
-        { model with Form = updateFunction model.Form newValue }, Cmd.none
+        { model with Form = updateFunction newValue model.Form }, Cmd.none
 
     | ValidateField validationFunction ->
         { model with Form = validationFunction model.Form }, Cmd.none
 
     | RegistrationResult (Error err) ->
-        { model with Form = RegistrationForm.applyErrors err model.Form }, Cmd.none
+        { model with Form = RegistrationForm.applyRequestError err model.Form }, Cmd.none
 
     | RegistrationResult (Ok _) ->
         model, Effects.redirectTo "/read"
@@ -61,8 +60,8 @@ let view model d =
   let dispatch = Html.Dispatcher(d)
   let serverErrorView =
       match RegistrationForm.serverError model.Form with
-      | "" -> div [] []
-      | message -> p [ Class "error message" ] [ str message ]
+      | None -> div [] []
+      | Some message -> p [ Class "error message" ] [ str message ]
 
   div []
       [ header [ Class "app-header" ]

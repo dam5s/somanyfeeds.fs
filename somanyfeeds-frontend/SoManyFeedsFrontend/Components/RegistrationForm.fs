@@ -1,141 +1,103 @@
 module SoManyFeedsFrontend.Components.RegistrationForm
 
+open SoManyFeedsDomain
+open SoManyFeedsDomain.Registration
 open SoManyFeedsFrontend.Support.Http
 
 
-type private FormError = FormError of string
-
-[<RequireQualifiedAccess>]
-module private FormError =
-    let optionToString (err: FormError option) =
-        match err with
-        | Some (FormError msg) -> msg
-        | _ -> ""
-
-type private Field =
-    { Value: string
-      Error: FormError option
-    }
-
-[<RequireQualifiedAccess>]
-module private Field =
-    let setError newErr (field: Field) = { field with Error = newErr }
-    let setValue newValue (field: Field) = { field with Value = newValue }
-    let validate validator field = setError (validator field.Value) field
-    let isValid field = field.Error |> Option.isNone
-
-
 type RegistrationForm =
-    private { ServerError: FormError option
-              Name: Field
-              Email: Field
-              Password: Field
-              PasswordConfirmation: Field
-            }
-
-type ValidRegistrationForm =
-    private { Name: string
-              Email: string
-              Password: string
-              PasswordConfirmation: string
-            }
-
-
-[<RequireQualifiedAccess>]
-module private Validation =
-    let name value =
-        if String.isEmpty value
-        then Some(FormError "cannot be blank")
-        else None
-
-    let email value =
-        let validLength = String.length value > 2
-        let isEmail = String.contains "@" value
-
-        if validLength && isEmail
-        then None
-        else Some(FormError "must be an email")
-
-    let password value =
-        if String.length value >= 8
-        then None
-        else Some(FormError "must be at least 8 characters long")
-
-    let passwordConfirmation original copy =
-        if original = copy
-        then None
-        else Some(FormError "confirmation mismatched")
+    private { ServerError: string option
+              FieldErrors: FieldError<ValidationError> list
+              Registration: Registration }
 
 
 [<RequireQualifiedAccess>]
 module RegistrationForm =
 
     let create =
-        let newField = { Value = ""; Error = None }
-
         { ServerError = None
-          Name = newField
-          Email = newField
-          Password = newField
-          PasswordConfirmation = newField
-        }
+          FieldErrors = []
+          Registration =
+              { Name = ""
+                Email = ""
+                Password = ""
+                PasswordConfirmation = "" } }
 
-    let serverError (form: RegistrationForm): string = FormError.optionToString form.ServerError
-
-    let request (form: ValidRegistrationForm) =
-        HttpRequest.postJson "/api/users" {|name = form.Name; email = form.Email; password = form.Password; passwordConfirmation = form.PasswordConfirmation|}
+    let request (registration: ValidRegistration) =
+        let fields = Registration.fields registration
+        HttpRequest.postJson "/api/users"
+            {| name = fields.Name
+               email = fields.Email
+               password = fields.Password
+               passwordConfirmation = fields.Password |}
 
     let private removeServerError form = { form with ServerError = None }
 
-    let name (form: RegistrationForm) = form.Name.Value
-    let nameError (form: RegistrationForm) = form.Name.Error |> FormError.optionToString
-    let updateName (form: RegistrationForm) newValue = { form with Name = Field.setValue newValue form.Name }
-    let validateName (form: RegistrationForm) = { form with Name = Field.validate Validation.name form.Name }
+    let private fieldError name (form: RegistrationForm) =
+        form.FieldErrors
+        |> List.tryFind (fun f -> f.FieldName = name)
+        |> Option.map (fun f -> Registration.errorToString f.Error)
+        |> Option.defaultValue ""
 
-    let email (form: RegistrationForm) = form.Email.Value
-    let emailError (form: RegistrationForm) = form.Email.Error |> FormError.optionToString
-    let updateEmail (form: RegistrationForm) newValue = { form with Email = Field.setValue newValue form.Email }
-    let validateEmail (form: RegistrationForm) = { form with Email = Field.validate Validation.email form.Email }
+    let private removeFieldErrors name form =
+        { form with FieldErrors = form.FieldErrors |> List.filter (fun e -> e.FieldName <> name) }
 
-    let password (form: RegistrationForm) = form.Password.Value
-    let passwordError (form: RegistrationForm) = form.Password.Error |> FormError.optionToString
-    let updatePassword (form: RegistrationForm) newValue = { form with Password = Field.setValue newValue form.Password }
-    let validatePassword (form: RegistrationForm) = { form with Password = Field.validate Validation.password form.Password }
+    let private addFieldErrors fieldErrors form =
+        { form with FieldErrors = form.FieldErrors |> List.append fieldErrors }
 
-    let passwordConfirmation (form: RegistrationForm) = form.PasswordConfirmation.Value
-    let passwordConfirmationError (form: RegistrationForm) = form.PasswordConfirmation.Error |> FormError.optionToString
-    let updatePasswordConfirmation (form: RegistrationForm) newValue = { form with PasswordConfirmation = Field.setValue newValue form.PasswordConfirmation }
-    let validatePasswordConfirmation (form: RegistrationForm) = { form with PasswordConfirmation = Field.validate (Validation.passwordConfirmation form.Password.Value) form.PasswordConfirmation }
+    let private addErrorsIfValidationFailed validation form =
+        match validation with
+        | Ok _ -> form
+        | Error fieldErrors -> addFieldErrors fieldErrors form
+
+    let private validateField (fieldName: string) validation form =
+        form
+        |> removeFieldErrors fieldName
+        |> addErrorsIfValidationFailed (validation form.Registration)
+
+    let private updateRegistration updater form = { form with Registration = updater form.Registration }
+
+    let name form = form.Registration.Name
+    let nameError = fieldError "name"
+    let updateName newValue = updateRegistration (fun r -> { r with Name = newValue })
+    let validateName = validateField "name" Registration.nameValidation
+
+    let email form = form.Registration.Email
+    let emailError = fieldError "email"
+    let updateEmail newValue = updateRegistration (fun r -> { r with Email = newValue })
+    let validateEmail = validateField "email" Registration.emailValidation
+
+    let password form = form.Registration.Password
+    let passwordError = fieldError "password"
+    let updatePassword newValue = updateRegistration (fun r -> { r with Password = newValue })
+    let validatePassword = validateField "password" Registration.passwordValidation
+
+    let passwordConfirmation form = form.Registration.PasswordConfirmation
+    let passwordConfirmationError = fieldError "passwordConfirmation"
+    let updatePasswordConfirmation newValue = updateRegistration (fun r -> { r with PasswordConfirmation = newValue })
+    let validatePasswordConfirmation = validateField "passwordConfirmation" Registration.passwordValidation
+
+    let serverError form = form.ServerError
 
 
     let private isValid (form: RegistrationForm) =
-        [ form.Name; form.Email; form.Password; form.PasswordConfirmation ]
-        |> List.all Field.isValid
+        Option.isSome form.ServerError || not (List.isEmpty form.FieldErrors)
 
-    let validate (form: RegistrationForm): Result<ValidRegistrationForm, RegistrationForm> =
-        let validatedForm =
-            form
-            |> removeServerError
-            |> validateName
-            |> validateEmail
-            |> validatePassword
-            |> validatePasswordConfirmation
+    let private buildValidRegistration name email password () =
+        { Name = name
+          Email = email
+          Password = password
+          PasswordConfirmation = password }
 
-        if isValid validatedForm
-        then Ok { Name = form.Name.Value
-                  Email = form.Email.Value
-                  Password = form.Password.Value
-                  PasswordConfirmation = form.PasswordConfirmation.Value
-                }
-        else Error validatedForm
+    let private applyValidationErrors form errors =
+        form
+        |> removeServerError
+        |> addFieldErrors errors
 
-    let applyErrors (err: RequestError) (form: RegistrationForm): RegistrationForm =
-        match err with
-            | ApiError ->
-                { form with ServerError = Some (FormError "Validation on the server failed") }
+    let validate (form: RegistrationForm): Result<ValidRegistration, RegistrationForm> =
+        form.Registration
+        |> Registration.validate
+        |> Result.mapError (applyValidationErrors form)
 
-            | ParseError _ ->
-                { form with ServerError = Some (FormError "Response parsing failed") }
-
-            | CmdError ->
-                { form with ServerError = Some (FormError "An error occured while contacting our server, please try again later.") }
+    let applyRequestError (err: RequestError) (form: RegistrationForm): RegistrationForm =
+        { form with ServerError = Some (RequestError.userMessage err) }
