@@ -16,7 +16,7 @@ let create registration: Async<UserCreationResult> =
     async {
         match Registration.validate registration with
         | Ok validReg ->
-            match! UsersDataGateway.findByEmail (Registration.email validReg) with
+            match! UsersDataGateway.exists (Registration.email validReg) with
             | Found _ ->
                 return CreationFailure (Validation.error "email" EmailAlreadyInUse)
             | FindError message ->

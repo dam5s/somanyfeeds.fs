@@ -1,27 +1,35 @@
 module SoManyFeedsPersistence.UsersDataGateway
 
 open SoManyFeedsPersistence.DataSource
-open SoManyFeedsDomain.Passwords
 open SoManyFeedsDomain
 
+
+module private Password =
+    open BCrypt.Net
+
+    let hash = BCrypt.HashPassword
+    let verify clearPassword hash =
+        BCrypt.Verify (clearPassword, hash)
 
 type UserRecord =
     { Id: int64
       Name: string
       Email: string
-      PasswordHash: HashedPassword
     }
-
 
 let private entityToRecord (entity: UserEntity) =
     { Id = entity.Id
       Name = entity.Name
       Email = entity.Email
-      PasswordHash = HashedPassword entity.PasswordHash
     }
 
+let private entityToRecordIfPasswordMatch password (entity: UserEntity) =
+    if Password.verify password entity.PasswordHash
+        then Some (entityToRecord entity)
+        else None
 
-let findByEmail email: Async<FindResult<UserRecord>> =
+
+let findByEmailAndPassword email password: Async<FindResult<UserRecord>> =
     dataAccessOperation (fun ctx ->
         query {
             for user in ctx.Public.Users do
@@ -29,7 +37,7 @@ let findByEmail email: Async<FindResult<UserRecord>> =
             take 1
         }
         |> Seq.tryHead
-        |> Option.map entityToRecord
+        |> Option.bind (entityToRecordIfPasswordMatch password)
     )
     |> FindResult.asyncFromAsyncResultOfOption
 
@@ -40,9 +48,19 @@ let create registration: AsyncResult<UserRecord> =
         let entity = ctx.Public.Users.Create()
         entity.Name <- fields.Name
         entity.Email <- fields.Email
-        entity.PasswordHash <- Passwords.hashedValue fields.PasswordHash
+        entity.PasswordHash <- Password.hash fields.Password
 
         ctx.SubmitUpdates()
 
         entityToRecord entity
     )
+
+
+let exists email: Async<ExistsResult> =
+    dataAccessOperation (fun ctx ->
+        query {
+            for user in ctx.Public.Users do
+            exists (user.Email = email)
+        }
+    )
+    |> ExistsResult.asyncFromAsyncResultOfBoolean

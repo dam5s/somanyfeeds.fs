@@ -9,7 +9,6 @@ type FindResult<'a> =
     | NotFound
     | FindError of message: string
 
-
 [<RequireQualifiedAccess>]
 module FindResult =
     let asyncFromAsyncResultOfOption (result: AsyncResult<'a option>) =
@@ -17,6 +16,19 @@ module FindResult =
             match! result with
             | Ok(Some value) -> return Found value
             | Ok None -> return NotFound
+            | Error message -> return FindError message
+        }
+
+
+type ExistsResult = FindResult<unit>
+
+[<RequireQualifiedAccess>]
+module ExistsResult =
+    let asyncFromAsyncResultOfBoolean (result: AsyncResult<bool>) =
+        async {
+            match! result with
+            | Ok true -> return Found ()
+            | Ok false -> return NotFound
             | Error message -> return FindError message
         }
 

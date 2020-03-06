@@ -135,7 +135,7 @@ let handler: HttpHandler =
     choose
         [ GET >=> route "/" >=> htmlView HomePage.view
           GET >=> route "/login" >=> htmlView (Auth.Web.loginPage false)
-          POST >=> route "/login" >=> (Auth.Web.doLogin UsersDataGateway.findByEmail)
+          POST >=> route "/login" >=> (Auth.Web.doLogin UsersDataGateway.findByEmailAndPassword)
           GET >=> route "/logout" >=> Auth.Web.doLogout
           GET >=> route "/register" >=> Auth.Web.registrationPage
           POST >=> route "/api/users" >=> bindJson (UsersApi.create UsersService.create)

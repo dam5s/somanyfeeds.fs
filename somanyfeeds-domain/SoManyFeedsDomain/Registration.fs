@@ -1,7 +1,5 @@
 module SoManyFeedsDomain.Registration
 
-open Passwords
-
 
 type Registration =
     { Name: string
@@ -16,7 +14,7 @@ type ValidRegistration =
 and RegistrationFields =
     { Name: string
       Email: string
-      PasswordHash: HashedPassword
+      Password: string
     }
 
 
@@ -55,18 +53,18 @@ let private emailValidation (registration: Registration) =
             then error "email" EmailMustResembleAnEmail
             else Ok email
 
-let private passwordValidation registration =
+let private passwordValidation (registration: Registration) =
     if String.length registration.Password < 8
         then error "password" PasswordMustBeAtLeastEightCharacters
         else if not (String.equals registration.PasswordConfirmation registration.Password)
             then error "passwordConfirmation" PasswordConfirmationMismatched
-            else Ok (Passwords.generateHash registration.Password)
+            else Ok registration.Password
 
-let private buildRegistration name email passwordHash =
+let private buildRegistration name email password =
     ValidRegistration
         { Name = name
           Email = email
-          PasswordHash = passwordHash
+          Password = password
         }
 
 
