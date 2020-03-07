@@ -16,7 +16,7 @@ module Json =
            name = record.Name
            email = record.Email |}
 
-    let private fieldError (error: FieldError<ValidationError>) =
+    let private fieldError (error: FieldError<Registration.Error>) =
         {| fieldName = error.FieldName
            error = Registration.errorToString error.Error |}
 

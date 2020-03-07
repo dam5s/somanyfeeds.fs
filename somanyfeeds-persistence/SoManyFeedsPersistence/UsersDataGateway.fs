@@ -1,7 +1,7 @@
 module SoManyFeedsPersistence.UsersDataGateway
 
 open SoManyFeedsPersistence.DataSource
-open SoManyFeedsDomain
+open SoManyFeedsDomain.Registration
 
 
 module private Password =
@@ -44,7 +44,7 @@ let findByEmailAndPassword email password: Async<FindResult<UserRecord>> =
 
 let create registration: AsyncResult<UserRecord> =
     dataAccessOperation (fun ctx ->
-        let fields = Registration.fields registration
+        let fields = ValidRegistration.fields registration
         let entity = ctx.Public.Users.Create()
         entity.Name <- fields.Name
         entity.Email <- fields.Email

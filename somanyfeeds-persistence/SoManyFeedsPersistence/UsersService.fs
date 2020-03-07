@@ -8,7 +8,7 @@ open SoManyFeedsDomain
 
 type UserCreationResult =
     | CreationSuccess of UserRecord
-    | CreationFailure of FieldError<ValidationError> list
+    | CreationFailure of FieldError<Registration.Error> list
     | CreationError of message: string
 
 
@@ -16,9 +16,9 @@ let create registration: Async<UserCreationResult> =
     async {
         match Registration.validate registration with
         | Ok validReg ->
-            match! UsersDataGateway.exists (Registration.email validReg) with
+            match! UsersDataGateway.exists (ValidRegistration.email validReg) with
             | Found _ ->
-                return CreationFailure (Validation.error "email" EmailAlreadyInUse)
+                return CreationFailure (Validation.error "email" Registration.EmailAlreadyInUse)
             | FindError message ->
                 return CreationError message
             | NotFound ->

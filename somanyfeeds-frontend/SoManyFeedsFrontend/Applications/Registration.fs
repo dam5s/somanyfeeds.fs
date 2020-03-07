@@ -8,6 +8,7 @@ open SoManyFeedsFrontend.Support.Http
 open SoManyFeedsFrontend.Components.Logo
 open SoManyFeedsFrontend.Components.RegistrationForm
 open SoManyFeedsFrontend.Support
+open SoManyFeedsFrontend.Support.Form
 
 
 type Model =
@@ -51,7 +52,7 @@ let update msg model =
         { model with Form = validationFunction model.Form }, Cmd.none
 
     | RegistrationResult (Error err) ->
-        { model with Form = RegistrationForm.applyRequestError err model.Form }, Cmd.none
+        { model with Form = Form.applyRequestError err model.Form }, Cmd.none
 
     | RegistrationResult (Ok _) ->
         model, Effects.redirectTo "/read"
@@ -59,7 +60,7 @@ let update msg model =
 let view model d =
   let dispatch = Html.Dispatcher(d)
   let serverErrorView =
-      match RegistrationForm.serverError model.Form with
+      match Form.serverError model.Form with
       | None -> div [] []
       | Some message -> p [ Class "error message" ] [ str message ]
 
@@ -91,7 +92,7 @@ let view model d =
                                       AutoFocus true
                                       Type "text"
                                     ]
-                                p [ Class "field-error" ] [ str (RegistrationForm.nameError model.Form) ]
+                                p [ Class "field-error" ] [ str (Form.fieldError "name" model.Form) ]
                               ]
                           label []
                               [ str "Email"
@@ -103,7 +104,7 @@ let view model d =
                                       dispatch.OnBlur (ValidateField RegistrationForm.validateEmail)
                                       Type "email"
                                     ]
-                                p [ Class "field-error" ] [ str (RegistrationForm.emailError model.Form) ]
+                                p [ Class "field-error" ] [ str (Form.fieldError "email" model.Form) ]
                               ]
                           label []
                               [ str "Password"
@@ -115,7 +116,7 @@ let view model d =
                                       dispatch.OnBlur (ValidateField RegistrationForm.validatePassword)
                                       Type "password"
                                     ]
-                                p [ Class "field-error" ] [ str (RegistrationForm.passwordError model.Form) ]
+                                p [ Class "field-error" ] [ str (Form.fieldError "password" model.Form) ]
                               ]
                           label []
                               [ str "Password confirmation"
@@ -127,7 +128,7 @@ let view model d =
                                       dispatch.OnBlur (ValidateField RegistrationForm.validatePasswordConfirmation)
                                       Type "password"
                                     ]
-                                p [ Class "field-error" ] [ str (RegistrationForm.passwordConfirmationError model.Form) ]
+                                p [ Class "field-error" ] [ str (Form.fieldError "passwordConfirmation" model.Form) ]
                               ]
                           nav []
                               [ button [ Class "button primary" ] [ str "Sign up" ]

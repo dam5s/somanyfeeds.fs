@@ -17,38 +17,49 @@ and RegistrationFields =
       Password: string
     }
 
+[<RequireQualifiedAccess>]
+module Registration =
+    let name (r: Registration) = r.Name
+    let setName value (r:Registration) = { r with Name = value }
+    let email (r: Registration) = r.Email
+    let setEmail value (r:Registration) = { r with Email = value }
+    let password (r: Registration) = r.Password
+    let setPassword value (r:Registration) = { r with Password = value }
+    let passwordConfirmation (r: Registration) = r.PasswordConfirmation
+    let setPasswordConfirmation value (r:Registration) = { r with PasswordConfirmation = value }
 
-let fields (ValidRegistration f) = f
-let email (ValidRegistration f) = f.Email
+    type Error =
+        | NameCannotBeBlank
+        | EmailCannotBeBlank
+        | EmailMustResembleAnEmail
+        | EmailAlreadyInUse
+        | PasswordMustBeAtLeastEightCharacters
+        | PasswordConfirmationMismatched
+
+    let errorToString error =
+        match error with
+        | NameCannotBeBlank -> "Name cannot be blank"
+        | EmailCannotBeBlank -> "Email cannot be blank"
+        | EmailMustResembleAnEmail -> "Email is invalid"
+        | EmailAlreadyInUse -> "Email is already in use"
+        | PasswordMustBeAtLeastEightCharacters -> "Password must be at least 8 characters"
+        | PasswordConfirmationMismatched -> "Password confirmation does not match"
 
 
-type ValidationError =
-    | NameCannotBeBlank
-    | EmailCannotBeBlank
-    | EmailMustResembleAnEmail
-    | EmailAlreadyInUse
-    | PasswordMustBeAtLeastEightCharacters
-    | PasswordConfirmationMismatched
-
-
-let errorToString error =
-    match error with
-    | NameCannotBeBlank -> "Name cannot be blank"
-    | EmailCannotBeBlank -> "Email cannot be blank"
-    | EmailMustResembleAnEmail -> "Email is invalid"
-    | EmailAlreadyInUse -> "Email is already in use"
-    | PasswordMustBeAtLeastEightCharacters -> "Password must be at least 8 characters"
-    | PasswordConfirmationMismatched -> "Password confirmation does not match"
+[<RequireQualifiedAccess>]
+module ValidRegistration =
+    let fields (ValidRegistration f) = f
+    let email (ValidRegistration f) = f.Email
 
 
 let private error fieldName validationError =
     Error (Validation.error fieldName validationError)
 
-let nameValidation (registration: Registration): Validation<string, ValidationError> =
+let nameValidation (registration: Registration): Validation<string, Registration.Error> =
     let name = registration.Name |> String.trim
 
     if String.isEmpty name
-        then error "name" NameCannotBeBlank
+        then error "name" Registration.NameCannotBeBlank
         else Ok name
 
 let emailValidation (registration: Registration) =
@@ -58,19 +69,19 @@ let emailValidation (registration: Registration) =
     let isNotEmail = not (String.contains "@" email)
 
     if isEmpty
-        then error "email" EmailCannotBeBlank
+        then error "email" Registration.EmailCannotBeBlank
         else if isNotEmail
-            then error "email" EmailMustResembleAnEmail
+            then error "email" Registration.EmailMustResembleAnEmail
             else Ok email
 
 let passwordValidation (registration: Registration) =
     if String.length registration.Password < 8
-        then error "password" PasswordMustBeAtLeastEightCharacters
+        then error "password" Registration.PasswordMustBeAtLeastEightCharacters
         else Ok registration.Password
 
 let passwordConfirmationValidation (registration: Registration) =
     if not (String.equals registration.PasswordConfirmation registration.Password)
-        then error "passwordConfirmation" PasswordConfirmationMismatched
+        then error "passwordConfirmation" Registration.PasswordConfirmationMismatched
         else Ok ()
 
 let private buildValidRegistration name email password () =
