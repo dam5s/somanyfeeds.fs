@@ -5,13 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Prelude\Extensions.fs" />
+    <Compile Include="Prelude/Extensions.fs" />
     <Compile Include="Prelude/AsyncResult.fs" />
     <Compile Include="Prelude/Logging.fs" />
     <Compile Include="Prelude/UnsafeOperation.fs" />
     <Compile Include="Prelude/Time.fs" />
     <Compile Include="Prelude/Validation.fs" />
-    <Compile Include="Prelude\EnvSupport.fs" />
+    <Compile Include="Prelude/EnvSupport.fs" />
+    <Compile Include="Prelude/Optics.fs" />
   </ItemGroup>
 
   <ItemGroup>

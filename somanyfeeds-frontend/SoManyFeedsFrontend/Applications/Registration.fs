@@ -86,8 +86,8 @@ let view model d =
                                 input
                                     [ Placeholder "John"
                                       Name "name"
-                                      DefaultValue (RegistrationForm.name model.Form)
-                                      dispatch.OnChange (curry UpdateForm RegistrationForm.updateName)
+                                      DefaultValue (RegistrationForm.name.get model.Form)
+                                      dispatch.OnChange (curry UpdateForm RegistrationForm.name.set)
                                       dispatch.OnBlur (ValidateField RegistrationForm.validateName)
                                       AutoFocus true
                                       Type "text"
@@ -99,8 +99,8 @@ let view model d =
                                 input
                                     [ Placeholder "john@example.com"
                                       Name "email"
-                                      DefaultValue (RegistrationForm.email model.Form)
-                                      dispatch.OnChange (curry UpdateForm RegistrationForm.updateEmail)
+                                      DefaultValue (RegistrationForm.email.get model.Form)
+                                      dispatch.OnChange (curry UpdateForm RegistrationForm.email.set)
                                       dispatch.OnBlur (ValidateField RegistrationForm.validateEmail)
                                       Type "email"
                                     ]
@@ -111,8 +111,8 @@ let view model d =
                                 input
                                     [ Placeholder "******************"
                                       Name "password"
-                                      DefaultValue (RegistrationForm.password model.Form)
-                                      dispatch.OnChange (curry UpdateForm RegistrationForm.updatePassword)
+                                      DefaultValue (RegistrationForm.password.get model.Form)
+                                      dispatch.OnChange (curry UpdateForm RegistrationForm.password.set)
                                       dispatch.OnBlur (ValidateField RegistrationForm.validatePassword)
                                       Type "password"
                                     ]
@@ -123,8 +123,8 @@ let view model d =
                                 input
                                     [ Placeholder "******************"
                                       Name "passwordConfirmation"
-                                      DefaultValue (RegistrationForm.passwordConfirmation model.Form)
-                                      dispatch.OnChange (curry UpdateForm RegistrationForm.updatePasswordConfirmation)
+                                      DefaultValue (RegistrationForm.passwordConfirmation.get model.Form)
+                                      dispatch.OnChange (curry UpdateForm RegistrationForm.passwordConfirmation.set)
                                       dispatch.OnBlur (ValidateField RegistrationForm.validatePasswordConfirmation)
                                       Type "password"
                                     ]

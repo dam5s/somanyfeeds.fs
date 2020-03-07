@@ -19,14 +19,18 @@ and RegistrationFields =
 
 [<RequireQualifiedAccess>]
 module Registration =
-    let name (r: Registration) = r.Name
-    let setName value (r:Registration) = { r with Name = value }
-    let email (r: Registration) = r.Email
-    let setEmail value (r:Registration) = { r with Email = value }
-    let password (r: Registration) = r.Password
-    let setPassword value (r:Registration) = { r with Password = value }
-    let passwordConfirmation (r: Registration) = r.PasswordConfirmation
-    let setPasswordConfirmation value (r:Registration) = { r with PasswordConfirmation = value }
+    let name =
+        { get = fun (r: Registration) -> r.Name
+          set = fun name r -> { r with Name = name } }
+    let email =
+        { get = fun (r: Registration) -> r.Email
+          set = fun email r -> { r with Email = email } }
+    let password =
+        { get = fun (r: Registration) -> r.Password
+          set = fun password r -> { r with Password = password } }
+    let passwordConfirmation =
+        { get = fun (r: Registration) -> r.PasswordConfirmation
+          set = fun passwordConfirmation r -> { r with PasswordConfirmation = passwordConfirmation } }
 
     type Error =
         | NameCannotBeBlank

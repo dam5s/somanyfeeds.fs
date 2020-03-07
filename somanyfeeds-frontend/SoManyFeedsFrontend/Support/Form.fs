@@ -35,9 +35,9 @@ module Form =
         |> Option.map (fun f -> form.ErrorToString f.Error)
         |> Option.defaultValue ""
 
-    let model form = form.Model
-
-    let update updater form = { form with Model = updater form.Model }
+    let model =
+        { get = fun form -> form.Model
+          set = fun model form -> { form with Model = model } }
 
     let validateField (fieldName: string) validation form =
         form

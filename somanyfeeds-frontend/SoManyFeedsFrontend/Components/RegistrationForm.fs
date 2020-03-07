@@ -28,24 +28,22 @@ module RegistrationForm =
                password = fields.Password
                passwordConfirmation = fields.Password |}
 
-    let name form = Registration.name (Form.model form)
-    let updateName value = Form.update (Registration.setName value)
+    open Optics.Operators
+
+    let name: Lens<RegistrationForm, string> = Form.model >=> Registration.name
     let validateName = Form.validateField "name" Registration.nameValidation
 
-    let email form = Registration.email (Form.model form)
-    let updateEmail value = Form.update (Registration.setEmail value)
+    let email: Lens<RegistrationForm, string> = Form.model >=> Registration.email
     let validateEmail = Form.validateField "email" Registration.emailValidation
 
-    let password form = Registration.password (Form.model form)
-    let updatePassword value = Form.update (Registration.setPassword value)
+    let password: Lens<RegistrationForm, string> = Form.model >=> Registration.password
     let validatePassword = Form.validateField "password" Registration.passwordValidation
 
-    let passwordConfirmation form = Registration.passwordConfirmation (Form.model form)
-    let updatePasswordConfirmation value = Form.update (Registration.setPasswordConfirmation value)
+    let passwordConfirmation: Lens<RegistrationForm, string> = Form.model >=> Registration.passwordConfirmation
     let validatePasswordConfirmation = Form.validateField "passwordConfirmation" Registration.passwordValidation
 
     let validate (form: RegistrationForm): Result<ValidRegistration, RegistrationForm> =
         form
-        |> Form.model
+        |> Form.model.get
         |> Registration.validate
         |> Result.mapError (Form.applyValidationErrors form)
