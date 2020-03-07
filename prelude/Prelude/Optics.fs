@@ -10,4 +10,4 @@ let compose (lensAB: Lens<'a, 'b>) (lensBC: Lens<'b, 'c>): Lens<'a, 'c> =
       set = fun c a -> lensAB.set (lensBC.set c (lensAB.get a)) a }
 
 module Operators =
-    let (>=>) = compose
+    let (>->) = compose

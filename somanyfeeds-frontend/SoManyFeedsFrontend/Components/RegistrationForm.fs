@@ -30,16 +30,16 @@ module RegistrationForm =
 
     open Optics.Operators
 
-    let name: Lens<RegistrationForm, string> = Form.model >=> Registration.name
+    let name: Lens<RegistrationForm, string> = Form.model >-> Registration.name
     let validateName = Form.validateField "name" Registration.nameValidation
 
-    let email: Lens<RegistrationForm, string> = Form.model >=> Registration.email
+    let email: Lens<RegistrationForm, string> = Form.model >-> Registration.email
     let validateEmail = Form.validateField "email" Registration.emailValidation
 
-    let password: Lens<RegistrationForm, string> = Form.model >=> Registration.password
+    let password: Lens<RegistrationForm, string> = Form.model >-> Registration.password
     let validatePassword = Form.validateField "password" Registration.passwordValidation
 
-    let passwordConfirmation: Lens<RegistrationForm, string> = Form.model >=> Registration.passwordConfirmation
+    let passwordConfirmation: Lens<RegistrationForm, string> = Form.model >-> Registration.passwordConfirmation
     let validatePasswordConfirmation = Form.validateField "passwordConfirmation" Registration.passwordValidation
 
     let validate (form: RegistrationForm): Result<ValidRegistration, RegistrationForm> =
