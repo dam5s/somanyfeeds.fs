@@ -23,8 +23,12 @@ module private Views =
               ]
         ]
 
-let page message =
-    message
-    |> Views.error
+type private Logs = Logs
+let private logger = Logger<Logs>()
+
+let page (explanation: Explanation) =
+    explanation
+    |> logger.Error
+    |> fun e -> Views.error e.Message
     |> Layout.withoutTabs
     |> htmlView

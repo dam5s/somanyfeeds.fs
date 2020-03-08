@@ -1,9 +1,29 @@
 [<AutoOpen>]
 module AsyncResult
 
+open System
+
+
+type Explanation =
+    { Message: string; Exceptions: Exception list }
 
 type AsyncResult<'a> =
-    Async<Result<'a, string>>
+    Async<Result<'a, Explanation>>
+
+
+[<RequireQualifiedAccess>]
+module Explanation =
+    let create msg exs = { Message = msg; Exceptions = exs }
+    let wrapMessage f err = { Message = f err.Message; Exceptions = [] }
+    let append err1 err2 = { Message = sprintf "%s, %s" err1.Message err2.Message
+                             Exceptions = List.append err1.Exceptions err2.Exceptions }
+
+
+[<RequireQualifiedAccess>]
+module Error =
+    let create msg ex = Error (Explanation.create msg [ex])
+    let ofMessage msg = Error (Explanation.create msg [])
+    let ofException (ex: Exception) = Error (Explanation.create ex.Message [ex])
 
 
 [<RequireQualifiedAccess>]
@@ -12,8 +32,8 @@ module AsyncResult =
     let result value: AsyncResult<'a> =
         async { return Ok value }
 
-    let error message: AsyncResult<'a> =
-        async { return Error message }
+    let error (msg: string): AsyncResult<'a> =
+        async { return Error.ofMessage msg }
 
     let fromResult result: AsyncResult<'a> =
         async { return result }

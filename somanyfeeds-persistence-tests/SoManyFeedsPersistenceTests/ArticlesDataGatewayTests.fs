@@ -49,7 +49,7 @@ let ``creating then updating an article``() =
                       |> Async.RunSynchronously
 
     match createResult with
-    | Error msg -> failwithf "Expected Ok, but got Error '%s'" msg
+    | Error err -> failwithf "Expected Ok, but got Error '%s'" err.Message
     | Ok created ->
         fieldsOf created |> should equal fields
         find created.Id |> should equal created
@@ -67,7 +67,7 @@ let ``creating then updating an article``() =
                        |> Async.RunSynchronously
 
     match updateResult with
-    | Error msg -> failwithf "Expected Ok, but got Error '%s'" msg
+    | Error err -> failwithf "Expected Ok, but got Error '%s'" err.Message
     | Ok updated ->
         fieldsOf updated |> should equal updatedFields
         find updated.Id |> should equal updated

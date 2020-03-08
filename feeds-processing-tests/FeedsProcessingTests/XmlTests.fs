@@ -21,8 +21,9 @@ let ``with unsupported XML``() =
 
     match result with
     | Ok _ -> Assert.Fail "Expected failure"
-    | Error msg ->
-        String.length msg |> shouldBeGreaterThan 0
+    | Error err ->
+        String.length err.Message |> shouldBeGreaterThan 0
+        List.length err.Exceptions |> shouldEqual 0
 
 
 [<Test>]

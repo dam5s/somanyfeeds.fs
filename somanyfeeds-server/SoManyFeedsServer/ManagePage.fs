@@ -63,6 +63,6 @@ let page maxFeeds (listFeeds: AsyncResult<FeedRecord seq>) (user: User) frontend
                 let flagsJson = Api.serializeObject (Json.flags flags) ctx
 
                 return! htmlView (View.render flagsJson) next ctx
-            | Error message ->
-                return! ErrorPage.page message next ctx
+            | Error explanation ->
+                return! ErrorPage.page explanation next ctx
         }

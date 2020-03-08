@@ -6,7 +6,6 @@ open FeedsProcessing.Download
 open FeedsProcessing.Feeds
 
 open System
-open System.Net.Http
 open System.Web
 
 
@@ -38,7 +37,7 @@ let private parseToken jsonString =
         | None ->
             jsonString
             |> sprintf "Could not parse access_token from json %s"
-            |> Error
+            |> Error.ofMessage
         | Some accessToken -> Ok(BearerToken accessToken)
     }
 

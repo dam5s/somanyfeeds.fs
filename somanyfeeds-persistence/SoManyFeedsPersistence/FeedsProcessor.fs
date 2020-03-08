@@ -41,16 +41,16 @@ let private everyFiveMinutes (s: AsyncSeq<'a>) =
     }
 
 
-let private logFeedError (FeedUrl url) msg =
-    sprintf "There was an error while processing the feed with url %s: %s" url msg
+let private logFeedError (FeedUrl url) err =
+    err
+    |> Explanation.wrapMessage (sprintf "There was an error while processing the feed with url %s: %s" url)
     |> logger.Error
-    |> always msg
 
 
-let private logArticleError url msg =
-    sprintf "There was an error while persisting the article with url %s: %s" url msg
+let private logArticleError url err =
+    err
+    |> Explanation.wrapMessage (sprintf "There was an error while persisting the article with url %s: %s" url)
     |> logger.Error
-    |> always msg
 
 
 let private completeJob feedUrl =
@@ -105,8 +105,8 @@ let private processFeed feedUrl =
         |> List.toSeq
         |> Seq.map (articleToFields feedUrl)
 
-    | Error message ->
-        failJob feedUrl message
+    | Error explanation ->
+        failJob feedUrl explanation
 
         Seq.empty
 

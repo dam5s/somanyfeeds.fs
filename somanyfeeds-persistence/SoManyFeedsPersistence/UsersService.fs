@@ -9,7 +9,7 @@ open SoManyFeedsDomain
 type UserCreationResult =
     | CreationSuccess of UserRecord
     | CreationFailure of FieldError<Registration.Error> list
-    | CreationError of message: string
+    | CreationError of Explanation
 
 
 let create registration: Async<UserCreationResult> =
@@ -19,12 +19,12 @@ let create registration: Async<UserCreationResult> =
             match! UsersDataGateway.exists (ValidRegistration.email validReg) with
             | Found _ ->
                 return CreationFailure (Validation.error "email" Registration.EmailAlreadyInUse)
-            | FindError message ->
-                return CreationError message
+            | FindError explanation ->
+                return CreationError explanation
             | NotFound ->
                 match! UsersDataGateway.create validReg with
                 | Ok record -> return CreationSuccess record
-                | Error message -> return CreationError message
+                | Error explanation -> return CreationError explanation
         | Error errors ->
             return CreationFailure errors
     }

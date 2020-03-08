@@ -10,13 +10,7 @@ let private logger = Logger<Logs>()
 module private UnsafeOperation =
     let error description (ex: Exception) =
         let msg = sprintf "%s error: %s" description (ex.Message.Trim())
-                  |> logger.Error
-
-        sprintf "Exception details %s" (ex.ToString())
-        |> logger.Error
-        |> ignore
-
-        Error msg
+        Error.create msg ex
 
     let doTry description func =
         try func() |> Ok

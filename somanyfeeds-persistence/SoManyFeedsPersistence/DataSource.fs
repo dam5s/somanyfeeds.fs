@@ -7,7 +7,7 @@ open System
 type FindResult<'a> =
     | Found of 'a
     | NotFound
-    | FindError of message: string
+    | FindError of Explanation
 
 [<RequireQualifiedAccess>]
 module FindResult =
@@ -16,7 +16,7 @@ module FindResult =
             match! result with
             | Ok(Some value) -> return Found value
             | Ok None -> return NotFound
-            | Error message -> return FindError message
+            | Error err -> return FindError err
         }
 
 
@@ -29,7 +29,7 @@ module ExistsResult =
             match! result with
             | Ok true -> return Found ()
             | Ok false -> return NotFound
-            | Error message -> return FindError message
+            | Error err -> return FindError err
         }
 
 

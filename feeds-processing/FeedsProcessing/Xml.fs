@@ -31,7 +31,7 @@ module private Rss =
             |> Seq.toList
         }
 
-    let private parse xml: Result<RssProvider.Rss, string> =
+    let private parse xml: Result<RssProvider.Rss, Explanation> =
         unsafeOperation "Rss parse" { return fun _ -> RssProvider.Parse xml }
 
     let processRss (DownloadedFeed downloaded): ProcessingResult =
@@ -53,7 +53,7 @@ module private Atom =
         unsafeOperation "Atom to articles" { return! fun _ ->
             match atom.Entries with
             | [||] ->
-                Error "Expected at least one atom entry"
+                Error.ofMessage "Expected at least one atom entry"
             | entries ->
                 entries
                 |> Seq.map entryToArticle
@@ -61,7 +61,7 @@ module private Atom =
                 |> Ok
         }
 
-    let private parse xml: Result<AtomProvider.Feed, string> =
+    let private parse xml: Result<AtomProvider.Feed, Explanation> =
         unsafeOperation "Atom parse" { return fun _ -> AtomProvider.Parse xml }
 
     let processAtom (DownloadedFeed downloaded): ProcessingResult =
@@ -79,11 +79,11 @@ module private Rdf =
             (Some item.Description)
             (Some item.Date)
 
-    let private toArticles (rdf: RdfProvider.Rdf): Result<Article list, string> =
+    let private toArticles (rdf: RdfProvider.Rdf): Result<Article list, Explanation> =
         unsafeOperation "Rdf to articles" { return! fun _ ->
             match rdf.Items with
             | [||] ->
-                Error "Expected at least one rdf item"
+                Error.ofMessage "Expected at least one rdf item"
             | items ->
                 items
                 |> Seq.map itemToArticle
@@ -91,7 +91,7 @@ module private Rdf =
                 |> Ok
         }
 
-    let private parse (xml: string): Result<RdfProvider.Rdf, string> =
+    let private parse (xml: string): Result<RdfProvider.Rdf, Explanation> =
         unsafeOperation "Rdf parse" { return fun _ -> RdfProvider.Parse xml }
 
     let processRdf (DownloadedFeed downloaded): ProcessingResult =
@@ -105,10 +105,10 @@ type private Processor =
 let private tryProcessor downloaded (previousState: ProcessingResult) (processor: Processor): ProcessingResult =
     match previousState with
     | Ok articles -> Ok articles
-    | Error msg ->
+    | Error err ->
         match processor downloaded with
         | Ok articles -> Ok articles
-        | Error nextMsg -> Error(sprintf "%s, %s" msg nextMsg)
+        | Error nextErr -> Error (Explanation.append err nextErr)
 
 
 let private processors: Processor list =
@@ -118,6 +118,6 @@ let private processors: Processor list =
     ]
 
 let processXmlFeed (downloaded: DownloadedFeed): ProcessingResult =
-    (Error "", processors)
+    (Error.ofMessage "", processors)
     ||> List.fold (tryProcessor downloaded)
-    |> Result.mapError (sprintf "Failed all the parsers: %s")
+    |> Result.mapError (Explanation.wrapMessage (sprintf "Failed all the parsers: %s"))

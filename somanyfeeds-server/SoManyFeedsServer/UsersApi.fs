@@ -30,5 +30,5 @@ let create (createUser: Registration -> Async<UserCreationResult>) (registration
             match! createUser registration with
             | CreationSuccess record -> return! jsonResponse 201 (Json.user record) next ctx
             | CreationFailure errors -> return! jsonResponse 400 (Json.fieldErrors errors) next ctx
-            | CreationError message -> return! serverErrorResponse message next ctx
+            | CreationError explanation -> return! serverErrorResponse explanation next ctx
         }

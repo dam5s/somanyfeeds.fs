@@ -5,6 +5,7 @@ open System.Diagnostics
 open NUnit.Framework
 open System.Threading
 open Microsoft.AspNetCore.Hosting
+open SoManyFeedsServer
 
 
 let private tokenSource =
@@ -16,8 +17,10 @@ let private runningOnWindows =
     | _ -> false
 
 let private startSoManyFeedsServer _ =
+    let logary = LoggingConfig.configure()
+
     Program
-        .webHostBuilder()
+        .webHostBuilder(logary)
         .UseUrls("http://localhost:9090")
         .Build()
         .RunAsync(tokenSource.Token)

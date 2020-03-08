@@ -74,8 +74,9 @@ let doLogin (findByEmailAndPassword: string -> string -> Async<FindResult<UserRe
             match! findByEmailAndPassword email password with
             | NotFound ->
                 return! loginError next ctx
-            | FindError _ ->
-                return! ErrorPage.page "There was a database access error, please try again later." next ctx
+            | FindError e ->
+                let explanation = { e with Message = "There was a database access error, please try again later." }
+                return! ErrorPage.page explanation next ctx
             | Found userRecord ->
                 let user =
                     { Id = userRecord.Id

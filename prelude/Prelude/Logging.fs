@@ -14,13 +14,19 @@ open Logary
 
 type Logger<'a>() =
     let logger = Log.create (typeof<'a>.DeclaringType)
-    let log lvl msg =
-        msg
-        |> Message.event lvl
-        |> Logger.logSimple logger
-        msg
+    let log = Logger.logSimple logger
 
-    member this.Error msg = log Error msg
-    member this.Info msg = log Info msg
+    member this.Error err =
+        err.Message
+        |> Message.event Error
+        |> Message.addExns err.Exceptions
+        |> log
+        err
+
+    member this.Info msg =
+        msg
+        |> Message.event Info
+        |> log
+        msg
 
 #endif

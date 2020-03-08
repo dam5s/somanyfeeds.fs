@@ -7,7 +7,7 @@ open System
 
 
 type JobFailure =
-    JobFailure of message: string
+    JobFailure of Explanation
 
 
 let createMissing =
@@ -89,10 +89,10 @@ let complete url: AsyncResult<int> =
     updateJob url setCompleted
 
 
-let fail url (JobFailure message): AsyncResult<int> =
+let fail url (JobFailure err): AsyncResult<int> =
     let setFailed (entity: FeedJobEntity) =
         entity.LastFailedAt <- Some DateTime.UtcNow
-        entity.LastFailure <- message
+        entity.LastFailure <- err.Message
         entity.LockedUntil <- None
 
     updateJob url setFailed
