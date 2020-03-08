@@ -21,7 +21,7 @@
         <Compile Include="SoManyFeedsPersistence/UsersDataGateway.fs" />
         <Compile Include="SoManyFeedsPersistence/UserArticlesDataGateway.fs" />
         <Compile Include="SoManyFeedsPersistence/FeedJobsDataGateway.fs" />
-        <Compile Include="SoManyFeedsPersistence\User.fs" />
+        <Compile Include="SoManyFeedsPersistence/User.fs" />
         <Compile Include="SoManyFeedsPersistence/FeedsService.fs" />
         <Compile Include="SoManyFeedsPersistence/UsersService.fs" />
         <Compile Include="SoManyFeedsPersistence/UserArticlesService.fs" />

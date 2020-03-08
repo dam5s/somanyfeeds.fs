@@ -9,7 +9,7 @@ open SoManyFeedsPersistence.ArticlesDataGateway
 
 
 type private Logs = Logs
-let private logger = createLogger<Logs>
+let private logger = Logger<Logs>()
 
 
 let private createMissing _ = FeedJobsDataGateway.createMissing
@@ -43,13 +43,13 @@ let private everyFiveMinutes (s: AsyncSeq<'a>) =
 
 let private logFeedError (FeedUrl url) msg =
     sprintf "There was an error while processing the feed with url %s: %s" url msg
-    |> logError logger
+    |> logger.Error
     |> always msg
 
 
 let private logArticleError url msg =
     sprintf "There was an error while persisting the article with url %s: %s" url msg
-    |> logError logger
+    |> logger.Error
     |> always msg
 
 
@@ -89,7 +89,7 @@ let private persistArticle fields =
 
 let private processFeed feedUrl =
     sprintf "Processing feed %A" feedUrl
-    |> logInfo logger
+    |> logger.Info
     |> ignore
 
     let processResult =

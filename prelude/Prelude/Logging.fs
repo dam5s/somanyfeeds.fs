@@ -1,30 +1,26 @@
+#if !FABLE_COMPILER
+
 [<AutoOpen>]
 module Logging
 
 open Logary
-
-
-let private log logger lvl msg =
-    msg
-    |> Message.event lvl
-    |> Logger.logSimple logger
-
-    msg
-
 
 /// Usage, for a logger for module Foo:
 ///
 /// module Foo
 ///
 /// type private Logs = Logs
-/// let private logger = createLogger<Logs>
-let createLogger<'a> =
-    let t = typeof<'a>
-    Log.create (t.DeclaringType)
+/// let private logger = Logger<Logs>()
 
+type Logger<'a>() =
+    let logger = Log.create (typeof<'a>.DeclaringType)
+    let log lvl msg =
+        msg
+        |> Message.event lvl
+        |> Logger.logSimple logger
+        msg
 
-let logError logger msg =
-    log logger Error msg
+    member this.Error msg = log Error msg
+    member this.Info msg = log Info msg
 
-let logInfo logger msg =
-    log logger Info msg
+#endif

@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Logary.Adapters.Facade" Version="5.0.0-rc.1" />
+    <PackageReference Include="Logary.Adapters.Facade" Version="5.0.0" />
   </ItemGroup>
 
 </Project>

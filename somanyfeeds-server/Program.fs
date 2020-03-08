@@ -42,16 +42,16 @@ let private configureServices (services: IServiceCollection) =
 
 let private configureLogging (builder: ILoggingBuilder) =
     builder
-        .AddFilter(fun l -> l.Equals LogLevel.Error)
         .AddConsole()
         .AddDebug()
         |> ignore
 
-let webHostBuilder _ =
+let webHostBuilder logary =
     let contentRoot = Env.varDefault "CONTENT_ROOT" Directory.GetCurrentDirectory
     let webRoot = Path.Combine(contentRoot, "WebRoot")
+    let builder = IWebHostBuilderEx.addLogary(WebHostBuilder(), logary)
 
-    WebHostBuilder()
+    builder
         .UseKestrel()
         .UseContentRoot(contentRoot)
         .UseIISIntegration()
@@ -62,11 +62,13 @@ let webHostBuilder _ =
 
 [<EntryPoint>]
 let main args =
+    let logary = LoggingConfig.configure()
+
     args
     |> Array.tryHead
     |> Option.bind Tasks.run
     |> Option.defaultWith (fun _ ->
         Async.Start FeedsProcessor.backgroundProcessingInfinite
-        webHostBuilder().Build().Run()
+        webHostBuilder(logary).Build().Run()
     )
     0

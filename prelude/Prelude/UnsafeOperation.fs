@@ -5,15 +5,15 @@ open System
 
 
 type private Logs = Logs
-let private logger = createLogger<Logs>
+let private logger = Logger<Logs>()
 
 module private UnsafeOperation =
     let error description (ex: Exception) =
         let msg = sprintf "%s error: %s" description (ex.Message.Trim())
-                  |> logError logger
+                  |> logger.Error
 
         sprintf "Exception details %s" (ex.ToString())
-        |> logError logger
+        |> logger.Error
         |> ignore
 
         Error msg
