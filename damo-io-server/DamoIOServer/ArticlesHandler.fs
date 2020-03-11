@@ -1,46 +1,66 @@
 module DamoIOServer.ArticlesHandler
 
-open Chiron
-open Chiron.Operators
+open FSharp.Control.Tasks.V2.ContextInsensitive
 open DamoIOServer.ArticlesDataGateway
-open DamoIOServer.Sources
-open Suave
-open Suave.DotLiquid
+open Giraffe
 open System
 open Time
 
 
 let private source record =
-    match record.Source with
-    | About -> "About"
-    | Social -> "Social"
-    | Code -> "Code"
-    | Blog -> "Blog"
+    sprintf "%A" record.Source
 
 
 let private toJson record =
-    Json.write "title" record.Title
-    *> Json.write "link" record.Link
-    *> Json.write "content" record.Content
-    *> Json.write "date" (Option.map Posix.milliseconds record.Date)
-    *> Json.write "source" (source record)
+    {| title = record.Title
+       link =  record.Link
+       content =  record.Content
+       date =  (Option.map Posix.milliseconds record.Date)
+       source =  (source record)
+    |}
 
 
 type ArticlesListViewModel =
     { ArticlesJson: string }
 
 
-let list findAllRecords ctx =
-    async {
-        let now =
-            Posix.fromDateTimeOffset DateTimeOffset.UtcNow
+module View =
+    open GiraffeViewEngine
 
-        let recordsJson =
-            findAllRecords()
-            |> List.sortByDescending (fun r -> Option.defaultValue now r.Date)
-            |> List.map (Json.serializeWith toJson)
-            |> Json.Array
-            |> Json.format
+    let render articlesJson =
+        html [ _lang "en" ]
+            [ head []
+                  [ meta [ _charset "utf-8" ]
+                    meta [ _name "viewport"; _content "width=device-width" ]
+                    link [ _rel "stylesheet"; _type "text/css"; _href "/damo-io.css" ]
+                    title [] [ str "damo.io - Damien Le Berrigaud's feed aggregator." ]
+                  ]
+              body []
+                  [ script [ _src "/damo-io.js" ] []
+                    script [] [ rawText (sprintf """
+                        if (!window.location.hash) {
+                            window.location.hash = '#About,Social,Blog';
+                        }
+                        Elm.DamoIO.App.init({flags: {articles: %s }});
+                    """ articlesJson) ]
+                  ]
+            ]
 
-        return! page "articles-list.html.liquid" { ArticlesJson = recordsJson } ctx
-    }
+
+let list findAllRecords: HttpHandler =
+    fun next ctx ->
+        task {
+            let now =
+                Posix.fromDateTimeOffset DateTimeOffset.UtcNow
+
+            let serialize object =
+                ctx.GetJsonSerializer().SerializeToString(object)
+
+            let recordsJson =
+                findAllRecords()
+                |> List.sortByDescending (fun r -> Option.defaultValue now r.Date)
+                |> List.map toJson
+                |> serialize
+
+            return! htmlView (View.render recordsJson) next ctx
+        }

@@ -7,12 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Giraffe" Version="4.0.*" />
     <PackageReference Include="FSharp.Control.AsyncSeq" Version="2.0.21" />
-    <PackageReference Include="FSharp.Data" Version="3.0.0" />
-    <PackageReference Include="DotLiquid" Version="2.0.298" />
-    <PackageReference Include="Suave" Version="2.5.3" />
-    <PackageReference Include="Suave.DotLiquid" Version="2.5.3" />
-    <PackageReference Include="Chiron" Version="6.3.1" />
+    <PackageReference Include="Logary.Adapters.AspNetCore" Version="5.0.0" />
+    <PackageReference Include="Microsoft.FSharpLu.Json" Version="0.11.6" />
 
     <ProjectReference Include="../prelude/prelude.fsproj" />
     <ProjectReference Include="../feeds-processing/feeds-processing.fsproj" />
@@ -21,16 +19,14 @@
     <Compile Include="DamoIOServer/ArticlesDataGateway.fs" />
     <Compile Include="DamoIOServer/ArticlesHandler.fs" />
     <Compile Include="DamoIOServer/FeedsProcessor.fs" />
-    <Compile Include="DamoIOServer/SslHandler.fs" />
     <Compile Include="DamoIOServer/App.fs" />
+    <Compile Include="DamoIOServer/Logging.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resources Include="Resources/**" />
+    <Content Include="WebRoot/**/*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
-
-  <Target Name="CopyResources" AfterTargets="Publish">
-    <Copy SourceFiles="@(Resources)" DestinationFiles="@(Resources->'$(PublishDir)/Resources/%(RecursiveDir)%(Filename)%(Extension)')" />
-  </Target>
 </Project>

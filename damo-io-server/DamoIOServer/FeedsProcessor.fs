@@ -23,10 +23,10 @@ let private resultToList sourceType (result: ProcessingResult) =
     List.map (articleToRecord sourceType) (Result.defaultValue [] result)
 
 let private consumerKey =
-    Env.varRequired "TWITTER_CONSUMER_API_KEY"
+    Env.requireVar "TWITTER_CONSUMER_API_KEY"
 
 let private consumerSecret =
-    Env.varRequired "TWITTER_CONSUMER_SECRET"
+    Env.requireVar "TWITTER_CONSUMER_SECRET"
 
 
 let private processFeed feed: ProcessingResult =

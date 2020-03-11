@@ -1,12 +1,10 @@
 module DamoIOServer.App
 
+open System
 open DamoIOServer.ArticlesDataGateway
-open DamoIOServer.SslHandler
 open FSharp.Control
-open Suave
-open Suave.Filters
-open Suave.Operators
-open Suave.RequestErrors
+open Giraffe
+open Microsoft.Extensions.Logging
 
 
 let private updatesSequence =
@@ -25,12 +23,11 @@ let backgroundProcessing =
         updatesSequence
 
 
-let handler =
-    choose [
-        enforceSsl
+let handler: HttpHandler =
+    choose
+        [ route "/" >=> GET >=> ArticlesHandler.list Repository.findAll
+          setStatusCode 404 >=> text "Not Found" ]
 
-        path "/" >=> GET >=> ArticlesHandler.list Repository.findAll
-
-        GET >=> Files.browseHome
-        NOT_FOUND "not found"
-    ]
+let errorHandler (ex: Exception) (logger: ILogger): HttpHandler =
+    logger.LogError(ex, "An unhandled exception has occurred while executing the request.")
+    clearResponse >=> setStatusCode 500 >=> text ex.Message

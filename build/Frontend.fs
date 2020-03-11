@@ -4,7 +4,6 @@ open Fake.Core
 open Fake.IO
 open SharpScss
 open Support
-open System.IO
 
 let private generateCss filePath =
     let scssOptions = ScssOptions(OutputStyle = ScssOutputStyle.Compressed)
@@ -17,18 +16,18 @@ let private runCmd cmd workingDir args =
     |> ensureSuccessExitCode
 
 let private clean _ =
-    File.delete "damo-io-server/Resources/public/damo-io.js"
-    File.delete "damo-io-server/Resources/public/damo-io.css"
+    File.delete "damo-io-server/Resources/WebRoot/damo-io.js"
+    File.delete "damo-io-server/Resources/WebRoot/damo-io.css"
     File.delete "somanyfeeds-server/WebRoot/somanyfeeds.css"
     File.delete "somanyfeeds-server/WebRoot/somanyfeeds.js"
     Directory.delete "damo-io-frontend/elm-stuff/0.19.1"
 
 let private buildScss _ =
-    generateCss "shared-frontend/Scss/damo-io.scss" |> writeToFile "damo-io-server/Resources/public/damo-io.css"
+    generateCss "shared-frontend/Scss/damo-io.scss" |> writeToFile "damo-io-server/WebRoot/damo-io.css"
     generateCss "shared-frontend/Scss/somanyfeeds.scss" |> writeToFile "somanyfeeds-server/WebRoot/somanyfeeds.css"
 
 let private buildDamoIoFrontend _ =
-    runCmd "elm" "damo-io-frontend" "make --optimize --output ../../damo-io-server/Resources/public/damo-io.js DamoIO/App.elm"
+    runCmd "elm" "damo-io-frontend" "make --optimize --output ../damo-io-server/WebRoot/damo-io.js DamoIO/App.elm"
 
 let private yarn =
     if Environment.isWindows
@@ -40,7 +39,7 @@ let private buildSoManyFeedsFrontend _ =
     runCmd yarn "somanyfeeds-frontend" "run build"
 
 let private copyFonts _ =
-    Shell.copyDir "damo-io-server/Resources/public/fonts" "shared-frontend/Fonts" (fun _ -> true)
+    Shell.copyDir "damo-io-server/WebRoot/fonts" "shared-frontend/Fonts" (fun _ -> true)
     Shell.copyDir "somanyfeeds-server/WebRoot/fonts" "shared-frontend/Fonts" (fun _ -> true)
 
 let loadTasks _ =
