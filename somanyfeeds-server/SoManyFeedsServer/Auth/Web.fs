@@ -7,9 +7,9 @@ open SoManyFeedsDomain
 open SoManyFeedsPersistence.DataSource
 open SoManyFeedsPersistence.UsersDataGateway
 open SoManyFeedsDomain.User
+open SoManyFeedsFrontend.Applications
 open SoManyFeedsServer
 open SoManyFeedsServer.Auth
-open SoManyFeedsServer.CacheBusting
 
 
 module private Views =
@@ -96,7 +96,12 @@ let doLogout: HttpHandler =
         |> redirectTo false "/" next
 
 let registrationPage: HttpHandler =
-    htmlView (Layout.startFableApp "SoManyFeeds.StartRegistrationApp();")
+    htmlView (
+        Layout.hydrateFableApp
+            Registration.view
+            Registration.initModel
+            "SoManyFeeds.StartRegistrationApp();"
+    )
 
 let authenticate (withUser: User -> HttpHandler): HttpHandler =
     fun next ctx ->

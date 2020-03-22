@@ -64,3 +64,10 @@ let startFableApp js =
           script [ _src (assetPath "/somanyfeeds.js") ] []
           script [] [ rawText js ]
         ]
+
+let hydrateFableApp view model js =
+    withoutHeader
+        [ div [ _id "somanyfeeds-body" ] [ rawText (Fable.ReactServer.renderToString (view model ignore)) ]
+          script [ _src (assetPath "/somanyfeeds.js") ] []
+          script [] [ rawText js ]
+        ]

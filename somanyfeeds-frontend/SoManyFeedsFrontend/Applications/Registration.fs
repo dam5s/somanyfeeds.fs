@@ -20,8 +20,11 @@ type Msg =
     | ValidateField of (RegistrationForm -> RegistrationForm)
     | RegistrationResult of Result<unit, RequestError>
 
+let initModel =
+    { Form = RegistrationForm.create }
+
 let init () =
-    { Form = RegistrationForm.create }, Cmd.none
+    initModel, Cmd.none
 
 let private sendRequest form =
     async {
