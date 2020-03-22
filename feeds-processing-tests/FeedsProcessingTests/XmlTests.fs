@@ -23,7 +23,7 @@ let ``with unsupported XML``() =
     | Ok _ -> Assert.Fail "Expected failure"
     | Error err ->
         String.length err.Message |> shouldBeGreaterThan 0
-        List.length err.Exceptions |> shouldEqual 0
+        List.length err.Exceptions |> shouldEqual 1
 
 
 [<Test>]
