@@ -22,5 +22,8 @@ let private monthDisplayName month =
 let toString posix =
     let date = Posix.toDateTime posix
     let month = monthDisplayName date.Month
+    let day = date.ToString "dd"
+    let year = date.ToString "yy"
+    let time = date.ToString "HH:mm"
 
-    sprintf "%s %s" month (date.ToString "dd 'yy @ HH:mm")
+    sprintf "%s %s '%s @ %s" month day year time

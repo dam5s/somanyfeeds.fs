@@ -2,13 +2,14 @@ module SoManyFeedsServer.FeedsApi
 
 open Giraffe
 open SoManyFeedsPersistence.FeedsDataGateway
+open SoManyFeedsFrontend.Components.Feed
 
 
 module Json =
-    let feed (record: FeedRecord) =
-        {| id = record.Id
-           name = record.Name
-           url = record.Url |}
+    let feed (record: FeedRecord): Feed.Json =
+        { id = record.Id
+          name = record.Name
+          url = record.Url }
 
 let list (listFeeds: AsyncResult<FeedRecord seq>): HttpHandler =
     listFeeds |> Api.list Json.feed

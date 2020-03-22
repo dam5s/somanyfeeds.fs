@@ -5,75 +5,57 @@ open FSharp.Control.Tasks.V2.ContextInsensitive
 open Giraffe
 open SoManyFeedsPersistence.ArticlesDataGateway
 open SoManyFeedsPersistence.FeedsDataGateway
+open SoManyFeedsFrontend.Applications
 open SoManyFeedsDomain.User
 
 
-type FrontendPage =
-    | Recent of feedId: int64 option
-    | Bookmarks
-
-
-type private Flags =
-    { UserName: string
-      Recents: ArticleRecord seq
-      Feeds: FeedRecord seq
-      Page: FrontendPage }
-
-
 module private Json =
-    let private articleList feeds articles =
+    let articleArray feeds articles =
         articles
         |> Seq.map (ArticlesApi.Json.article feeds)
-        |> Seq.toList
+        |> Seq.toArray
 
-    let private feedList feeds =
+    let feedArray feeds =
         feeds
         |> Seq.map FeedsApi.Json.feed
-        |> Seq.toList
+        |> Seq.toArray
 
-    let private pageJson page =
+    let maybeFeedId (page: Read.Page) =
         match page with
-        | Recent _ -> "Recent"
-        | Bookmarks -> "Bookmarks"
-
-    let maybeFeedId page =
-        match page with
-        | Recent maybeFeedId -> maybeFeedId
-        | Bookmarks -> None
-
-    let flags flags =
-        {| userName = flags.UserName
-           recents = articleList flags.Feeds flags.Recents
-           feeds = feedList flags.Feeds
-           page = pageJson flags.Page
-           selectedFeedId = maybeFeedId flags.Page |}
+        | Read.Recent maybeFeedId -> maybeFeedId
+        | Read.Bookmarks -> None
 
 
 module private View =
-    let render (flagsJson: string) =
-        flagsJson
-        |> sprintf "SoManyFeeds.StartReadApp(%s);"
-        |> Layout.startFableApp
+    let render flags ctx =
+        let flagsJson = Api.serializeObject flags ctx
+        let model = Read.initModel flags
+        let js = sprintf "SoManyFeeds.StartReadApp(%s);" flagsJson
+
+        Layout.hydrateFableApp Read.view model js
 
 
 let page
     (listFeedsAndArticles: int64 option -> AsyncResult<FeedRecord seq * ArticleRecord seq>)
     (user: User)
-    (frontendPage: FrontendPage): HttpHandler =
+    (frontendPage: Read.Page): HttpHandler =
 
     fun next ctx ->
         task {
             let maybeFeedId = Json.maybeFeedId frontendPage
 
             match! listFeedsAndArticles maybeFeedId with
-            | Ok(feeds, articles) ->
-                let flags =
-                    { UserName = user.Name
-                      Recents = articles
-                      Feeds = feeds
-                      Page = frontendPage }
-                let flagsJson = Api.serializeObject (Json.flags flags) ctx
-                return! htmlView (View.render flagsJson) next ctx
+            | Ok (feeds, articles) ->
+                let (page, selectedFeedId) = Read.pageToFlag frontendPage
+
+                let flags: Read.Flags =
+                    { userName = user.Name
+                      recents = Json.articleArray feeds articles
+                      feeds = Json.feedArray feeds
+                      page = page
+                      selectedFeedId = selectedFeedId }
+
+                return! htmlView (View.render flags ctx) next ctx
             | Error explanation ->
                 return! ErrorPage.page explanation next ctx
         }

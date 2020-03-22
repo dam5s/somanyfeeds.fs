@@ -6,6 +6,7 @@ open Giraffe
 open Microsoft.AspNetCore.Http
 open Microsoft.Extensions.Logging
 open SoManyFeedsDomain.User
+open SoManyFeedsFrontend.Applications
 open SoManyFeedsPersistence
 open SoManyFeedsPersistence.UserArticlesDataGateway
 open SoManyFeedsServer
@@ -88,7 +89,7 @@ type private UserReadPage(articles: UserArticles, user: User) =
     member this.Read innerPage _ =
         ReadPage.page articles.ListRecent user innerPage
     member this.ReadFeed feedId =
-        ReadPage.page articles.ListRecent user (ReadPage.Recent(Some feedId))
+        ReadPage.page articles.ListRecent user (Read.Recent(Some feedId))
 
 
 type private UserManagePage(feeds: UserFeeds, user: User) =
@@ -108,9 +109,9 @@ let private authenticatedHandler (user: User) =
 
     choose
         [ GET >=> route "/read" >=> redirectTo false "/read/recent"
-          GET >=> route "/read/recent" >=> warbler (userReadPage.Read(ReadPage.Recent None))
+          GET >=> route "/read/recent" >=> warbler (userReadPage.Read(Read.Recent None))
           GET >=> routef "/read/recent/feed/%d" userReadPage.ReadFeed
-          GET >=> route "/read/bookmarks" >=> warbler (userReadPage.Read ReadPage.Bookmarks)
+          GET >=> route "/read/bookmarks" >=> warbler (userReadPage.Read Read.Bookmarks)
 
           GET >=> route "/manage" >=> redirectTo false "/manage/list"
           GET >=> route "/manage/list" >=> warbler userManagePage.List

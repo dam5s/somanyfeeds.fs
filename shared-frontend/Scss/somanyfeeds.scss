@@ -218,7 +218,7 @@ header.page {
     @include icon(icon-light-svg($dots-vertical-icon-path));
     color: $bg-color;
     background-position: 1rem center;
-    padding: .5rem 1rem .5rem 2.5rem;
+    padding: .5rem 1rem .4rem 2.5rem;
     cursor: pointer;
     border-bottom: 2px solid transparent;
     display: inline-block;

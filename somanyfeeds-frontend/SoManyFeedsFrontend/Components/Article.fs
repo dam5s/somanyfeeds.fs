@@ -1,7 +1,6 @@
 module SoManyFeedsFrontend.Components.Article
 
 open Fable.Core
-open SoManyFeedsFrontend.Components.Feed
 open SoManyFeedsFrontend.Support
 open SoManyFeedsFrontend.Support.Http
 open Result.Operators
@@ -13,7 +12,7 @@ type Article =
       Title: string
       FeedUrl: string
       Content: string
-      Date: Time.Posix
+      Date: Time.Posix option
       ReadUrl: string
       BookmarkUrl: string
       State: ArticleState }
@@ -31,7 +30,7 @@ module Article =
           title: string
           feedUrl: string
           content: string
-          date: int64
+          date: int64 option
           readUrl: string
           bookmarkUrl: string }
 
@@ -41,7 +40,7 @@ module Article =
           Title = json.title
           FeedUrl = json.feedUrl
           Content = json.content
-          Date = Posix(int64 json.date) // force to int64 here,
+          Date = json.date |> Option.map (int64 >> Posix) // force to int64 here,
           // json value is not correctly parsed to that type by Fable.
           ReadUrl = json.readUrl
           BookmarkUrl = json.bookmarkUrl
@@ -70,7 +69,7 @@ module Article =
 
     let listBookmarksRequest = HttpRequest.get "/api/articles/bookmarks"
     let listAllRequest = HttpRequest.get "/api/articles/recent"
-    let listByFeedRequest (feed: Feed) = HttpRequest.get (sprintf "/api/articles/recent?feedId=%d" feed.Id)
+    let listByFeedRequest (feedId: int64) = HttpRequest.get (sprintf "/api/articles/recent?feedId=%d" feedId)
     let createBookmarkRequest article = HttpRequest.post article.BookmarkUrl
     let deleteBookmarkRequest article = HttpRequest.delete article.BookmarkUrl
     let createReadArticleRequest article = HttpRequest.post article.ReadUrl

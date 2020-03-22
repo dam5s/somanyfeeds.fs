@@ -21,8 +21,13 @@ type Flags =
       selectedFeedId: int64 option }
 
 type Page =
-    | Recent of Feed option
+    | Recent of int64 option
     | Bookmarks
+
+let pageToFlag page =
+    match page with
+    | Recent feedIdOption -> ("Recent", feedIdOption)
+    | Bookmarks -> ("Bookmarks", None)
 
 type Model =
     { UserName: string
@@ -54,7 +59,7 @@ let private pageFromFlags flags =
         flags.feeds
         |> Array.filter (fun (f: Feed.Json) -> Some f.id = flags.selectedFeedId)
         |> Array.tryHead
-        |> Option.map Feed.fromJson
+        |> Option.map (fun f -> f.id)
         |> Recent
     | _ -> Bookmarks
 
@@ -71,9 +76,9 @@ let private (|RecentFeed|_|) (path: string) =
 let private tryFindFeed model feedId =
     model.Feeds |> List.tryFind (fun f -> feedId = f.Id)
 
-let private pageFromPath (model: Model) (path: string) =
+let private pageFromPath (path: string) =
     match path with
-    | RecentFeed feedId -> Some (Recent(tryFindFeed model feedId))
+    | RecentFeed feedId -> Some (Recent (Some feedId))
     | "/read/recent" -> Some (Recent None)
     | "/read/bookmarks" -> Some Bookmarks
     | _ -> None
@@ -95,16 +100,16 @@ let private loadBookmarks =
 let private loadAllFeeds =
     loadArticles Article.listAllRequest ReceivedRecents
 
-let private loadOneFeed feed =
-    loadArticles (Article.listByFeedRequest feed) ReceivedRecents
+let private loadOneFeed feedId =
+    loadArticles (Article.listByFeedRequest feedId) ReceivedRecents
 
-let init flags =
+let initModel flags =
     let page = pageFromFlags flags
 
-    let (bookmarks, cmd) =
+    let bookmarks =
         match page with
-        | Bookmarks -> Loading, loadBookmarks
-        | _ -> NotLoaded, Cmd.none
+        | Bookmarks -> Loading
+        | _ -> NotLoaded
 
     { UserName = flags.userName
       Recents =
@@ -118,22 +123,33 @@ let init flags =
           |> Array.toList
           |> List.map Feed.fromJson
       Page = page
-      DropdownOpen = false }, cmd
+      DropdownOpen = false }
 
-let private pageTitle page =
+let init flags =
+    let model = initModel flags
+    let cmd =
+        match model.Page with
+        | Bookmarks -> loadBookmarks
+        | _ -> Cmd.none
+
+    model, cmd
+
+let private pageTitle model page =
     match page with
     | Recent None -> "Recent"
-    | Recent(Some feed) -> feed.Name
+    | Recent(Some feedId) -> (tryFindFeed model feedId)
+                             |> Option.map (fun feed -> feed.Name)
+                             |> Option.defaultValue "Recent"
     | Bookmarks -> "Bookmarks"
 
 let private pagePath page =
     match page with
     | Recent None -> "/read/recent"
-    | Recent(Some feed) -> sprintf "/read/recent/feed/%d" feed.Id
+    | Recent(Some feedId) -> sprintf "/read/recent/feed/%d" feedId
     | Bookmarks -> "/read/bookmarks"
 
-let menuOptions model (dispatch: Html.Dispatcher<Msg>) =
-    let feedPage feed = Recent(Some feed)
+let private menuOptions model (dispatch: Html.Dispatcher<Msg>) =
+    let feedPage feed = Recent(Some feed.Id)
 
     let pages =
         [ Recent None
@@ -142,7 +158,7 @@ let menuOptions model (dispatch: Html.Dispatcher<Msg>) =
 
     let pageLink page =
         let path = pagePath page
-        let title = pageTitle page
+        let title = pageTitle model page
         let msg = NavigateToAndPushState path
         a [ Href path ; dispatch.OnClickPreventingDefault msg ] [ str title ]
 
@@ -168,7 +184,12 @@ let private articleView model (dispatch: Html.Dispatcher<Msg>) (record: Article)
             [ h4 [] [ str record.FeedName ]
               articleTitleLink() ]
 
-    let articleDate _ = p [ Class "date" ] [ str (Posix.toString record.Date) ]
+    let articleDate _ =
+        let dateStr =
+            record.Date
+            |> Option.map Posix.toString
+            |> Option.defaultValue "-"
+        p [ Class "date" ] [ str dateStr ]
 
     let articleContent _ =
         div
@@ -258,14 +279,13 @@ let view model d =
     div []
         [ header [ Class "app-header" ]
               [ div []
-                    [ div [ Class "page-content" ]
-                          [ Logo.view
-                            Tabs.view Tabs.Read ] ] ]
+                    [ Logo.view
+                      Tabs.view Tabs.Read ] ]
           header [ Class "page" ]
               [ div [ Class "row align-end responsive" ]
                     [ div []
                           [ h2 [] [ str "Articles" ]
-                            h1 [] [ str (pageTitle model.Page) ] ]
+                            h1 [] [ str (pageTitle model model.Page) ] ]
                       nav [ Class "flex-init" ]
                           [ div
                               [ Class("toggle " + dropdownClass)
@@ -289,7 +309,7 @@ let private createReadArticle = Article.createReadArticleRequest >> doSimpleRequ
 let private deleteReadArticle = Article.deleteReadArticleRequest >> doSimpleRequest
 
 let private changePage model (withPush: bool) newPath =
-    match pageFromPath model newPath with
+    match pageFromPath newPath with
     | Some newPage ->
         let newPageModel = { model with DropdownOpen = false; Page = newPage }
         let batch cmd =
@@ -302,9 +322,9 @@ let private changePage model (withPush: bool) newPath =
         | Recent None ->
             { newPageModel with Recents = Loading },
             batch loadAllFeeds
-        | Recent (Some feed) ->
+        | Recent (Some feedId) ->
             { newPageModel with Recents = Loading },
-            batch (loadOneFeed feed)
+            batch (loadOneFeed feedId)
         | Bookmarks ->
             { newPageModel with Bookmarks = Loading },
             batch loadBookmarks

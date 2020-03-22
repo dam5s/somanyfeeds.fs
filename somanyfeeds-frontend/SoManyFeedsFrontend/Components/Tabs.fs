@@ -12,7 +12,11 @@ type Tab =
 
 let private tabName = sprintf "%A"
 
-let private tabPath = tabName >> String.toLowerInvariant >> sprintf "/%s"
+let private tabPath tab =
+    match tab with
+    | Home -> "/"
+    | Read -> "/read"
+    | Manage -> "/manage"
 
 let private tabView (currentTab: Tab) (tab: Tab) =
     if tab = currentTab
