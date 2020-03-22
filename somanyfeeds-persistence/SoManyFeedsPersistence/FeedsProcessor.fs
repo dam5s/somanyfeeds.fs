@@ -116,7 +116,7 @@ let private backgroundProcessing (sequenceModifier: AsyncSeq<FeedUrl> -> AsyncSe
     |> sequenceModifier
     |> AsyncSeq.map processFeed
     |> AsyncSeq.concatSeq
-    |> AsyncSeq.iterAsyncParallel persistArticle
+    |> AsyncSeq.iterAsync persistArticle
 
 
 let backgroundProcessingOnce =

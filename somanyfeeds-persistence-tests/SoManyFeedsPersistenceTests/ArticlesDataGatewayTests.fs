@@ -44,9 +44,10 @@ let ``creating then updating an article``() =
         }
 
 
-    let createResult = fields
-                      |> ArticlesDataGateway.createOrUpdateArticle
-                      |> Async.RunSynchronously
+    let createResult =
+        fields
+        |> ArticlesDataGateway.createOrUpdateArticle
+        |> Async.RunSynchronously
 
     match createResult with
     | Error err -> failwithf "Expected Ok, but got Error '%s'" err.Message
