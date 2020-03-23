@@ -4,6 +4,7 @@ open Giraffe
 open Giraffe.Serialization.Json
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
+open Microsoft.AspNetCore.StaticFiles
 open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Logging
@@ -27,9 +28,14 @@ let private configureErrorHandling (app: IApplicationBuilder) =
     | false -> app.UseGiraffeErrorHandler WebApp.errorHandler
 
 let private configureApp (app: IApplicationBuilder) =
+    let contentTypeProvider = FileExtensionContentTypeProvider()
+    contentTypeProvider.Mappings.[".webmanifest"] <- "application/json"
+    let staticFileOptions = StaticFileOptions()
+    staticFileOptions.ContentTypeProvider <- contentTypeProvider
+
     (configureErrorHandling app)
         .UseHttpsRedirection()
-        .UseStaticFiles()
+        .UseStaticFiles(staticFileOptions)
         .UseGiraffe(WebApp.handler)
 
 let private configureServices (services: IServiceCollection) =
