@@ -12,12 +12,6 @@
  1. Create 3 local databases`somanyfeeds_dev`, `somanyfeeds_test`, `somanyfeeds_integration_tests` that belong to user `somanyfeeds`
  1. Migrate the databases `dotnet run -p build db:somanyfeeds:local:migrate`
 
-### Chrome + Chrome driver.
-
-For integration tests you'll need a version of Chrome and its matching Chrome driver.
-I recommend putting the driver in the same folder as Chrome and its binary.
-Then set the `CHROME_DRIVER_DIR` environment variable in your `.env` file. 
-
 ### Setup your environment variables.
 
 The file `.env.example` contains the list of necessary variables for the whole build.
@@ -26,7 +20,6 @@ The file `.env.example` contains the list of necessary variables for the whole b
  * `TWITTER_CONSUMER_SECRET`  is used by `damo-io-server` at runtime only.
  * `COOKIE_ENCRYPTION_KEY` is used by `somanyfeeds-server` for encryption of JWT cookies
  * `DB_CONNECTION` is set to `Host=localhost;Username=somanyfeeds;Password=secret;Database=somanyfeeds_dev`
- * `CHROME_DRIVER_DIR` is necessary for the integration tests, e.g. `/home/dam5s/dev/chromium`
  * `ENABLE_EXCEPTION_PAGE` is used by Giraffe when running `somanyfeeds-server` locally.
 
 ### Running the build
