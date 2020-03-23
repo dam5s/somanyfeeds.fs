@@ -7,6 +7,7 @@ open Microsoft.AspNetCore.Http
 open Microsoft.Extensions.Logging
 open SoManyFeedsDomain.User
 open SoManyFeedsFrontend.Applications
+open SoManyFeedsFrontend.Applications
 open SoManyFeedsPersistence
 open SoManyFeedsPersistence.UserArticlesDataGateway
 open SoManyFeedsServer
@@ -94,11 +95,11 @@ type private UserReadPage(articles: UserArticles, user: User) =
 
 type private UserManagePage(feeds: UserFeeds, user: User) =
     member this.List _ =
-        ManagePage.page maxFeeds feeds.List user ManagePage.List
+        ManagePage.page maxFeeds feeds.List user Manage.List
     member this.SearchNone _ =
-        ManagePage.page maxFeeds feeds.List user (ManagePage.Search None)
+        ManagePage.page maxFeeds feeds.List user (Manage.Search None)
     member this.SearchSome text =
-        ManagePage.page maxFeeds feeds.List user (ManagePage.Search (Some text))
+        ManagePage.page maxFeeds feeds.List user (Manage.Search (Some text))
 
 
 let private authenticatedHandler (user: User) =

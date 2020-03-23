@@ -5,48 +5,23 @@ open FSharp.Control.Tasks.V2.ContextInsensitive
 open Giraffe
 open SoManyFeedsPersistence.FeedsDataGateway
 open SoManyFeedsDomain.User
+open SoManyFeedsFrontend.Applications
 open SoManyFeedsServer
 
 
-type FrontendPage =
-    | List
-    | Search of string option
-
-
-type private Flags =
-    { UserName: string
-      MaxFeeds: int
-      Feeds: FeedRecord seq
-      Page: FrontendPage }
-
-
-module private Json =
-    let private pageJson page =
-        match page with
-        | List -> "List"
-        | Search _ -> "Search"
-
-    let private searchText page =
-        match page with
-        | List -> None
-        | Search textOption -> textOption
-
-    let flags flags =
-        {| userName = flags.UserName
-           maxFeeds = flags.MaxFeeds
-           feeds =
-               flags.Feeds
-               |> Seq.map FeedsApi.Json.feed
-               |> Seq.toList
-           page = pageJson flags.Page
-           searchText = searchText flags.Page |}
+let private pageFlags (page: Manage.Page) =
+    match page with
+    | Manage.List -> ("List", None)
+    | Manage.Search text -> ("Search", text)
 
 
 module private View =
-    let render (flagsJson: string) =
-        flagsJson
-        |> sprintf "SoManyFeeds.StartManageApp(%s);"
-        |> Layout.startFableApp
+    let render (flags: Manage.Flags) ctx =
+        let flagsJson = Api.serializeObject flags ctx
+        let model = Manage.initModel flags
+        let js = sprintf "SoManyFeeds.StartManageApp(%s);" flagsJson
+
+        Layout.hydrateFableApp Manage.view model js
 
 
 let page maxFeeds (listFeeds: AsyncResult<FeedRecord seq>) (user: User) frontendPage =
@@ -54,15 +29,19 @@ let page maxFeeds (listFeeds: AsyncResult<FeedRecord seq>) (user: User) frontend
         task {
             match! listFeeds with
             | Ok records ->
-                let flags =
-                    { UserName = user.Name
-                      MaxFeeds = maxFeeds
-                      Feeds = records
-                      Page = frontendPage }
+                let (page, searchText) = pageFlags frontendPage
+                let flags: Manage.Flags =
+                    { userName = user.Name
+                      maxFeeds = maxFeeds
+                      feeds = records
+                              |> Seq.map FeedsApi.Json.feed
+                              |> Seq.toArray
+                      page = page
+                      searchText = searchText }
 
-                let flagsJson = Api.serializeObject (Json.flags flags) ctx
+                let view = View.render flags ctx
 
-                return! htmlView (View.render flagsJson) next ctx
+                return! htmlView view next ctx
             | Error explanation ->
                 return! ErrorPage.page explanation next ctx
         }

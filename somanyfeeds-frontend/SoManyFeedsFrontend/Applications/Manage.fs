@@ -2,8 +2,6 @@ module SoManyFeedsFrontend.Applications.Manage
 
 open Elmish
 open Browser
-open Browser
-open Browser
 open Fable.SimpleHttp
 open SoManyFeedsFrontend.Support
 open SoManyFeedsFrontend.Support.Dialog
@@ -20,7 +18,7 @@ type Flags =
 
 type Page =
     | List
-    | Search
+    | Search of string option
 
 type Model =
     { UserName: string
@@ -42,7 +40,7 @@ type Msg =
     | DeleteFeed
     | DeleteFeedResult of Feed * Result<unit, RequestError>
 
-let init (flags: Flags) =
+let initModel (flags: Flags) =
     let feeds = flags.feeds
                 |> Array.toList
                 |> List.map Feed.fromJson
@@ -54,8 +52,10 @@ let init (flags: Flags) =
       Form = Feed.emptyFields
       CreationInProgress = false
       DeleteDialog = Initial
-      DeletionInProgress = false }, Cmd.none
+      DeletionInProgress = false }
 
+let init (flags: Flags) =
+    initModel flags, Cmd.none
 
 let private sendCreateRequest form =
     async {
