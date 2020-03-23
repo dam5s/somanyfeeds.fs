@@ -7,7 +7,6 @@ open Microsoft.AspNetCore.Http
 open Microsoft.Extensions.Logging
 open SoManyFeedsDomain.User
 open SoManyFeedsFrontend.Applications
-open SoManyFeedsFrontend.Applications
 open SoManyFeedsPersistence
 open SoManyFeedsPersistence.UserArticlesDataGateway
 open SoManyFeedsServer
@@ -135,8 +134,8 @@ let private authenticatedHandler (user: User) =
 
 let handler: HttpHandler =
     choose
-        [ GET >=> route "/" >=> htmlView HomePage.view
-          GET >=> route "/login" >=> htmlView (Auth.Web.loginPage false)
+        [ GET >=> route "/" >=> HomePage.view
+          GET >=> route "/login" >=> Auth.Web.loginPage false
           POST >=> route "/login" >=> (Auth.Web.doLogin UsersDataGateway.findByEmailAndPassword)
           GET >=> route "/logout" >=> Auth.Web.doLogout
           GET >=> route "/register" >=> Auth.Web.registrationPage

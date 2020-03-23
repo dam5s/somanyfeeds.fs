@@ -12,41 +12,42 @@ open SoManyFeedsServer.Auth
 
 
 module private Views =
-    open GiraffeViewEngine
+    open Fable.React
+    open Fable.React.Props
 
     let login (error: bool) =
         let errorView =
             if error
-            then p [ _class "error message" ] [ rawText "Authentication failed." ]
+            then p [ Class "error message" ] [ str "Authentication failed." ]
             else div [] []
 
-        [ header [ _class "page" ]
-              [ div [ _class "page-content" ]
-                    [ h2 [] [ rawText "Login" ]
-                      h1 [] [ rawText "Authentication required" ]
+        [ header [ Class "page" ]
+              [ div [ Class "page-content" ]
+                    [ h2 [] [ str "Login" ]
+                      h1 [] [ str "Authentication required" ]
                     ]
               ]
-          div [ _class "main" ]
+          div [ Class "main" ]
               [ section []
-                    [ form [ _method "post"; _class "card" ]
+                    [ form [ Method "post"; Class "card" ]
                           [ errorView
                             label []
-                                [ rawText "Email"
-                                  input [ _type "email"; _name "email"; _placeholder "john@example.com" ]
+                                [ str "Email"
+                                  input [ Type "email"; Name "email"; Placeholder "john@example.com" ]
                                 ]
                             label []
-                                [ rawText "Password"
-                                  input [ _type "password"; _name "password"; _placeholder "******************" ]
+                                [ str "Password"
+                                  input [ Type "password"; Name "password"; Placeholder "******************" ]
                                 ]
-                            nav [] [ button [ _class "button primary" ] [ rawText "Sign in" ] ]
+                            nav [] [ button [ Class "button primary" ] [ str "Sign in" ] ]
                           ]
                     ]
                 section []
-                    [ div [ _class "card" ]
-                          [ p [ _class "message" ]
-                                [ rawText "Don't have an account? "
-                                  a [ _href "/register" ] [ rawText "Sign up now" ]
-                                  rawText "."
+                    [ div [ Class "card" ]
+                          [ p [ Class "message" ]
+                                [ str "Don't have an account? "
+                                  a [ Href "/register" ] [ str "Sign up now" ]
+                                  str "."
                                 ]
                           ]
                     ]
@@ -57,7 +58,7 @@ let loginPage error =
     Layout.withoutTabs (Views.login error)
 
 let private loginError =
-    htmlView (loginPage true)
+    loginPage true
 
 let private formData name (ctx: HttpContext) =
     name
@@ -95,12 +96,10 @@ let doLogout: HttpHandler =
         |> redirectTo false "/" next
 
 let registrationPage: HttpHandler =
-    htmlView (
-        Layout.hydrateFableApp
-            RegistrationFrontend.view
-            RegistrationFrontend.initModel
-            "SoManyFeeds.StartRegistrationApp();"
-    )
+    Layout.hydrateFableApp
+        RegistrationFrontend.view
+        RegistrationFrontend.initModel
+        "SoManyFeeds.StartRegistrationApp();"
 
 let authenticate (withUser: User -> HttpHandler): HttpHandler =
     fun next ctx ->

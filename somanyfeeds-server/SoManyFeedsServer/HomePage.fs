@@ -2,43 +2,44 @@
 module SoManyFeedsServer.HomePage
 
 open Giraffe
-open GiraffeViewEngine
+open Fable.React
+open Fable.React.Props
+open SoManyFeedsFrontend.Components
 
-let private txt = rawText
-let private strong text = strong [] [ txt text ]
-let private link url text = a [ _href url; _target "_blank" ] [ txt text ]
+let private strong text = strong [] [ str text ]
+let private link url text = a [ Href url; Target "_blank" ] [ str text ]
 
-let view =
-    [ header [ _class "page" ]
-          [ div [ _class "page-content" ]
-                [ h2 [] [ txt "Home" ]
-                  h1 [] [ txt "Welcome" ]
+let view: HttpHandler =
+    [ header [ Class "page" ]
+          [ div [ Class "page-content" ]
+                [ h2 [] [ str "Home" ]
+                  h1 [] [ str "Welcome" ]
                 ]
           ]
-      div [ _class "main" ]
+      div [ Class "main" ]
           [ section []
-                [ div [ _class "card" ]
-                      [ p [ _class "big-message" ]
+                [ div [ Class "card" ]
+                      [ p [ Class "big-message" ]
                             [ strong "SoManyFeeds"
-                              txt " is a "
+                              str " is a "
                               strong "feed aggregator"
-                              txt ". Read the latest articles from multiple subscriptions in a"
+                              str ". Read the latest articles from multiple subscriptions in a"
                               strong "mobile friendly"
-                              txt " format."
+                              str " format."
                             ]
-                        p [ _class "big-message" ]
-                            [ txt "This website is written in "
+                        p [ Class "big-message" ]
+                            [ str "This website is written in "
                               link "https://fsharp.org" "F#"
-                              txt " and "
+                              str " and "
                               link "https://fsharelm-lang.org" "Elm"
-                              txt ". Source code is all "
+                              str ". Source code is all "
                               link "https://github.com/dam5s/somanyfeeds.fs" "available on Github"
-                              txt ". This version is deployed to "
+                              str ". This version is deployed to "
                               link "https://run.pivotal.io" "Pivotal Web Services"
-                              txt "."
+                              str "."
                             ]
                       ]
                 ]
           ]
     ]
-    |> Layout.withTabs Layout.Home
+    |> Layout.withTabs Tabs.Home

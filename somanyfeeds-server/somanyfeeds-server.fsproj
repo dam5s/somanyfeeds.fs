@@ -26,7 +26,6 @@
   <ItemGroup>
     <Compile Include="SoManyFeedsServer/Api.fs" />
     <Compile Include="SoManyFeedsServer/CacheBusting.fs" />
-    <Compile Include="SoManyFeedsServer/Logo.fs" />
     <Compile Include="SoManyFeedsServer/Layout.fs" />
     <Compile Include="SoManyFeedsServer/ErrorPage.fs" />
     <Compile Include="SoManyFeedsServer/Auth/JWT.fs" />
@@ -36,8 +35,8 @@
     <Compile Include="SoManyFeedsServer/UsersApi.fs" />
     <Compile Include="SoManyFeedsServer/ArticlesApi.fs" />
     <Compile Include="SoManyFeedsServer/FeedsApi.fs" />
-    <Compile Include="SoManyFeedsServer\ManageBackend.fs" />
-    <Compile Include="SoManyFeedsServer\ReadBackend.fs" />
+    <Compile Include="SoManyFeedsServer/ManageBackend.fs" />
+    <Compile Include="SoManyFeedsServer/ReadBackend.fs" />
     <Compile Include="SoManyFeedsServer/HomePage.fs" />
     <Compile Include="SoManyFeedsServer/WebApp.fs" />
     <Compile Include="SoManyFeedsServer/Logging.fs" />

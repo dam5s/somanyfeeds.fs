@@ -1,23 +1,22 @@
 module SoManyFeedsServer.ErrorPage
 
-open Giraffe
-
 module private Views =
-    open GiraffeViewEngine
+    open Fable.React
+    open Fable.React.Props
 
     let error message =
         let fullMessage = sprintf "Oops, there was an error: %s" message
 
-        [ header [ _class "page" ]
-              [ div [ _class "page-content" ]
-                    [ h2 [] [ rawText "Error" ]
-                      h1 [] [ rawText "There was a server error" ]
+        [ header [ Class "page" ]
+              [ div [ Class "page-content" ]
+                    [ h2 [] [ str "Error" ]
+                      h1 [] [ str "There was a server error" ]
                     ]
               ]
-          div [ _class "main" ]
+          div [ Class "main" ]
               [ section []
-                    [ div [ _class "card" ]
-                          [ p [ _class "message" ] [ encodedText fullMessage ]
+                    [ div [ Class "card" ]
+                          [ p [ Class "message" ] [ str fullMessage ]
                           ]
                     ]
               ]
@@ -31,4 +30,3 @@ let page (explanation: Explanation) =
     |> logger.Error
     |> fun e -> Views.error e.Message
     |> Layout.withoutTabs
-    |> htmlView

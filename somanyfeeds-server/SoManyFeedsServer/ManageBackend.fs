@@ -33,7 +33,7 @@ let page maxFeeds (listFeeds: AsyncResult<FeedRecord seq>) (user: User) frontend
                 let js = sprintf "SoManyFeeds.StartManageApp(%s);" flagsJson
                 let view = Layout.hydrateFableApp view model js
 
-                return! htmlView view next ctx
+                return! view next ctx
             | Error explanation ->
                 return! ErrorPage.page explanation next ctx
         }
