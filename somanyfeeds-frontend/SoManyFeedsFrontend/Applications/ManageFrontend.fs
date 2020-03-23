@@ -1,4 +1,4 @@
-module SoManyFeedsFrontend.Applications.Manage
+module SoManyFeedsFrontend.Applications.ManageFrontend
 
 open Elmish
 open Browser

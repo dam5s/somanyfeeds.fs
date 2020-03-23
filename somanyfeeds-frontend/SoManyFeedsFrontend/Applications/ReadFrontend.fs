@@ -1,4 +1,4 @@
-module SoManyFeedsFrontend.Applications.Read
+module SoManyFeedsFrontend.Applications.ReadFrontend
 
 open Elmish
 open Fable.React
@@ -23,11 +23,6 @@ type Flags =
 type Page =
     | Recent of int64 option
     | Bookmarks
-
-let pageToFlag page =
-    match page with
-    | Recent feedIdOption -> ("Recent", feedIdOption)
-    | Bookmarks -> ("Bookmarks", None)
 
 type Model =
     { UserName: string

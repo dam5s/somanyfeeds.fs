@@ -27,9 +27,9 @@
     <Compile Include="SoManyFeedsFrontend/Components/RegistrationForm.fs" />
     <Compile Include="SoManyFeedsFrontend/Components/Article.fs" />
     <Compile Include="SoManyFeedsFrontend/Components/Tabs.fs" />
-    <Compile Include="SoManyFeedsFrontend/Applications/Registration.fs" />
-    <Compile Include="SoManyFeedsFrontend/Applications/Manage.fs" />
-    <Compile Include="SoManyFeedsFrontend/Applications/Read.fs" />
+    <Compile Include="SoManyFeedsFrontend\Applications\RegistrationFrontend.fs" />
+    <Compile Include="SoManyFeedsFrontend\Applications\ManageFrontend.fs" />
+    <Compile Include="SoManyFeedsFrontend\Applications\ReadFrontend.fs" />
     <Compile Include="SoManyFeedsFrontend/Library.fs" />
   </ItemGroup>
 </Project>

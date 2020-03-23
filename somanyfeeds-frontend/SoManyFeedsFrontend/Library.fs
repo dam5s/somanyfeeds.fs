@@ -8,26 +8,24 @@ open SoManyFeedsFrontend.Applications
 let private makeFullScreenApp (init: 'flags -> ('model * Cmd<'msg>)) update view =
     (init, update, view)
     |||> Program.mkProgram
-    |> Program.withReactBatched "somanyfeeds-body"
+    |> Program.withReactHydrate "somanyfeeds-body"
     |> Program.withConsoleTrace
 
 let private startRegistrationApp _ =
-    (Registration.init, Registration.update, Registration.view)
-    |||> Program.mkProgram
-    |> Program.withReactHydrate "somanyfeeds-body"
-    |> Program.withConsoleTrace
+    (RegistrationFrontend.init, RegistrationFrontend.update, RegistrationFrontend.view)
+    |||> makeFullScreenApp
     |> Program.run
 
 let private startManageApp flags =
-    (Manage.init, Manage.update, Manage.view)
+    (ManageFrontend.init, ManageFrontend.update, ManageFrontend.view)
     |||> makeFullScreenApp
-    |> Program.withSubscription Manage.subscriptions
+    |> Program.withSubscription ManageFrontend.subscriptions
     |> Program.runWith flags
 
 let private startReadApp flags =
-    (Read.init, Read.update, Read.view)
+    (ReadFrontend.init, ReadFrontend.update, ReadFrontend.view)
     |||> makeFullScreenApp
-    |> Program.withSubscription Read.subscriptions
+    |> Program.withSubscription ReadFrontend.subscriptions
     |> Program.runWith flags
 
 Browser.Dom.window?SoManyFeeds <- {| StartRegistrationApp = startRegistrationApp

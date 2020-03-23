@@ -58,13 +58,6 @@ let withTabs tab content =
     withoutHeader
         ([ headerView (Some tab) ] @ content)
 
-let startFableApp js =
-    withoutHeader
-        [ div [ _id "somanyfeeds-body" ] []
-          script [ _src (assetPath "/somanyfeeds.js") ] []
-          script [] [ rawText js ]
-        ]
-
 let hydrateFableApp view model js =
     withoutHeader
         [ div [ _id "somanyfeeds-body" ] [ rawText (Fable.ReactServer.renderToString (view model ignore)) ]

@@ -1,27 +1,12 @@
 [<RequireQualifiedAccess>]
-module SoManyFeedsServer.ManagePage
+module SoManyFeedsServer.ManageBackend
 
 open FSharp.Control.Tasks.V2.ContextInsensitive
 open Giraffe
 open SoManyFeedsPersistence.FeedsDataGateway
 open SoManyFeedsDomain.User
-open SoManyFeedsFrontend.Applications
+open SoManyFeedsFrontend.Applications.ManageFrontend
 open SoManyFeedsServer
-
-
-let private pageFlags (page: Manage.Page) =
-    match page with
-    | Manage.List -> ("List", None)
-    | Manage.Search text -> ("Search", text)
-
-
-module private View =
-    let render (flags: Manage.Flags) ctx =
-        let flagsJson = Api.serializeObject flags ctx
-        let model = Manage.initModel flags
-        let js = sprintf "SoManyFeeds.StartManageApp(%s);" flagsJson
-
-        Layout.hydrateFableApp Manage.view model js
 
 
 let page maxFeeds (listFeeds: AsyncResult<FeedRecord seq>) (user: User) frontendPage =
@@ -29,8 +14,12 @@ let page maxFeeds (listFeeds: AsyncResult<FeedRecord seq>) (user: User) frontend
         task {
             match! listFeeds with
             | Ok records ->
-                let (page, searchText) = pageFlags frontendPage
-                let flags: Manage.Flags =
+                let (page, searchText) =
+                    match frontendPage with
+                    | List -> ("List", None)
+                    | Search text -> ("Search", text)
+
+                let flags: Flags =
                     { userName = user.Name
                       maxFeeds = maxFeeds
                       feeds = records
@@ -39,7 +28,10 @@ let page maxFeeds (listFeeds: AsyncResult<FeedRecord seq>) (user: User) frontend
                       page = page
                       searchText = searchText }
 
-                let view = View.render flags ctx
+                let flagsJson = Api.serializeObject flags ctx
+                let model = initModel flags
+                let js = sprintf "SoManyFeeds.StartManageApp(%s);" flagsJson
+                let view = Layout.hydrateFableApp view model js
 
                 return! htmlView view next ctx
             | Error explanation ->

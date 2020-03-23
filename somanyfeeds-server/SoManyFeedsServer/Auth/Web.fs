@@ -3,7 +3,6 @@ module SoManyFeedsServer.Auth.Web
 open FSharp.Control.Tasks.V2.ContextInsensitive
 open Giraffe
 open Microsoft.AspNetCore.Http
-open SoManyFeedsDomain
 open SoManyFeedsPersistence.DataSource
 open SoManyFeedsPersistence.UsersDataGateway
 open SoManyFeedsDomain.User
@@ -98,8 +97,8 @@ let doLogout: HttpHandler =
 let registrationPage: HttpHandler =
     htmlView (
         Layout.hydrateFableApp
-            Registration.view
-            Registration.initModel
+            RegistrationFrontend.view
+            RegistrationFrontend.initModel
             "SoManyFeeds.StartRegistrationApp();"
     )
 

@@ -36,8 +36,8 @@
     <Compile Include="SoManyFeedsServer/UsersApi.fs" />
     <Compile Include="SoManyFeedsServer/ArticlesApi.fs" />
     <Compile Include="SoManyFeedsServer/FeedsApi.fs" />
-    <Compile Include="SoManyFeedsServer/ManagePage.fs" />
-    <Compile Include="SoManyFeedsServer/ReadPage.fs" />
+    <Compile Include="SoManyFeedsServer\ManageBackend.fs" />
+    <Compile Include="SoManyFeedsServer\ReadBackend.fs" />
     <Compile Include="SoManyFeedsServer/HomePage.fs" />
     <Compile Include="SoManyFeedsServer/WebApp.fs" />
     <Compile Include="SoManyFeedsServer/Logging.fs" />

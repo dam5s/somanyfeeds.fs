@@ -1,4 +1,4 @@
-module SoManyFeedsFrontend.Applications.Registration
+module SoManyFeedsFrontend.Applications.RegistrationFrontend
 
 open Elmish
 open Fable.React

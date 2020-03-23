@@ -90,16 +90,16 @@ type private UserReadPage(articles: UserArticles, user: User) =
     member this.Read innerPage _ =
         ReadPage.page articles.ListRecent user innerPage
     member this.ReadFeed feedId =
-        ReadPage.page articles.ListRecent user (Read.Recent(Some feedId))
+        ReadPage.page articles.ListRecent user (ReadFrontend.Recent(Some feedId))
 
 
 type private UserManagePage(feeds: UserFeeds, user: User) =
     member this.List _ =
-        ManagePage.page maxFeeds feeds.List user Manage.List
+        ManageBackend.page maxFeeds feeds.List user ManageFrontend.List
     member this.SearchNone _ =
-        ManagePage.page maxFeeds feeds.List user (Manage.Search None)
+        ManageBackend.page maxFeeds feeds.List user (ManageFrontend.Search None)
     member this.SearchSome text =
-        ManagePage.page maxFeeds feeds.List user (Manage.Search (Some text))
+        ManageBackend.page maxFeeds feeds.List user (ManageFrontend.Search (Some text))
 
 
 let private authenticatedHandler (user: User) =
@@ -110,9 +110,9 @@ let private authenticatedHandler (user: User) =
 
     choose
         [ GET >=> route "/read" >=> redirectTo false "/read/recent"
-          GET >=> route "/read/recent" >=> warbler (userReadPage.Read(Read.Recent None))
+          GET >=> route "/read/recent" >=> warbler (userReadPage.Read(ReadFrontend.Recent None))
           GET >=> routef "/read/recent/feed/%d" userReadPage.ReadFeed
-          GET >=> route "/read/bookmarks" >=> warbler (userReadPage.Read Read.Bookmarks)
+          GET >=> route "/read/bookmarks" >=> warbler (userReadPage.Read ReadFrontend.Bookmarks)
 
           GET >=> route "/manage" >=> redirectTo false "/manage/list"
           GET >=> route "/manage/list" >=> warbler userManagePage.List
