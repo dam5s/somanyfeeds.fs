@@ -28,7 +28,7 @@ let ``with unsupported XML``() =
 
 [<Test>]
 let ``with github Atom XML``() =
-    let downloaded = "../../../../feeds-processing/Resources/samples/github.atom.sample"
+    let downloaded = "../../../../feeds-processing-tests/Resources/test-samples/github.xml"
                      |> File.ReadAllText
                      |> DownloadedFeed
 
@@ -53,8 +53,24 @@ let ``with github Atom XML``() =
 
 
 [<Test>]
+let ``with Dualshock Atom XML``() =
+    let downloaded = "../../../../feeds-processing-tests/Resources/test-samples/dualshock.xml"
+                     |> File.ReadAllText
+                     |> DownloadedFeed
+
+
+    let result = processXmlFeed downloaded
+
+
+    match result with
+    | Error _ -> Assert.Fail "Expected success"
+    | Ok records ->
+        List.length records |> should equal 10
+
+
+[<Test>]
 let ``with RSS XML``() =
-    let downloadedFeed = "../../../../feeds-processing/Resources/samples/rss.sample"
+    let downloadedFeed = "../../../../feeds-processing/Resources/samples/rss.sample.xml"
                          |> File.ReadAllText
                          |> DownloadedFeed
 
@@ -86,7 +102,7 @@ let ``with RSS XML``() =
 
 [<Test>]
 let ``processFeed with slashdot RDF XML``() =
-    let downloadedFeed = "../../../../feeds-processing/Resources/samples/slashdot.rdf.sample"
+    let downloadedFeed = "../../../../feeds-processing-tests/Resources/test-samples/slashdot.xml"
                          |> File.ReadAllText
                          |> DownloadedFeed
 

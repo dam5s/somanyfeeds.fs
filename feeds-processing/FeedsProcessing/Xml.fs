@@ -15,7 +15,7 @@ let private stringToOption text =
 
 module private Rss =
 
-    type private RssProvider = XmlProvider<"../feeds-processing/Resources/samples/rss.sample">
+    type private RssProvider = XmlProvider<"../feeds-processing/Resources/samples/rss.sample.xml">
 
     let private itemToArticle (item: RssProvider.Item) =
         Article.create
@@ -40,12 +40,12 @@ module private Rss =
 
 module private Atom =
 
-    type private AtomProvider = XmlProvider<"../feeds-processing/Resources/samples/github.atom.sample">
+    type private AtomProvider = XmlProvider<"../feeds-processing/Resources/samples/atom.sample.xml">
 
     let private entryToArticle (entry: AtomProvider.Entry) =
         Article.create
             (Some entry.Title.Value)
-            entry.Link.Href
+            (entry.Links |> Array.head |> fun l -> l.Href)
             (Some entry.Content.Value)
             (Some entry.Published)
 
@@ -70,7 +70,7 @@ module private Atom =
 
 module private Rdf =
 
-    type private RdfProvider = XmlProvider<"../feeds-processing/Resources/samples/slashdot.rdf.sample">
+    type private RdfProvider = XmlProvider<"../feeds-processing/Resources/samples/rdf.sample.xml">
 
     let private itemToArticle (item: RdfProvider.Item) =
         Article.create

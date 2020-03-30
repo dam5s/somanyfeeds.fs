@@ -14,7 +14,7 @@ open Time
 
 [<Test>]
 let ``processFeed twitter timeline``() =
-    let downloadedFeed = "../../../../feeds-processing/Resources/samples/twitter.timeline.sample"
+    let downloadedFeed = "../../../../feeds-processing/Resources/samples/twitter.timeline.sample.json"
                          |> File.ReadAllText
                          |> DownloadedFeed
 

@@ -26,7 +26,7 @@ let private parseDate dateValue =
     |> Result.toOption
 
 
-type TwitterTimelineProvider = JsonProvider<"../feeds-processing/Resources/samples/twitter.timeline.sample">
+type TwitterTimelineProvider = JsonProvider<"../feeds-processing/Resources/samples/twitter.timeline.sample.json">
 
 
 let private mapTweet (json: TwitterTimelineProvider.Root) =

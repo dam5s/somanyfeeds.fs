@@ -18,4 +18,12 @@
     <Compile Include="FeedsProcessingTests/TwitterTests.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Resources Include="Resources/**" />
+  </ItemGroup>
+
+  <Target Name="CopyResources" AfterTargets="Publish">
+    <Copy SourceFiles="@(Resources)" DestinationFiles="@(Resources->'$(PublishDir)/Resources/%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target>
 </Project>

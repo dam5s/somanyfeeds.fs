@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml-stylesheet type="text/xsl" media="screen" href="/~d/styles/rss1full.xsl"?><?xml-stylesheet type="text/css" media="screen" href="http://rss.slashdot.org/~d/styles/itemcontent.css"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/"
+         xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+         xmlns:syn="http://purl.org/rss/1.0/modules/syndication/">
+
+<channel rdf:about="https://slashdot.org/">
+<title>Slashdot</title>
+<link>https://slashdot.org/</link>
+<description>News for nerds, stuff that matters</description>
+<dc:language>en-us</dc:language>
+<dc:rights>Copyright 1997-2016, SlashdotMedia. All Rights Reserved.</dc:rights>
+<dc:date>2018-12-28T21:43:08+00:00</dc:date>
+<dc:publisher>Dice</dc:publisher>
+<dc:creator>help@slashdot.org</dc:creator>
+<dc:subject>Technology</dc:subject>
+<syn:updateBase>1970-01-01T00:00+00:00</syn:updateBase>
+<syn:updateFrequency>1</syn:updateFrequency>
+<syn:updatePeriod>hourly</syn:updatePeriod>
+<items>
+ <rdf:Seq>
+  <rdf:li rdf:resource="https://news.slashdot.org/story/18/12/28/2054254/netflix-permanently-pulls-itunes-billing-for-new-and-returning-users?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed" />
+  <rdf:li rdf:resource="https://tech.slashdot.org/story/18/12/28/1929236/mark-zuckerberg-on-facebooks-2018-weve-changed-we-promise?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed" />
+  <rdf:li rdf:resource="https://news.slashdot.org/story/18/12/28/1629206/sears-the-125-year-old-iconic-retailer-has-24-hours-to-survive?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed" />
+  <rdf:li rdf:resource="https://entertainment.slashdot.org/story/18/12/28/1620232/hmv-one-of-uks-largest-retailers-of-cds-dvds-and-blu-rays-calls-in-administrators-for-second-time-in-six-years?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed" />
+  <rdf:li rdf:resource="https://tech.slashdot.org/story/18/12/28/168236/fcc-says-it-is-investigating-centurylink-911-outage?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed" />
+  <rdf:li rdf:resource="https://tech.slashdot.org/story/18/12/28/0041202/google-erases-kurdistan-from-maps-in-compliance-with-turkish-government?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed" />
+  <rdf:li rdf:resource="https://developers.slashdot.org/story/18/12/28/1417258/apache-netbeans-100-now-available?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed" />
+  <rdf:li rdf:resource="https://news.slashdot.org/story/18/12/28/1355246/the-language-of-capitalism-isnt-just-annoying-its-dangerous?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed" />
+  <rdf:li rdf:resource="https://science.slashdot.org/story/18/12/28/1214248/hybrid-rice-engineered-with-crispr-can-clone-its-seeds?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed" />
+  <rdf:li rdf:resource="https://tech.slashdot.org/story/18/12/28/0813244/google-will-launch-the-pixel-3-and-3-xl-lite-on-verizon-in-spring-2019-report-says?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed" />
+  <rdf:li rdf:resource="https://linux.slashdot.org/story/18/12/28/0738249/canonical-shares-top-10-linux-snaps-of-2018?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed" />
+  <rdf:li rdf:resource="https://news.slashdot.org/story/18/12/28/0728206/new-york-sky-turns-bright-blue-after-transformer-explosion?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed" />
+  <rdf:li rdf:resource="https://news.slashdot.org/story/18/12/28/0153201/beware-silicon-valleys-gifts-to-our-schools?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed" />
+  <rdf:li rdf:resource="https://news.slashdot.org/story/18/12/28/0144225/theres-a-lot-at-stake-in-the-weekly-us-drought-map?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed" />
+  <rdf:li rdf:resource="https://tech.slashdot.org/story/18/12/27/2226253/users-report-of-nationwide-centurylink-internet-outage?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed" />
+ </rdf:Seq>
+</items>
+<image rdf:resource="https://a.fsdn.com/sd/topics/topicslashdot.gif" />
+<textinput rdf:resource="https://slashdot.org/search.pl" />
+<atom10:link xmlns:atom10="http://www.w3.org/2005/Atom" rel="self" type="application/rdf+xml" href="http://rss.slashdot.org/slashdot/slashdotMain" /><feedburner:info xmlns:feedburner="http://rssnamespace.org/feedburner/ext/1.0" uri="slashdot/slashdotmain" /><atom10:link xmlns:atom10="http://www.w3.org/2005/Atom" rel="hub" href="http://pubsubhubbub.appspot.com/" /></channel>
+<image rdf:about="https://a.fsdn.com/sd/topics/topicslashdot.gif">
+<title>Slashdot</title>
+<url>https://a.fsdn.com/sd/topics/topicslashdot.gif</url>
+<link>https://slashdot.org/</link>
+</image>
+<item rdf:about="https://news.slashdot.org/story/18/12/28/2054254/netflix-permanently-pulls-itunes-billing-for-new-and-returning-users?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed">
+<title>Netflix Permanently Pulls iTunes Billing For New and Returning Users</title>
+<link>https://news.slashdot.org/story/18/12/28/2054254/netflix-permanently-pulls-itunes-billing-for-new-and-returning-users?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed</link>
+<description>An anonymous reader shares a report: Netflix is further distancing itself...</description>
+<dc:creator>msmash</dc:creator>
+<dc:date>2018-12-28T20:55:00+00:00</dc:date>
+<dc:subject>money</dc:subject>
+<slash:department>how-about-that</slash:department>
+<slash:section>news</slash:section>
+<slash:comments>30</slash:comments>
+<slash:hit_parade>30,30,14,12,0,0,0</slash:hit_parade>
+</item>
+<item rdf:about="https://tech.slashdot.org/story/18/12/28/1929236/mark-zuckerberg-on-facebooks-2018-weve-changed-we-promise?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed">
+<title>Mark Zuckerberg on Facebook's 2018: We've Changed, We Promise</title>
+<link>https://tech.slashdot.org/story/18/12/28/1929236/mark-zuckerberg-on-facebooks-2018-weve-changed-we-promise?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed</link>
+<description>It's nearly the new year, which means time for some reflection on what's happened and what's to come. For Facebook CEO Mark Zuckerberg, that means looking back on one really tough year. From a report: In his year-end post on Friday, Zuckerberg is optimistic, if a little defensive. He ticked off changes the company's made -- or, as he put it, "We've fundamentally altered our DNA" -- to focus more on handling the bad stuff that happens on Facebook. That includes tackling Russian interference in our elections, stopping harmful and bullying posts, and promising to give people more control over their data. He also noted that Facebook now has 30,000 people working on safety and harassment issues, and it's investing billions of dollars in security each year. He also acknowledged these issues will take more than a year to fix. But he said the company's started multiyear plans to address them. That doesn't mean he thinks Facebook is fully on the ball. "In the past we didn't focus as much on these issues as we needed to, but we're now much more proactive," he wrote.
+
+"I've learned a lot from focusing on these issues and we still have a lot of work ahead," Zuckerberg added. "I'm proud of the progress we've made in 2018 and grateful to everyone who has helped us get here -- the teams inside Facebook, our partners and the independent researchers and everyone who has given us so much feedback. I'm committed to continuing to make progress on these important issues as we enter the new year."&lt;p&gt;&lt;div class="share_submission" style="position:relative;"&gt;
+&lt;a class="slashpop" href="http://twitter.com/home?status=Mark+Zuckerberg+on+Facebook's+2018%3A+We've+Changed%2C+We+Promise%3A+http%3A%2F%2Fbit.ly%2F2ETSMul"&gt;&lt;img src="https://a.fsdn.com/sd/twitter_icon_large.png"&gt;&lt;/a&gt;
+&lt;a class="slashpop" href="http://www.facebook.com/sharer.php?u=https%3A%2F%2Ftech.slashdot.org%2Fstory%2F18%2F12%2F28%2F1929236%2Fmark-zuckerberg-on-facebooks-2018-weve-changed-we-promise%3Futm_source%3Dslashdot%26utm_medium%3Dfacebook"&gt;&lt;img src="https://a.fsdn.com/sd/facebook_icon_large.png"&gt;&lt;/a&gt;
+
+&lt;a class="nobg" href="http://plus.google.com/share?url=https://tech.slashdot.org/story/18/12/28/1929236/mark-zuckerberg-on-facebooks-2018-weve-changed-we-promise?utm_source=slashdot&amp;amp;utm_medium=googleplus" onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"&gt;&lt;img src="https://www.gstatic.com/images/icons/gplus-16.png" alt="Share on Google+"/&gt;&lt;/a&gt;
+
+
+
+&lt;/div&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://tech.slashdot.org/story/18/12/28/1929236/mark-zuckerberg-on-facebooks-2018-weve-changed-we-promise?utm_source=rss1.0moreanon&amp;amp;utm_medium=feed"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;&lt;iframe src="https://slashdot.org/slashdot-it.pl?op=discuss&amp;amp;id=13135978&amp;amp;smallembed=1" style="height: 300px; width: 100%; border: none;"&gt;&lt;/iframe&gt;</description>
+<dc:creator>msmash</dc:creator>
+<dc:date>2018-12-28T19:30:00+00:00</dc:date>
+<dc:subject>facebook</dc:subject>
+<slash:department>Zuckerberg-speaks</slash:department>
+<slash:section>technology</slash:section>
+<slash:comments>105</slash:comments>
+<slash:hit_parade>105,103,37,30,14,10,8</slash:hit_parade>
+</item>
+<item rdf:about="https://news.slashdot.org/story/18/12/28/1629206/sears-the-125-year-old-iconic-retailer-has-24-hours-to-survive?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed">
+<title>Sears, the 125-Year-Old Iconic Retailer, Has 24 Hours To Survive</title>
+<link>https://news.slashdot.org/story/18/12/28/1629206/sears-the-125-year-old-iconic-retailer-has-24-hours-to-survive?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed</link>
+<description>An anonymous reader shares a report: Sears, the employer of more than 68,000 filed for bankruptcy in October. Its last shot at survival is a $4.6 billion proposal put forward by its chairman, Eddie Lampert, to buy the company out of bankruptcy through his hedge fund, ESL Investments. ESL is the only party offering to buy Sears as a whole, people familiar with the situation tell CNBC. Without that bid or another like it, liquidators will break the company up into pieces. But as Lampert stares down a deadline of Dec. 28 to submit his offer, he is quickly running out of time. As of Thursday afternoon, Lampert had neither submitted his bid, nor rounded up financing, the people familiar said. Should Lampert submit a bid, Sears' advisors would have until Jan. 4 to decide whether he is a "qualified bidder." Only then, could ESL take part in an auction against liquidation bids on Jan. 14. It is possible Lampert, Sears' largest investor, secures financing in time to meet the deadline, these people said.&lt;p&gt;&lt;div class="share_submission" style="position:relative;"&gt;
+&lt;a class="slashpop" href="http://twitter.com/home?status=Sears%2C+the+125-Year-Old+Iconic+Retailer%2C+Has+24+Hours+To+Survive%3A+http%3A%2F%2Fbit.ly%2F2EUyyR1"&gt;&lt;img src="https://a.fsdn.com/sd/twitter_icon_large.png"&gt;&lt;/a&gt;
+&lt;a class="slashpop" href="http://www.facebook.com/sharer.php?u=https%3A%2F%2Fnews.slashdot.org%2Fstory%2F18%2F12%2F28%2F1629206%2Fsears-the-125-year-old-iconic-retailer-has-24-hours-to-survive%3Futm_source%3Dslashdot%26utm_medium%3Dfacebook"&gt;&lt;img src="https://a.fsdn.com/sd/facebook_icon_large.png"&gt;&lt;/a&gt;
+
+&lt;a class="nobg" href="http://plus.google.com/share?url=https://news.slashdot.org/story/18/12/28/1629206/sears-the-125-year-old-iconic-retailer-has-24-hours-to-survive?utm_source=slashdot&amp;amp;utm_medium=googleplus" onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"&gt;&lt;img src="https://www.gstatic.com/images/icons/gplus-16.png" alt="Share on Google+"/&gt;&lt;/a&gt;
+
+
+
+&lt;/div&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://news.slashdot.org/story/18/12/28/1629206/sears-the-125-year-old-iconic-retailer-has-24-hours-to-survive?utm_source=rss1.0moreanon&amp;amp;utm_medium=feed"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;&lt;iframe src="https://slashdot.org/slashdot-it.pl?op=discuss&amp;amp;id=13135588&amp;amp;smallembed=1" style="height: 300px; width: 100%; border: none;"&gt;&lt;/iframe&gt;</description>
+<dc:creator>msmash</dc:creator>
+<dc:date>2018-12-28T18:50:00+00:00</dc:date>
+<dc:subject>business</dc:subject>
+<slash:department>clock-is-running</slash:department>
+<slash:section>news</slash:section>
+<slash:comments>187</slash:comments>
+<slash:hit_parade>187,183,113,101,32,19,13</slash:hit_parade>
+</item>
+<item rdf:about="https://entertainment.slashdot.org/story/18/12/28/1620232/hmv-one-of-uks-largest-retailers-of-cds-dvds-and-blu-rays-calls-in-administrators-for-second-time-in-six-years?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed">
+<title>HMV, One of UK's Largest Retailers of CDs, DVDs and Blu-rays, Calls in Administrators For Second Time in Six Years</title>
+<link>https://entertainment.slashdot.org/story/18/12/28/1620232/hmv-one-of-uks-largest-retailers-of-cds-dvds-and-blu-rays-calls-in-administrators-for-second-time-in-six-years?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed</link>
+<description>Retron shares a report: Music retailer HMV has confirmed it is calling in KPMG as administrators. The move, the second in six years, involves 2,200 staff at 125 stores. Owners Hilco, which took the company out of its first administration in 2013, blamed a "tsunami" of retail challenges, including business rate levels and the move to digital. It said the stores would continue to trade while negotiations were held with major suppliers and it looked for buyers. Paul McGowan, executive chairman of HMV and its owner Hilco Capital, said: "Even an exceptionally well-run and much-loved business such as HMV cannot withstand the tsunami of challenges facing UK retailers over the last 12 months on top of such a dramatic change in consumer behaviour in the entertainment market."
+
+He pointed out HMV sold 31% of all physical music in the UK in 2018 and 23% of all DVDs and Blu-rays, with its market share growing month by month throughout the year. But he added that the industry consensus was that the market would fall by another 17% during 2019 and therefore it would not be possible to continue to trade the business. Holders of gift vouchers are being advised to consider spending them sooner rather than later.&lt;p&gt;&lt;div class="share_submission" style="position:relative;"&gt;
+&lt;a class="slashpop" href="http://twitter.com/home?status=HMV%2C+One+of+UK's+Largest+Retailers+of+CDs%2C+DVDs+and+Blu-rays%2C+Calls+in+Administrators+For+Second+Time+in+Six+Years%3A+http%3A%2F%2Fbit.ly%2F2ET5TvS"&gt;&lt;img src="https://a.fsdn.com/sd/twitter_icon_large.png"&gt;&lt;/a&gt;
+&lt;a class="slashpop" href="http://www.facebook.com/sharer.php?u=https%3A%2F%2Fentertainment.slashdot.org%2Fstory%2F18%2F12%2F28%2F1620232%2Fhmv-one-of-uks-largest-retailers-of-cds-dvds-and-blu-rays-calls-in-administrators-for-second-time-in-six-years%3Futm_source%3Dslashdot%26utm_medium%3Dfacebook"&gt;&lt;img src="https://a.fsdn.com/sd/facebook_icon_large.png"&gt;&lt;/a&gt;
+
+&lt;a class="nobg" href="http://plus.google.com/share?url=https://entertainment.slashdot.org/story/18/12/28/1620232/hmv-one-of-uks-largest-retailers-of-cds-dvds-and-blu-rays-calls-in-administrators-for-second-time-in-six-years?utm_source=slashdot&amp;amp;utm_medium=googleplus" onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"&gt;&lt;img src="https://www.gstatic.com/images/icons/gplus-16.png" alt="Share on Google+"/&gt;&lt;/a&gt;
+
+
+
+&lt;/div&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://entertainment.slashdot.org/story/18/12/28/1620232/hmv-one-of-uks-largest-retailers-of-cds-dvds-and-blu-rays-calls-in-administrators-for-second-time-in-six-years?utm_source=rss1.0moreanon&amp;amp;utm_medium=feed"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;&lt;iframe src="https://slashdot.org/slashdot-it.pl?op=discuss&amp;amp;id=13135566&amp;amp;smallembed=1" style="height: 300px; width: 100%; border: none;"&gt;&lt;/iframe&gt;</description>
+<dc:creator>msmash</dc:creator>
+<dc:date>2018-12-28T18:00:00+00:00</dc:date>
+<dc:subject>music</dc:subject>
+<slash:department>tussle-continues</slash:department>
+<slash:section>entertainment</slash:section>
+<slash:comments>46</slash:comments>
+<slash:hit_parade>46,45,24,22,9,2,1</slash:hit_parade>
+</item>
+<item rdf:about="https://tech.slashdot.org/story/18/12/28/168236/fcc-says-it-is-investigating-centurylink-911-outage?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed">
+<title>FCC Says It is Investigating CenturyLink 911 Outage</title>
+<link>https://tech.slashdot.org/story/18/12/28/168236/fcc-says-it-is-investigating-centurylink-911-outage?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed</link>
+<description>Federal Communications Commission Chairman Ajit Pai said on Friday the agency had launched an investigation into a nationwide CenturyLink outage that has affected 911 service for consumers across the country. In a statement, he said [PDF]: "When an emergency strikes, it's critical that Americans are able to use 911 to reach those who can help. The CenturyLink service outage is therefore completely unacceptable, and its breadth and duration are particularly troubling. I've directed the Public Safety and Homeland Security Bureau to immediately launch an investigation into the cause and impact of this outage. This inquiry will include an examination of the effect that CenturyLink's outage appears to have had on other providers' 911 services. I have also spoken with CenturyLink to underscore the urgency of restoring service immediately. We will continue to monitor this situation closely to ensure that consumers' access to 911 is restored as quickly as possible." The outage, which lasted all day Thursday and is still ongoing in certain states, knocked out 911 emergency call services in parts of western Washington state. News outlet KOMO reported that some CenturyLink customers reported receiving busy signals when dialing 911. Other areas of the country also experiencing 911 outages included parts of Missouri, Idaho and Arizona. Some ATM machines weren't working in Idaho and Montana. And additionally, Verizon said it had service interruptions in Albuquerque, New Mexico, and parts of Montana as a result of issues with CenturyLink.&lt;p&gt;&lt;div class="share_submission" style="position:relative;"&gt;
+&lt;a class="slashpop" href="http://twitter.com/home?status=FCC+Says+It+is+Investigating+CenturyLink+911+Outage%3A+http%3A%2F%2Fbit.ly%2F2ETA1qV"&gt;&lt;img src="https://a.fsdn.com/sd/twitter_icon_large.png"&gt;&lt;/a&gt;
+&lt;a class="slashpop" href="http://www.facebook.com/sharer.php?u=https%3A%2F%2Ftech.slashdot.org%2Fstory%2F18%2F12%2F28%2F168236%2Ffcc-says-it-is-investigating-centurylink-911-outage%3Futm_source%3Dslashdot%26utm_medium%3Dfacebook"&gt;&lt;img src="https://a.fsdn.com/sd/facebook_icon_large.png"&gt;&lt;/a&gt;
+
+&lt;a class="nobg" href="http://plus.google.com/share?url=https://tech.slashdot.org/story/18/12/28/168236/fcc-says-it-is-investigating-centurylink-911-outage?utm_source=slashdot&amp;amp;utm_medium=googleplus" onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"&gt;&lt;img src="https://www.gstatic.com/images/icons/gplus-16.png" alt="Share on Google+"/&gt;&lt;/a&gt;
+
+
+
+&lt;/div&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://tech.slashdot.org/story/18/12/28/168236/fcc-says-it-is-investigating-centurylink-911-outage?utm_source=rss1.0moreanon&amp;amp;utm_medium=feed"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;&lt;iframe src="https://slashdot.org/slashdot-it.pl?op=discuss&amp;amp;id=13135522&amp;amp;smallembed=1" style="height: 300px; width: 100%; border: none;"&gt;&lt;/iframe&gt;</description>
+<dc:creator>msmash</dc:creator>
+<dc:date>2018-12-28T17:00:00+00:00</dc:date>
+<dc:subject>communications</dc:subject>
+<slash:department>outage-reports</slash:department>
+<slash:section>technology</slash:section>
+<slash:comments>101</slash:comments>
+<slash:hit_parade>101,99,65,51,9,7,5</slash:hit_parade>
+</item>
+<item rdf:about="https://tech.slashdot.org/story/18/12/28/0041202/google-erases-kurdistan-from-maps-in-compliance-with-turkish-government?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed">
+<title>Google Erases Kurdistan From Maps in Compliance With Turkish Government</title>
+<link>https://tech.slashdot.org/story/18/12/28/0041202/google-erases-kurdistan-from-maps-in-compliance-with-turkish-government?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed</link>
+<description>schwit1 shares a report: Google has removed a map outlining the geographical extent of the Greater Kurdistan after the Turkish state asked it to do so, a simple inquiry on the Internet giant's search engine from Wednesday on can show. "Unavailable. This map is no longer available due to a violation of our Terms of Service and/or policies," a note on the page that the map was previously on read. Google did not provide further details on how the Kurdistan map violated its rules.
+
+The map in question, available for years, used to be on Google's My Maps service, a feature of Google Maps that enables users to create custom maps for personal use or sharing through search. Maps drawn by ancient Greeks, Islamic historians, Ottomans, and Westerners showing Kurdistan with alternative names such as "Corduene" or "Karduchi" have existed since antiquity. The use of the name "Kurdistan" was banned by the administration of Turkey's founder Mustafa Kemal Ataturk in the immediate aftermath of the crushed Sheikh Said uprising for Kurdish statehood in 1925. Further reading: Local media report. "Turkish officials outraged by Google map showing the unofficial border of Kurdistan. Turkey demands the removal of the map. There are around 40 million Kurds divided between 4 main countries," Jiyar Gol, a BBC correspondent tweeted.&lt;p&gt;&lt;div class="share_submission" style="position:relative;"&gt;
+&lt;a class="slashpop" href="http://twitter.com/home?status=Google+Erases+Kurdistan+From+Maps+in+Compliance+With+Turkish+Government%3A+http%3A%2F%2Fbit.ly%2F2ETrynO"&gt;&lt;img src="https://a.fsdn.com/sd/twitter_icon_large.png"&gt;&lt;/a&gt;
+&lt;a class="slashpop" href="http://www.facebook.com/sharer.php?u=https%3A%2F%2Ftech.slashdot.org%2Fstory%2F18%2F12%2F28%2F0041202%2Fgoogle-erases-kurdistan-from-maps-in-compliance-with-turkish-government%3Futm_source%3Dslashdot%26utm_medium%3Dfacebook"&gt;&lt;img src="https://a.fsdn.com/sd/facebook_icon_large.png"&gt;&lt;/a&gt;
+
+&lt;a class="nobg" href="http://plus.google.com/share?url=https://tech.slashdot.org/story/18/12/28/0041202/google-erases-kurdistan-from-maps-in-compliance-with-turkish-government?utm_source=slashdot&amp;amp;utm_medium=googleplus" onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"&gt;&lt;img src="https://www.gstatic.com/images/icons/gplus-16.png" alt="Share on Google+"/&gt;&lt;/a&gt;
+
+
+
+&lt;/div&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://tech.slashdot.org/story/18/12/28/0041202/google-erases-kurdistan-from-maps-in-compliance-with-turkish-government?utm_source=rss1.0moreanon&amp;amp;utm_medium=feed"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;&lt;iframe src="https://slashdot.org/slashdot-it.pl?op=discuss&amp;amp;id=13130332&amp;amp;smallembed=1" style="height: 300px; width: 100%; border: none;"&gt;&lt;/iframe&gt;</description>
+<dc:creator>msmash</dc:creator>
+<dc:date>2018-12-28T16:01:00+00:00</dc:date>
+<dc:subject>google</dc:subject>
+<slash:department>stranger-things</slash:department>
+<slash:section>technology</slash:section>
+<slash:comments>122</slash:comments>
+<slash:hit_parade>122,121,56,47,16,6,3</slash:hit_parade>
+</item>
+<item rdf:about="https://developers.slashdot.org/story/18/12/28/1417258/apache-netbeans-100-now-available?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed">
+<title>Apache NetBeans 10.0 Now Available</title>
+<link>https://developers.slashdot.org/story/18/12/28/1417258/apache-netbeans-100-now-available?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed</link>
+<description>The Apache Software Foundation has released NetBeans 10.0, the second major release of the Apache NetBeans IDE. The release, said the Apache Software Foundation, is focused in adding support for JDK 11, JUnit 5, PHP, JavaScript and Groovy, as well in solving many issues. From a blog post: JDK 11 support has been enhanced in the following ways: Integration with the nb-javac project, adding support for JDK 11, removed the CORBA modules, support for JEP 309, Dynamic Class-File Constants, support for JEP 323, Local-Variable Syntax for Lambda Parameters, and support for LVTI Support for Lamdba Parameters.
+
+PHP 7.3: You can now add trailing commas in function calls under PHP 7.3 (mailing list thread), and also use the list reference assignment, the flexible Heredoc and Nowdoc Syntaxes are also supported. [...] And more: context sensitive lexer, PHPStan support, debugger, twig, hints, suggestions, code completion&amp;#226;&amp;#166;&amp;#226; visit PHP Features Page and NetBeans 10 New and Noteworthy for more details on PHP support. JUnit 5.3.1 has been added as a new Library to NetBeans, so you can quickly add it to your Java projects. For Maven projects without no existing tests, JUnit 5 is now the default JUnit version.&lt;p&gt;&lt;div class="share_submission" style="position:relative;"&gt;
+&lt;a class="slashpop" href="http://twitter.com/home?status=Apache+NetBeans+10.0+Now+Available%3A+http%3A%2F%2Fbit.ly%2F2EUu3X0"&gt;&lt;img src="https://a.fsdn.com/sd/twitter_icon_large.png"&gt;&lt;/a&gt;
+&lt;a class="slashpop" href="http://www.facebook.com/sharer.php?u=https%3A%2F%2Fdevelopers.slashdot.org%2Fstory%2F18%2F12%2F28%2F1417258%2Fapache-netbeans-100-now-available%3Futm_source%3Dslashdot%26utm_medium%3Dfacebook"&gt;&lt;img src="https://a.fsdn.com/sd/facebook_icon_large.png"&gt;&lt;/a&gt;
+
+&lt;a class="nobg" href="http://plus.google.com/share?url=https://developers.slashdot.org/story/18/12/28/1417258/apache-netbeans-100-now-available?utm_source=slashdot&amp;amp;utm_medium=googleplus" onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"&gt;&lt;img src="https://www.gstatic.com/images/icons/gplus-16.png" alt="Share on Google+"/&gt;&lt;/a&gt;
+
+
+
+&lt;/div&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://developers.slashdot.org/story/18/12/28/1417258/apache-netbeans-100-now-available?utm_source=rss1.0moreanon&amp;amp;utm_medium=feed"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;&lt;iframe src="https://slashdot.org/slashdot-it.pl?op=discuss&amp;amp;id=13135232&amp;amp;smallembed=1" style="height: 300px; width: 100%; border: none;"&gt;&lt;/iframe&gt;</description>
+<dc:creator>msmash</dc:creator>
+<dc:date>2018-12-28T15:01:00+00:00</dc:date>
+<dc:subject>java</dc:subject>
+<slash:department>moving-along</slash:department>
+<slash:section>developers</slash:section>
+<slash:comments>32</slash:comments>
+<slash:hit_parade>32,32,16,10,5,1,0</slash:hit_parade>
+</item>
+<item rdf:about="https://news.slashdot.org/story/18/12/28/1355246/the-language-of-capitalism-isnt-just-annoying-its-dangerous?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed">
+<title>'The Language of Capitalism Isn't Just Annoying, It's Dangerous'</title>
+<link>https://news.slashdot.org/story/18/12/28/1355246/the-language-of-capitalism-isnt-just-annoying-its-dangerous?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed</link>
+<description>An anonymous reader shares a report: When General Motors laid off more than 6,000 workers days after Thanksgiving, John Patrick Leary, the author of the new book Keywords: The New Language of Capitalism, tweeted out part of GM CEO Mary Barra's statement. "The actions we are taking today continue our transformation to be highly agile, resilient, and profitable, while giving us the flexibility to invest in the future," she said. Leary added a line of commentary to of Barra's statement: "Language was pronounced dead at the scene." Why should we pay attention to the particular words used to describe, and justify, the regularly scheduled "disruptions" of late capitalism? Published this month by Haymarket Books, Leary's Keywords explores the regime of late-capitalist language: a set of ubiquitous modern terms, drawn from the corporate world and the business press, that he argues promulgate values friendly to corporations (hierarchy, competitiveness, the unquestioning embrace of new technologies) over those friendly to human beings (democracy, solidarity, and scrutiny of new technologies' impact on people and the planet).
+
+These words narrow our conceptual horizons -- they "manacle our imagination," Leary writes -- making it more difficult to conceive alternative ways of organizing our economy and society. We are encouraged by powerful "thought leaders" and corporate executives to accept it as the language of common sense or "normal reality." When we understand and deploy such language to describe our own lives, we're seen as good workers; when we fail to do so, we're implicitly threatened with economic obsolescence. After all, if you're not conversant in "innovation" or "collaboration," how can you expect to thrive in this brave new economy? [...] Calling our current economic system "late capitalism" suggests that, despite our gleaming buzzwords and technologies, what we're living through is just the next iteration of an old system of global capitalism. In other words, he writes, "cheer up: things have always been terrible!" What is new, Leary says, quoting Marxist economic historian Ernest Mandel, is our "belief in the omnipotence of technology" and in experts. He also claims that capitalism is expanding at an unprecedented rate into previously uncommodified geographical, cultural, and spiritual realms.&lt;p&gt;&lt;div class="share_submission" style="position:relative;"&gt;
+&lt;a class="slashpop" href="http://twitter.com/home?status='The+Language+of+Capitalism+Isn't+Just+Annoying%2C+It's+Dangerous'%3A+http%3A%2F%2Fbit.ly%2F2EQSggR"&gt;&lt;img src="https://a.fsdn.com/sd/twitter_icon_large.png"&gt;&lt;/a&gt;
+&lt;a class="slashpop" href="http://www.facebook.com/sharer.php?u=https%3A%2F%2Fnews.slashdot.org%2Fstory%2F18%2F12%2F28%2F1355246%2Fthe-language-of-capitalism-isnt-just-annoying-its-dangerous%3Futm_source%3Dslashdot%26utm_medium%3Dfacebook"&gt;&lt;img src="https://a.fsdn.com/sd/facebook_icon_large.png"&gt;&lt;/a&gt;
+
+&lt;a class="nobg" href="http://plus.google.com/share?url=https://news.slashdot.org/story/18/12/28/1355246/the-language-of-capitalism-isnt-just-annoying-its-dangerous?utm_source=slashdot&amp;amp;utm_medium=googleplus" onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"&gt;&lt;img src="https://www.gstatic.com/images/icons/gplus-16.png" alt="Share on Google+"/&gt;&lt;/a&gt;
+
+
+
+&lt;/div&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://news.slashdot.org/story/18/12/28/1355246/the-language-of-capitalism-isnt-just-annoying-its-dangerous?utm_source=rss1.0moreanon&amp;amp;utm_medium=feed"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;&lt;iframe src="https://slashdot.org/slashdot-it.pl?op=discuss&amp;amp;id=13135152&amp;amp;smallembed=1" style="height: 300px; width: 100%; border: none;"&gt;&lt;/iframe&gt;</description>
+<dc:creator>msmash</dc:creator>
+<dc:date>2018-12-28T14:00:00+00:00</dc:date>
+<dc:subject>business</dc:subject>
+<slash:department>food-for-thought</slash:department>
+<slash:section>news</slash:section>
+<slash:comments>336</slash:comments>
+<slash:hit_parade>336,331,184,148,53,25,18</slash:hit_parade>
+</item>
+<item rdf:about="https://science.slashdot.org/story/18/12/28/1214248/hybrid-rice-engineered-with-crispr-can-clone-its-seeds?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed">
+<title>Hybrid Rice Engineered With CRISPR Can Clone Its Seeds</title>
+<link>https://science.slashdot.org/story/18/12/28/1214248/hybrid-rice-engineered-with-crispr-can-clone-its-seeds?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed</link>
+<description>A gene editing technique has been used to produce asexual rice, which could carry traits such as high yields and drought resistance. From a report: After more than 20 years of theorizing about it, scientists have tweaked a hybrid variety of rice so that some of the plants produce cloned seeds. No plant sex necessary. The feat, described earlier this month in Nature, is encouraging for efforts to feed an increasingly crowded world. Crossing two good varieties of grain can make one fabulous one, combining the best versions of genes to give crops desirable traits such as higher yields. But such hybrid grain marvels often don't pass along those coveted genetic qualities to all seeds during reproduction. So farmers who want consistently higher yields have to pay for new hybrid seeds every year.
+
+This new lab version of hybrid rice would preserve those qualities through self-cloning, says study coauthor Venkatesan Sundaresan, a plant geneticist at the University of California, Davis. Though 400 kinds of plants, including some blackberries and citruses, have developed self-cloning seeds naturally, re-creating those pathways in crop plants has "been harder than anyone expected," Sundaresan says. He and his colleagues got the idea for the new research while studying "how a fertilized egg becomes a zygote, this magical cell that regenerates an entire organism," as Sundaresan puts it. The researchers discovered that modifying two sets of genes caused the japonica rice hybrid called Kitaake to clone its own seeds. First the team found that in a fertilized plant egg, only the male version of a gene called BABY BOOM1 found in sperm triggered the development of a seed embryo. So the scientists inserted a genetic starter switch, called a promoter, that let the female version of the same gene do the same job. No male would be necessary to trigger an embryo's development.&lt;p&gt;&lt;div class="share_submission" style="position:relative;"&gt;
+&lt;a class="slashpop" href="http://twitter.com/home?status=Hybrid+Rice+Engineered+With+CRISPR+Can+Clone+Its+Seeds%3A+http%3A%2F%2Fbit.ly%2F2EVI7zr"&gt;&lt;img src="https://a.fsdn.com/sd/twitter_icon_large.png"&gt;&lt;/a&gt;
+&lt;a class="slashpop" href="http://www.facebook.com/sharer.php?u=https%3A%2F%2Fscience.slashdot.org%2Fstory%2F18%2F12%2F28%2F1214248%2Fhybrid-rice-engineered-with-crispr-can-clone-its-seeds%3Futm_source%3Dslashdot%26utm_medium%3Dfacebook"&gt;&lt;img src="https://a.fsdn.com/sd/facebook_icon_large.png"&gt;&lt;/a&gt;
+
+&lt;a class="nobg" href="http://plus.google.com/share?url=https://science.slashdot.org/story/18/12/28/1214248/hybrid-rice-engineered-with-crispr-can-clone-its-seeds?utm_source=slashdot&amp;amp;utm_medium=googleplus" onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"&gt;&lt;img src="https://www.gstatic.com/images/icons/gplus-16.png" alt="Share on Google+"/&gt;&lt;/a&gt;
+
+
+
+&lt;/div&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://science.slashdot.org/story/18/12/28/1214248/hybrid-rice-engineered-with-crispr-can-clone-its-seeds?utm_source=rss1.0moreanon&amp;amp;utm_medium=feed"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;&lt;iframe src="https://slashdot.org/slashdot-it.pl?op=discuss&amp;amp;id=13134642&amp;amp;smallembed=1" style="height: 300px; width: 100%; border: none;"&gt;&lt;/iframe&gt;</description>
+<dc:creator>msmash</dc:creator>
+<dc:date>2018-12-28T12:20:00+00:00</dc:date>
+<dc:subject>science</dc:subject>
+<slash:department>pushing-the-limits</slash:department>
+<slash:section>science</slash:section>
+<slash:comments>122</slash:comments>
+<slash:hit_parade>122,120,58,53,11,5,2</slash:hit_parade>
+</item>
+<item rdf:about="https://tech.slashdot.org/story/18/12/28/0813244/google-will-launch-the-pixel-3-and-3-xl-lite-on-verizon-in-spring-2019-report-says?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed">
+<title>Google Will Launch the Pixel 3 and 3 XL 'Lite' on Verizon in Spring 2019, Report Says</title>
+<link>https://tech.slashdot.org/story/18/12/28/0813244/google-will-launch-the-pixel-3-and-3-xl-lite-on-verizon-in-spring-2019-report-says?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed</link>
+<description>An anonymous reader shares a report: Speaking to a source familiar with the company's plans, we've learned that Google intends to launch two new Pixel smartphones on Verizon in early spring 2019 -- the Pixel 3 and 3 XL "Lite." An exact announcement date and pricing are not yet known. A Pixel 3 Lite prototype was leaked on a Russian tech blog last month, fueling rampant speculation about where the phone would be sold and how it would be positioned in Google's larger smartphone lineup. Later, renders of the 3 Lite and a larger XL variant were released by OnLeaks. These "Lite" Pixels will be the first phones in the mid-range Google has released since the Nexus 5X, which launched at $379 in the US in 2015.&lt;p&gt;&lt;div class="share_submission" style="position:relative;"&gt;
+&lt;a class="slashpop" href="http://twitter.com/home?status=Google+Will+Launch+the+Pixel+3+and+3+XL+'Lite'+on+Verizon+in+Spring+2019%2C+Report+Says%3A+http%3A%2F%2Fbit.ly%2F2BV07WP"&gt;&lt;img src="https://a.fsdn.com/sd/twitter_icon_large.png"&gt;&lt;/a&gt;
+&lt;a class="slashpop" href="http://www.facebook.com/sharer.php?u=https%3A%2F%2Ftech.slashdot.org%2Fstory%2F18%2F12%2F28%2F0813244%2Fgoogle-will-launch-the-pixel-3-and-3-xl-lite-on-verizon-in-spring-2019-report-says%3Futm_source%3Dslashdot%26utm_medium%3Dfacebook"&gt;&lt;img src="https://a.fsdn.com/sd/facebook_icon_large.png"&gt;&lt;/a&gt;
+
+&lt;a class="nobg" href="http://plus.google.com/share?url=https://tech.slashdot.org/story/18/12/28/0813244/google-will-launch-the-pixel-3-and-3-xl-lite-on-verizon-in-spring-2019-report-says?utm_source=slashdot&amp;amp;utm_medium=googleplus" onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"&gt;&lt;img src="https://www.gstatic.com/images/icons/gplus-16.png" alt="Share on Google+"/&gt;&lt;/a&gt;
+
+
+
+&lt;/div&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://tech.slashdot.org/story/18/12/28/0813244/google-will-launch-the-pixel-3-and-3-xl-lite-on-verizon-in-spring-2019-report-says?utm_source=rss1.0moreanon&amp;amp;utm_medium=feed"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;&lt;iframe src="https://slashdot.org/slashdot-it.pl?op=discuss&amp;amp;id=13132556&amp;amp;smallembed=1" style="height: 300px; width: 100%; border: none;"&gt;&lt;/iframe&gt;</description>
+<dc:creator>msmash</dc:creator>
+<dc:date>2018-12-28T10:00:00+00:00</dc:date>
+<dc:subject>google</dc:subject>
+<slash:department>up-next</slash:department>
+<slash:section>technology</slash:section>
+<slash:comments>26</slash:comments>
+<slash:hit_parade>26,25,8,8,2,1,0</slash:hit_parade>
+</item>
+<item rdf:about="https://linux.slashdot.org/story/18/12/28/0738249/canonical-shares-top-10-linux-snaps-of-2018?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed">
+<title>Canonical Shares Top 10 Linux Snaps of 2018</title>
+<link>https://linux.slashdot.org/story/18/12/28/0738249/canonical-shares-top-10-linux-snaps-of-2018?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed</link>
+<description>One of the most refreshing aspects of Linux in 2018 was the popularity of Snaps. Canonical revealed that the containerized packages have been a smashing success. Today, the Ubuntu-maker highlights what it feels are the top 10 Snaps of 2018. From a report: "With 2018 drawing to a close, and many of us spending with family during the holiday season, I thought we'd take a look back over some of our favourite Linux applications in the Snap Store. Some have been in the store for over a year, and a few landed only recently, but they're all great," says Alan Pope, Canonical. [...] Canonical shares the Top 10 Snaps: Spotify, Slack, VLC, Nextcloud, Android Studio, Discord, Plex Media Server, Xonotic, Notepad++, and Shotcut.&lt;p&gt;&lt;div class="share_submission" style="position:relative;"&gt;
+&lt;a class="slashpop" href="http://twitter.com/home?status=Canonical+Shares+Top+10+Linux+Snaps+of+2018%3A+http%3A%2F%2Fbit.ly%2F2BJdNDX"&gt;&lt;img src="https://a.fsdn.com/sd/twitter_icon_large.png"&gt;&lt;/a&gt;
+&lt;a class="slashpop" href="http://www.facebook.com/sharer.php?u=https%3A%2F%2Flinux.slashdot.org%2Fstory%2F18%2F12%2F28%2F0738249%2Fcanonical-shares-top-10-linux-snaps-of-2018%3Futm_source%3Dslashdot%26utm_medium%3Dfacebook"&gt;&lt;img src="https://a.fsdn.com/sd/facebook_icon_large.png"&gt;&lt;/a&gt;
+
+&lt;a class="nobg" href="http://plus.google.com/share?url=https://linux.slashdot.org/story/18/12/28/0738249/canonical-shares-top-10-linux-snaps-of-2018?utm_source=slashdot&amp;amp;utm_medium=googleplus" onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"&gt;&lt;img src="https://www.gstatic.com/images/icons/gplus-16.png" alt="Share on Google+"/&gt;&lt;/a&gt;
+
+
+
+&lt;/div&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://linux.slashdot.org/story/18/12/28/0738249/canonical-shares-top-10-linux-snaps-of-2018?utm_source=rss1.0moreanon&amp;amp;utm_medium=feed"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;&lt;iframe src="https://slashdot.org/slashdot-it.pl?op=discuss&amp;amp;id=13132312&amp;amp;smallembed=1" style="height: 300px; width: 100%; border: none;"&gt;&lt;/iframe&gt;</description>
+<dc:creator>msmash</dc:creator>
+<dc:date>2018-12-28T08:30:00+00:00</dc:date>
+<dc:subject>linux</dc:subject>
+<slash:department>how-about-that</slash:department>
+<slash:section>linux</slash:section>
+<slash:comments>70</slash:comments>
+<slash:hit_parade>70,69,39,31,12,6,4</slash:hit_parade>
+</item>
+<item rdf:about="https://news.slashdot.org/story/18/12/28/0728206/new-york-sky-turns-bright-blue-after-transformer-explosion?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed">
+<title>New York Sky Turns Bright Blue After Transformer Explosion</title>
+<link>https://news.slashdot.org/story/18/12/28/0728206/new-york-sky-turns-bright-blue-after-transformer-explosion?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed</link>
+<description>There was a boom; then a hum. The lights flickered. A giant plume of smoke filled the New York City sky, and turned it blue. From a report: "A sort of unnatural, fluorescent shade of blue," said Bill San Antonio, 28, who was watching Thursday night from inside a terminal at La Guardia Airport. "We thought it was a U.F.O.," said Yiota Androtsakis, a longtime Astoria resident. Ms. Androtsakis was not the only one. In the earliest moments, hundreds of Twitter users from across the city posted videos of the eerie lights, causing many on social media to fear an alien invasion.
+
+By late Thursday night officials said the event was caused by nothing more than a transformer explosion. "No injuries, no fire, no evidence of extraterrestrial activity," the New York Police Department tweeted, adding later that the explosion was not suspicious. There was one Con Edison employee nearby when the fire started, and the authorities said he was unharmed. Still, Deputy Inspector Osvaldo Nunez, the commanding officer of the 114th Precinct, conceded that the episode "was spectacular." "You could see it from the precinct, and the precinct is about a half-mile away," he said. "You felt it in your chest, the explosions, and the night sky turned an electric blue."&lt;p&gt;&lt;div class="share_submission" style="position:relative;"&gt;
+&lt;a class="slashpop" href="http://twitter.com/home?status=New+York+Sky+Turns+Bright+Blue+After+Transformer+Explosion%3A+http%3A%2F%2Fbit.ly%2F2BIaUU1"&gt;&lt;img src="https://a.fsdn.com/sd/twitter_icon_large.png"&gt;&lt;/a&gt;
+&lt;a class="slashpop" href="http://www.facebook.com/sharer.php?u=https%3A%2F%2Fnews.slashdot.org%2Fstory%2F18%2F12%2F28%2F0728206%2Fnew-york-sky-turns-bright-blue-after-transformer-explosion%3Futm_source%3Dslashdot%26utm_medium%3Dfacebook"&gt;&lt;img src="https://a.fsdn.com/sd/facebook_icon_large.png"&gt;&lt;/a&gt;
+
+&lt;a class="nobg" href="http://plus.google.com/share?url=https://news.slashdot.org/story/18/12/28/0728206/new-york-sky-turns-bright-blue-after-transformer-explosion?utm_source=slashdot&amp;amp;utm_medium=googleplus" onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"&gt;&lt;img src="https://www.gstatic.com/images/icons/gplus-16.png" alt="Share on Google+"/&gt;&lt;/a&gt;
+
+
+
+&lt;/div&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://news.slashdot.org/story/18/12/28/0728206/new-york-sky-turns-bright-blue-after-transformer-explosion?utm_source=rss1.0moreanon&amp;amp;utm_medium=feed"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;&lt;iframe src="https://slashdot.org/slashdot-it.pl?op=discuss&amp;amp;id=13132238&amp;amp;smallembed=1" style="height: 300px; width: 100%; border: none;"&gt;&lt;/iframe&gt;</description>
+<dc:creator>msmash</dc:creator>
+<dc:date>2018-12-28T07:30:00+00:00</dc:date>
+<dc:subject>usa</dc:subject>
+<slash:department>'spectacular'</slash:department>
+<slash:section>news</slash:section>
+<slash:comments>131</slash:comments>
+<slash:hit_parade>131,131,58,52,20,14,8</slash:hit_parade>
+</item>
+<item rdf:about="https://news.slashdot.org/story/18/12/28/0153201/beware-silicon-valleys-gifts-to-our-schools?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed">
+<title>'Beware Silicon Valley's Gifts To Our Schools'</title>
+<link>https://news.slashdot.org/story/18/12/28/0153201/beware-silicon-valleys-gifts-to-our-schools?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed</link>
+<description>schwit1 shares a National Review report: After three years, there is no proof that Apple's, Google's, and Microsoft's infiltration of the classroom is producing actual academic improvement and results. Take Facebook's efforts for an example. The company -- under fire for privacy breaches worldwide -- is peddling something called "Summit Learning," a web-based curriculum bankrolled by CEO Mark Zuckerberg and his wife, Priscilla Chan. Last month, students in New York City schools walked out in protest of the program. "It's annoying to just sit there staring at one screen for so long," freshman Mitchel Storman, 14, told the New York Post. He spends close to five hours a day on Summit classes in algebra, biology, English, world history, and physics. Teacher interaction is minimal. "You have to teach yourself," Storman rightly complained. No outside research supports any claim that Summit Learning actually enhances, um, learning. What more studies are showing, however, is that endless hours of screen time are turning kids into zombies who are more easily distracted, less happy, less socially adept, and less physically fit. Standing up to the Silicon Valley Santas and asserting your family's "right to no" may well be the best long-term gift you can give your school-age children.&lt;p&gt;&lt;div class="share_submission" style="position:relative;"&gt;
+&lt;a class="slashpop" href="http://twitter.com/home?status='Beware+Silicon+Valley's+Gifts+To+Our+Schools'%3A+http%3A%2F%2Fbit.ly%2F2EPfW4Y"&gt;&lt;img src="https://a.fsdn.com/sd/twitter_icon_large.png"&gt;&lt;/a&gt;
+&lt;a class="slashpop" href="http://www.facebook.com/sharer.php?u=https%3A%2F%2Fnews.slashdot.org%2Fstory%2F18%2F12%2F28%2F0153201%2Fbeware-silicon-valleys-gifts-to-our-schools%3Futm_source%3Dslashdot%26utm_medium%3Dfacebook"&gt;&lt;img src="https://a.fsdn.com/sd/facebook_icon_large.png"&gt;&lt;/a&gt;
+
+&lt;a class="nobg" href="http://plus.google.com/share?url=https://news.slashdot.org/story/18/12/28/0153201/beware-silicon-valleys-gifts-to-our-schools?utm_source=slashdot&amp;amp;utm_medium=googleplus" onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"&gt;&lt;img src="https://www.gstatic.com/images/icons/gplus-16.png" alt="Share on Google+"/&gt;&lt;/a&gt;
+
+
+
+&lt;/div&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://news.slashdot.org/story/18/12/28/0153201/beware-silicon-valleys-gifts-to-our-schools?utm_source=rss1.0moreanon&amp;amp;utm_medium=feed"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;&lt;iframe src="https://slashdot.org/slashdot-it.pl?op=discuss&amp;amp;id=13130466&amp;amp;smallembed=1" style="height: 300px; width: 100%; border: none;"&gt;&lt;/iframe&gt;</description>
+<dc:creator>msmash</dc:creator>
+<dc:date>2018-12-28T03:00:00+00:00</dc:date>
+<dc:subject>education</dc:subject>
+<slash:department>closer-look</slash:department>
+<slash:section>news</slash:section>
+<slash:comments>127</slash:comments>
+<slash:hit_parade>127,125,56,48,10,8,1</slash:hit_parade>
+</item>
+<item rdf:about="https://news.slashdot.org/story/18/12/28/0144225/theres-a-lot-at-stake-in-the-weekly-us-drought-map?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed">
+<title>There's A Lot At Stake In The Weekly US Drought Map</title>
+<link>https://news.slashdot.org/story/18/12/28/0144225/theres-a-lot-at-stake-in-the-weekly-us-drought-map?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed</link>
+<description>Crippling drought this year has caused more than $1 billion in damage. As it has played out, anyone affected by the drought or trying to manage it has turned to a once obscure map that has become key to understanding what's happening: the U.S. Drought Monitor. From a report: That includes water planners who decide resource allotments. Farmers who need water for their livelihood. Federal bureaucrats who use the map to calculate aid for the Livestock Forage Disaster Program. And then there are citizen scientists like Dave Kitts outside of Sante Fe, N.M. "I think it's a little obsessive, but I check it every Thursday," says Kitts, who has lived on the same 2-acre spread in New Mexico for decades. Dry years like this past one can crust the soil and kill his pinyon trees. "It's just upsetting and depressing to me," he says. "And when it moves the other direction, it definitely lifts my spirits."
+
+Scientist Mark Svoboda started the drought map 20 years ago, when Congress took an interest after drought struck Washington, D.C. He directs the National Drought Mitigation Center at the University of Nebraska, Lincoln. "We're covering everything," he says, "from groundwater, stream flow, temperature." In bad drought years like this one, the map has patches of crayon yellow, orange and red that show the levels of drought. Right now, there's a deep crimson bull's-eye in the hardest-hit area of the southwest, where Colorado borders Utah, Arizona and New Mexico. The Drought Monitor map is updated weekly, often taking into account input from hundreds of people -- in addition to scientists. Ranchers and farmers from across the country also send missives to state and national offices, making the map a mix of art, science and farmer wisdom. But it starts with recommendations from state climatologists on any potential changes.&lt;p&gt;&lt;div class="share_submission" style="position:relative;"&gt;
+&lt;a class="slashpop" href="http://twitter.com/home?status=There's+A+Lot+At+Stake+In+The+Weekly+US+Drought+Map%3A+http%3A%2F%2Fbit.ly%2F2EVM731"&gt;&lt;img src="https://a.fsdn.com/sd/twitter_icon_large.png"&gt;&lt;/a&gt;
+&lt;a class="slashpop" href="http://www.facebook.com/sharer.php?u=https%3A%2F%2Fnews.slashdot.org%2Fstory%2F18%2F12%2F28%2F0144225%2Ftheres-a-lot-at-stake-in-the-weekly-us-drought-map%3Futm_source%3Dslashdot%26utm_medium%3Dfacebook"&gt;&lt;img src="https://a.fsdn.com/sd/facebook_icon_large.png"&gt;&lt;/a&gt;
+
+&lt;a class="nobg" href="http://plus.google.com/share?url=https://news.slashdot.org/story/18/12/28/0144225/theres-a-lot-at-stake-in-the-weekly-us-drought-map?utm_source=slashdot&amp;amp;utm_medium=googleplus" onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"&gt;&lt;img src="https://www.gstatic.com/images/icons/gplus-16.png" alt="Share on Google+"/&gt;&lt;/a&gt;
+
+
+
+&lt;/div&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://news.slashdot.org/story/18/12/28/0144225/theres-a-lot-at-stake-in-the-weekly-us-drought-map?utm_source=rss1.0moreanon&amp;amp;utm_medium=feed"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;&lt;iframe src="https://slashdot.org/slashdot-it.pl?op=discuss&amp;amp;id=13130442&amp;amp;smallembed=1" style="height: 300px; width: 100%; border: none;"&gt;&lt;/iframe&gt;</description>
+<dc:creator>msmash</dc:creator>
+<dc:date>2018-12-28T01:45:00+00:00</dc:date>
+<dc:subject>usa</dc:subject>
+<slash:department>closer-look</slash:department>
+<slash:section>news</slash:section>
+<slash:comments>96</slash:comments>
+<slash:hit_parade>96,93,47,39,10,5,1</slash:hit_parade>
+</item>
+<item rdf:about="https://tech.slashdot.org/story/18/12/27/2226253/users-report-of-nationwide-centurylink-internet-outage?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed">
+<title>Users Report of Nationwide CenturyLink Internet Outage</title>
+<link>https://tech.slashdot.org/story/18/12/27/2226253/users-report-of-nationwide-centurylink-internet-outage?utm_source=rss1.0mainlinkanon&amp;utm_medium=feed</link>
+<description>Are you having trouble accessing your CenturyLink internet today? Well, you're not alone. From a report: Several Treasure Valley residents reached out to KTVB Thursday morning to report they had no access to their CenturyLink internet or in some cases, their phone services. Some KTVB employees experienced the outage as well. A KTVB employee who uses the internet service provider called CenturyLink customer service. The customer service associate said they are aware of the outage for the 208 area code and technicians are working on a fix. He added there were similar outages in other states across the country. Downdetector.com indicated issues began being reported a little before 2 a.m. MST.
+
+As far as a cause, the CenturyLink representative could not comment. The associate said the outage could last anywhere from 24 to 48-hours. CenturyLink released a statement to Newsweek explaining that its network "is experiencing a disruption affecting customer services." "We know how important these services are to our customers and we are working to restore services as quickly as possible," CenturyLink's statement continued.&lt;p&gt;&lt;div class="share_submission" style="position:relative;"&gt;
+&lt;a class="slashpop" href="http://twitter.com/home?status=Users+Report+of+Nationwide+CenturyLink+Internet+Outage%3A+http%3A%2F%2Fbit.ly%2F2BJNzBg"&gt;&lt;img src="https://a.fsdn.com/sd/twitter_icon_large.png"&gt;&lt;/a&gt;
+&lt;a class="slashpop" href="http://www.facebook.com/sharer.php?u=https%3A%2F%2Ftech.slashdot.org%2Fstory%2F18%2F12%2F27%2F2226253%2Fusers-report-of-nationwide-centurylink-internet-outage%3Futm_source%3Dslashdot%26utm_medium%3Dfacebook"&gt;&lt;img src="https://a.fsdn.com/sd/facebook_icon_large.png"&gt;&lt;/a&gt;
+
+&lt;a class="nobg" href="http://plus.google.com/share?url=https://tech.slashdot.org/story/18/12/27/2226253/users-report-of-nationwide-centurylink-internet-outage?utm_source=slashdot&amp;amp;utm_medium=googleplus" onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"&gt;&lt;img src="https://www.gstatic.com/images/icons/gplus-16.png" alt="Share on Google+"/&gt;&lt;/a&gt;
+
+
+
+&lt;/div&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://tech.slashdot.org/story/18/12/27/2226253/users-report-of-nationwide-centurylink-internet-outage?utm_source=rss1.0moreanon&amp;amp;utm_medium=feed"&gt;Read more of this story&lt;/a&gt; at Slashdot.&lt;/p&gt;&lt;iframe src="https://slashdot.org/slashdot-it.pl?op=discuss&amp;amp;id=13130100&amp;amp;smallembed=1" style="height: 300px; width: 100%; border: none;"&gt;&lt;/iframe&gt;</description>
+<dc:creator>msmash</dc:creator>
+<dc:date>2018-12-27T22:30:00+00:00</dc:date>
+<dc:subject>internet</dc:subject>
+<slash:department>outage-reports</slash:department>
+<slash:section>technology</slash:section>
+<slash:comments>84</slash:comments>
+<slash:hit_parade>84,82,25,18,4,2,2</slash:hit_parade>
+</item>
+<textinput rdf:about="https://slashdot.org/search.pl">
+<title>Search Slashdot</title>
+<description>Search Slashdot stories</description>
+<name>query</name>
+<link>https://slashdot.org/search.pl</link>
+</textinput>
+</rdf:RDF>
