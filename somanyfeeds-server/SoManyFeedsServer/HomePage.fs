@@ -30,9 +30,8 @@ let view: HttpHandler =
                         p [ Class "big-message" ]
                             [ str "This website is written in "
                               link "https://fsharp.org" "F#"
-                              str " and "
-                              link "https://fsharelm-lang.org" "Elm"
-                              str ". Source code is all "
+                              str " both for the backend and the frontend. "
+                              str "Source code is all "
                               link "https://github.com/dam5s/somanyfeeds.fs" "available on Github"
                               str ". This version is deployed to "
                               link "https://run.pivotal.io" "Pivotal Web Services"
