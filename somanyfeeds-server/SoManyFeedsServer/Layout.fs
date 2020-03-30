@@ -7,7 +7,6 @@ open SoManyFeedsFrontend.Components
 open SoManyFeedsFrontend.Components.Logo
 open SoManyFeedsServer.CacheBusting
 open Giraffe.ResponseWriters
-open SoManyFeedsFrontend.Support
 
 let private headerView (activeTab: Tabs.Tab option) =
     let tabs =
