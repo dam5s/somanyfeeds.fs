@@ -23,7 +23,7 @@ let view: HttpHandler =
                             [ strong "SoManyFeeds"
                               str " is a "
                               strong "feed aggregator"
-                              str ". Read the latest articles from multiple subscriptions in a"
+                              str ". Read the latest articles from multiple subscriptions in a "
                               strong "mobile friendly"
                               str " format."
                             ]
