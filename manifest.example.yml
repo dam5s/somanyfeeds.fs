@@ -1,12 +1,12 @@
 applications:
 - name: somanyfeeds
-  path: somanyfeeds-server/bin/Release/netcoreapp2.2/publish/
+  path: somanyfeeds-server/bin/Release/netcoreapp3.1/publish/
   disk_quota: 1G
   instances: 2
   memory: 256M
   stack: cflinuxfs3
   buildpacks:
-    - https://github.com/cloudfoundry/dotnet-core-buildpack#v2.2.11
+    - https://github.com/cloudfoundry/dotnet-core-buildpack#v2.3.7
   env:
     COOKIE_ENCRYPTION_KEY: ...
     DB_CONNECTION: ...
