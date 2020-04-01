@@ -70,6 +70,7 @@ figure {
 
 img {
   width: calc(100% + 3rem);
+  height: auto;
   margin: 0 -1.5rem;
 
   @media (min-width: $small-screen-width) {
