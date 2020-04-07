@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 #
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "damo-io-server", "damo-io-server\damo-io-server.fsproj", "{A7157346-F377-4B8A-8CF2-1DB962115171}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "damo-io-frontend", "damo-io-frontend\damo-io-frontend.fsproj", "{3FFF4355-EB86-42A6-9E8E-0EAB5D20615D}"
-EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "build", "build\build.fsproj", "{48AB536C-C4D7-4A79-88CD-92DB6CCB3A95}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "feeds-processing", "feeds-processing\feeds-processing.fsproj", "{B4BC8FCB-9682-43BA-8676-680224209DA5}"
@@ -24,6 +22,8 @@ EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "somanyfeeds-server", "somanyfeeds-server\somanyfeeds-server.fsproj", "{C59E4502-4566-4DF3-B5FC-92954AF16FD8}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "somanyfeeds-persistence", "somanyfeeds-persistence\somanyfeeds-persistence.fsproj", "{7BEE72D8-AF6D-46A8-8E93-516FA7A0C60E}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "damo-io-frontend", "damo-io-frontend\damo-io-frontend.fsproj", "{D43AB091-A72A-4CDA-B2DE-7FDE18C2EC75}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,18 +59,6 @@ Global
 		{55BB409D-D281-4C3A-A108-5D4517F2E894}.Release|x64.Build.0 = Release|x64
 		{55BB409D-D281-4C3A-A108-5D4517F2E894}.Release|x86.ActiveCfg = Release|x86
 		{55BB409D-D281-4C3A-A108-5D4517F2E894}.Release|x86.Build.0 = Release|x86
-		{3FFF4355-EB86-42A6-9E8E-0EAB5D20615D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3FFF4355-EB86-42A6-9E8E-0EAB5D20615D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3FFF4355-EB86-42A6-9E8E-0EAB5D20615D}.Debug|x64.ActiveCfg = Debug|x64
-		{3FFF4355-EB86-42A6-9E8E-0EAB5D20615D}.Debug|x64.Build.0 = Debug|x64
-		{3FFF4355-EB86-42A6-9E8E-0EAB5D20615D}.Debug|x86.ActiveCfg = Debug|x86
-		{3FFF4355-EB86-42A6-9E8E-0EAB5D20615D}.Debug|x86.Build.0 = Debug|x86
-		{3FFF4355-EB86-42A6-9E8E-0EAB5D20615D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3FFF4355-EB86-42A6-9E8E-0EAB5D20615D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3FFF4355-EB86-42A6-9E8E-0EAB5D20615D}.Release|x64.ActiveCfg = Release|x64
-		{3FFF4355-EB86-42A6-9E8E-0EAB5D20615D}.Release|x64.Build.0 = Release|x64
-		{3FFF4355-EB86-42A6-9E8E-0EAB5D20615D}.Release|x86.ActiveCfg = Release|x86
-		{3FFF4355-EB86-42A6-9E8E-0EAB5D20615D}.Release|x86.Build.0 = Release|x86
 		{48AB536C-C4D7-4A79-88CD-92DB6CCB3A95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{48AB536C-C4D7-4A79-88CD-92DB6CCB3A95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48AB536C-C4D7-4A79-88CD-92DB6CCB3A95}.Debug|x64.ActiveCfg = Debug|x64
@@ -191,5 +179,17 @@ Global
 		{7BEE72D8-AF6D-46A8-8E93-516FA7A0C60E}.Release|x64.Build.0 = Release|Any CPU
 		{7BEE72D8-AF6D-46A8-8E93-516FA7A0C60E}.Release|x86.ActiveCfg = Release|Any CPU
 		{7BEE72D8-AF6D-46A8-8E93-516FA7A0C60E}.Release|x86.Build.0 = Release|Any CPU
+		{D43AB091-A72A-4CDA-B2DE-7FDE18C2EC75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D43AB091-A72A-4CDA-B2DE-7FDE18C2EC75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D43AB091-A72A-4CDA-B2DE-7FDE18C2EC75}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D43AB091-A72A-4CDA-B2DE-7FDE18C2EC75}.Debug|x64.Build.0 = Debug|Any CPU
+		{D43AB091-A72A-4CDA-B2DE-7FDE18C2EC75}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D43AB091-A72A-4CDA-B2DE-7FDE18C2EC75}.Debug|x86.Build.0 = Debug|Any CPU
+		{D43AB091-A72A-4CDA-B2DE-7FDE18C2EC75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D43AB091-A72A-4CDA-B2DE-7FDE18C2EC75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D43AB091-A72A-4CDA-B2DE-7FDE18C2EC75}.Release|x64.ActiveCfg = Release|Any CPU
+		{D43AB091-A72A-4CDA-B2DE-7FDE18C2EC75}.Release|x64.Build.0 = Release|Any CPU
+		{D43AB091-A72A-4CDA-B2DE-7FDE18C2EC75}.Release|x86.ActiveCfg = Release|Any CPU
+		{D43AB091-A72A-4CDA-B2DE-7FDE18C2EC75}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -22,6 +22,7 @@
     <Compile Include="DamoIOServer/App.fs" />
     <Compile Include="DamoIOServer/Logging.fs" />
     <Compile Include="Program.fs" />
+    <ProjectReference Include="..\damo-io-frontend\damo-io-frontend.fsproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,66 +1,62 @@
 module DamoIOServer.ArticlesHandler
 
+open DamoIOFrontend
+open DamoIOFrontend.Article
 open FSharp.Control.Tasks.V2.ContextInsensitive
 open DamoIOServer.ArticlesDataGateway
 open Giraffe
 open System
 open Time
 
-
-let private source record =
-    sprintf "%A" record.Source
-
-
-let private toJson record =
-    {| title = record.Title
-       link =  record.Link
-       content =  record.Content
-       date =  (Option.map Posix.milliseconds record.Date)
-       source =  (source record)
-    |}
-
-
-type ArticlesListViewModel =
-    { ArticlesJson: string }
-
+let private toJson record: Article.Json =
+    { Title = record.Title
+      Link =  record.Link
+      Content =  record.Content
+      Date =  (Option.map Posix.milliseconds record.Date)
+      Source =  (sprintf "%A" record.Source)
+    }
 
 module View =
-    open GiraffeViewEngine
+    open Fable.React
+    open Fable.React.Props
 
-    let render articlesJson =
-        html [ _lang "en" ]
+    let private Content = HTMLAttr.Content
+
+    let render path (flags: App.Flags) flagsJson: string =
+        let model, _ = App.init path flags
+        let js = sprintf "DamoIO.StartApp(%s);" flagsJson
+
+        html [ Lang "en" ]
             [ head []
-                  [ meta [ _charset "utf-8" ]
-                    meta [ _name "viewport"; _content "width=device-width" ]
-                    link [ _rel "stylesheet"; _type "text/css"; _href "/damo-io.css" ]
-                    title [] [ str "damo.io - Damien Le Berrigaud's feed aggregator." ]
+                  [ meta [ CharSet "utf-8" ]
+                    meta [ Name "viewport"; Content "width=device-width" ]
+                    link [ Rel "stylesheet"; Type "text/css"; Href "/damo-io.css" ]
+                    title [] [ str "damo.io - Damien Le Berrigaud's feeds." ]
                   ]
               body []
-                  [ script [ _src "/damo-io.js" ] []
-                    script [] [ rawText (sprintf """
-                        if (!window.location.hash) {
-                            window.location.hash = '#About,Social,Blog';
-                        }
-                        Elm.DamoIO.App.init({flags: {articles: %s }});
-                    """ articlesJson) ]
+                  [ div [ Id "damo-io-body" ] [ App.view model ignore ]
+                    script [ Src "/damo-io.js" ] []
+                    script [ DangerouslySetInnerHTML { __html = js } ] []
                   ]
             ]
+        |> Fable.ReactServer.renderToString
 
 
-let list findAllRecords: HttpHandler =
+
+let list findAllRecords path: HttpHandler =
     fun next ctx ->
         task {
-            let now =
-                Posix.fromDateTimeOffset DateTimeOffset.UtcNow
+            let now = Posix.fromDateTimeOffset DateTimeOffset.UtcNow
 
-            let serialize object =
-                ctx.GetJsonSerializer().SerializeToString(object)
-
-            let recordsJson =
+            let articles =
                 findAllRecords()
                 |> List.sortByDescending (fun r -> Option.defaultValue now r.Date)
                 |> List.map toJson
-                |> serialize
+                |> List.toArray
 
-            return! htmlView (View.render recordsJson) next ctx
+            let flags: App.Flags = { Articles = articles }
+            let flagsJson = ctx.GetJsonSerializer().SerializeToString(flags)
+            let view = View.render (sprintf "/%s" path) flags flagsJson
+
+            return! htmlString view next ctx
         }

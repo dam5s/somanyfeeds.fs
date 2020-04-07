@@ -16,16 +16,15 @@ let private updatesSequence =
             do! Async.Sleep tenMinutes
     }
 
-
 let backgroundProcessing =
     AsyncSeq.iter
         Repository.updateAll
         updatesSequence
 
-
 let handler: HttpHandler =
     choose
-        [ route "/" >=> GET >=> ArticlesHandler.list Repository.findAll
+        [ GET >=> route "/" >=> redirectTo false "/About,Social,Blog"
+          GET >=> routef "/%s" (ArticlesHandler.list Repository.findAll)
           setStatusCode 404 >=> text "Not Found" ]
 
 let errorHandler (ex: Exception) (logger: ILogger): HttpHandler =
