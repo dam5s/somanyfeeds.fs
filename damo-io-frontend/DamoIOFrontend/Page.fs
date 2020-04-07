@@ -12,7 +12,7 @@ module Page =
     let private sourcesFromPath (path: string) =
         path.Replace("/", "").Split(",")
         |> Array.toList
-        |> List.map Source.fromString
+        |> List.choose Source.fromString
 
     let sources page =
         match page with

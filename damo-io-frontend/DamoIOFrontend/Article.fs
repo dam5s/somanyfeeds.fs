@@ -24,7 +24,7 @@ module Article =
           Link = json.Link
           Content = json.Content
           Date = json.Date |> Option.map (int64 >> Time.Posix)
-          Source = json.Source |> Source.fromString }
+          Source = json.Source |> Source.fromString |> Option.defaultValue Blog }
 
     open Fable.React
     open Fable.React.Props

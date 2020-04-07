@@ -12,10 +12,11 @@ module Source =
 
     let fromString value =
         match value with
-        | "About" -> About
-        | "Social" -> Social
-        | "Code" -> Code
-        | _ -> Blog
+        | "About" -> Some About
+        | "Social" -> Some Social
+        | "Code" -> Some Code
+        | "Blog" -> Some Blog
+        | _ -> None
 
     let toString (source: Source) =
         sprintf "%A" source
