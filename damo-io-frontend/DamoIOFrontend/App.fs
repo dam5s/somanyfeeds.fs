@@ -109,7 +109,6 @@ let private main flags =
     |||> Program.mkProgram
     |> Program.withReactHydrate "damo-io-body"
     |> Program.withSubscription subscriptions
-    |> Program.withConsoleTrace
     |> Program.runWith flags
 
 window?DamoIO <- {| StartApp = main |}
