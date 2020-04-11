@@ -1,6 +1,6 @@
 applications:
 - name: somanyfeeds
-  path: somanyfeeds-server/bin/Release/netcoreapp3.1/publish/
+  path: bin/Release/netcoreapp3.1/publish/
   disk_quota: 1G
   instances: 2
   memory: 256M
