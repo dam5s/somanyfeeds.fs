@@ -12,6 +12,16 @@
  1. Create 3 local databases`somanyfeeds_dev`, `somanyfeeds_test`, `somanyfeeds_integration_tests` that belong to user `somanyfeeds`
  1. Migrate the databases `dotnet run -p build db:somanyfeeds:local:migrate`
 
+```sql
+create user somanyfeeds with password 'secret';
+create database somanyfeeds_dev;
+create database somanyfeeds_tests;
+create database somanyfeeds_integration_tests;
+grant all privileges on database somanyfeeds_dev to somanyfeeds;
+grant all privileges on database somanyfeeds_tests to somanyfeeds;
+grant all privileges on database somanyfeeds_integration_tests to somanyfeeds;
+```
+
 ### Setup your environment variables.
 
 The file `.env.example` contains the list of necessary variables for the whole build.
