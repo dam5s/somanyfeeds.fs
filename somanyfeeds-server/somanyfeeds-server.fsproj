@@ -7,11 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Giraffe" Version="4.0.*" />
-    <PackageReference Include="JWT" Version="6.0.1" />
-    <PackageReference Include="Logary.Adapters.AspNetCore" Version="5.0.0" />
+    <PackageReference Include="Giraffe" Version="4.1.0" />
+    <PackageReference Include="JWT" Version="7.3.1" />
+    <PackageReference Include="Logary.Adapters.AspNetCore" Version="5.0.1" />
     <PackageReference Include="Microsoft.FSharpLu.Json" Version="0.11.6" />
-    <PackageReference Include="TaskBuilder.fs" Version="2.1.*" />
+    <PackageReference Include="TaskBuilder.fs" Version="2.1.0" />
+
     <ProjectReference Include="../somanyfeeds-domain/somanyfeeds-domain.fsproj" />
     <ProjectReference Include="../somanyfeeds-persistence/somanyfeeds-persistence.fsproj" />
     <ProjectReference Include="../somanyfeeds-frontend/somanyfeeds-frontend.fsproj" />

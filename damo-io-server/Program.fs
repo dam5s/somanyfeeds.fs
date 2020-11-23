@@ -48,7 +48,7 @@ let private configureLogging (builder: ILoggingBuilder) =
 let webHostBuilder logary =
     let contentRoot = Env.varDefault "CONTENT_ROOT" Directory.GetCurrentDirectory
     let webRoot = Path.Combine(contentRoot, "WebRoot")
-    let builder = IWebHostBuilderEx.addLogary(WebHostBuilder(), logary)
+    let builder = IWebHostBuilderEx.useLogary(WebHostBuilder(), logary)
 
     builder
         .UseKestrel()
