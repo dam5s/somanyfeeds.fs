@@ -23,6 +23,7 @@
     <Compile Include="SoManyFeedsFrontend/Support/Effects.fs" />
     <Compile Include="SoManyFeedsFrontend/Support/Form.fs" />
     <Compile Include="SoManyFeedsFrontend/Components/Logo.fs" />
+    <Compile Include="SoManyFeedsFrontend\Components\Search.fs" />
     <Compile Include="SoManyFeedsFrontend/Components/Feed.fs" />
     <Compile Include="SoManyFeedsFrontend/Components/RegistrationForm.fs" />
     <Compile Include="SoManyFeedsFrontend/Components/Article.fs" />

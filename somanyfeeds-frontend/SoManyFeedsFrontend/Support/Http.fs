@@ -1,5 +1,6 @@
 module SoManyFeedsFrontend.Support.Http
 
+open System.Web
 open Elmish
 open Fable.Core
 open Fable.SimpleHttp
@@ -67,3 +68,13 @@ module HttpResponse =
         |> Option.toResult "Invalid json"
         |> Result.bind decoder
         |> Result.mapError ParseError
+
+
+[<RequireQualifiedAccess>]
+module Http =
+    let urlEncode (value: string): string =
+        #if FABLE_COMPILER
+        Fable.Core.JS.encodeURI value
+        #else
+        HttpUtility.UrlEncode value
+        #endif

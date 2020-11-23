@@ -14,11 +14,11 @@ open SoManyFeedsFrontend.Support.RemoteData
 open Time
 
 type Flags =
-    { userName: string
-      recents: Article.Json array
-      feeds: Feed.Json array
-      page: string
-      selectedFeedId: int64 option }
+    { UserName: string
+      Recents: Article.Json array
+      Feeds: Feed.Json array
+      Page: string
+      SelectedFeedId: int64 option }
 
 type Page =
     | Recent of int64 option
@@ -48,11 +48,11 @@ type Msg =
     | ChangeArticleStateResult of Article * ArticleState * Result<unit, RequestError>
     | BookmarkRemoved of Article * Result<unit, RequestError>
 
-let private pageFromFlags flags =
-    match flags.page with
+let private pageFromFlags (flags: Flags) =
+    match flags.Page with
     | "Recent" ->
-        flags.feeds
-        |> Array.filter (fun (f: Feed.Json) -> Some f.id = flags.selectedFeedId)
+        flags.Feeds
+        |> Array.filter (fun (f: Feed.Json) -> Some f.id = flags.SelectedFeedId)
         |> Array.tryHead
         |> Option.map (fun f -> f.id)
         |> Recent
@@ -106,15 +106,15 @@ let initModel flags =
         | Bookmarks -> Loading
         | _ -> NotLoaded
 
-    { UserName = flags.userName
+    { UserName = flags.UserName
       Recents =
-          flags.recents
+          flags.Recents
           |> Array.toList
           |> List.map Article.fromJson
           |> Loaded
       Bookmarks = bookmarks
       Feeds =
-          flags.feeds
+          flags.Feeds
           |> Array.toList
           |> List.map Feed.fromJson
       Page = page
@@ -282,10 +282,10 @@ let view model d =
                           [ h2 [] [ str "Articles" ]
                             h1 [] [ str (pageTitle model model.Page) ] ]
                       nav [ Class "flex-init" ]
-                          [ div
-                              [ Class("toggle " + dropdownClass)
-                                dispatch.OnClick ToggleDropdown ] [ str "Filters" ]
-                            menu [ Class dropdownClass ] (menuOptions model dispatch) ] ] ]
+                          [ div [ Class("toggle " + dropdownClass); dispatch.OnClick ToggleDropdown ] [ str "Filters" ]
+                            menu [ Class dropdownClass ] (menuOptions model dispatch) ]
+                          ]
+              ]
           div [ Class "main" ]
               [ match model.Page with
                 | Recent _ -> recentArticleList model dispatch

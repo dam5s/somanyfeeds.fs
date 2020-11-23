@@ -2,38 +2,33 @@
 module SoManyFeedsServer.ManageBackend
 
 open FSharp.Control.Tasks.V2.ContextInsensitive
-open Giraffe
 open SoManyFeedsPersistence.FeedsDataGateway
 open SoManyFeedsDomain.User
+open SoManyFeedsFrontend.Applications
 open SoManyFeedsFrontend.Applications.ManageFrontend
 open SoManyFeedsServer
 
 
-let page maxFeeds (listFeeds: AsyncResult<FeedRecord seq>) (user: User) frontendPage =
+let page maxFeeds (listFeeds: AsyncResult<FeedRecord seq>) (user: User) (frontendPage: ManageFrontend.Page) searchText =
     fun next ctx ->
         task {
             match! listFeeds with
             | Ok records ->
-                let (page, searchText) =
-                    match frontendPage with
-                    | List -> ("List", None)
-                    | Search text -> ("Search", text)
-
                 let flags: Flags =
-                    { userName = user.Name
-                      maxFeeds = maxFeeds
-                      feeds = records
+                    { UserName = user.Name
+                      MaxFeeds = maxFeeds
+                      Feeds = records
                               |> Seq.map FeedsApi.Json.feed
                               |> Seq.toArray
-                      page = page
-                      searchText = searchText }
+                      Page = sprintf "%A" frontendPage
+                      SearchText = searchText }
 
                 let flagsJson = Api.serializeObject flags ctx
-                let model = initModel flags
                 let js = sprintf "SoManyFeeds.StartManageApp(%s);" flagsJson
-                let view = Layout.hydrateFableApp view model js
+                let model = initModel flags
+                let page = Layout.hydrateFableApp view model js
 
-                return! view next ctx
+                return! page next ctx
             | Error explanation ->
                 return! ErrorPage.page explanation next ctx
         }

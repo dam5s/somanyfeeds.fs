@@ -12,7 +12,12 @@ let private updatesSequence =
         let tenMinutes = 10 * 1000 * 60
 
         while true do
-            yield FeedsProcessor.processFeeds (Sources.Repository.findAll())
+            let newArticles =
+                Sources.Repository.findAll ()
+                |> FeedsProcessor.processFeeds
+                |> AsyncSeq.toList
+            
+            yield newArticles
             do! Async.Sleep tenMinutes
     }
 

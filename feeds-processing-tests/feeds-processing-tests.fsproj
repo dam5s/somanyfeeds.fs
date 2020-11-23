@@ -14,8 +14,11 @@
 
     <ProjectReference Include="../feeds-processing/feeds-processing.fsproj" />
 
+    <Compile Include="FeedsProcessingTests\DownloadSupport.fs" />
+
     <Compile Include="FeedsProcessingTests/XmlTests.fs" />
     <Compile Include="FeedsProcessingTests/TwitterTests.fs" />
+    <Compile Include="FeedsProcessingTests/SearchTests.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 

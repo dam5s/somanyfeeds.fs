@@ -94,11 +94,9 @@ type private UserReadPage(articles: UserArticles, user: User) =
 
 type private UserManagePage(feeds: UserFeeds, user: User) =
     member this.List _ =
-        ManageBackend.page maxFeeds feeds.List user ManageFrontend.List
-    member this.SearchNone _ =
-        ManageBackend.page maxFeeds feeds.List user (ManageFrontend.Search None)
-    member this.SearchSome text =
-        ManageBackend.page maxFeeds feeds.List user (ManageFrontend.Search (Some text))
+        ManageBackend.page maxFeeds feeds.List user ManageFrontend.List ""
+    member this.Search text =
+        ManageBackend.page maxFeeds feeds.List user ManageFrontend.Search text
 
 
 let private authenticatedHandler (user: User) =
@@ -115,8 +113,10 @@ let private authenticatedHandler (user: User) =
 
           GET >=> route "/manage" >=> redirectTo false "/manage/list"
           GET >=> route "/manage/list" >=> warbler userManagePage.List
-          GET >=> route "/manage/search" >=> warbler userManagePage.SearchNone
-          GET >=> routef "/manage/search/%s" userManagePage.SearchSome
+          GET >=> route "/manage/search" >=> warbler (fun _ -> userManagePage.Search "")
+          GET >=> routef "/manage/search/%s" userManagePage.Search
+
+          POST >=> routef "/api/search/%s" SearchApi.search
 
           GET >=> route "/api/feeds" >=> warbler userFeeds.ListApi
           POST >=> route "/api/feeds" >=> userFeeds.CreateApi

@@ -2,7 +2,9 @@ module DamoIOServer.FeedsProcessor
 
 open DamoIOServer.ArticlesDataGateway
 open DamoIOServer.Sources
+open FSharp.Control
 open FeedsProcessing
+open FeedsProcessing.Article
 open FeedsProcessing.DataGateway
 open FeedsProcessing.Feeds
 open FeedsProcessing.ProcessingResult
@@ -29,13 +31,25 @@ let private consumerSecret =
     Env.requireVar "TWITTER_CONSUMER_SECRET"
 
 
-let private processFeed feed: ProcessingResult =
+let private downloadAndProcessFeed feed: Async<ProcessingResult> =
     match feed with
-    | Xml(_, url) -> Result.bind processXmlFeed (downloadFeed url)
-    | Twitter(handle) -> Result.bind (processTweets handle) (downloadTwitterTimeline consumerKey consumerSecret handle)
+    | Xml(_, url) ->
+        async {
+            let! download = downloadContent url
+            return download |> Result.bind processFeed
+        }
+    | Twitter(handle) ->
+        async {
+            let! timeline = downloadTwitterTimeline consumerKey consumerSecret handle
+            return timeline |> Result.bind (processTweets handle)
+        }
 
 
-let processFeeds (sources: Source list) =
-    List.collect
-        (fun (sourceType, feed) -> processFeed feed |> resultToList sourceType)
-        sources
+let processFeeds (sources: Source list): AsyncSeq<ArticleRecord> =
+    asyncSeq {
+        for (sourceType, feed) in sources do
+            let! processingResult = downloadAndProcessFeed feed
+            let articles = processingResult |> resultToList sourceType
+
+            for a in articles do yield a
+    }

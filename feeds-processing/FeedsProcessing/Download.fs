@@ -1,6 +1,14 @@
 module FeedsProcessing.Download
 
 
-type DownloadedFeed = DownloadedFeed of string
+type Url = Url of string
 
-type DownloadResult = Result<DownloadedFeed, Explanation>
+[<RequireQualifiedAccess>]
+module Url =
+    let value (Url url) = url
+
+type Download =
+    { Url: Url
+      Content: string }
+
+type DownloadResult = AsyncResult<Download>

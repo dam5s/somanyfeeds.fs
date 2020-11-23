@@ -44,9 +44,9 @@ let private mapTweet (json: TwitterTimelineProvider.Root) =
     }
 
 
-let private parseTweets (DownloadedFeed downloaded) =
+let private parseTweets (download: Download) =
     unsafeOperation "Parse tweets" { return fun _ ->
-        downloaded
+        download.Content
         |> TwitterTimelineProvider.Parse
         |> Array.toList
         |> List.map mapTweet

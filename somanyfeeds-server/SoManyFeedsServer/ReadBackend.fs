@@ -29,22 +29,22 @@ let page
                     | Bookmarks -> ("Bookmarks", None)
 
                 let flags: Flags =
-                    { userName = user.Name
-                      recents = articles
+                    { UserName = user.Name
+                      Recents = articles
                                 |> Seq.map (ArticlesApi.Json.article feeds)
                                 |> Seq.toArray
-                      feeds = feeds
+                      Feeds = feeds
                               |> Seq.map FeedsApi.Json.feed
                               |> Seq.toArray
-                      page = page
-                      selectedFeedId = selectedFeedId }
+                      Page = page
+                      SelectedFeedId = selectedFeedId }
 
                 let flagsJson = Api.serializeObject flags ctx
                 let model = initModel flags
                 let js = sprintf "SoManyFeeds.StartReadApp(%s);" flagsJson
-                let view = Layout.hydrateFableApp view model js
+                let page = Layout.hydrateFableApp view model js
 
-                return! view next ctx
+                return! page next ctx
             | Error explanation ->
                 return! ErrorPage.page explanation next ctx
         }

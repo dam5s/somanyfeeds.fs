@@ -1,9 +1,11 @@
 module SoManyFeedsFrontend.Components.Feed
 
 open Fable.Core
+open Fable.SimpleHttp
+open Result.Operators
 open SoManyFeedsFrontend.Support
 open SoManyFeedsFrontend.Support.Http
-open Result.Operators
+open SoManyFeedsFrontend.Components.Search
 
 type Feed =
     { Id: int64
@@ -12,14 +14,6 @@ type Feed =
 
 [<RequireQualifiedAccess>]
 module Feed =
-    type Fields =
-        { Name: string
-          Url: string }
-
-    let emptyFields =
-        { Name = ""
-          Url = "" }
-
     type Json =
         { id: int64
           name: string
@@ -30,14 +24,36 @@ module Feed =
           Name = json.name
           Url = json.url }
 
-    let decoder (obj: JS.Object) =
+    let private decoder (obj: JS.Object) =
         (fun id name url -> { Id = id; Name = name; Url = url })
             <!> (Json.property "id" obj |> Result.map int64)
             <*> (Json.property "name" obj)
             <*> (Json.property "url" obj)
 
-    let createRequest (fields: Fields) =
-        HttpRequest.postJson "/api/feeds" {|name = fields.Name; url = fields.Url|}
+    let private createRequest (result: SearchResult) =
+        HttpRequest.postJson "/api/feeds" {|name = result.Name; url = result.Url|}
 
-    let deleteRequest (feed: Feed) =
+    let private deleteRequest (feed: Feed) =
         HttpRequest.delete (sprintf "/api/feeds/%d" feed.Id)
+
+    let sendCreateRequest result =
+        async {
+            let! response = result
+                            |> createRequest
+                            |> Http.send
+
+            return if response.statusCode <> 201
+                   then Error ApiError
+                   else response |> HttpResponse.parse decoder
+        }
+
+    let sendDeleteRequest feed =
+        async {
+            let! response = feed
+                            |> deleteRequest
+                            |> Http.send
+
+            return if response.statusCode <> 204
+                   then Error ApiError
+                   else Ok()
+        }

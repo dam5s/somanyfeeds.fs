@@ -1,7 +1,7 @@
 module SoManyFeedsPersistence.FeedJobsDataGateway
 
 open FSharp.Data.Sql
-open FeedsProcessing.Feeds
+open FeedsProcessing.Download
 open SoManyFeedsPersistence.DataSource
 open System
 
@@ -36,7 +36,7 @@ let createMissing =
     )
 
 
-let startSome howMany: AsyncResult<FeedUrl seq> =
+let startSome howMany: AsyncResult<Url seq> =
     dataAccessOperation (fun ctx ->
         let now = DateTime.UtcNow
         let tenMinutesAgo = now.AddMinutes(-10.0)
@@ -58,14 +58,14 @@ let startSome howMany: AsyncResult<FeedUrl seq> =
 
                 ctx.SubmitUpdates()
 
-                FeedUrl job.FeedUrl
+                Url job.FeedUrl
             )
 
         updatedUrls
     )
 
 
-let private updateJob (FeedUrl url) updateFunction =
+let private updateJob (Url url) updateFunction =
     dataAccessOperation (fun ctx ->
         let updatesCount =
             query {

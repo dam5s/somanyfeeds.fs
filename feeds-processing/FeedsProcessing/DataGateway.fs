@@ -4,10 +4,8 @@ open FSharp.Data
 open FSharp.Data.HttpRequestHeaders
 open FeedsProcessing.Download
 open FeedsProcessing.Feeds
-
 open System
 open System.Web
-
 
 type private BasicAuthHeader = BasicAuthHeader of string
 type private BearerToken = BearerToken of string
@@ -25,7 +23,6 @@ let private basicAuthHeader username password =
     |> sprintf "Basic %s"
     |> BasicAuthHeader
 
-
 let private parseToken jsonString =
     unsafeOperation "Parse token json" { return! fun _ ->
         let responseJson = JsonValue.Parse jsonString
@@ -41,7 +38,6 @@ let private parseToken jsonString =
         | Some accessToken -> Ok(BearerToken accessToken)
     }
 
-
 let private requestToken (BasicAuthHeader authHeader) =
     unsafeOperation "Request token" { return! fun _ ->
         let responseString = Http.RequestString
@@ -56,32 +52,38 @@ let private requestToken (BasicAuthHeader authHeader) =
         parseToken responseString
     }
 
-
-let private requestTweets (TwitterHandle handle) token: DownloadResult =
+let private requestTweets (TwitterHandle handle) token =
     unsafeOperation "Request tweets" { return fun _ ->
-        Http.RequestString
-            ("https://api.twitter.com/1.1/statuses/user_timeline.json",
-              httpMethod = "GET",
-              query = [
-                  "screen_name", handle
-                  "count", "60"
-              ],
-              headers = [ Authorization(bearerTokenHeader token) ]
-            )
-            |> DownloadedFeed
+        let url = sprintf "https://twitter.com/%s" handle
+
+        let content =
+            Http.RequestString
+                ("https://api.twitter.com/1.1/statuses/user_timeline.json",
+                  httpMethod = "GET",
+                  query = [
+                      "screen_name", handle
+                      "count", "60"
+                  ],
+                  headers = [ Authorization(bearerTokenHeader token) ]
+                )
+
+        { Url = (Url url); Content = content }
     }
 
-
 let downloadTwitterTimeline consumerKey consumerSecret handle: DownloadResult =
-    let auth = basicAuthHeader (urlEncode consumerKey) (urlEncode consumerSecret)
-    Result.bind (requestTweets handle) (requestToken auth)
+    async {
+        let auth = basicAuthHeader (urlEncode consumerKey) (urlEncode consumerSecret)
+        return Result.bind (requestTweets handle) (requestToken auth)
+    }
 
-
-let downloadFeed (FeedUrl url): DownloadResult =
-    unsafeOperation "Download feed" { return fun _ ->
-        Http.RequestString
-                ( url,
-                headers = [ "User-Agent", "somanyfeeds.com" ],
-                responseEncodingOverride = "utf-8" )
-        |> DownloadedFeed
+let downloadContent (Url url): DownloadResult =
+    async {
+        return unsafeOperation "Download content" { return fun _ ->
+            let content =
+                Http.RequestString
+                    ( url,
+                      headers = [ "User-Agent", "somanyfeeds.com" ],
+                      responseEncodingOverride = "utf-8" )
+            { Url = (Url url); Content = content }
+        }
     }

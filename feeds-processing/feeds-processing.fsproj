@@ -11,14 +11,15 @@
 
     <ProjectReference Include="../prelude/prelude.fsproj" />
 
+    <Compile Include="FeedsProcessing/Download.fs" />
     <Compile Include="FeedsProcessing/Feeds.fs" />
     <Compile Include="FeedsProcessing/Html.fs" />
     <Compile Include="FeedsProcessing/Article.fs" />
     <Compile Include="FeedsProcessing/ProcessingResult.fs" />
-    <Compile Include="FeedsProcessing/Download.fs" />
     <Compile Include="FeedsProcessing/Xml.fs" />
     <Compile Include="FeedsProcessing/Twitter.fs" />
     <Compile Include="FeedsProcessing/DataGateway.fs" />
+    <Compile Include="FeedsProcessing/Search.fs" />
   </ItemGroup>
 
   <ItemGroup>

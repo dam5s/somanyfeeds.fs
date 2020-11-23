@@ -326,7 +326,7 @@ em, strong {
 }
 
 p {
-  margin: 1rem 0;
+  margin: 0 0 1rem 0;
 
   &.message {
     font-size: 1.2rem;
@@ -465,7 +465,7 @@ label {
 input[type="text"], input[type="email"], input[type="password"] {
   background-color: $bg-color;
   color: $fg-color;
-  border: none;
+  border: 1px solid $dark-color;
   border-radius: 2px;
   display: block;
   padding: .5rem;
@@ -477,6 +477,10 @@ input[type="text"], input[type="email"], input[type="password"] {
 
   &:disabled {
     opacity: 0.5;
+  }
+
+  &:focus {
+    border: 1px solid $fg-color;
   }
 }
 

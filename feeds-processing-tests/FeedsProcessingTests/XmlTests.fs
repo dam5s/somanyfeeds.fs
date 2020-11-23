@@ -1,8 +1,10 @@
 module ``Xml Processor Tests``
 
 open FeedsProcessing
+open FeedsProcessing.Article
 open FeedsProcessing.Download
 open FeedsProcessing.Xml
+open FeedsProcessingTests.DownloadSupport
 open FsUnit
 open FsUnitTyped
 open NUnit.Framework
@@ -12,12 +14,10 @@ open Time
 
 
 [<Test>]
-let ``with unsupported XML``() =
-    let downloaded = DownloadedFeed "<foo>Not quite expected xml content</foo>"
+let ``with unsupported XML`` () =
+    let download = Download.fromContent "<foo>Not quite expected xml content</foo>"
 
-
-    let result = processXmlFeed downloaded
-
+    let result = processFeed download
 
     match result with
     | Ok _ -> Assert.Fail "Expected failure"
@@ -27,14 +27,12 @@ let ``with unsupported XML``() =
 
 
 [<Test>]
-let ``with github Atom XML``() =
-    let downloaded = "../../../../feeds-processing-tests/Resources/test-samples/github.xml"
-                     |> File.ReadAllText
-                     |> DownloadedFeed
+let ``with github Atom XML`` () =
+    let download =
+        "../../../../feeds-processing-tests/Resources/test-samples/github.xml"
+        |> Download.fromFilePath
 
-
-    let result = processXmlFeed downloaded
-
+    let result = processFeed download
 
     match result with
     | Error _ -> Assert.Fail "Expected success"
@@ -42,9 +40,11 @@ let ``with github Atom XML``() =
         List.length records |> should equal 7
 
         let article = List.head records
-        let expectedTimeUtc = (2018, 04, 14, 21, 30, 17, TimeSpan.Zero)
-                              |> DateTimeOffset
-                              |> Posix.fromDateTimeOffset
+
+        let expectedTimeUtc =
+            (2018, 04, 14, 21, 30, 17, TimeSpan.Zero)
+            |> DateTimeOffset
+            |> Posix.fromDateTimeOffset
 
         Article.title article |> should equal (Some "dam5s pushed to master in dam5s/somanyfeeds.fs")
         Article.link article |> should equal (Some "https://github.com/dam5s/somanyfeeds.fs")
@@ -53,14 +53,12 @@ let ``with github Atom XML``() =
 
 
 [<Test>]
-let ``with Dualshock Atom XML``() =
-    let downloaded = "../../../../feeds-processing-tests/Resources/test-samples/dualshock.xml"
-                     |> File.ReadAllText
-                     |> DownloadedFeed
+let ``with Dualshock Atom XML`` () =
+    let downloaded =
+        "../../../../feeds-processing-tests/Resources/test-samples/dualshock.xml"
+        |> Download.fromFilePath
 
-
-    let result = processXmlFeed downloaded
-
+    let result = processFeed downloaded
 
     match result with
     | Error _ -> Assert.Fail "Expected success"
@@ -69,14 +67,12 @@ let ``with Dualshock Atom XML``() =
 
 
 [<Test>]
-let ``with RSS XML``() =
-    let downloadedFeed = "../../../../feeds-processing/Resources/samples/rss.sample.xml"
-                         |> File.ReadAllText
-                         |> DownloadedFeed
+let ``with RSS XML`` () =
+    let downloadedFeed =
+        "../../../../feeds-processing/Resources/samples/rss.sample.xml"
+        |> Download.fromFilePath
 
-
-    let result = processXmlFeed downloadedFeed
-
+    let result = processFeed downloadedFeed
 
     match result with
     | Error _ -> Assert.Fail "Expected success"
@@ -84,9 +80,11 @@ let ``with RSS XML``() =
         List.length records |> should equal 6
 
         let firstArticle = List.head records
-        let expectedTimeUtc = (2016, 09, 20, 12, 54, 44, TimeSpan.Zero)
-                              |> DateTimeOffset
-                              |> Posix.fromDateTimeOffset
+
+        let expectedTimeUtc =
+            (2016, 09, 20, 12, 54, 44, TimeSpan.Zero)
+            |> DateTimeOffset
+            |> Posix.fromDateTimeOffset
 
         Article.title firstArticle |> should equal (Some "First title!")
         Article.link firstArticle |> should equal (Some "https://medium.com/@its_damo/first")
@@ -101,14 +99,12 @@ let ``with RSS XML``() =
 
 
 [<Test>]
-let ``processFeed with slashdot RDF XML``() =
-    let downloadedFeed = "../../../../feeds-processing-tests/Resources/test-samples/slashdot.xml"
-                         |> File.ReadAllText
-                         |> DownloadedFeed
+let ``processFeed with slashdot RDF XML`` () =
+    let downloadedFeed =
+        "../../../../feeds-processing-tests/Resources/test-samples/slashdot.xml"
+        |> Download.fromFilePath
 
-
-    let result = processXmlFeed downloadedFeed
-
+    let result = processFeed downloadedFeed
 
     match result with
     | Error _ -> Assert.Fail "Expected success"
@@ -116,9 +112,11 @@ let ``processFeed with slashdot RDF XML``() =
         List.length records |> should equal 15
 
         let article = List.head records
-        let expectedTimeUtc = (2018, 12, 28, 20, 55, 0, TimeSpan.Zero)
-                              |> DateTimeOffset
-                              |> Posix.fromDateTimeOffset
+
+        let expectedTimeUtc =
+            (2018, 12, 28, 20, 55, 0, TimeSpan.Zero)
+            |> DateTimeOffset
+            |> Posix.fromDateTimeOffset
 
         Article.title article |> should equal (Some "Netflix Permanently Pulls iTunes Billing For New and Returning Users")
         Article.link article |> should equal (Some "https://news.slashdot.org/story/18/12/28/2054254/netflix-permanently-pulls-itunes-billing-for-new-and-returning-users?utm_source=rss1.0mainlinkanon&utm_medium=feed")

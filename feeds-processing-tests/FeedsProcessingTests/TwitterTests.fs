@@ -1,22 +1,21 @@
 module ``Twitter Processor Tests``
 
-open FeedsProcessing
-open FeedsProcessing.Download
+open FeedsProcessingTests.DownloadSupport
+open FeedsProcessing.Article
 open FeedsProcessing.Feeds
 open FeedsProcessing.Twitter
-open FsUnit
-
+open FeedsProcessing
 open NUnit.Framework
+open FsUnit
 open System
-open System.IO
 open Time
 
 
 [<Test>]
 let ``processFeed twitter timeline``() =
-    let downloadedFeed = "../../../../feeds-processing/Resources/samples/twitter.timeline.sample.json"
-                         |> File.ReadAllText
-                         |> DownloadedFeed
+    let downloadedFeed =
+        "../../../../feeds-processing/Resources/samples/twitter.timeline.sample.json"
+        |> Download.fromFilePath
 
 
     let result = processTweets (TwitterHandle "its_damo") downloadedFeed
