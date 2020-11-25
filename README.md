@@ -3,7 +3,7 @@
 ## Local Setup
 
 ### Dependencies
- 1. .NET Core 3.1 (+ maybe Mono for Type Providers on Linux)
+ 1. .NET 5
  1. PostgreSQL 11
  1. Node JS + Yarn on the PATH
 
