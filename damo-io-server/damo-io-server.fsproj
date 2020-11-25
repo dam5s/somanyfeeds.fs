@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <OutputType>Exe</OutputType>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
@@ -14,6 +13,7 @@
 
     <ProjectReference Include="../prelude/prelude.fsproj" />
     <ProjectReference Include="../feeds-processing/feeds-processing.fsproj" />
+    <ProjectReference Include="../damo-io-frontend/damo-io-frontend.fsproj" />
 
     <Compile Include="DamoIOServer/Sources.fs" />
     <Compile Include="DamoIOServer/ArticlesDataGateway.fs" />
@@ -22,7 +22,6 @@
     <Compile Include="DamoIOServer/App.fs" />
     <Compile Include="DamoIOServer/Logging.fs" />
     <Compile Include="Program.fs" />
-    <ProjectReference Include="..\damo-io-frontend\damo-io-frontend.fsproj" />
   </ItemGroup>
 
   <ItemGroup>
