@@ -11,6 +11,7 @@
     "react-dom": "16.14.0",
     "webpack": "4.44.2",
     "webpack-cli": "3.3.12",
-    "elliptic": "~6.5.3"
+    "elliptic": "~6.5.3",
+    "terser-webpack-plugin": "~1.4.5"
   }
 }
