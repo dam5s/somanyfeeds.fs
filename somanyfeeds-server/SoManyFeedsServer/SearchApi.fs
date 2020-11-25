@@ -1,11 +1,13 @@
 module SoManyFeedsServer.SearchApi
 
 open FSharp.Control
+open Giraffe
+open Microsoft.AspNetCore.Http
+
 open FeedsProcessing
 open FeedsProcessing.Search
 open FeedsProcessing.Download
 open FeedsProcessing.Xml
-open Giraffe
 
 let rec private recursiveSearch (url: Url): AsyncSeq<FeedMetadata> =
     asyncSeq {
@@ -49,8 +51,17 @@ let private sanitizeQuery (query: string) =
     else if query.StartsWith("https://") then query
     else sprintf "https://%s" query
 
-let search searchText : HttpHandler =
+let private queryParamValues name (context: HttpContext) =
+    context.Request.Query.Item(name).ToArray()
+
+let search : HttpHandler =
     fun next ctx ->
-        let query = sanitizeQuery searchText
+        let q =
+            ctx 
+            |> queryParamValues "q"
+            |> Array.tryHead 
+            |> Option.defaultValue ""
+
+        let query = sanitizeQuery q
 
         doSearch query next ctx

@@ -14,7 +14,7 @@ module FindResult =
     let asyncFromAsyncResultOfOption (result: AsyncResult<'a option>) =
         async {
             match! result with
-            | Ok(Some value) -> return Found value
+            | Ok (Some value) -> return Found value
             | Ok None -> return NotFound
             | Error err -> return FindError err
         }

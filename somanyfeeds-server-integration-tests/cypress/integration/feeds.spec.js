@@ -32,27 +32,27 @@ describe("Feeds", () => {
         cy.get("p").should("have.text", "You have not subscribed to any feeds yet.");
         cy.get(".card-list .card").should("have.length", 0);
 
-        cy.get("input[name='name']").type("My Test Feed");
-        cy.get("input[name='url']").type("http://example.com/my/test/feed.rss");
-        cy.get("button").contains("Subscribe").click();
+        cy.get("input[name='searchText']").type("http://localhost:9092/index.html");
+        cy.get("button").contains("Search").click();
 
+        cy.get("h3").should("contain", "Search results");
         cy.get(".card-list .card").should("have.length", 1);
-        cy.get(".card dd").should("contain", "My Test Feed");
-        cy.get(".card dd").should("contain", "http://example.com/my/test/feed.rss");
+        cy.get(".card dd").should("contain", "Stories by Damien Le Berrigaud on Medium")
+        cy.get(".card dd a").should("contain", "http://localhost:9092/rss.xml")
+        cy.get(".card .actions button").contains("Subscribe").click();
 
-        cy.get("input[name='name']").type("My Test Feed #2");
-        cy.get("input[name='url']").type("http://example.com/my/test/feed-2.rss");
-        cy.get("button").contains("Subscribe").click();
-
-        cy.get(".card-list .card").should("have.length", 2);
-        cy.get(".card dd").should("contain", "My Test Feed #2");
-        cy.get(".card dd").should("contain", "http://example.com/my/test/feed-2.rss");
+        cy.visit(serverUrl + "/manage");
+        cy.get("h2").should("have.text", "Feeds");
+        cy.get("h3").should("contain.text", "Add feed");
+        cy.get(".card-list .card").should("have.length", 1);
+        cy.get(".card dt").should("contain.text", "Stories by Damien Le Berrigaud on Medium");
+        cy.get(".card dd").should("contain.text", "http://localhost:9092/rss.xml");
 
         cy.get("button").contains("Unsubscribe").click();
-        cy.get("h3").should("contain", "Unsubscribe");
-
+        cy.get("h3").should("contain.text", "Unsubscribe");
         cy.get("button").contains("Yes, unsubscribe").click();
-        cy.get(".card-list .card").should("have.length", 1);
-        cy.get(".card dd").should("contain", "My Test Feed");
+
+        cy.get(".card-list .card").should("have.length", 0);
+        cy.get("p").should("have.text", "You have not subscribed to any feeds yet.");
     });
 });

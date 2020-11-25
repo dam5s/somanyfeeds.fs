@@ -34,7 +34,7 @@ module Search =
     let private request query =
         query
         |> Http.urlEncode
-        |> sprintf "/api/search/%s"
+        |> sprintf "/api/search?q=%s"
         |> HttpRequest.post
 
     let private feedDecoder (obj: JS.Object): Result<SearchResult, string> =

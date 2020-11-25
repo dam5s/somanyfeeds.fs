@@ -40,4 +40,9 @@ let ``with HTML from Le Monde`` () =
 
     let result = search download
 
-    result |> should equal (WebPageMatch [ Url "https://www.lemonde.fr/rss/une.xml" ])
+    match result with
+    | FeedMatch _ -> failwith "Expected a web page match"
+    | WebPageMatch urls -> 
+        urls 
+        |> Seq.toList  
+        |> should equal [ Url "https://www.lemonde.fr/rss/une.xml" ]

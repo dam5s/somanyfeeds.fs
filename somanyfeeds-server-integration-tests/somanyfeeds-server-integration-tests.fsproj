@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <GenerateProgramFile>false</GenerateProgramFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
@@ -14,7 +14,8 @@
 
     <ProjectReference Include="../somanyfeeds-server/somanyfeeds-server.fsproj" />
 
-    <Compile Include="IntegrationTests/DatabaseSupport.fs" />
+    <Compile Include="IntegrationTests/Support/Database.fs" />
+    <Compile Include="IntegrationTests/Support/TestWebsite.fs" />
     <Compile Include="IntegrationTests/BrowserTests.fs" />
     <Compile Include="IntegrationTests/FeedsProcessingTests.fs" />
     <Compile Include="Program.fs" />

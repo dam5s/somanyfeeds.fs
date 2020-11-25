@@ -162,7 +162,7 @@ let update msg model =
         model, subscribeToFeed result
 
     | SubscriptionResult (Ok newFeed) ->
-        { model with Feeds = [ newFeed ] @ model.Feeds; Page = Search }, Cmd.none
+        { model with Feeds = [ newFeed ] @ model.Feeds }, Cmd.none
 
     | SubscriptionResult (Error _) ->
         failwith "TODO"
@@ -183,7 +183,7 @@ let private deleteDialog model (dispatch: Html.Dispatcher<Msg>) =
     | Opened feed ->
         div [ Class "dialog" ]
             [ h3 [] [ str "Unsubscribe" ]
-              p [] [ str(sprintf "Are you sure you want to unsubscribe from \"%s\"?" feed.Name) ]
+              p [] [ str (sprintf "Are you sure you want to unsubscribe from \"%s\"?" feed.Name) ]
               nav []
                   [ button
                         [ Class "button primary"
