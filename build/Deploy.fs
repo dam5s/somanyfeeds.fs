@@ -42,3 +42,4 @@ let loadTasks _ =
     Target.create "deploy:damo-io" (deploy "damo-io-server")
 
     "deploy:somanyfeeds" |> dependsOn [ "build" ]
+    "deploy:damo-io" |> dependsOn [ "build" ]
