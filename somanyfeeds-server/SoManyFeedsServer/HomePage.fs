@@ -34,7 +34,7 @@ let view: HttpHandler =
                               str "Source code is all "
                               link "https://github.com/dam5s/somanyfeeds.fs" "available on Github"
                               str ". This version is deployed to "
-                              link "https://run.pivotal.io" "Pivotal Web Services"
+                              link "https://heroku.com" "Heroku"
                               str "."
                             ]
                       ]

@@ -43,7 +43,6 @@ let main args =
         DotNet.release "somanyfeeds-server" ()
     )
 
-
     "clean" |> dependsOn [ "frontend:clean" ]
     "build" |> dependsOn [ "frontend:build" ]
 
@@ -52,6 +51,7 @@ let main args =
     "test" |> dependsOn [ "build" ]
     "release" |> dependsOn [ "test"; "build"; "clean" ]
 
+    Deploy.loadTasks()
     Target.runOrDefault "release"
 
     0

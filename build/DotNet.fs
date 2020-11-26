@@ -23,7 +23,7 @@ let run project _ =
     dotnet "run" (sprintf "-p %s" project)
 
 let release project _ =
-    dotnet "publish" (sprintf "%s -c Release" project)
+    dotnet "publish" (sprintf "%s -c Release -r linux-x64" project)
 
 
 let solutionProjects =

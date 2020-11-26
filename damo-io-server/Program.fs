@@ -46,15 +46,16 @@ let private configureLogging (builder: ILoggingBuilder) =
         |> ignore
 
 let webHostBuilder logary =
+    let serverPort = Env.varDefault "PORT" (always "5000")
     let contentRoot = Env.varDefault "CONTENT_ROOT" Directory.GetCurrentDirectory
     let webRoot = Path.Combine(contentRoot, "WebRoot")
-    let builder = IWebHostBuilderEx.useLogary(WebHostBuilder(), logary)
 
-    builder
+    useLogary(WebHostBuilder(), logary)
         .UseKestrel()
         .UseContentRoot(contentRoot)
         .UseIISIntegration()
         .UseWebRoot(webRoot)
+        .UseUrls(sprintf "http://0.0.0.0:%s" serverPort)
         .Configure(Action<IApplicationBuilder> configureApp)
         .ConfigureServices(configureServices)
         .ConfigureLogging(configureLogging)
