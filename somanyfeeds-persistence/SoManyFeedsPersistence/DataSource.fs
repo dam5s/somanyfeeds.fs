@@ -34,7 +34,8 @@ module ExistsResult =
 
 
 [<Literal>]
-let private DefaultConnectionString = "User ID=somanyfeeds;Host=localhost;Port=5432;Database=somanyfeeds_dev;Password=secret"
+let private DefaultConnectionString =
+    "User ID=somanyfeeds;Host=localhost;Port=5432;Database=somanyfeeds_dev;Password=secret"
 
 
 let private connectionString =

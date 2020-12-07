@@ -2,7 +2,7 @@ module SoManyFeedsPersistence.UsersDataGateway
 
 open SoManyFeedsPersistence.DataSource
 open SoManyFeedsDomain.Registration
-
+open Time
 
 module private Password =
     open BCrypt.Net
@@ -15,21 +15,26 @@ type UserRecord =
     { Id: int64
       Name: string
       Email: string
+      LastLogin: Posix option
     }
 
 let private entityToRecord (entity: UserEntity) =
     { Id = entity.Id
       Name = entity.Name
       Email = entity.Email
+      LastLogin = entity.LastLogin |> Option.map Posix.fromDateTime
     }
 
-let private entityToRecordIfPasswordMatch password (entity: UserEntity) =
-    if Password.verify password entity.PasswordHash
-        then Some (entityToRecord entity)
-        else None
+let private updateLastLogin (ctx: DataContext) (entity: UserEntity) =
+    entity.LastLogin <- 
+        Posix.now () 
+        |> Posix.toDateTime
+        |> Some
+    ctx.SubmitUpdates ()
+    entity
 
 
-let findByEmailAndPassword email password: Async<FindResult<UserRecord>> =
+let loginByEmailAndPassword email password =
     dataAccessOperation (fun ctx ->
         query {
             for user in ctx.Public.Users do
@@ -37,7 +42,16 @@ let findByEmailAndPassword email password: Async<FindResult<UserRecord>> =
             take 1
         }
         |> Seq.tryHead
-        |> Option.bind (entityToRecordIfPasswordMatch password)
+        |> Option.bind (fun entity ->
+            if Password.verify password entity.PasswordHash
+                then
+                    entity
+                    |> updateLastLogin ctx
+                    |> entityToRecord
+                    |> Some
+                else 
+                    None
+        )
     )
     |> FindResult.asyncFromAsyncResultOfOption
 

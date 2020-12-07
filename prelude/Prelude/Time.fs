@@ -11,6 +11,8 @@ module Posix =
 
     let fromDateTime (d: DateTime) = fromDateTimeOffset (DateTimeOffset(d, TimeSpan.Zero))
 
+    let now () = fromDateTimeOffset DateTimeOffset.Now
+
     let toDateTimeOffset (Posix m) = DateTimeOffset.FromUnixTimeMilliseconds(int64 m)
 
     let toDateTime p = (toDateTimeOffset p).DateTime
