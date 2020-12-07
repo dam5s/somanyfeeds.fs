@@ -2,7 +2,6 @@ module Time
 
 open System
 
-
 type Posix =
     Posix of milliseconds: int64
 

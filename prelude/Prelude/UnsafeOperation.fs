@@ -3,7 +3,6 @@ module UnsafeOperation
 
 open System
 
-
 type private Logs = Logs
 let private logger = Logger<Logs>()
 

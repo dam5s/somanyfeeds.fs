@@ -6,13 +6,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Prelude/Extensions.fs" />
+    <Compile Include="Prelude/Prelude.fs" />
+    <Compile Include="Prelude/Option.fs" />
+    <Compile Include="Prelude/Choice.fs" />
+    <Compile Include="Prelude/Result.fs" />
+    <Compile Include="Prelude/List.fs" />
+    <Compile Include="Prelude/String.fs" />
     <Compile Include="Prelude/AsyncResult.fs" />
     <Compile Include="Prelude/Logging.fs" />
     <Compile Include="Prelude/UnsafeOperation.fs" />
     <Compile Include="Prelude/Time.fs" />
     <Compile Include="Prelude/Validation.fs" />
-    <Compile Include="Prelude/EnvSupport.fs" />
+    <Compile Include="Prelude/Env.fs" />
     <Compile Include="Prelude/Optics.fs" />
   </ItemGroup>
 

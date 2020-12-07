@@ -28,7 +28,7 @@ module RegistrationForm =
                password = fields.Password
                passwordConfirmation = fields.Password |}
 
-    open Optics.Operators
+    open Lens.Operators
 
     let name: Lens<RegistrationForm, string> = Form.model >=> Registration.name
     let validateName = Form.validateField "name" Registration.nameValidation

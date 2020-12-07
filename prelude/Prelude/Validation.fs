@@ -1,15 +1,12 @@
 namespace global
 
-
 type FieldError<'Error> =
     { FieldName: string
       Error: 'Error
     }
 
-
 type Validation<'Success, 'Failure> =
     Result<'Success, FieldError<'Failure> list>
-
 
 [<RequireQualifiedAccess>]
 module Validation =

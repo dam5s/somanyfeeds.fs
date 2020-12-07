@@ -3,13 +3,11 @@ module AsyncResult
 
 open System
 
-
 type Explanation =
     { Message: string; Exceptions: Exception list }
 
 type AsyncResult<'a> =
     Async<Result<'a, Explanation>>
-
 
 [<RequireQualifiedAccess>]
 module Explanation =
@@ -18,13 +16,11 @@ module Explanation =
     let append err1 err2 = { Message = sprintf "%s, %s" err1.Message err2.Message
                              Exceptions = List.append err1.Exceptions err2.Exceptions }
 
-
 [<RequireQualifiedAccess>]
 module Error =
     let create msg ex = Error (Explanation.create msg [ex])
     let ofMessage msg = Error (Explanation.create msg [])
     let ofException (ex: Exception) = Error (Explanation.create ex.Message [ex])
-
 
 [<RequireQualifiedAccess>]
 module AsyncResult =

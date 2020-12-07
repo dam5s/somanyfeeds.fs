@@ -1,11 +1,7 @@
 #if !FABLE_COMPILER
 
-[<AutoOpen>]
-module EnvSupport
-
 [<RequireQualifiedAccess>]
-module Env =
-
+module Env
     open System
 
     let var name =
