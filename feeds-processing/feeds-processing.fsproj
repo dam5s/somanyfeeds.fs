@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="FSharp.Data" Version="3.3.3" />
-    <PackageReference Include="HtmlSanitizer" Version="5.0.355" />
+    <PackageReference Include="HtmlSanitizer" Version="5.0.372" />
 
     <ProjectReference Include="../prelude/prelude.fsproj" />
 
