@@ -10,6 +10,7 @@ open SoManyFeedsFrontend.Applications
 open SoManyFeedsPersistence
 open SoManyFeedsPersistence.UserArticlesDataGateway
 open SoManyFeedsServer
+open SoManyFeedsServer.Auth.Admin
 
 let private maxFeeds =
     Env.var "MAX_FEEDS"
@@ -99,7 +100,7 @@ type private UserManagePage(feeds: UserFeeds, user: User) =
         ManageBackend.page maxFeeds feeds.List user ManageFrontend.Search
 
 
-let private authenticatedHandler (user: User) =
+let private authenticatedHandler (user: User): HttpHandler =
     let userFeeds = UserFeeds user
     let userArticles = UserArticles user
     let userReadPage = UserReadPage(userArticles, user)
@@ -127,22 +128,28 @@ let private authenticatedHandler (user: User) =
           POST >=> routef "/api/articles/%d/read" userArticles.CreateReadArticle
           DELETE >=> routef "/api/articles/%d/read" userArticles.DeleteReadArticle
           POST >=> routef "/api/articles/%d/bookmark" userArticles.CreateBookmark
-          DELETE >=> routef "/api/articles/%d/bookmark" userArticles.DeleteBookmark
+          DELETE >=> routef "/api/articles/%d/bookmark" userArticles.DeleteBookmark ]
 
-          setStatusCode 404 >=> text "Not Found" ]
+let private adminHandler (admin: Admin): HttpHandler =
+    let usersPage = Admin.UsersPage.page UsersDataGateway.listUsers
+
+    choose
+        [ GET >=> route "/admin/users" >=> (warbler usersPage)
+        ]
 
 let handler: HttpHandler =
     choose
         [ GET >=> route "/" >=> HomePage.view
           GET >=> route "/login" >=> Auth.Web.loginPage false
-          POST >=> route "/login" >=> (Auth.Web.doLogin UsersDataGateway.findByEmailAndPassword)
+          POST >=> route "/login" >=> (Auth.Web.doLogin UsersDataGateway.loginByEmailAndPassword)
           GET >=> route "/logout" >=> Auth.Web.doLogout
           GET >=> route "/register" >=> Auth.Web.registrationPage
           POST >=> route "/api/users" >=> bindJson (UsersApi.create UsersService.create)
 
           Auth.Web.authenticate authenticatedHandler
+          Admin.authenticate adminHandler
 
-          setStatusCode 403 >=> text "Unauthorized" ]
+          setStatusCode 404 >=> text "Not found" ]
 
 let errorHandler (ex: Exception) (logger: ILogger): HttpHandler =
     logger.LogError(ex, "An unhandled exception has occurred while executing the request.")

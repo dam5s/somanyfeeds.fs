@@ -65,13 +65,13 @@ let private formData name (ctx: HttpContext) =
     |> ctx.GetFormValue
     |> Option.defaultValue ""
 
-let doLogin (findByEmailAndPassword: string -> string -> Async<FindResult<UserRecord>>): HttpHandler =
+let doLogin (loginByEmailAndPassword: string -> string -> Async<FindResult<UserRecord>>): HttpHandler =
     fun next ctx ->
         task {
             let email = formData "email" ctx
             let password = formData "password" ctx
 
-            match! findByEmailAndPassword email password with
+            match! loginByEmailAndPassword email password with
             | NotFound ->
                 return! loginError next ctx
             | FindError e ->
@@ -81,6 +81,7 @@ let doLogin (findByEmailAndPassword: string -> string -> Async<FindResult<UserRe
                 let user =
                     { Id = userRecord.Id
                       Name = userRecord.Name }
+
                 return!
                     ctx
                     |> Session.setUser user
@@ -104,7 +105,8 @@ let registrationPage: HttpHandler =
 let authenticate (withUser: User -> HttpHandler): HttpHandler =
     fun next ctx ->
         match Session.getUser ctx with
-        | Some user -> withUser user next ctx
+        | Some user -> 
+            withUser user next ctx
         | None ->
             ctx
             |> Session.saveUrl

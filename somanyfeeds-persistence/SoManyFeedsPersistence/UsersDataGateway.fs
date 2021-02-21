@@ -26,8 +26,8 @@ let private entityToRecord (entity: UserEntity) =
     }
 
 let private updateLastLogin (ctx: DataContext) (entity: UserEntity) =
-    entity.LastLogin <- 
-        Posix.now () 
+    entity.LastLogin <-
+        Posix.now ()
         |> Posix.toDateTime
         |> Some
     ctx.SubmitUpdates ()
@@ -49,11 +49,22 @@ let loginByEmailAndPassword email password =
                     |> updateLastLogin ctx
                     |> entityToRecord
                     |> Some
-                else 
+                else
                     None
         )
     )
     |> FindResult.asyncFromAsyncResultOfOption
+
+
+let listUsers: AsyncResult<UserRecord seq> =
+    dataAccessOperation (fun ctx ->
+        query {
+            for user in ctx.Public.Users do
+            take 500
+            select user
+        }
+        |> Seq.map entityToRecord
+    )
 
 
 let create registration: AsyncResult<UserRecord> =
