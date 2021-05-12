@@ -8,9 +8,9 @@
 .fable
 bin
 obj
+build
 public
 WebRoot
-elm-stuff
 node_modules
 *.DotSettings.user
 manifest.yml

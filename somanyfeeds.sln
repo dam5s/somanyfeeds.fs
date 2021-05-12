@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-#
+# 
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "damo-io-server", "damo-io-server\damo-io-server.fsproj", "{A7157346-F377-4B8A-8CF2-1DB962115171}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "build", "build\build.fsproj", "{48AB536C-C4D7-4A79-88CD-92DB6CCB3A95}"
@@ -24,6 +24,8 @@ EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "somanyfeeds-persistence", "somanyfeeds-persistence\somanyfeeds-persistence.fsproj", "{7BEE72D8-AF6D-46A8-8E93-516FA7A0C60E}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "damo-io-frontend", "damo-io-frontend\damo-io-frontend.fsproj", "{D43AB091-A72A-4CDA-B2DE-7FDE18C2EC75}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "damo-io-blog", "damo-io-blog\damo-io-blog.fsproj", "{5B4B3346-32F8-41B2-8851-9927D9C5223E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -191,5 +193,17 @@ Global
 		{D43AB091-A72A-4CDA-B2DE-7FDE18C2EC75}.Release|x64.Build.0 = Release|Any CPU
 		{D43AB091-A72A-4CDA-B2DE-7FDE18C2EC75}.Release|x86.ActiveCfg = Release|Any CPU
 		{D43AB091-A72A-4CDA-B2DE-7FDE18C2EC75}.Release|x86.Build.0 = Release|Any CPU
+		{5B4B3346-32F8-41B2-8851-9927D9C5223E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B4B3346-32F8-41B2-8851-9927D9C5223E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B4B3346-32F8-41B2-8851-9927D9C5223E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5B4B3346-32F8-41B2-8851-9927D9C5223E}.Debug|x64.Build.0 = Debug|Any CPU
+		{5B4B3346-32F8-41B2-8851-9927D9C5223E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5B4B3346-32F8-41B2-8851-9927D9C5223E}.Debug|x86.Build.0 = Debug|Any CPU
+		{5B4B3346-32F8-41B2-8851-9927D9C5223E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B4B3346-32F8-41B2-8851-9927D9C5223E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B4B3346-32F8-41B2-8851-9927D9C5223E}.Release|x64.ActiveCfg = Release|Any CPU
+		{5B4B3346-32F8-41B2-8851-9927D9C5223E}.Release|x64.Build.0 = Release|Any CPU
+		{5B4B3346-32F8-41B2-8851-9927D9C5223E}.Release|x86.ActiveCfg = Release|Any CPU
+		{5B4B3346-32F8-41B2-8851-9927D9C5223E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
