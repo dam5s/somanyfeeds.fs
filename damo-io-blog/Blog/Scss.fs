@@ -1,19 +1,14 @@
 ﻿module Blog.Scss
 
+open System.IO
+
 [<RequireQualifiedAccess>]
 module Scss =
     open SharpScss
 
-    let private options =
-        ScssOptions(OutputStyle = ScssOutputStyle.Compressed)
-
-    let private convertCss css =
-        Scss.ConvertToCss(css, options).Css
-
-    let private convertFile file =
-        file
-        |> FileInfo.readAll
-        |> convertCss
+    let private convertFile (file: FileInfo) =
+        let options = ScssOptions(OutputStyle = ScssOutputStyle.Compressed)
+        Scss.ConvertFileToCss(file.FullName, options).Css
 
     let convert path =
         path

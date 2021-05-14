@@ -17,6 +17,8 @@ module Html =
             [ head []
                   [ meta [ HTMLAttr.Content "text/html;charset=utf-8"; HttpEquiv "Content-Type" ]
                     meta [ HTMLAttr.Content "utf-8"; HttpEquiv "encoding" ]
+                    meta [ Name "viewport";  HTMLAttr.Content "width=device-width" ]
+                    link [ Rel "stylesheet"; Type "text/css"; Href "/app.css" ]
                     title [] [ str pageTitle ]
                   ]
               body [] [
@@ -24,18 +26,14 @@ module Html =
                       h1 [] [ str pageTitle ]
                       nav [] [ a [ Href "/" ] [ str "Home" ] ]
                   ]
-                  content
-                  footer [] [ str $"Copyright © %s{name} %d{year}" ]
+                  main [] content
+                  footer [] [ str $"© %d{year} — %s{name}" ]
               ]
             ]
         |> Fable.ReactServer.renderToString
 
     let private contentsItem post =
-        article [ Class "contentsItem" ]
-            [ a [ Href (Post.path post) ]
-                  [ h3 [] [ str post.Title  ]
-                  ]
-            ]
+        h3 [] [ a [ Href (Post.path post) ] [ str post.Title  ] ]
 
     let private contentsList posts =
         posts
@@ -52,21 +50,20 @@ module Html =
             |> Set.toList
             |> List.sort
 
-        main [ Class "tableOfContents" ]
-            [ nav [] (tags |> List.map tagLink)
-              section [] (contentsList posts)
-            ]
-        |> withLayout
+        withLayout [
+          nav [] (tags |> List.map tagLink)
+          section [] (contentsList posts)
+        ]
+
 
     let tagPage (tag: string) (posts: Post list) =
         let postList = contentsList posts
 
-        [ h2 [] [ str $"Tag: %s{tag}" ]  ] @ postList
-        |> main [ Class "tagPage" ]
-        |> withLayout
+        withLayout (
+            [ h1 [] [ str $"Posts tagged with “%s{tag}”" ]  ] @ postList
+        )
 
     let postPage (post: Post) =
-        main [ Class "postPage" ] [
+        withLayout [
             article [ DangerouslySetInnerHTML { __html = post.HtmlContent } ] []
         ]
-        |> withLayout
