@@ -13,6 +13,11 @@ type Post =
       HtmlContent: string
       Dir: DirectoryInfo }
 
+[<RequireQualifiedAccess>]
+module Post =
+    let path post =
+        $"/posts/%s{post.Slug}"
+
 module Posts =
     open OptionBuilder
 
@@ -39,3 +44,9 @@ module Posts =
         dirs
         |> Array.choose tryReadFromDir
         |> Array.toList
+
+    let tags posts =
+        posts
+        |> List.map (fun p -> p.Tags)
+        |> List.concat
+        |> Set.ofList

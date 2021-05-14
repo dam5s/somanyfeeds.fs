@@ -24,7 +24,7 @@ module Tasks =
         |> File.writeString false $"%s{buildPath}/app.css"
 
     let private generatePost post =
-        let postDirPath = $"%s{buildPath}/%s{post.Slug}"
+        let postDirPath = $"%s{buildPath}/posts/%s{post.Slug}"
         let postFiles = !! $"%s{post.Dir.FullName}/*"
 
         Shell.mkdir postDirPath
@@ -32,7 +32,7 @@ module Tasks =
 
         post
         |> Html.postPage
-        |> File.writeString false $"%s{buildPath}/%s{post.Slug}/index.html"
+        |> File.writeString false $"%s{buildPath}/posts/%s{post.Slug}/index.html"
 
     let private generatePosts posts =
         posts
@@ -54,11 +54,7 @@ module Tasks =
 
     let private generateTagPages posts =
         let tagsPath = $"%s{buildPath}/tags"
-        let tags =
-            posts
-            |> List.map (fun p -> p.Tags)
-            |> List.concat
-            |> Set.ofList
+        let tags = Posts.tags posts
 
         Shell.mkdir tagsPath
 
