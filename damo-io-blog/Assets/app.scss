@@ -84,6 +84,13 @@ header {
   }
 }
 
+aside {
+  text-align: right;
+  margin-bottom: $spacing * 2;
+  padding-bottom: $spacing;
+  border-bottom: 1px solid $foreground;
+}
+
 main {
   background: $background;
   padding: $spacing * 2;

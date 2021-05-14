@@ -33,7 +33,10 @@ module Html =
         |> Fable.ReactServer.renderToString
 
     let private contentsItem post =
-        h3 [] [ a [ Href (Post.path post) ] [ str post.Title  ] ]
+        p [] [
+            a [ Href (Post.path post) ] [ str post.Title  ]
+            str $", %s{Post.displayDate post}"
+        ]
 
     let private contentsList posts =
         posts
@@ -65,5 +68,8 @@ module Html =
 
     let postPage (post: Post) =
         withLayout [
-            article [ DangerouslySetInnerHTML { __html = post.HtmlContent } ] []
+            article [] [
+                aside [] [ str $"posted on %s{Post.displayDate post}" ]
+                section [ DangerouslySetInnerHTML { __html = post.HtmlContent } ] []
+            ]
         ]

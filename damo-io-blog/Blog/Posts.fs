@@ -18,6 +18,14 @@ module Post =
     let path post =
         $"/posts/%s{post.Slug}"
 
+    let displayDate post =
+        let date = post.Posted.DateTime
+        let month = date.ToString "MMMM"
+        let day = date.ToString "dd"
+        let year = date.ToString "yyyy"
+
+        $"%s{month} %s{day}, %s{year}"
+
 module Posts =
     open OptionBuilder
 
