@@ -1,4 +1,4 @@
-﻿module Blog.Fake
+﻿module BlogGenerator.Fake
 
 [<RequireQualifiedAccess>]
 module Fake =

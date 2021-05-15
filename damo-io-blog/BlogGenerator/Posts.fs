@@ -1,4 +1,4 @@
-﻿module Blog.Posts
+﻿module BlogGenerator.Posts
 
 open System
 open System.IO

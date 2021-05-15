@@ -1,5 +1,5 @@
 ﻿[<AutoOpen>]
-module Blog.Prelude
+module BlogGenerator.Prelude
 
 let always a _ = a
 

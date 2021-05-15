@@ -1,5 +1,5 @@
-open Blog.Fake
-open Blog.Tasks
+open BlogGenerator.Fake
+open BlogGenerator.Tasks
 
 [<EntryPoint>]
 let main argv =

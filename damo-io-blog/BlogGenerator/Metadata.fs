@@ -1,4 +1,4 @@
-﻿module Blog.Metadata
+﻿module BlogGenerator.Metadata
 
 open System
 

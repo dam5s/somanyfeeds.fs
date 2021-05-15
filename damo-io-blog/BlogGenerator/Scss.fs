@@ -1,4 +1,4 @@
-﻿module Blog.Scss
+﻿module BlogGenerator.Scss
 
 open System.IO
 

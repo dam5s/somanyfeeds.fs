@@ -1,8 +1,8 @@
-﻿module Blog.Rss
+﻿module BlogGenerator.Rss
 
 open System
 open System.Xml.Linq
-open Blog.Posts
+open BlogGenerator.Posts
 
 [<RequireQualifiedAccess>]
 module Rss =

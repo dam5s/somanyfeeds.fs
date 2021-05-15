@@ -1,7 +1,7 @@
-﻿module Blog.Html
+﻿module BlogGenerator.Html
 
 open System
-open Blog.Posts
+open BlogGenerator.Posts
 
 [<RequireQualifiedAccess>]
 module Html =

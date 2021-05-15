@@ -1,14 +1,14 @@
-﻿module Blog.Tasks
+﻿module BlogGenerator.Tasks
 
-open Blog.Html
-open Blog.Rss
+open BlogGenerator.Html
+open BlogGenerator.Rss
 
 [<RequireQualifiedAccess>]
 module Tasks =
     open Fake.IO
     open Fake.IO.Globbing.Operators
-    open Blog.Posts
-    open Blog.Scss
+    open BlogGenerator.Posts
+    open BlogGenerator.Scss
 
     let private relativePath subPath = $"./%s{subPath}"
     let private assetsPath = relativePath "Assets"

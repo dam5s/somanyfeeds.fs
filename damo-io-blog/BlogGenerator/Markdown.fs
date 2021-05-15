@@ -1,4 +1,4 @@
-﻿module Blog.Markdown
+﻿module BlogGenerator.Markdown
 
 type Markdown =
     { Title: string
