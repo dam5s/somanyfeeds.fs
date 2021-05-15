@@ -21,7 +21,8 @@
     <Compile Include="Blog/Metadata.fs" />
     <Compile Include="Blog/Markdown.fs" />
     <Compile Include="Blog/Posts.fs" />
-    <Compile Include="Blog\Html.fs" />
+    <Compile Include="Blog/Html.fs" />
+    <Compile Include="Blog/Rss.fs" />
     <Compile Include="Blog/Tasks.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
@@ -33,5 +34,8 @@
     <Content Include="Assets/**/*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources/rss.sample.xml" />
   </ItemGroup>
 </Project>

@@ -19,6 +19,7 @@ module Html =
                     meta [ HTMLAttr.Content "utf-8"; HttpEquiv "encoding" ]
                     meta [ Name "viewport";  HTMLAttr.Content "width=device-width" ]
                     link [ Rel "stylesheet"; Type "text/css"; Href "/app.css" ]
+                    link [ Rel "alternate"; Type "application/rss+xml"; Href "/rss.xml" ]
                     title [] [ str pageTitle ]
                   ]
               body [] [

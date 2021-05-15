@@ -1,6 +1,7 @@
 ﻿module Blog.Tasks
 
 open Blog.Html
+open Blog.Rss
 
 [<RequireQualifiedAccess>]
 module Tasks =
@@ -68,6 +69,12 @@ module Tasks =
         |> File.writeString false $"%s{buildPath}/index.html"
         |> always posts
 
+    let private generateRssFeed posts =
+        posts
+        |> Rss.generate
+        |> (fun xml -> xml.Save $"%s{buildPath}/rss.xml")
+        |> always posts
+
     let build _ =
         cleanupBuildDir ()
         generateScss ()
@@ -76,4 +83,5 @@ module Tasks =
         |> generatePosts
         |> generateTagPages
         |> generateIndex
+        |> generateRssFeed
         |> ignore
