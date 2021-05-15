@@ -4,6 +4,6 @@
     "test": "cypress"
   },
   "dependencies": {
-    "cypress": "4.12.1"
+    "cypress": "^7.3.0"
   }
 }
