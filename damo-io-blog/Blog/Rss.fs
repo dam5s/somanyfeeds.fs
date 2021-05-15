@@ -3,56 +3,50 @@
 open System
 open System.Xml.Linq
 open Blog.Posts
-open FSharp.Data.Runtime.BaseTypes
 
 [<RequireQualifiedAccess>]
 module Rss =
 
-    open FSharp.Data
-
-    type RssProvider = XmlProvider<"Resources/rss.sample.xml">
-
     let private blogUrl = "https://blog.damo.io"
 
-    let private replaceElementWithElementWithCData (content: string) (oldElement: XElement) =
-        let parent = oldElement.Parent
-        let newElement = XElement(oldElement.Name)
+    let element name attributes (children: XNode list): XElement =
+        let xe = XElement(XName.Get(name))
+        for (name, value) in attributes do
+            xe.SetAttributeValue(XName.Get(name), value)
+        for child in children do
+            xe.Add(child)
+        xe
 
-        oldElement.Remove()
-        newElement.Add(XCData(content))
-        parent.Add(newElement)
+    let cdata (content: string) = XCData(content)
+    let str (content: string) = XText(content)
+    let dateStr (date: DateTimeOffset) = str (date.DateTime.ToString "yyyy-MM-ddTHH:mm:sszzz")
 
-    let private updateDescriptionToCData (post: Post) (item: RssProvider.Item): RssProvider.Item =
-        item.XElement.Elements()
-        |> Seq.filter (fun e -> e.Name.LocalName = "description")
-        |> Seq.tryHead
-        |> Option.iter (replaceElementWithElementWithCData post.HtmlContent)
-        |> always item
-
-    let private rssItem (post: Post): RssProvider.Item =
+    let private rssItem (post: Post) =
         let link = $"{blogUrl}/posts/{post.Slug}"
 
-        RssProvider.Item(
-            title = post.Title,
-            link = link,
-            guid = RssProvider.Guid(isPermaLink = true, value = link),
-            pubDate = RssProvider.PubDate(post.Posted),
-            description = post.HtmlContent
-        ) |> updateDescriptionToCData post
+        element "item" [] [
+            element "title" [] [ str post.Title ]
+            element "link" [] [ str link ]
+            element "guid" [ "isPermaLink", "true" ] [ str link ]
+            element "pubDate" [] [ dateStr post.Posted ]
+            element "description" [] [ cdata post.HtmlContent ]
+        ]
+
+    let private tryCast<'a> (a: obj) =
+        try Some (a :?> 'a)
+        with | _ -> None
 
     let generate (posts: Post list) =
         let items =
             posts
             |> List.map rssItem
-            |> Array.ofList
+            |> List.choose tryCast<XNode>
 
-        let channel =
-            RssProvider.Channel(
-                title = "Damien Le Berrigaud's Blog",
-                description = "Ramblings about software, coding, architecture...",
-                link = blogUrl,
-                lastBuildDate = DateTimeOffset.Now,
-                items = items
-            )
-
-        RssProvider.Rss(version = 2.0m, channel = channel).XElement
+        element "rss" [ "version", "2.0" ] [
+            element "channel" [] ([
+                element "title" [] [ str "Damien Le Berrigaud's Blog" ]
+                element "description" [] [ str "Ramblings about software, coding, architecture..." ]
+                element "link" [] [ str blogUrl ]
+                element "lastBuildDate" [] [ dateStr DateTimeOffset.Now ]
+            ] @ items)
+        ]
