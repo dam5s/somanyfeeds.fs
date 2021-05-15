@@ -18,6 +18,6 @@ module Repository =
 
     let findAll(): Source list =
         [ (Code, Xml(FeedName "Github", Url "https://github.com/dam5s.atom"))
-          (Blog, Xml(FeedName "Medium", Url "https://medium.com/feed/@its_damo"))
+          (Blog, Xml(FeedName "Blog", Url "https://blog.damo.io/rss.xml"))
           (Social, (Twitter(TwitterHandle "dam5s")))
         ]
