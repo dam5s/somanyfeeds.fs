@@ -14,18 +14,20 @@ module Tasks =
     let private assetsPath = relativePath "Assets"
     let private postsPath = relativePath "Posts"
     let private buildPath = relativePath "build"
+    let private publicPath = relativePath "build/public"
 
     let private cleanupBuildDir () =
         Shell.cleanDir buildPath
         Shell.mkdir buildPath
+        Shell.mkdir publicPath
 
     let private generateScss _ =
         $"%s{assetsPath}/app.scss"
         |> Scss.convert
-        |> File.writeString false $"%s{buildPath}/app.css"
+        |> File.writeString false $"%s{publicPath}/app.css"
 
     let private generatePost post =
-        let postDirPath = $"%s{buildPath}/posts/%s{post.Slug}"
+        let postDirPath = $"%s{publicPath}/posts/%s{post.Slug}"
         let postFiles = !! $"%s{post.Dir.FullName}/*"
 
         Shell.mkdir postDirPath
@@ -33,7 +35,7 @@ module Tasks =
 
         post
         |> Html.postPage
-        |> File.writeString false $"%s{buildPath}/posts/%s{post.Slug}/index.html"
+        |> File.writeString false $"%s{publicPath}/posts/%s{post.Slug}/index.html"
 
     let private generatePosts posts =
         posts
@@ -41,7 +43,7 @@ module Tasks =
         |> always posts
 
     let private generateTagPage posts tag =
-        let tagPath = $"%s{buildPath}/tags/%s{tag}"
+        let tagPath = $"%s{publicPath}/tags/%s{tag}"
         let tagPosts =
             posts
             |> List.filter (fun p -> p.Tags |> List.contains tag)
@@ -54,7 +56,7 @@ module Tasks =
         |> File.writeString false $"%s{tagPath}/index.html"
 
     let private generateTagPages posts =
-        let tagsPath = $"%s{buildPath}/tags"
+        let tagsPath = $"%s{publicPath}/tags"
         let tags = Posts.tags posts
 
         Shell.mkdir tagsPath
@@ -66,14 +68,18 @@ module Tasks =
     let private generateIndex posts =
         posts
         |> Html.tableOfContents
-        |> File.writeString false $"%s{buildPath}/index.html"
+        |> File.writeString false $"%s{publicPath}/index.html"
         |> always posts
 
     let private generateRssFeed posts =
         posts
         |> Rss.generate
-        |> (fun xml -> xml.Save $"%s{buildPath}/rss.xml")
+        |> (fun xml -> xml.Save $"%s{publicPath}/rss.xml")
         |> always posts
+
+    let private generateHerokuConfig _ =
+        """{"root": "public/"}"""
+        |> File.writeString false $"%s{buildPath}/static.json"
 
     let build _ =
         cleanupBuildDir ()
@@ -84,4 +90,4 @@ module Tasks =
         |> generateTagPages
         |> generateIndex
         |> generateRssFeed
-        |> ignore
+        |> generateHerokuConfig
