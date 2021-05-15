@@ -38,9 +38,18 @@ h1, h2, h3, h4, h5, h6 {
   font-family: $sans-serif;
 }
 
-h1 { font-size: 3.4rem; }
-h2 { color: $primaryDark; font-size: 2.6rem; }
-h3, h4, h5, h6 { font-size: 1.7rem; }
+h1 {
+  font-size: 3.4rem;
+}
+
+h2 {
+  color: $primaryDark;
+  font-size: 2.6rem;
+}
+
+h3, h4, h5, h6 {
+  font-size: 1.7rem;
+}
 
 p {
   margin: 0 0 ($spacing * 2);
@@ -97,7 +106,7 @@ main {
   min-height: 80vh;
   box-sizing: border-box;
 
-  &> * {
+  & > * {
     max-width: 70rem;
   }
 
