@@ -11,6 +11,7 @@ type Post =
       Posted: DateTimeOffset
       Tags: string list
       HtmlContent: string
+      RssContent: string
       Dir: DirectoryInfo }
 
 [<RequireQualifiedAccess>]
@@ -40,6 +41,7 @@ module Posts =
                   Posted = metadata.Posted
                   Tags = metadata.Tags
                   HtmlContent = article.HtmlContent
+                  RssContent = article.RssContent
                   Dir = dir }
 
             return! Some post

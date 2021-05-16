@@ -15,15 +15,16 @@
     <PackageReference Include="Fake.IO.FileSystem" Version="5.19.0" />
     <PackageReference Include="Fable.React" Version="7.4.0" />
 
-    <Compile Include="BlogGenerator/Prelude.fs" />
-    <Compile Include="BlogGenerator/Fake.fs" />
-    <Compile Include="BlogGenerator/Scss.fs" />
-    <Compile Include="BlogGenerator/Metadata.fs" />
-    <Compile Include="BlogGenerator/Markdown.fs" />
-    <Compile Include="BlogGenerator/Posts.fs" />
-    <Compile Include="BlogGenerator/Html.fs" />
-    <Compile Include="BlogGenerator/Rss.fs" />
-    <Compile Include="BlogGenerator/Tasks.fs" />
+    <Compile Include="BlogGenerator\Prelude.fs" />
+    <Compile Include="BlogGenerator\Config.fs" />
+    <Compile Include="BlogGenerator\Fake.fs" />
+    <Compile Include="BlogGenerator\Scss.fs" />
+    <Compile Include="BlogGenerator\Metadata.fs" />
+    <Compile Include="BlogGenerator\Markdown.fs" />
+    <Compile Include="BlogGenerator\Posts.fs" />
+    <Compile Include="BlogGenerator\Html.fs" />
+    <Compile Include="BlogGenerator\Rss.fs" />
+    <Compile Include="BlogGenerator\Tasks.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 

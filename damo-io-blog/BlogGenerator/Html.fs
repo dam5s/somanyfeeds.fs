@@ -2,16 +2,15 @@
 
 open System
 open BlogGenerator.Posts
+open BlogGenerator.Config
 
 [<RequireQualifiedAccess>]
 module Html =
     open Fable.React
     open Fable.React.Props
 
-    let private withLayout content =
-        let name = "Damien Le Berrigaud"
+    let private withLayout (config: Config) subtitle content =
         let year = DateTimeOffset.Now.Year
-        let pageTitle = $"%s{name}'s Blog"
 
         html [ Lang "en" ]
             [ head []
@@ -20,15 +19,15 @@ module Html =
                     meta [ Name "viewport";  HTMLAttr.Content "width=device-width" ]
                     link [ Rel "stylesheet"; Type "text/css"; Href "/app.css" ]
                     link [ Rel "alternate"; Type "application/rss+xml"; Href "/rss.xml" ]
-                    title [] [ str pageTitle ]
+                    title [] [ str $"{config.Title} - ${subtitle}" ]
                   ]
               body [] [
                   header [] [
-                      h1 [] [ str pageTitle ]
+                      h1 [] [ str config.Title ]
                       nav [] [ a [ Href "/" ] [ str "Home" ] ]
                   ]
                   main [] content
-                  footer [] [ str $"© %d{year} — %s{name}" ]
+                  footer [] [ str $"© %d{year} — %s{config.Author}" ]
               ]
             ]
         |> Fable.ReactServer.renderToString
@@ -47,28 +46,28 @@ module Html =
     let private tagLink tag =
         a [ Href $"tags/%s{tag}" ] [ str tag  ]
 
-    let tableOfContents (posts: Post list) =
+    let tableOfContents config (posts: Post list) =
         let tags =
             posts
             |> Posts.tags
             |> Set.toList
             |> List.sort
 
-        withLayout [
+        withLayout config "Table of Contents" [
           nav [] (tags |> List.map tagLink)
           section [] (contentsList posts)
         ]
 
-
-    let tagPage (tag: string) (posts: Post list) =
+    let tagPage config (tag: string) (posts: Post list) =
         let postList = contentsList posts
+        let title = $"Posts tagged with “%s{tag}”"
 
-        withLayout (
-            [ h1 [] [ str $"Posts tagged with “%s{tag}”" ]  ] @ postList
+        withLayout config title (
+            [ h1 [] [ str title ]  ] @ postList
         )
 
-    let postPage (post: Post) =
-        withLayout [
+    let postPage config (post: Post) =
+        withLayout config post.Title [
             article [] [
                 aside [] [ str $"posted on %s{Post.displayDate post}" ]
                 section [ DangerouslySetInnerHTML { __html = post.HtmlContent } ] []

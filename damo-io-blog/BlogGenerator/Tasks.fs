@@ -2,6 +2,7 @@
 
 open BlogGenerator.Html
 open BlogGenerator.Rss
+open BlogGenerator.Config
 
 [<RequireQualifiedAccess>]
 module Tasks =
@@ -9,6 +10,11 @@ module Tasks =
     open Fake.IO.Globbing.Operators
     open BlogGenerator.Posts
     open BlogGenerator.Scss
+
+    let private config: Config =
+        { Url = "https://blog.damo.io"
+          Title = "Damien Le Berrigaud's Blog"
+          Author = "Damien Le Berrigaud" }
 
     let private relativePath subPath = $"./%s{subPath}"
     let private assetsPath = relativePath "Assets"
@@ -34,7 +40,7 @@ module Tasks =
         Shell.copy postDirPath postFiles
 
         post
-        |> Html.postPage
+        |> Html.postPage config
         |> File.writeString false $"%s{publicPath}/posts/%s{post.Slug}/index.html"
 
     let private generatePosts posts =
@@ -52,7 +58,7 @@ module Tasks =
         Shell.mkdir tagPath
 
         tagPosts
-        |> Html.tagPage tag
+        |> Html.tagPage config tag
         |> File.writeString false $"%s{tagPath}/index.html"
 
     let private generateTagPages posts =
@@ -67,13 +73,13 @@ module Tasks =
 
     let private generateIndex posts =
         posts
-        |> Html.tableOfContents
+        |> Html.tableOfContents config
         |> File.writeString false $"%s{publicPath}/index.html"
         |> always posts
 
     let private generateRssFeed posts =
         posts
-        |> Rss.generate
+        |> Rss.generate config
         |> (fun xml -> xml.Save $"%s{publicPath}/rss.xml")
         |> always posts
 

@@ -2,7 +2,8 @@
 
 type Markdown =
     { Title: string
-      HtmlContent: string }
+      HtmlContent: string
+      RssContent: string }
 
 [<RequireQualifiedAccess>]
 module Markdown =
@@ -32,9 +33,12 @@ module Markdown =
             let! doc = Try.toOption load file
             let! title = tryFindTitle doc
 
+            let html = Markdown.ToHtml(doc)
+
             let markdown =
                 { Title = title
-                  HtmlContent = Markdown.ToHtml(doc) }
+                  HtmlContent = html
+                  RssContent = html }
 
             return! Some markdown
         }
