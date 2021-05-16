@@ -13,7 +13,7 @@ type AsyncResult<'a> =
 module Explanation =
     let create msg exs = { Message = msg; Exceptions = exs }
     let wrapMessage f err = { Message = f err.Message; Exceptions = err.Exceptions }
-    let append err1 err2 = { Message = sprintf "%s, %s" err1.Message err2.Message
+    let append err1 err2 = { Message = $"%s{err1.Message}, %s{err2.Message}"
                              Exceptions = List.append err1.Exceptions err2.Exceptions }
 
 [<RequireQualifiedAccess>]

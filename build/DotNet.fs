@@ -20,10 +20,10 @@ let test project =
     dotnet "test" project
 
 let run project _ =
-    dotnet "run" (sprintf "-p %s" project)
+    dotnet "run" $"-p %s{project}"
 
 let release project _ =
-    dotnet "publish" (sprintf "%s -c Release -r linux-x64" project)
+    dotnet "publish" $"%s{project} -c Release -r linux-x64"
 
 
 let solutionProjects =
@@ -35,7 +35,7 @@ let solutionProjects =
     |> Array.toList
 
 let projectSubFolder name projectName =
-    DirectoryInfo(sprintf "%s/%s" projectName name)
+    DirectoryInfo $"%s{projectName}/%s{name}"
 
 let clean _ =
     let binFolders = solutionProjects |> List.map (projectSubFolder "bin")

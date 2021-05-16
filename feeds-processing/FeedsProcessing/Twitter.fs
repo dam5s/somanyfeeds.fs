@@ -56,7 +56,7 @@ let private parseTweets (download: Download) =
 let private tweetToArticle (TwitterHandle handle) tweet =
     Article.create
         None
-        (sprintf "https://twitter.com/%s" handle)
+        $"https://twitter.com/%s{handle}"
         (Some tweet.Text)
         (tweet.CreatedAt |> Option.map DateTimeOffset)
 

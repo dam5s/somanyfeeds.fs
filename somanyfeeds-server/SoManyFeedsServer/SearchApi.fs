@@ -49,7 +49,7 @@ let private doSearch query: HttpHandler =
 let private sanitizeQuery (query: string) =
     if query.StartsWith("http://") then query
     else if query.StartsWith("https://") then query
-    else sprintf "https://%s" query
+    else $"https://%s{query}"
 
 let private queryParamValues name (context: HttpContext) =
     context.Request.Query.Item(name).ToArray()
@@ -57,9 +57,9 @@ let private queryParamValues name (context: HttpContext) =
 let search : HttpHandler =
     fun next ctx ->
         let q =
-            ctx 
+            ctx
             |> queryParamValues "q"
-            |> Array.tryHead 
+            |> Array.tryHead
             |> Option.defaultValue ""
 
         let query = sanitizeQuery q

@@ -26,4 +26,4 @@ let toString posix =
     let year = date.ToString "yy"
     let time = date.ToString "HH:mm"
 
-    sprintf "%s %s '%s @ %s" month day year time
+    $"%s{month} %s{day} '%s{year} @ %s{time}"

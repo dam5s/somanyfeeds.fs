@@ -13,7 +13,7 @@ let private toJson record: Article.Json =
       Link =  record.Link
       Content =  record.Content
       Date =  (Option.map Posix.milliseconds record.Date)
-      Source =  (sprintf "%A" record.Source)
+      Source =  $"%A{record.Source}"
     }
 
 module View =
@@ -24,7 +24,7 @@ module View =
 
     let render path (flags: App.Flags) flagsJson: string =
         let model, _ = App.init path flags
-        let js = sprintf "DamoIO.StartApp(%s);" flagsJson
+        let js = $"DamoIO.StartApp(%s{flagsJson});"
 
         html [ Lang "en" ]
             [ head []
@@ -56,7 +56,7 @@ let list findAllRecords path: HttpHandler =
 
             let flags: App.Flags = { Articles = articles }
             let flagsJson = ctx.GetJsonSerializer().SerializeToString(flags)
-            let view = View.render (sprintf "/%s" path) flags flagsJson
+            let view = View.render $"/%s{path}" flags flagsJson
 
             return! htmlString view next ctx
         }

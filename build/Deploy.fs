@@ -11,9 +11,9 @@ let private runCmd cmd workingDir args =
 
 let private runningOnWindows =
     match Environment.OSVersion.Platform with
-    | PlatformID.Win32NT 
-    | PlatformID.Win32S 
-    | PlatformID.Win32Windows 
+    | PlatformID.Win32NT
+    | PlatformID.Win32S
+    | PlatformID.Win32Windows
     | PlatformID.WinCE -> true
     | _ -> false
 
@@ -23,19 +23,19 @@ let private herokuBinary =
         else "heroku"
 
 let private deploy project _ =
-    let publishDir = sprintf "%s/bin/Release/net5.0/linux-x64/publish" project
+    let publishDir = $"%s{project}/bin/Release/net5.0/linux-x64/publish"
     let herokuApp = project.Replace("-server", "")
 
     DotNet.release project ()
 
-    writeToFile 
-        (sprintf "%s/Procfile" publishDir) 
-        (sprintf "web: chmod 755 %s && ./%s" project project)
+    writeToFile
+        $"%s{publishDir}/Procfile"
+        $"web: chmod 755 %s{project} && ./%s{project}"
 
     runCmd
-        herokuBinary 
+        herokuBinary
         publishDir
-        (sprintf "builds:create -a %s" herokuApp)
+        $"builds:create -a %s{herokuApp}"
 
 let loadTasks _ =
     Target.create "deploy:somanyfeeds" (deploy "somanyfeeds-server")

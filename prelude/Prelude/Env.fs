@@ -13,6 +13,6 @@ module Env
     let requireVar name =
         match var name with
         | Some value -> value
-        | None -> failwith (sprintf "Missing env variable with name %s" name)
+        | None -> failwith $"Missing env variable with name %s{name}"
 
 #endif

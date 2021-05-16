@@ -6,7 +6,7 @@ open Fable.React
 
 let private matchReplace replace (m: Match) =
     match List.ofSeq m.Groups with
-    | _ :: leading :: target :: _ -> sprintf "%s%s" leading.Value (replace target.Value)
+    | _ :: leading :: target :: _ -> $"%s{leading.Value}%s{replace target.Value}"
     | _ -> m.Value
 
 let private regexReplace pattern replace input =
@@ -15,17 +15,17 @@ let private regexReplace pattern replace input =
 let private createMentionLinks =
     regexReplace
         "(^|\\s)@([A-Za-z0-9_]+)"
-        (fun matched -> sprintf "<a href=\"https://twitter.com/%s\">@%s</a>" matched matched)
+        (fun matched -> $"<a href=\"https://twitter.com/%s{matched}\">@%s{matched}</a>")
 
 let private createSimpleLinks =
     regexReplace
         "(^|\\s)(https?://[^\\s]+)"
-        (fun matched -> sprintf "<a href=\"%s\">%s</a>" matched matched)
+        (fun matched -> $"<a href=\"%s{matched}\">%s{matched}</a>")
 
 let private createHashTagLinks =
     regexReplace
         "(^|\\s)#([A-Za-z_]+[A-Za-z0-9_]+)"
-        (fun matched -> sprintf "<a href=\"https://twitter.com/hashtag/%s\">#%s</a>" matched matched)
+        (fun matched -> $"<a href=\"https://twitter.com/hashtag/%s{matched}\">#%s{matched}</a>")
 
 let private createLinks =
     createMentionLinks >> createSimpleLinks >> createHashTagLinks

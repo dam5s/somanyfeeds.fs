@@ -62,7 +62,7 @@ let webHostBuilder logary =
         .UseContentRoot(contentRoot)
         .UseIISIntegration()
         .UseWebRoot(webRoot)
-        .UseUrls(sprintf "http://0.0.0.0:%s" serverPort)
+        .UseUrls($"http://0.0.0.0:%s{serverPort}")
         .Configure(Action<IApplicationBuilder> configureApp)
         .ConfigureServices(configureServices)
         .ConfigureLogging(configureLogging)
