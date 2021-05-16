@@ -91,7 +91,7 @@ module Tasks =
         cleanupBuildDir ()
         generateScss ()
 
-        Posts.loadFrom postsPath
+        Posts.loadFrom config postsPath
         |> generatePosts
         |> generateTagPages
         |> generateIndex

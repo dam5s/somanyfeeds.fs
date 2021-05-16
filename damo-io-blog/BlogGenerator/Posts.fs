@@ -4,6 +4,7 @@ open System
 open System.IO
 open Metadata
 open Markdown
+open Config
 
 type Post =
     { Title: string
@@ -30,10 +31,12 @@ module Post =
 module Posts =
     open OptionBuilder
 
-    let private tryReadFromDir (dir: DirectoryInfo) =
+    let private tryReadFromDir (config: Config) (dir: DirectoryInfo) =
         option {
+            let urlPrefix = $"{config.Url}/posts/{dir.Name}/"
+
             let! metadata = Metadata.tryGet dir
-            let! article = Markdown.tryGet dir
+            let! article = Markdown.tryGet urlPrefix dir
 
             let post =
                 { Title = article.Title
@@ -47,12 +50,12 @@ module Posts =
             return! Some post
         }
 
-    let loadFrom dirPath =
+    let loadFrom config dirPath =
         let dir = DirectoryInfo(dirPath)
         let dirs = dir.GetDirectories()
 
         dirs
-        |> Array.choose tryReadFromDir
+        |> Array.choose (tryReadFromDir config)
         |> Array.toList
 
     let tags posts =
