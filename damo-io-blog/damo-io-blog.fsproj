@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="5.0.1" />
+    <PackageReference Update="Fsharp.Core" Version="5.0.1" />
     <PackageReference Include="SharpScss" Version="2.0.0" />
     <PackageReference Include="FSharp.Formatting" Version="11.1.0" />
     <PackageReference Include="FSharp.Data" Version="4.1.1" />

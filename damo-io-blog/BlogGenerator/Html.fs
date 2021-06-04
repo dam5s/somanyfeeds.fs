@@ -19,7 +19,7 @@ module Html =
                     meta [ Name "viewport";  HTMLAttr.Content "width=device-width" ]
                     link [ Rel "stylesheet"; Type "text/css"; Href "/app.css" ]
                     link [ Rel "alternate"; Type "application/rss+xml"; Href "/rss.xml" ]
-                    title [] [ str $"{config.Title} - ${subtitle}" ]
+                    title [] [ str $"{config.Title} - %s{subtitle}" ]
                   ]
               body [] [
                   header [] [
