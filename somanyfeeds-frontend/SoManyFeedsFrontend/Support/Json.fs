@@ -24,4 +24,4 @@ let list (decoder: 'b -> Result<'a, string>) (arr: JS.TypedArray<'b>) =
 
 let property<'a> (name: string) (obj: JS.Object): Result<'a, string> =
     tryCast<'a> obj?(name)
-    |> Option.toResult $"Cannot parse field '%s{name}'"
+    |> Option.toResult (sprintf "Cannot parse field '%s'" name)

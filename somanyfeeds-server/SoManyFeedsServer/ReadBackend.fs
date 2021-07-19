@@ -41,7 +41,7 @@ let page
 
                 let flagsJson = Api.serializeObject flags ctx
                 let model = initModel flags
-                let js = $"SoManyFeeds.StartReadApp(%s{flagsJson});"
+                let js = sprintf "SoManyFeeds.StartReadApp(%s);" flagsJson
                 let page = Layout.hydrateFableApp view model js
 
                 return! page next ctx

@@ -140,7 +140,7 @@ let private pageTitle model page =
 let private pagePath page =
     match page with
     | Recent None -> "/read/recent"
-    | Recent(Some feedId) -> $"/read/recent/feed/%d{feedId}"
+    | Recent(Some feedId) -> sprintf "/read/recent/feed/%d" feedId
     | Bookmarks -> "/read/bookmarks"
 
 let private menuOptions model (dispatch: Html.Dispatcher<Msg>) =

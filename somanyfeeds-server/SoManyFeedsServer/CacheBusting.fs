@@ -7,4 +7,4 @@ let assetPath (path: string) =
         try File.ReadAllText("WebRoot/assets.version")
         with ex -> "dev"
 
-    $"%s{path}?v=%s{version}"
+    sprintf "%s?v=%s" path version

@@ -7,7 +7,7 @@ open System.IO
 [<RequireQualifiedAccess>]
 module Download =
     let fromFilePath path =
-        { Url = Url $"file://%s{path}"
+        { Url = Url (sprintf "file://%s" path)
           Content = File.ReadAllText path }
 
     let fromContent content =

@@ -22,8 +22,8 @@ module Json =
           feedUrl = article.FeedUrl
           content = article.Content
           date = (Option.map Posix.milliseconds article.Date)
-          readUrl = $"/api/articles/%d{article.Id}/read"
-          bookmarkUrl = $"/api/articles/%d{article.Id}/bookmark" }
+          readUrl = (sprintf "/api/articles/%d/read" article.Id)
+          bookmarkUrl = (sprintf "/api/articles/%d/bookmark" article.Id) }
 
 let list (listArticles: AsyncResult<FeedRecord seq * ArticleRecord seq>): HttpHandler =
     let jsonMapping (feeds, articles) =

@@ -69,7 +69,7 @@ module Article =
 
     let listBookmarksRequest = HttpRequest.get "/api/articles/bookmarks"
     let listAllRequest = HttpRequest.get "/api/articles/recent"
-    let listByFeedRequest (feedId: int64) = HttpRequest.get $"/api/articles/recent?feedId=%d{feedId}"
+    let listByFeedRequest (feedId: int64) = HttpRequest.get (sprintf "/api/articles/recent?feedId=%d" feedId)
     let createBookmarkRequest article = HttpRequest.post article.BookmarkUrl
     let deleteBookmarkRequest article = HttpRequest.delete article.BookmarkUrl
     let createReadArticleRequest article = HttpRequest.post article.ReadUrl

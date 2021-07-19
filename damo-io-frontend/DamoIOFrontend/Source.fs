@@ -19,4 +19,4 @@ module Source =
         | _ -> None
 
     let toString (source: Source) =
-        $"%A{source}"
+        sprintf "%A" source

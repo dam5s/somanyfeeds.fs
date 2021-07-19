@@ -34,7 +34,7 @@ module Feed =
         HttpRequest.postJson "/api/feeds" {|name = result.Name; url = result.Url|}
 
     let private deleteRequest (feed: Feed) =
-        HttpRequest.delete $"/api/feeds/%d{feed.Id}"
+        HttpRequest.delete (sprintf "/api/feeds/%d" feed.Id)
 
     let sendCreateRequest result =
         async {

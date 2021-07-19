@@ -79,7 +79,7 @@ let private persistArticle fields =
 
 let private processFeed feedUrl =
     asyncSeq {
-        $"Processing feed %A{feedUrl}"
+        sprintf "Processing feed %A" feedUrl
         |> logger.Info
         |> ignore
 

@@ -17,9 +17,9 @@ let page maxFeeds (listFeeds: AsyncResult<FeedRecord seq>) (user: User) (fronten
     fun next ctx ->
         task {
             let q =
-                ctx
+                ctx 
                 |> queryParamValues "q"
-                |> Array.tryHead
+                |> Array.tryHead 
                 |> Option.defaultValue ""
 
             match! listFeeds with
@@ -30,11 +30,11 @@ let page maxFeeds (listFeeds: AsyncResult<FeedRecord seq>) (user: User) (fronten
                       Feeds = records
                               |> Seq.map FeedsApi.Json.feed
                               |> Seq.toArray
-                      Page = $"%A{frontendPage}"
+                      Page = sprintf "%A" frontendPage
                       SearchText = q }
 
                 let flagsJson = Api.serializeObject flags ctx
-                let js = $"SoManyFeeds.StartManageApp(%s{flagsJson});"
+                let js = sprintf "SoManyFeeds.StartManageApp(%s);" flagsJson
                 let model = initModel flags
                 let page = Layout.hydrateFableApp view model js
 

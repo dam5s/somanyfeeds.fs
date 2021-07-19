@@ -15,10 +15,10 @@ let private urlEncode (value: string): string =
 let private base64encode (value: string): string =
     Convert.ToBase64String(Text.Encoding.UTF8.GetBytes value)
 let private bearerTokenHeader (BearerToken s) =
-    $"Bearer %s{s}"
+    sprintf "Bearer %s" s
 
 let private basicAuthHeader username password =
-    $"%s{username}:%s{password}"
+    sprintf "%s:%s" username password
     |> base64encode
     |> sprintf "Basic %s"
     |> BasicAuthHeader
@@ -54,7 +54,7 @@ let private requestToken (BasicAuthHeader authHeader) =
 
 let private requestTweets (TwitterHandle handle) token =
     unsafeOperation "Request tweets" { return fun _ ->
-        let url = $"https://twitter.com/%s{handle}"
+        let url = sprintf "https://twitter.com/%s" handle
 
         let content =
             Http.RequestString

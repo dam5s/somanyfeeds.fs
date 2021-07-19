@@ -115,7 +115,7 @@ let private subscribeToFeed searchResult =
 let private searchPath (form: Search.Form) =
     match form.Text with
     | "" -> "/manage/search"
-    | query -> $"/manage/search/%s{Http.urlEncode query}"
+    | query -> sprintf "/manage/search/%s" (Http.urlEncode query)
 
 let update msg model =
     let form = model.Form
@@ -183,7 +183,7 @@ let private deleteDialog model (dispatch: Html.Dispatcher<Msg>) =
     | Opened feed ->
         div [ Class "dialog" ]
             [ h3 [] [ str "Unsubscribe" ]
-              p [] [ str $"Are you sure you want to unsubscribe from \"%s{feed.Name}\"?" ]
+              p [] [ str (sprintf "Are you sure you want to unsubscribe from \"%s\"?" feed.Name) ]
               nav []
                   [ button
                         [ Class "button primary"

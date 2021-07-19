@@ -8,7 +8,7 @@ let private logger = Logger<Logs>()
 
 module private UnsafeOperation =
     let error description (ex: Exception) =
-        let msg = $"%s{description} error: %s{ex.Message.Trim()}"
+        let msg = sprintf "%s error: %s" description (ex.Message.Trim())
         Error.create msg ex
 
     let doTry description func =

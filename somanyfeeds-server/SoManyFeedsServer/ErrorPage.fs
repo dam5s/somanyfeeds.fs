@@ -5,6 +5,8 @@ module private Views =
     open Fable.React.Props
 
     let error message =
+        let fullMessage = sprintf "Oops, there was an error: %s" message
+
         [ header [ Class "page" ]
               [ div [ Class "page-content" ]
                     [ h2 [] [ str "Error" ]
@@ -14,7 +16,7 @@ module private Views =
           div [ Class "main" ]
               [ section []
                     [ div [ Class "card" ]
-                          [ p [ Class "message" ] [ str $"Oops, there was an error: %s{message}" ]
+                          [ p [ Class "message" ] [ str fullMessage ]
                           ]
                     ]
               ]
