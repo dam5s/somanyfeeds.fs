@@ -19,7 +19,7 @@ let private maxFeeds =
 
 
 let private paramToId param =
-    unsafeOperation "Reading id query param" { return fun _ -> int64 param } |> Result.toOption
+    Try.value "Reading id query param" (fun _ -> int64 param) |> Result.toOption
 
 
 type private UserFeeds(user: User) =

@@ -24,7 +24,7 @@ let private basicAuthHeader username password =
     |> BasicAuthHeader
 
 let private parseToken jsonString =
-    unsafeOperation "Parse token json" { return! fun _ ->
+    Try.result "Parse token json" (fun _ ->
         let responseJson = JsonValue.Parse jsonString
         let accessTokenOption =
             responseJson.TryGetProperty "access_token"
@@ -36,10 +36,10 @@ let private parseToken jsonString =
             |> sprintf "Could not parse access_token from json %s"
             |> Error.ofMessage
         | Some accessToken -> Ok(BearerToken accessToken)
-    }
+    )
 
 let private requestToken (BasicAuthHeader authHeader) =
-    unsafeOperation "Request token" { return! fun _ ->
+    Try.result "Request token" (fun _ ->
         let responseString = Http.RequestString
                                 ("https://api.twitter.com/oauth2/token",
                                   httpMethod = "POST",
@@ -50,10 +50,10 @@ let private requestToken (BasicAuthHeader authHeader) =
                                   ]
                                 )
         parseToken responseString
-    }
+    )
 
 let private requestTweets (TwitterHandle handle) token =
-    unsafeOperation "Request tweets" { return fun _ ->
+    Try.value "Request tweets" (fun _ ->
         let url = sprintf "https://twitter.com/%s" handle
 
         let content =
@@ -68,7 +68,7 @@ let private requestTweets (TwitterHandle handle) token =
                 )
 
         { Url = (Url url); Content = content }
-    }
+    )
 
 let downloadTwitterTimeline consumerKey consumerSecret handle: DownloadResult =
     async {
@@ -78,12 +78,12 @@ let downloadTwitterTimeline consumerKey consumerSecret handle: DownloadResult =
 
 let downloadContent (Url url): DownloadResult =
     async {
-        return unsafeOperation "Download content" { return fun _ ->
+        return Try.value "Download content" (fun _ ->
             let content =
                 Http.RequestString
                     ( url,
                       headers = [ "User-Agent", "somanyfeeds.com" ],
                       responseEncodingOverride = "utf-8" )
             { Url = (Url url); Content = content }
-        }
+        )
     }

@@ -29,7 +29,7 @@ module private Processor =
         (toMetadata: Url -> 'a -> FeedMetadata option) =
 
         let safeParse (download: Download) =
-            unsafeOperation (sprintf "%s parse" name) { return fun _ -> unsafeParse download.Content }
+            Try.value (sprintf "%s parse" name) (fun _ -> unsafeParse download.Content)
 
         { Process = fun download -> safeParse download |> Result.bind toArticles
           TryGetMetadata = fun download -> safeParse download
@@ -49,11 +49,11 @@ module private Rss =
           (Some item.PubDate)
 
     let private toArticles (rss: RssProvider.Rss) =
-        unsafeOperation "Rss to articles" { return fun _ ->
+        Try.value "Rss to articles" (fun _ ->
             rss.Channel.Items
             |> Seq.map itemToArticle
             |> Seq.toList
-        }
+        )
 
     let private toMetadata (url: Url) (rss: RssProvider.Rss) =
         try
@@ -78,7 +78,7 @@ module private Atom =
             (Some entry.Published)
 
     let private toArticles (atom: AtomProvider.Feed) =
-        unsafeOperation "Atom to articles" { return! fun _ ->
+        Try.result "Atom to articles" (fun _ ->
             match atom.Entries with
             | [||] ->
                 Error.ofMessage "Expected at least one atom entry"
@@ -87,7 +87,7 @@ module private Atom =
                 |> Seq.map entryToArticle
                 |> Seq.toList
                 |> Ok
-        }
+        )
 
     let private toMetadata (url: Url) (atom: AtomProvider.Feed) =
         try
@@ -112,7 +112,7 @@ module private Rdf =
             (Some item.Date)
 
     let private toArticles (rdf: RdfProvider.Rdf): Result<Article list, Explanation> =
-        unsafeOperation "Rdf to articles" { return! fun _ ->
+        Try.result "Rdf to articles" (fun _ ->
             match rdf.Items with
             | [||] ->
                 Error.ofMessage "Expected at least one rdf item"
@@ -121,7 +121,7 @@ module private Rdf =
                 |> Seq.map itemToArticle
                 |> Seq.toList
                 |> Ok
-        }
+        )
 
     let private toMetadata (url: Url) (rdf: RdfProvider.Rdf) =
         try

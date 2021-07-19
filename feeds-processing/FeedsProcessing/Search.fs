@@ -6,7 +6,7 @@ open FeedsProcessing.Download
 open FeedsProcessing.Xml
 
 let private tryParseHtml text =
-    unsafeOperation "tryParseHtml"  { return fun _ -> HtmlDocument.Parse(text) }
+    Try.value "tryParseHtml"  (fun _ -> HtmlDocument.Parse text)
 
 let private attrValue name (node: HtmlNode) =
     try Some (node.Attribute(name).Value())

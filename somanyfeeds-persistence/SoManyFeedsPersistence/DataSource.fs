@@ -3,7 +3,6 @@ module SoManyFeedsPersistence.DataSource
 open FSharp.Data.Sql
 open System
 
-
 type FindResult<'a> =
     | Found of 'a
     | NotFound
@@ -19,7 +18,6 @@ module FindResult =
             | Error err -> return FindError err
         }
 
-
 type ExistsResult = FindResult<unit>
 
 [<RequireQualifiedAccess>]
@@ -32,15 +30,12 @@ module ExistsResult =
             | Error err -> return FindError err
         }
 
-
 [<Literal>]
 let private DefaultConnectionString =
     "User ID=somanyfeeds;Host=localhost;Port=5432;Database=somanyfeeds_dev;Password=secret"
 
-
 let private connectionString =
     Env.varDefault "DB_CONNECTION" (always DefaultConnectionString)
-
 
 type private SoManyFeedsDb =
     SqlDataProvider<Common.DatabaseProviderTypes.POSTGRESQL,
@@ -52,24 +47,19 @@ type UserEntity = SoManyFeedsDb.dataContext.``public.usersEntity``
 type ArticleEntity = SoManyFeedsDb.dataContext.``public.articlesEntity``
 type FeedJobEntity = SoManyFeedsDb.dataContext.``public.feed_jobsEntity``
 
-
 type DataContext = SoManyFeedsDb.dataContext
-
 
 let asyncDataContext: AsyncResult<DataContext> =
     async {
-       return unsafeOperation "Get data context" { return fun _ ->
+       return Try.value "Get data context" (fun _ ->
            Environment.SetEnvironmentVariable("PGTZ", "UTC")
            SoManyFeedsDb.GetDataContext(connectionString)
-       }
+       )
     }
 
-
 let dataAccessOperation f =
-    asyncResult {
-        let! ctx = asyncDataContext
-
-        return! unsafeAsyncOperation "Data access" { return fun _ ->
-            f ctx
-        }
+    async {
+        match! asyncDataContext with
+        | Ok ctx -> return Try.value "Data access" (fun _ -> f ctx)
+        | Error x -> return Error x
     }

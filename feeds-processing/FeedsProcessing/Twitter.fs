@@ -20,9 +20,9 @@ type private Tweet =
 
 
 let private parseDate dateValue =
-    unsafeOperation "Date parsing" { return fun _ ->
+    Try.value "Date parsing" (fun _ ->
         DateTime.ParseExact(dateValue, "ddd MMM dd HH:mm:ss zzz yyyy", CultureInfo.InvariantCulture)
-    }
+    )
     |> Result.toOption
 
 
@@ -45,12 +45,12 @@ let private mapTweet (json: TwitterTimelineProvider.Root) =
 
 
 let private parseTweets (download: Download) =
-    unsafeOperation "Parse tweets" { return fun _ ->
+    Try.value "Parse tweets" (fun _ ->
         download.Content
         |> TwitterTimelineProvider.Parse
         |> Array.toList
         |> List.map mapTweet
-    }
+    )
 
 
 let private tweetToArticle (TwitterHandle handle) tweet =
