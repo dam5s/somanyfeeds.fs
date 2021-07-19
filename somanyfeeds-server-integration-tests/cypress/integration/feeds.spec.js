@@ -69,6 +69,9 @@ const manageScreen = {
         cy.get("h3").should("contain.text", "Unsubscribe");
         cy.get("button").contains("Yes, unsubscribe").click();
     },
+    goBack: () => {
+        cy.get(".back-link").contains("Back").click();
+    }
 }
 
 describe("Feeds", () => {
@@ -102,7 +105,7 @@ describe("Feeds", () => {
         manageScreen.checkHasResult("Stories by Damien Le Berrigaud on Medium", "http://localhost:9092/rss.xml");
         manageScreen.subscribe();
 
-        cy.visit(serverUrl + "/manage");
+        manageScreen.goBack();
 
         manageScreen.checkHasFeedCount(1);
         manageScreen.checkHasFeed("Stories by Damien Le Berrigaud on Medium", "http://localhost:9092/rss.xml");

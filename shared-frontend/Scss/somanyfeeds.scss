@@ -47,6 +47,7 @@ $bookmarked-icon-path: 'M17,3A2,2 0 0,1 19,5V21L12,18L5,21V5C5,3.89 5.9,3 7,3H17
 $undo-icon-path: 'M12.5,8C9.85,8 7.45,9 5.6,10.6L2,7V16H11L7.38,12.38C8.77,11.22 10.54,10.5 12.5,10.5C16.04,10.5 19.05,12.81 20.1,16L22.47,15.22C21.08,11.03 17.15,8 12.5,8Z';
 $chevron-down-icon-path: 'M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z';
 $dots-vertical-icon-path: 'M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z';
+$back-path: 'M11.67 3.87L9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z';
 
 
 html, body {
@@ -694,11 +695,31 @@ dt {
     }
   }
 
-  h3 {
-    margin: 0;
-    padding: .5rem 1rem;
+  header {
+    position: relative;
     background-color: $dark-color;
-    color: $bg-color;
+    padding: .5rem 1rem;
+    margin: 0;
+
+    .back-link {
+      @include icon(icon-link-svg($back-path));
+      background-position: 0 center;
+      padding-left: 1rem;
+      font-size: 1rem;
+
+      position: absolute;
+      top: 50%;
+      left: 2rem;
+      margin-top: -.5rem;
+      line-height: 1.1rem;
+    }
+
+    h3 {
+      padding: 0;
+      margin: 0;
+      text-align: center;
+      color: $bg-color;
+    }
   }
 
   @media (min-width: $small-screen-width) {

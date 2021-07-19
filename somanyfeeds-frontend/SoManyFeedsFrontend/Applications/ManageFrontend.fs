@@ -42,6 +42,7 @@ type Msg =
     | DeleteFeedResult of Feed * Result<unit, RequestError>
     | Subscribe of SearchResult
     | SubscriptionResult of SearchResult * Result<Feed, RequestError>
+    | BackToList
 
 let private pageFromFlags (flags: Flags) =
     match flags.Page with
@@ -170,6 +171,10 @@ let update msg model =
         let newForm = SearchForm.setStatus Unsubscribed result model.Form
         { model with Form = newForm }, Cmd.none
 
+    | BackToList ->
+        { model with Page = List; Form = SearchForm.init "" },
+        Cmd.batch [ Navigation.pushPath "/manage/list"; Effects.clearFormInputs () ]
+
 open Fable.React
 open Fable.React.Props
 open SoManyFeedsFrontend.Components
@@ -246,7 +251,7 @@ let private formView model (dispatch: Html.Dispatcher<Msg>) =
         else searchFeedForm model dispatch
 
 let private noFeedsView =
-    [ h3 [] [ str "Your feeds" ]
+    [ header [] [ h3 [] [ str "Your feeds" ] ]
       p [ Class "message" ] [ str "You have not subscribed to any feeds yet." ] ]
 
 let private feedView (dispatch: Html.Dispatcher<Msg>) (feed: Feed) =
@@ -264,7 +269,7 @@ let private feedList model (dispatch: Html.Dispatcher<Msg>) =
     let feedsView =
         if List.isEmpty model.Feeds
             then noFeedsView
-            else [ h3 [] [ str "Your feeds" ] ] @ (List.map (feedView dispatch) model.Feeds)
+            else [ header [] [ h3 [] [ str "Your feeds" ] ] ] @ (List.map (feedView dispatch) model.Feeds)
 
     section [] [ div [ Class "card-list" ] feedsView ]
 
@@ -288,7 +293,11 @@ let private cardView message =
     div [ Class "card" ] [ str message ]
 
 let private searchResultsList model (dispatch: Html.Dispatcher<Msg>) =
-    let searchResultsTitle = [ h3 [] [ str "Search results" ] ]
+    let searchResultsTitle =
+        [ header [] [
+            a [ Href "/manage/list"; Class "back-link"; dispatch.OnClickPreventingDefault BackToList ] [ str "Back" ]
+            h3 [] [ str "Search results" ]
+        ] ]
 
     let searchResultsView =
         match model.Form.Results with
