@@ -26,7 +26,7 @@ type Model =
       MaxFeeds: int
       Feeds: Feed list
       Page: Page
-      Form: Search.Form
+      Form: SearchForm
       DeleteDialog: Dialog<Feed>
       DeletionInProgress: bool }
 
@@ -41,7 +41,7 @@ type Msg =
     | DeleteFeed
     | DeleteFeedResult of Feed * Result<unit, RequestError>
     | Subscribe of SearchResult
-    | SubscriptionResult of Result<Feed, RequestError>
+    | SubscriptionResult of SearchResult * Result<Feed, RequestError>
 
 let private pageFromFlags (flags: Flags) =
     match flags.Page with
@@ -57,7 +57,7 @@ let private (|SearchQuery|_|) (path: string) =
         None
 
 let private startSearch query =
-    Cmd.ofRequest Search.sendRequest query SearchResult
+    Cmd.ofRequest SearchRequest.send query SearchResult
 
 let private setSearching model query =
     { model with
@@ -83,7 +83,7 @@ let initModel (flags: Flags) =
       MaxFeeds = flags.MaxFeeds
       Feeds = feeds
       Page = pageFromFlags flags
-      Form = Search.initForm flags.SearchText
+      Form = SearchForm.init flags.SearchText
       DeleteDialog = Initial
       DeletionInProgress = false }
 
@@ -110,9 +110,9 @@ let private updateResultName result newName =
     List.updateOne result (SearchResult.updateName newName)
 
 let private subscribeToFeed searchResult =
-    Cmd.ofRequest Feed.sendCreateRequest searchResult SubscriptionResult
+    Cmd.ofRequest Feed.sendCreateRequest searchResult (curry SubscriptionResult searchResult)
 
-let private searchPath (form: Search.Form) =
+let private searchPath (form: SearchForm) =
     match form.Text with
     | "" -> "/manage/search"
     | query -> sprintf "/manage/search/%s" (Http.urlEncode query)
@@ -159,13 +159,16 @@ let update msg model =
         { model with DeletionInProgress = false }, Cmd.none
 
     | Subscribe result ->
-        model, subscribeToFeed result
+        let newForm = SearchForm.setStatus Subscribing result model.Form
+        { model with Form = newForm }, subscribeToFeed result
 
-    | SubscriptionResult (Ok newFeed) ->
-        { model with Feeds = [ newFeed ] @ model.Feeds }, Cmd.none
+    | SubscriptionResult (result, Ok newFeed) ->
+        let newForm = SearchForm.setStatus Subscribed result model.Form
+        { model with Feeds = [ newFeed ] @ model.Feeds; Form = newForm }, Cmd.none
 
-    | SubscriptionResult (Error _) ->
-        failwith "TODO"
+    | SubscriptionResult (result, Error _) ->
+        let newForm = SearchForm.setStatus Unsubscribed result model.Form
+        { model with Form = newForm }, Cmd.none
 
 open Fable.React
 open Fable.React.Props
@@ -266,15 +269,19 @@ let private feedList model (dispatch: Html.Dispatcher<Msg>) =
     section [] [ div [ Class "card-list" ] feedsView ]
 
 let private searchResultView (dispatch: Html.Dispatcher<Msg>) (result: SearchResult) =
+    let action =
+        match result.Status with
+        | Unsubscribed -> button [ Class "button secondary"; dispatch.OnClick (Subscribe result) ] [ str "Subscribe" ]
+        | Subscribing -> button [ Class "button secondary"; Disabled true ] [ str "Subscribing..." ]
+        | Subscribed -> button [ Class "button secondary"; Disabled true ] [ str "✓ Subscribed" ]
+
     div [ Class "card" ]
         [ dl []
               [ dt [] [ str result.Name ]
                 dd [] [ str result.Description ]
                 dd [] [ Html.extLink result.Url result.Url ]
               ]
-          div [ Class "actions" ]
-              [ button [ Class "button secondary"; dispatch.OnClick (Subscribe result) ] [ str "Subscribe" ]
-              ]
+          div [ Class "actions" ] [ action ]
         ]
 
 let private cardView message =

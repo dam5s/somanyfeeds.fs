@@ -9,7 +9,6 @@ let private makeFullScreenApp (init: 'flags -> ('model * Cmd<'msg>)) update view
     (init, update, view)
     |||> Program.mkProgram
     |> Program.withReactHydrate "somanyfeeds-body"
-    |> Program.withConsoleTrace
 
 let private startRegistrationApp _ =
     (RegistrationFrontend.init, RegistrationFrontend.update, RegistrationFrontend.view)

@@ -1,5 +1,76 @@
 /// <reference types="Cypress" />
 
+const tabs = {
+    clickRead: () => cy.get("a").contains("Read").click(),
+    clickManage: () => cy.get("a").contains("Manage").click(),
+}
+
+const signInScreen = {
+    checkDisplayed: () => cy.get("h1").should("have.text", "Authentication required"),
+    clickSignUp: () => cy.get("a").contains("Sign up now").click(),
+    submitFormWith: (email, password) => {
+        cy.get("input[name='email']").type(email);
+        cy.get("input[name='password']").type(password);
+        cy.get("button").contains("Sign in").click();
+    },
+}
+
+const signUpScreen = {
+    checkDisplayed: () => cy.get("h1").should("have.text", "Registration"),
+    submitFormWith: (name, email, password, confirmation) => {
+        cy.get("input[name='name']").type(name);
+        cy.get("input[name='email']").type(email);
+        cy.get("input[name='password']").type(password);
+        cy.get("input[name='passwordConfirmation']").type(confirmation);
+        cy.get("button").contains("Sign up").click();
+    },
+}
+
+const welcomeScreen = {
+    checkDisplayed: () => cy.get("h1").should("have.text", "Welcome"),
+}
+
+const readScreen = {
+    checkDisplayed: () => cy.get("h2").should("have.text", "Articles")
+}
+
+const manageScreen = {
+    checkDisplayed: () => {
+        cy.get("h2").should("have.text", "Feeds");
+        cy.get("h3").should("contain.text", "Add feed");
+    },
+    checkHasNoFeeds: () => {
+        cy.get("p").should("have.text", "You have not subscribed to any feeds yet.");
+        cy.get(".card-list .card").should("have.length", 0);
+    },
+    checkHasFeedCount: (count) => {
+        cy.get("h3").should("contain.text", "Your feeds");
+        cy.get(".card-list .card").should("have.length", count);
+    },
+    checkHasFeed: (title, url) => {
+        cy.get(".card dt").should("contain", title);
+        cy.get(".card dd a").should("contain", url);
+    },
+    searchFor: (text) => {
+        cy.get("input[name='searchText']").type(text);
+        cy.get("button").contains("Search").click();
+    },
+    checkHasResultCount: (length) => {
+        cy.get("h3").should("contain", "Search results");
+        cy.get(".card-list .card").should("have.length", length);
+    },
+    checkHasResult: (title, url) => {
+        cy.get(".card dd").should("contain", title);
+        cy.get(".card dd a").should("contain", url);
+    },
+    subscribe: () => cy.get(".card .actions button").contains("Subscribe").click(),
+    unsubscribe: () => {
+        cy.get("button").contains("Unsubscribe").click();
+        cy.get("h3").should("contain.text", "Unsubscribe");
+        cy.get("button").contains("Yes, unsubscribe").click();
+    },
+}
+
 describe("Feeds", () => {
 
     const serverUrl = "http://localhost:9090";
@@ -7,52 +78,36 @@ describe("Feeds", () => {
     it("supports CRUD flow", () => {
         cy.visit(serverUrl);
 
-        cy.get("h1").should("have.text", "Welcome");
-        cy.get("a").contains("Read").click();
+        welcomeScreen.checkDisplayed();
+        tabs.clickRead();
 
-        cy.get("h1").should("have.text", "Authentication required");
-        cy.get("a").contains("Sign up now").click();
+        signInScreen.checkDisplayed();
+        signInScreen.clickSignUp();
 
-        cy.get("h1").should("have.text", "Registration");
-        cy.get("input[name='name']").type("Damo");
-        cy.get("input[name='email']").type("damo@example.com");
-        cy.get("input[name='password']").type("supersecret");
-        cy.get("input[name='passwordConfirmation']").type("supersecret");
-        cy.get("button").contains("Sign up").click();
+        signUpScreen.checkDisplayed();
+        signUpScreen.submitFormWith("Damo", "damo@example.com", "supersecret", "supersecret");
 
-        cy.get("h1").should("have.text", "Authentication required");
-        cy.get("input[name='email']").type("damo@example.com");
-        cy.get("input[name='password']").type("supersecret");
-        cy.get("button").contains("Sign in").click();
+        signInScreen.checkDisplayed();
+        signInScreen.submitFormWith("damo@example.com", "supersecret");
 
-        cy.get("h2").should("have.text", "Articles");
+        readScreen.checkDisplayed();
 
-        cy.get("a").contains("Manage").click();
-        cy.get("h2").should("have.text", "Feeds");
-        cy.get("p").should("have.text", "You have not subscribed to any feeds yet.");
-        cy.get(".card-list .card").should("have.length", 0);
+        tabs.clickManage();
 
-        cy.get("input[name='searchText']").type("http://localhost:9092/index.html");
-        cy.get("button").contains("Search").click();
+        manageScreen.checkDisplayed()
+        manageScreen.checkHasNoFeeds()
+        manageScreen.searchFor("http://localhost:9092/index.html")
 
-        cy.get("h3").should("contain", "Search results");
-        cy.get(".card-list .card").should("have.length", 1);
-        cy.get(".card dd").should("contain", "Stories by Damien Le Berrigaud on Medium")
-        cy.get(".card dd a").should("contain", "http://localhost:9092/rss.xml")
-        cy.get(".card .actions button").contains("Subscribe").click();
+        manageScreen.checkHasResultCount(1);
+        manageScreen.checkHasResult("Stories by Damien Le Berrigaud on Medium", "http://localhost:9092/rss.xml");
+        manageScreen.subscribe();
 
         cy.visit(serverUrl + "/manage");
-        cy.get("h2").should("have.text", "Feeds");
-        cy.get("h3").should("contain.text", "Add feed");
-        cy.get(".card-list .card").should("have.length", 1);
-        cy.get(".card dt").should("contain.text", "Stories by Damien Le Berrigaud on Medium");
-        cy.get(".card dd").should("contain.text", "http://localhost:9092/rss.xml");
 
-        cy.get("button").contains("Unsubscribe").click();
-        cy.get("h3").should("contain.text", "Unsubscribe");
-        cy.get("button").contains("Yes, unsubscribe").click();
+        manageScreen.checkHasFeedCount(1);
+        manageScreen.checkHasFeed("Stories by Damien Le Berrigaud on Medium", "http://localhost:9092/rss.xml");
+        manageScreen.unsubscribe();
 
-        cy.get(".card-list .card").should("have.length", 0);
-        cy.get("p").should("have.text", "You have not subscribed to any feeds yet.");
+        manageScreen.checkHasNoFeeds();
     });
 });

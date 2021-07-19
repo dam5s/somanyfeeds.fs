@@ -5,11 +5,11 @@ open NUnit.Framework
 open SoManyFeedsPersistence.FeedsProcessor
 
 [<SetUp>]
-let before() = 
+let before() =
     TestWebsite.start()
 
 [<TearDown>]
-let after() = 
+let after() =
     TestWebsite.stop()
 
 [<Test>]

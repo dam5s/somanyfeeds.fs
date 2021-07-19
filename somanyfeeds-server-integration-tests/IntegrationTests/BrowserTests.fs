@@ -30,7 +30,7 @@ let private runningOnWindows =
     | _ -> false
 
 [<SetUp>]
-let before() = 
+let before() =
     SoManyFeeds.start()
     TestWebsite.start()
 
@@ -46,10 +46,8 @@ let tests() =
           "delete from users"
           "delete from articles" ]
 
-    // start server with html page + rss feed
-
     let yarn = if runningOnWindows then "yarn.cmd" else "yarn"
-    let processInfo = ProcessStartInfo(yarn, "run cypress run")
+    let processInfo = ProcessStartInfo(yarn, "cypress run")
     use p = Process.Start(processInfo)
 
     p.WaitForExit()

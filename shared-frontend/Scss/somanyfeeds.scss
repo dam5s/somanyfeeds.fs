@@ -547,16 +547,19 @@ input[type="text"], input[type="email"], input[type="password"] {
   text-transform: uppercase;
   position: relative;
 
-  &:hover {
-    background-color: lighten($dark-color, 10%);
-  }
+  &:not(:disabled) {
+    &:hover {
+      background-color: lighten($dark-color, 10%);
+    }
 
-  &:active {
-    top: 1px;
+    &:active {
+      top: 1px;
+    }
   }
 
   &:disabled {
     opacity: 0.5;
+    cursor: default;
   }
 }
 
@@ -565,8 +568,10 @@ input[type="text"], input[type="email"], input[type="password"] {
   background-color: rgba(255, 255, 255, .1);
   color: $bg-color;
 
-  &:hover {
-    background-color: rgba(255, 255, 255, .2);
+  &:not(:disabled) {
+    &:hover {
+      background-color: rgba(255, 255, 255, .2);
+    }
   }
 }
 
@@ -575,7 +580,7 @@ input[type="text"], input[type="email"], input[type="password"] {
   border-color: $accent-color;
   color: $bg-color;
 
-  &:hover {
+  &:not(:disabled):hover {
     background-color: lighten($accent-color, 5%);
   }
 }
@@ -585,7 +590,7 @@ input[type="text"], input[type="email"], input[type="password"] {
   border-color: $dark-color;
   color: $dark-color;
 
-  &:hover {
+  &:not(:disabled):hover {
     background-color: rgba(0, 0, 0, 0.1);
   }
 }
