@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="src\Prelude.fs" />
+    <Compile Include="src\Option.fs" />
+    <Compile Include="src\Choice.fs" />
+    <Compile Include="src\Result.fs" />
+    <Compile Include="src\List.fs" />
+    <Compile Include="src\String.fs" />
+    <Compile Include="src\AsyncResult.fs" />
+    <Compile Include="src\Logging.fs" />
+    <Compile Include="src\Try.fs" />
+    <Compile Include="src\Time.fs" />
+    <Compile Include="src\Validation.fs" />
+    <Compile Include="src\Env.fs" />
+    <Compile Include="src\Optics.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Hopac" Version="0.5.0" />
+    <PackageReference Include="Logary.Adapters.Facade" Version="5.0.1" />
+  </ItemGroup>
+
+</Project>

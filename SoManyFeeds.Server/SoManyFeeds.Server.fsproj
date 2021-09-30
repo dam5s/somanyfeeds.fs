@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Giraffe" Version="4.1.0" />
+    <PackageReference Include="JWT" Version="7.3.1" />
+    <PackageReference Include="Logary.Adapters.AspNetCore" Version="5.0.1" />
+    <PackageReference Include="Microsoft.FSharpLu.Json" Version="0.11.6" />
+    <PackageReference Include="TaskBuilder.fs" Version="2.1.0" />
+
+    <ProjectReference Include="..\SoManyFeeds.Domain\SoManyFeeds.Domain.fsproj" />
+    <ProjectReference Include="..\SoManyFeeds.Persistence\SoManyFeeds.Persistence.fsproj" />
+    <ProjectReference Include="..\SoManyFeeds.Frontend\SoManyFeeds.Frontend.fsproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="WebRoot/**/*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="src\Api.fs" />
+    <Compile Include="src\CacheBusting.fs" />
+    <Compile Include="src\Layout.fs" />
+    <Compile Include="src\ErrorPage.fs" />
+    <Compile Include="src\Auth\JWT.fs" />
+    <Compile Include="src\Auth\Payload.fs" />
+    <Compile Include="src\Auth\Session.fs" />
+    <Compile Include="src\Auth\Web.fs" />
+    <Compile Include="src\Auth\Admin.fs" />
+    <Compile Include="src\Admin\UsersPage.fs" />
+    <Compile Include="src\UsersApi.fs" />
+    <Compile Include="src\ArticlesApi.fs" />
+    <Compile Include="src\FeedsApi.fs" />
+    <Compile Include="src\SearchApi.fs" />
+    <Compile Include="src\ManageBackend.fs" />
+    <Compile Include="src\ReadBackend.fs" />
+    <Compile Include="src\HomePage.fs" />
+    <Compile Include="src\WebApp.fs" />
+    <Compile Include="src\Logging.fs" />
+    <Compile Include="src\Tasks.fs" />
+    <Compile Include="src\Program.fs" />
+  </ItemGroup>
+</Project>

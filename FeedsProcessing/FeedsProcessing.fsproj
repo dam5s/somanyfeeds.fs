@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <RootNamespace>Feeds.Processing</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FSharp.Data" Version="3.3.3" />
+    <PackageReference Include="HtmlSanitizer" Version="5.0.404" />
+
+    <ProjectReference Include="..\Prelude\Prelude.fsproj" />
+
+    <Compile Include="src\Download.fs" />
+    <Compile Include="src\Feeds.fs" />
+    <Compile Include="src\Html.fs" />
+    <Compile Include="src\Article.fs" />
+    <Compile Include="src\ProcessingResult.fs" />
+    <Compile Include="src\Xml.fs" />
+    <Compile Include="src\Twitter.fs" />
+    <Compile Include="src\DataGateway.fs" />
+    <Compile Include="src\Search.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resources Include="resources/**" />
+  </ItemGroup>
+
+  <Target Name="CopyResources" AfterTargets="Publish">
+    <Copy SourceFiles="@(resources)" DestinationFiles="@(resources->'$(PublishDir)/resources/%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target>
+</Project>

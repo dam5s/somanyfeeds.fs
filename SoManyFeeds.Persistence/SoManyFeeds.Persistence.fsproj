@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\FeedsProcessing\FeedsProcessing.fsproj" />
+        <ProjectReference Include="..\SoManyFeeds.Domain\SoManyFeeds.Domain.fsproj" />
+        <ProjectReference Include="..\Prelude\Prelude.fsproj" />
+
+        <PackageReference Include="BCrypt.Net-Next.StrongName" Version="4.0.2" />
+        <PackageReference Include="FSharp.Control.AsyncSeq" Version="3.0.2" />
+        <PackageReference Include="Npgsql" Version="5.0.0" />
+        <PackageReference Include="SQLProvider" Version="1.1.93" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Include="src\DataSource.fs" />
+        <Compile Include="src\FeedsDataGateway.fs" />
+        <Compile Include="src\ArticlesDataGateway.fs" />
+        <Compile Include="src\UsersDataGateway.fs" />
+        <Compile Include="src\UserArticlesDataGateway.fs" />
+        <Compile Include="src\FeedJobsDataGateway.fs" />
+        <Compile Include="src\User.fs" />
+        <Compile Include="src\FeedsService.fs" />
+        <Compile Include="src\UsersService.fs" />
+        <Compile Include="src\UserArticlesService.fs" />
+        <Compile Include="src\FeedsProcessor.fs" />
+    </ItemGroup>
+</Project>

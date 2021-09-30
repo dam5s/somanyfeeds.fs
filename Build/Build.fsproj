@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Evolve" Version="2.4.0" />
+    <PackageReference Include="Npgsql" Version="5.0.0" />
+    <PackageReference Include="SharpScss" Version="2.0.0" />
+
+    <PackageReference Include="dotnet-fake" Version="5.19.0" />
+    <PackageReference Include="Fake.Core.Target" Version="5.19.0" />
+    <PackageReference Include="Fake.DotNet.Cli" Version="5.19.0" />
+    <PackageReference Include="Fake.IO.FileSystem" Version="5.19.0" />
+
+    <Compile Include="src/Support.fs" />
+    <Compile Include="src/Frontend.fs" />
+    <Compile Include="src/Database.fs" />
+    <Compile Include="src/DotNet.fs" />
+    <Compile Include="src/Deploy.fs" />
+    <Compile Include="src/Program.fs" />
+  </ItemGroup>
+</Project>

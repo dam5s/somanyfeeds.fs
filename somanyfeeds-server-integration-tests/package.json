@@ -1,9 +1,0 @@
-{
-  "private": true,
-  "scripts": {
-    "test": "cypress"
-  },
-  "dependencies": {
-    "cypress": "^7.7.0"
-  }
-}

@@ -1,8 +1,8 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 set -e
 source .env
-dotnet build build
+dotnet build Build
 mkdir -p bin
-cp -r build/bin/Debug/net5.0/* bin/
-dotnet bin/build.dll
+cp -r Build/bin/Debug/net5.0/* bin/
+dotnet bin/Build.dll

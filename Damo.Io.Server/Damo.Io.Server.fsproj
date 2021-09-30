@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Giraffe" Version="4.1.0" />
+    <PackageReference Include="FSharp.Control.AsyncSeq" Version="3.0.2" />
+    <PackageReference Include="Logary.Adapters.AspNetCore" Version="5.0.1" />
+    <PackageReference Include="Microsoft.FSharpLu.Json" Version="0.11.6" />
+
+    <ProjectReference Include="..\Prelude\Prelude.fsproj" />
+    <ProjectReference Include="..\FeedsProcessing\FeedsProcessing.fsproj" />
+    <ProjectReference Include="..\Damo.Io.Frontend\Damo.Io.Frontend.fsproj" />
+
+    <Compile Include="src\Sources.fs" />
+    <Compile Include="src\ArticlesDataGateway.fs" />
+    <Compile Include="src\ArticlesHandler.fs" />
+    <Compile Include="src\FeedsProcessor.fs" />
+    <Compile Include="src\App.fs" />
+    <Compile Include="src\Logging.fs" />
+    <Compile Include="src\Program.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="WebRoot/**/*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+</Project>
