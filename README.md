@@ -5,7 +5,7 @@
 ### Dependencies
  1. .NET 5
  1. PostgreSQL 11
- 1. Node JS + Yarn on the PATH
+ 1. Node JS
 
 ### Database setup
  1. Setup a local Postgresql database.

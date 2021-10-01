@@ -25,18 +25,18 @@ let private buildScss _ =
     generateCss "Frontend.Shared/Scss/damo-io.scss" |> writeToFile "Damo.Io.Server/WebRoot/damo-io.css"
     generateCss "Frontend.Shared/Scss/somanyfeeds.scss" |> writeToFile "SoManyFeeds.Server/WebRoot/somanyfeeds.css"
 
-let private yarn =
+let private npm =
     if Environment.isWindows
-        then "yarn.cmd"
-        else "yarn"
+        then "npm.cmd"
+        else "npm"
 
 let private buildDamoIoFrontend _ =
-    runCmd yarn "Damo.Io.Frontend" "install -s"
-    runCmd yarn "Damo.Io.Frontend" "run build"
+    runCmd npm "Damo.Io.Frontend" "install -s"
+    runCmd npm "Damo.Io.Frontend" "run build"
 
 let private buildSoManyFeedsFrontend _ =
-    runCmd yarn "SoManyFeeds.Frontend" "install -s"
-    runCmd yarn "SoManyFeeds.Frontend" "run build"
+    runCmd npm "SoManyFeeds.Frontend" "install -s"
+    runCmd npm "SoManyFeeds.Frontend" "run build"
 
 let private copyFonts _ =
     Shell.copyDir "Damo.Io.Server/WebRoot/fonts" "Frontend.Shared/Fonts" (fun _ -> true)

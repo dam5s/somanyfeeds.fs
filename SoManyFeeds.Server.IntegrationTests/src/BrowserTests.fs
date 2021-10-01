@@ -46,8 +46,8 @@ let tests() =
           "delete from users"
           "delete from articles" ]
 
-    let yarn = if runningOnWindows then "yarn.cmd" else "yarn"
-    let processInfo = ProcessStartInfo(yarn, "cypress run")
+    let npm = if runningOnWindows then "npm.cmd" else "npm"
+    let processInfo = ProcessStartInfo(npm, "run test")
     use p = Process.Start(processInfo)
 
     p.WaitForExit()

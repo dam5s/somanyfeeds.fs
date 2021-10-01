@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "test": "cypress"
+    "test": "cypress run"
   },
   "dependencies": {
     "cypress": "^7.7.0"
