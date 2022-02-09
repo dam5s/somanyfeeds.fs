@@ -64,7 +64,7 @@ module HttpResponse =
     let inline parse<'a, 'b> (decoder: 'b -> Result<'a, string>) (response: HttpResponse) : Result<'a, RequestError> =
         response.responseText
         |> JS.JSON.parse
-        |> tryCast<'b>
+        |> tryUnbox<'b>
         |> Option.toResult "Invalid json"
         |> Result.bind decoder
         |> Result.mapError ParseError

@@ -46,7 +46,7 @@ module Article =
 
     let view (article: Article): ReactElement =
         match article.Title with
-        | Some t ->
+        | Some _ ->
             Standard.article []
                 [ articleHeader article
                   section [ Html.rawInnerHtml article.Content ] []

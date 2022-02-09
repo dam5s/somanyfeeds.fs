@@ -37,7 +37,7 @@ module AsyncResult =
     let map mapping (result: AsyncResult<'a>): AsyncResult<'b> =
         async {
             match! result with
-            | Ok value -> return Ok(mapping value)
+            | Ok value -> return Ok (mapping value)
             | Error err -> return Error err
         }
 

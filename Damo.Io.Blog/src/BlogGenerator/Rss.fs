@@ -31,15 +31,11 @@ module Rss =
             element "description" [] [ cdata post.RssContent ]
         ]
 
-    let private tryCast<'a> (a: obj) =
-        try Some (a :?> 'a)
-        with | _ -> None
-
     let generate (config: Config) (posts: Post list) =
         let items =
             posts
             |> List.map (rssItem config)
-            |> List.choose tryCast<XNode>
+            |> List.choose tryUnbox<XNode>
 
         element "rss" [ "version", "2.0" ] [
             element "channel" [] ([

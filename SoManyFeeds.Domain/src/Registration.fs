@@ -21,16 +21,16 @@ and RegistrationFields =
 module Registration =
     let name =
         { get = fun (r: Registration) -> r.Name
-          set = fun name r -> { r with Name = name } }
+          set = fun value r -> { r with Name = value } }
     let email =
         { get = fun (r: Registration) -> r.Email
-          set = fun email r -> { r with Email = email } }
+          set = fun value r -> { r with Email = value } }
     let password =
         { get = fun (r: Registration) -> r.Password
-          set = fun password r -> { r with Password = password } }
+          set = fun value r -> { r with Password = value } }
     let passwordConfirmation =
         { get = fun (r: Registration) -> r.PasswordConfirmation
-          set = fun passwordConfirmation r -> { r with PasswordConfirmation = passwordConfirmation } }
+          set = fun value r -> { r with PasswordConfirmation = value } }
 
     type Error =
         | NameCannotBeBlank
