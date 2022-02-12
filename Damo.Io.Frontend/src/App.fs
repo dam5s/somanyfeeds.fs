@@ -74,22 +74,18 @@ let private articlesToDisplay model =
 
 
 let view (model: Model) (dispatch: Msg -> unit): ReactElement =
-    let sourceLinks = Source.all
-                      |> List.map (sourceView model dispatch)
-    let articlesList = model
-                       |> articlesToDisplay
-                       |> List.map Article.view
+    let sourceLinks =
+        Source.all
+        |> List.map (sourceView model dispatch)
 
-    div []
-        [ header [ Id "app-header" ]
-              [ section [ Class "content" ]
-                    [ Logo.view
-                      aside [ Id "app-menu" ]
-                          [ ul [] sourceLinks ]
-                    ]
-              ]
-          Logo.view
-          section [ Id "app-content"; Class "content" ] articlesList
+    let articlesList =
+        model
+        |> articlesToDisplay
+        |> List.map Article.view
+
+    div [ Class "top-level" ]
+        [ main [] articlesList
+          aside [] [ Logo.view; ul [ Class "main-menu" ] sourceLinks ]
         ]
 
 open Fable.Core.JsInterop
