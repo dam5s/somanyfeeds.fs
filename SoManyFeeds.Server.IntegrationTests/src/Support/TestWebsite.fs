@@ -12,7 +12,7 @@ let mutable private tokenSource: CancellationTokenSource =
     new CancellationTokenSource()
 
 let start _ =
-    let contentRoot = Env.varDefault "FEEDS_CONTENT_ROOT" Directory.GetCurrentDirectory
+    let contentRoot = projectDir "SoManyFeeds.Server.IntegrationTests"
     let webRoot = Path.Combine(contentRoot, "resources")
     tokenSource <- new CancellationTokenSource()
 

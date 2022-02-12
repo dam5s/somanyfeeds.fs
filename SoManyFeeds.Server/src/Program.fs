@@ -52,9 +52,7 @@ let private configureLogging (builder: ILoggingBuilder) =
         .AddDebug()
         |> ignore
 
-let webHostBuilder logary =
-    let serverPort = Env.varDefault "PORT" (always "5000")
-    let contentRoot = Env.varDefault "CONTENT_ROOT" Directory.GetCurrentDirectory
+let webHostBuilder (serverPort, contentRoot, logary) =
     let webRoot = Path.Combine(contentRoot, "WebRoot")
 
     useLogary(WebHostBuilder(), logary)
@@ -70,12 +68,14 @@ let webHostBuilder logary =
 [<EntryPoint>]
 let main args =
     let logary = LoggingConfig.configure()
+    let contentRoot = Directory.GetCurrentDirectory()
+    let serverPort = Env.varDefault "PORT" (always "5000")
 
     args
     |> Array.tryHead
     |> Option.bind Tasks.run
     |> Option.defaultWith (fun _ ->
         Async.Start FeedsProcessor.backgroundProcessingInfinite
-        webHostBuilder(logary).Build().Run()
+        webHostBuilder(serverPort, contentRoot, logary).Build().Run()
     )
     0

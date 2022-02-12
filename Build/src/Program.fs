@@ -1,9 +1,7 @@
 ﻿module Program
 
 open System
-open System.IO
 open Fake.Core
-open Fake.IO
 open Support
 
 
@@ -26,15 +24,9 @@ let main args =
         DotNet.build ()
     )
     Target.create "test" (fun _ ->
-        Environment.setEnvironVar "CONTENT_ROOT" (Path.GetFullPath "SoManyFeeds.Server")
-        Environment.setEnvironVar "FEEDS_CONTENT_ROOT" (Path.GetFullPath "SoManyFeeds.Server.IntegrationTests")
-        Environment.setEnvironVar "DB_CONNECTION" "Host=localhost;Username=somanyfeeds;Password=secret;Database=somanyfeeds_integration_tests"
         DotNet.test ""
     )
     Target.create "integrationTest" (fun _ ->
-        Environment.setEnvironVar "CONTENT_ROOT" (Path.GetFullPath "SoManyFeeds.Server")
-        Environment.setEnvironVar "FEEDS_CONTENT_ROOT" (Path.GetFullPath "SoManyFeeds.Server.IntegrationTests")
-        Environment.setEnvironVar "DB_CONNECTION" "Host=localhost;Username=somanyfeeds;Password=secret;Database=somanyfeeds_integration_tests"
         DotNet.test "SoManyFeeds.Server.IntegrationTests"
     )
 

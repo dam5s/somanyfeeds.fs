@@ -4,21 +4,21 @@ module DatabaseSupport
 open Npgsql
 open SoManyFeedsPersistence
 
+let dbConnectionString =
+    "Host=localhost;Username=somanyfeeds;Password=secret;Database=somanyfeeds_integration_tests"
 
 let executeSql sql =
-    use connection = new NpgsqlConnection(Env.requireVar "DB_CONNECTION")
+    use connection = new NpgsqlConnection(dbConnectionString)
     connection.Open()
 
     use command = connection.CreateCommand()
     command.CommandText <- sql
     command.ExecuteNonQuery() |> ignore
 
-
 let executeAllSql sql =
     sql
     |> List.map executeSql
     |> ignore
-
 
 let queryDataContext queryFn =
     asyncResult {

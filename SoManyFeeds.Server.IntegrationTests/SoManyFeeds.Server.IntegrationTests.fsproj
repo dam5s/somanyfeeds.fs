@@ -14,6 +14,8 @@
 
     <ProjectReference Include="..\SoManyFeeds.Server\SoManyFeeds.Server.fsproj" />
 
+    <Compile Include="src\Support\RootDir.fs" />
+
     <Compile Include="src\Support\Database.fs" />
     <Compile Include="src\Support\TestWebsite.fs" />
     <Compile Include="src\Support\SoManyFeedsTestServer.fs" />
