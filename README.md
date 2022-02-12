@@ -3,7 +3,7 @@
 ## Local Setup
 
 ### Dependencies
- 1. .NET 5
+ 1. .NET 6
  1. PostgreSQL 11
  1. Node JS
 

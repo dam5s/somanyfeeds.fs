@@ -23,7 +23,7 @@ let private herokuBinary =
         else "heroku"
 
 let private deploy project _ =
-    let publishDir = $"%s{project}/bin/Release/net5.0/linux-x64/publish"
+    let publishDir = $"%s{project}/bin/Release/net6.0/linux-x64/publish"
     let herokuApp = project.Replace("-server", "")
 
     DotNet.release project ()

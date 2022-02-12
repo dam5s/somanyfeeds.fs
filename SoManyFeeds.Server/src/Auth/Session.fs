@@ -2,7 +2,6 @@ module SoManyFeedsServer.Auth.Session
 
 open System
 open Microsoft.AspNetCore.Http
-open SoManyFeedsPersistence
 open SoManyFeedsDomain.User
 
 let private encryptionKey = Env.requireVar "COOKIE_ENCRYPTION_KEY"

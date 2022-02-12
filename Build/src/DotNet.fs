@@ -23,7 +23,7 @@ let run project _ =
     dotnet "run" $"-p %s{project}"
 
 let release project _ =
-    dotnet "publish" $"%s{project} -c Release -r linux-x64"
+    dotnet "publish" $"%s{project} -c Release -r linux-x64 --self-contained"
 
 
 let solutionProjects =

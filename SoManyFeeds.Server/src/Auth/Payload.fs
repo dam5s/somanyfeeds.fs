@@ -6,9 +6,13 @@ open SoManyFeedsDomain.User
 open System.Collections.Generic
 
 let private tryGet name (payload: IDictionary<string, obj>) f =
-    payload.Item(name)
-    |> Option.ofObj
-    |> Option.bind f
+    if payload.ContainsKey name
+        then
+            payload.Item(name)
+            |> Option.ofObj
+            |> Option.bind f
+        else
+            None
 
 let private tryCastId = tryUnbox<int64>
 let private tryCastName = tryUnbox<string>

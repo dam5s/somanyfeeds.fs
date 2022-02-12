@@ -1,6 +1,5 @@
 module SoManyFeedsFrontend.Support.Http
 
-open System.Web
 open Elmish
 open Fable.Core
 open Fable.SimpleHttp
@@ -64,7 +63,7 @@ module HttpResponse =
     let inline parse<'a, 'b> (decoder: 'b -> Result<'a, string>) (response: HttpResponse) : Result<'a, RequestError> =
         response.responseText
         |> JS.JSON.parse
-        |> tryUnbox<'b>
+        |> tryCast<'b>
         |> Option.toResult "Invalid json"
         |> Result.bind decoder
         |> Result.mapError ParseError
@@ -72,9 +71,13 @@ module HttpResponse =
 
 [<RequireQualifiedAccess>]
 module Http =
+    #if FABLE_COMPILER
     let urlEncode (value: string): string =
-        #if FABLE_COMPILER
         Fable.Core.JS.encodeURI value
-        #else
+
+    #else
+    open System.Web
+
+    let urlEncode (value: string): string =
         HttpUtility.UrlEncode value
-        #endif
+    #endif

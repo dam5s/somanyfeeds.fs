@@ -1,7 +1,7 @@
-#if !FABLE_COMPILER
-
 [<RequireQualifiedAccess>]
 module Env
+#if !FABLE_COMPILER
+
     open System
 
     let var name =

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
@@ -12,6 +12,7 @@
     <ProjectReference Include="..\Prelude\Prelude.fsproj" />
     <ProjectReference Include="..\SoManyFeeds.Domain\SoManyFeeds.Domain.fsproj" />
 
+    <Compile Include="src\Support\TryCast.fs" />
     <Compile Include="src\Support\Http.fs" />
     <Compile Include="src\Support\Dialog.fs" />
     <Compile Include="src\Support\RemoteData.fs" />

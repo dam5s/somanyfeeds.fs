@@ -3,9 +3,6 @@ module Try
 
 open System
 
-type private Logs = Logs
-let private logger = Logger<Logs>()
-
 module Try =
     let private error description (ex: Exception) =
         let msg = sprintf "%s error: %s" description (ex.Message.Trim())

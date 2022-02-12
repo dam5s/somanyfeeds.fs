@@ -1,7 +1,7 @@
-#if !FABLE_COMPILER
-
 [<AutoOpen>]
 module Logging
+
+#if !FABLE_COMPILER
 
 open Logary
 

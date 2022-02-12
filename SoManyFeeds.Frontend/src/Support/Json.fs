@@ -23,5 +23,5 @@ let list (decoder: 'b -> Result<'a, string>) (arr: JS.TypedArray<'b>) =
     |> decodeList decoder
 
 let property<'a> (name: string) (obj: JS.Object): Result<'a, string> =
-    tryUnbox<'a> obj?(name)
+    tryCast<'a> obj?(name)
     |> Option.toResult (sprintf "Cannot parse field '%s'" name)

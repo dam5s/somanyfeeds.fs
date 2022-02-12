@@ -3,26 +3,8 @@ module ``Browser tests``
 open System
 open System.Diagnostics
 open System.Threading
-open Microsoft.AspNetCore.Hosting
 open NUnit.Framework
 open SoManyFeedsServer
-
-module SoManyFeeds =
-    let private tokenSource =
-        new CancellationTokenSource()
-
-    let start _ =
-        let logary = LoggingConfig.configure()
-
-        Program
-            .webHostBuilder(logary)
-            .UseUrls("http://localhost:9090")
-            .Build()
-            .RunAsync(tokenSource.Token)
-            |> ignore
-
-    let stop _ =
-        tokenSource.Cancel()
 
 let private runningOnWindows =
     match Environment.OSVersion.Platform with
@@ -31,12 +13,12 @@ let private runningOnWindows =
 
 [<SetUp>]
 let before() =
-    SoManyFeeds.start()
+    SoManyFeedsTestServer.start()
     TestWebsite.start()
 
 [<TearDown>]
 let after() =
-    SoManyFeeds.stop()
+    SoManyFeedsTestServer.stop()
     TestWebsite.stop()
 
 [<Test>]

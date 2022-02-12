@@ -4,5 +4,5 @@ set -e
 source .env
 dotnet build Build
 mkdir -p bin
-cp -r Build/bin/Debug/net5.0/* bin/
+cp -r Build/bin/Debug/net6.0/* bin/
 dotnet bin/Build.dll

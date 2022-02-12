@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <GenerateProgramFile>false</GenerateProgramFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
@@ -16,6 +16,7 @@
 
     <Compile Include="src\Support\Database.fs" />
     <Compile Include="src\Support\TestWebsite.fs" />
+    <Compile Include="src\Support\SoManyFeedsTestServer.fs" />
     <Compile Include="src\BrowserTests.fs" />
     <Compile Include="src\FeedsProcessingTests.fs" />
     <Compile Include="src\Program.fs" />
