@@ -44,7 +44,6 @@
     <Compile Include="src\HomePage.fs" />
     <Compile Include="src\WebApp.fs" />
     <Compile Include="src\Logging.fs" />
-    <Compile Include="src\Tasks.fs" />
     <Compile Include="src\Program.fs" />
   </ItemGroup>
 </Project>

@@ -58,7 +58,6 @@ let webHostBuilder (serverPort, contentRoot, logary) =
     useLogary(WebHostBuilder(), logary)
         .UseKestrel()
         .UseContentRoot(contentRoot)
-        .UseIISIntegration()
         .UseWebRoot(webRoot)
         .UseUrls(sprintf "http://0.0.0.0:%s" serverPort)
         .Configure(Action<IApplicationBuilder> configureApp)
@@ -66,16 +65,14 @@ let webHostBuilder (serverPort, contentRoot, logary) =
         .ConfigureLogging(configureLogging)
 
 [<EntryPoint>]
-let main args =
+let main _ =
     let logary = LoggingConfig.configure()
     let contentRoot = Directory.GetCurrentDirectory()
     let serverPort = Env.varDefault "PORT" (always "5000")
 
-    args
-    |> Array.tryHead
-    |> Option.bind Tasks.run
-    |> Option.defaultWith (fun _ ->
-        Async.Start FeedsProcessor.backgroundProcessingInfinite
-        webHostBuilder(serverPort, contentRoot, logary).Build().Run()
-    )
+    Async.Start FeedsProcessor.backgroundProcessingInfinite
+
+    webHostBuilder(serverPort, contentRoot, logary)
+        .Build()
+        .Run()
     0
