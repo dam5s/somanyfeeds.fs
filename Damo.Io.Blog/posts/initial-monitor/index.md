@@ -1,4 +1,4 @@
-﻿# initialMonitor[]
+﻿# initialMonitor
 
 This blog post was originally posted [on the initialCapacity website](https://initialcapacity.io/initial-monitor)
 
