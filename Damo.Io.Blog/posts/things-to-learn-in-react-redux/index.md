@@ -93,8 +93,8 @@ It was designed after the [Elm architecture](https://guide.elm-lang.org/architec
     type ApplicationAction =
         | {type: 'session/sign in', user: User}
         | {type: 'session/sign out'}
-        | {type: 'todo/load', todos: Todo[]}
-        | {type: 'todo/add', todos: Todo}
+        | {type: 'todo/load', todoList: Todo[]}
+        | {type: 'todo/add', newTodo: Todo}
     ```
 
 1. [Reducer](https://redux.js.org/tutorials/fundamentals/part-3-state-actions-reducers)
@@ -149,8 +149,12 @@ you will need to build a production quality application.
 I do recommend using Typescript and test driving your application,
 but I cannot recommend pulling in external libraries to "solve" your development problems.
 
-Additional libraries will tend to introduce more complexity,
-more time for new comers to understand and learn how your codebase works,
-more transitive dependencies that can introduce security issues...
+Additional libraries will tend to introduce:
 
-Good luck out there.
+ * more unknown
+ * more complexity
+ * more ramp-up time for new team members
+ * more security issues to fix over time
+ * much longer build times
+
+Stay lean and good luck out there.
