@@ -1,24 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <OutputType>Exe</OutputType>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <RootNamespace>Damo.Io.Blog</RootNamespace>
+    <RootNamespace>DamoIoBlog</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Update="Fsharp.Core" Version="5.0.1" />
+    <PackageReference Include="Fake.IO.FileSystem" Version="5.23.1" />
     <PackageReference Include="SharpScss" Version="2.0.0" />
-    <PackageReference Include="FSharp.Formatting" Version="11.1.0" />
-    <PackageReference Include="FSharp.Data" Version="4.1.1" />
-    <PackageReference Include="Fake.Core.Target" Version="5.19.0" />
-    <PackageReference Include="Fake.IO.FileSystem" Version="5.19.0" />
-    <PackageReference Include="Fable.React" Version="7.4.0" />
+    <PackageReference Include="FSharp.Formatting" Version="17.2.2" />
+    <PackageReference Include="FSharp.Data" Version="4.2.10" />
+    <PackageReference Include="Fable.React" Version="9.2.0" />
 
     <Compile Include="src\BlogGenerator\Prelude.fs" />
     <Compile Include="src\BlogGenerator\Config.fs" />
-    <Compile Include="src\BlogGenerator\Fake.fs" />
     <Compile Include="src\BlogGenerator\Scss.fs" />
     <Compile Include="src\BlogGenerator\Metadata.fs" />
     <Compile Include="src\BlogGenerator\Markdown.fs" />

@@ -1,5 +1,5 @@
 [<RequireQualifiedAccess>]
-module DamoIOFrontend.Html
+module DamoIoFrontend.Html
 
 open Fable.React.Props
 

@@ -1,5 +1,5 @@
 [<RequireQualifiedAccess>]
-module DamoIOFrontend.Tweet
+module DamoIoFrontend.Tweet
 
 open System.Text.RegularExpressions
 open Fable.React

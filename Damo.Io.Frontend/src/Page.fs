@@ -1,4 +1,4 @@
-module DamoIOFrontend.Page
+module DamoIoFrontend.Page
 
 open Source
 

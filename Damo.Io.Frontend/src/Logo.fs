@@ -1,5 +1,5 @@
 [<RequireQualifiedAccess>]
-module DamoIOFrontend.Logo
+module DamoIoFrontend.Logo
 
 open Fable.React
 open Fable.React.Props

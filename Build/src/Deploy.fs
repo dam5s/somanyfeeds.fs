@@ -28,8 +28,6 @@ let private deploy project herokuApp _ =
         $"builds:create -a %s{herokuApp}"
 
 let loadTasks _ =
-    Target.create "deploy:somanyfeeds" (deploy "SoManyFeeds.Server" "somanyfeeds")
     Target.create "deploy:damo-io" (deploy "Damo.Io.Server" "damo-io")
 
-    "deploy:somanyfeeds" |> dependsOn [ "release" ]
     "deploy:damo-io" |> dependsOn [ "release" ]

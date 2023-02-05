@@ -1,9 +1,9 @@
-﻿module DamoIOFrontend.App
+﻿module DamoIoFrontend.App
 
 open Elmish
 open Elmish.React
 open Article
-open DamoIOFrontend
+open DamoIoFrontend
 open Source
 open Page
 

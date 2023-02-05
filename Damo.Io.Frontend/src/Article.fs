@@ -1,6 +1,5 @@
-module DamoIOFrontend.Article
+module DamoIoFrontend.Article
 
-open SoManyFeedsFrontend.Support
 open Source
 
 type Article =

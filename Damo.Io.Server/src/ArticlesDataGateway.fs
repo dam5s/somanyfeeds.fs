@@ -1,6 +1,6 @@
-module DamoIOServer.ArticlesDataGateway
+module DamoIoServer.ArticlesDataGateway
 
-open DamoIOServer.Sources
+open DamoIoServer.Sources
 open Time
 
 

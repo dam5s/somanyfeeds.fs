@@ -1,5 +1,6 @@
 ﻿module BlogGenerator.Tasks
 
+open System.IO
 open BlogGenerator.Html
 open BlogGenerator.Rss
 open BlogGenerator.Config
@@ -30,7 +31,7 @@ module Tasks =
     let private generateScss _ =
         $"%s{resourcesPath}/app.scss"
         |> Scss.convert
-        |> File.writeString false $"%s{publicPath}/app.css"
+        |> fun css -> File.WriteAllText($"%s{publicPath}/app.css", css)
 
     let private generatePost post =
         let postDirPath = $"%s{publicPath}/posts/%s{post.Slug}"

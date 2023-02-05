@@ -1,4 +1,5 @@
-module SoManyFeedsFrontend.Support.Posix
+[<RequireQualifiedAccess>]
+module DamoIoFrontend.Posix
 
 open Time
 
@@ -17,7 +18,7 @@ let private monthDisplayName month =
     | 10  -> "October"
     | 11 -> "November"
     | 12 -> "December"
-    | x -> failwithf "Not a valid month rank: %i" x
+    | x -> failwithf $"Not a valid month rank: %i{x}"
 
 let toString posix =
     let date = Posix.toDateTime posix
@@ -26,4 +27,4 @@ let toString posix =
     let year = date.ToString "yy"
     let time = date.ToString "HH:mm"
 
-    sprintf "%s %s '%s @ %s" month day year time
+    $"%s{month} %s{day} '%s{year} @ %s{time}"

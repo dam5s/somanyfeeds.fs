@@ -1,5 +1,5 @@
 [<RequireQualifiedAccess>]
-module DamoIOFrontend.Nav
+module DamoIoFrontend.Nav
 
 open Browser
 open Elmish

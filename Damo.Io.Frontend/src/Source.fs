@@ -1,4 +1,4 @@
-module DamoIOFrontend.Source
+module DamoIoFrontend.Source
 
 type Source =
     | About

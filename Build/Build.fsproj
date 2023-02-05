@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <OutputType>Exe</OutputType>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
@@ -18,7 +18,6 @@
 
     <Compile Include="src/Support.fs" />
     <Compile Include="src/Frontend.fs" />
-    <Compile Include="src/Database.fs" />
     <Compile Include="src/DotNet.fs" />
     <Compile Include="src/Deploy.fs" />
     <Compile Include="src/Program.fs" />

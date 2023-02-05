@@ -1,6 +1,6 @@
 module Program
 
-open DamoIOServer
+open DamoIoServer
 open Giraffe
 open Giraffe.Serialization.Json
 open Microsoft.AspNetCore.Builder

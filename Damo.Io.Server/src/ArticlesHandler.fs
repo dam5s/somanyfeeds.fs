@@ -1,9 +1,9 @@
-module DamoIOServer.ArticlesHandler
+module DamoIoServer.ArticlesHandler
 
-open DamoIOFrontend
-open DamoIOFrontend.Article
+open DamoIoFrontend
+open DamoIoFrontend.Article
 open FSharp.Control.Tasks.V2.ContextInsensitive
-open DamoIOServer.ArticlesDataGateway
+open DamoIoServer.ArticlesDataGateway
 open Giraffe
 open System
 open Time
@@ -13,7 +13,7 @@ let private toJson record: Article.Json =
       Link =  record.Link
       Content =  record.Content
       Date =  (Option.map Posix.milliseconds record.Date)
-      Source =  (sprintf "%A" record.Source)
+      Source =  $"%A{record.Source}"
     }
 
 module View =
@@ -24,7 +24,7 @@ module View =
 
     let render path (flags: App.Flags) flagsJson: string =
         let model, _ = App.init path flags
-        let js = sprintf "DamoIO.StartApp(%s);" flagsJson
+        let js = $"DamoIO.StartApp(%s{flagsJson});"
 
         html [ Lang "en" ]
             [ head []

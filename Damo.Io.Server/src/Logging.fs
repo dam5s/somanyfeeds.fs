@@ -1,4 +1,4 @@
-module DamoIOServer.LoggingConfig
+module DamoIoServer.LoggingConfig
 
 open Logary
 open Logary.Configuration

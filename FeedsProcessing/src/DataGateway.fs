@@ -3,7 +3,6 @@ module FeedsProcessing.DataGateway
 open FSharp.Data
 open FSharp.Data.HttpRequestHeaders
 open FeedsProcessing.Download
-open FeedsProcessing.Feeds
 open System
 open System.Web
 
@@ -15,10 +14,10 @@ let private urlEncode (value: string): string =
 let private base64encode (value: string): string =
     Convert.ToBase64String(Text.Encoding.UTF8.GetBytes value)
 let private bearerTokenHeader (BearerToken s) =
-    sprintf "Bearer %s" s
+    $"Bearer %s{s}"
 
 let private basicAuthHeader username password =
-    sprintf "%s:%s" username password
+    $"%s{username}:%s{password}"
     |> base64encode
     |> sprintf "Basic %s"
     |> BasicAuthHeader
@@ -51,30 +50,6 @@ let private requestToken (BasicAuthHeader authHeader) =
                                 )
         parseToken responseString
     )
-
-let private requestTweets (TwitterHandle handle) token =
-    Try.value "Request tweets" (fun _ ->
-        let url = sprintf "https://twitter.com/%s" handle
-
-        let content =
-            Http.RequestString
-                ("https://api.twitter.com/1.1/statuses/user_timeline.json",
-                  httpMethod = "GET",
-                  query = [
-                      "screen_name", handle
-                      "count", "60"
-                  ],
-                  headers = [ Authorization(bearerTokenHeader token) ]
-                )
-
-        { Url = (Url url); Content = content }
-    )
-
-let downloadTwitterTimeline consumerKey consumerSecret handle: DownloadResult =
-    async {
-        let auth = basicAuthHeader (urlEncode consumerKey) (urlEncode consumerSecret)
-        return Result.bind (requestTweets handle) (requestToken auth)
-    }
 
 let downloadContent (Url url): DownloadResult =
     async {

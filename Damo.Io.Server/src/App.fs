@@ -1,7 +1,8 @@
-module DamoIOServer.App
+module DamoIoServer.App
 
 open System
-open DamoIOServer.ArticlesDataGateway
+open DamoIoServer.ArticlesDataGateway
+open DamoIoServer
 open FSharp.Control
 open Giraffe
 open Microsoft.Extensions.Logging
