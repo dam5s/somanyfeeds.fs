@@ -41,29 +41,32 @@ let private configureServices (services: IServiceCollection) =
 
 let private configureLogging (builder: ILoggingBuilder) =
     builder
+        .ClearProviders()
         .AddConsole()
-        .AddDebug()
         |> ignore
 
-let webHostBuilder logary =
-    let serverPort = Env.varDefault "PORT" (always "5000")
+let webHostBuilder () =
+    let serverPort = Env.varDefault "PORT" (always "9000")
     let contentRoot = Env.varDefault "CONTENT_ROOT" Directory.GetCurrentDirectory
     let webRoot = Path.Combine(contentRoot, "WebRoot")
 
-    useLogary(WebHostBuilder(), logary)
+    WebHostBuilder()
         .UseKestrel()
         .UseContentRoot(contentRoot)
         .UseIISIntegration()
         .UseWebRoot(webRoot)
-        .UseUrls(sprintf "http://0.0.0.0:%s" serverPort)
+        .UseUrls($"http://0.0.0.0:%s{serverPort}")
         .Configure(Action<IApplicationBuilder> configureApp)
         .ConfigureServices(configureServices)
         .ConfigureLogging(configureLogging)
 
 [<EntryPoint>]
 let main _ =
-    let logary = LoggingConfig.configure()
+    let webHost = webHostBuilder().Build()
 
-    Async.Start App.backgroundProcessing
-    webHostBuilder(logary).Build().Run()
+    let loggerProvider = webHost.Services.GetRequiredService<ILoggerProvider>()
+    let processorLogger = loggerProvider.CreateLogger("Damo.Io.Server.FeedsProcessor")
+    Async.Start (App.backgroundProcessing processorLogger)
+
+    webHost.Run()
     0

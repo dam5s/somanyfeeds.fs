@@ -10,19 +10,23 @@
   <ItemGroup>
     <PackageReference Include="Giraffe" Version="4.1.0" />
     <PackageReference Include="FSharp.Control.AsyncSeq" Version="3.0.2" />
-    <PackageReference Include="Logary.Adapters.AspNetCore" Version="5.0.1" />
     <PackageReference Include="Microsoft.FSharpLu.Json" Version="0.11.6" />
 
     <ProjectReference Include="..\Prelude\Prelude.fsproj" />
     <ProjectReference Include="..\FeedsProcessing\FeedsProcessing.fsproj" />
-    <ProjectReference Include="..\Damo.Io.Frontend\Damo.Io.Frontend.fsproj" />
+    <Compile Include="src\LayoutTemplate.fs" />
+    <Compile Include="src\LogoTemplate.fs" />
+    <Compile Include="src\Source.fs" />
 
-    <Compile Include="src\Sources.fs" />
-    <Compile Include="src\ArticlesDataGateway.fs" />
+    <Compile Include="src\SourcesRepository.fs" />
+
+    <Compile Include="src\Article.fs" />
+    <Compile Include="src\ArticlesRepository.fs" />
+    <Compile Include="src\ArticleTemplate.fs" />
+    <Compile Include="src\ArticleListTemplate.fs" />
     <Compile Include="src\ArticlesHandler.fs" />
     <Compile Include="src\FeedsProcessor.fs" />
     <Compile Include="src\App.fs" />
-    <Compile Include="src\Logging.fs" />
     <Compile Include="src\Program.fs" />
   </ItemGroup>
 

@@ -1,21 +1,20 @@
 module DamoIoServer.App
 
 open System
-open DamoIoServer.ArticlesDataGateway
 open DamoIoServer
 open FSharp.Control
 open Giraffe
 open Microsoft.Extensions.Logging
 
 
-let private updatesSequence =
+let private updatesSequence logger =
     asyncSeq {
         let tenMinutes = 10 * 1000 * 60
 
         while true do
             let! newArticles =
-                Sources.Repository.findAll ()
-                |> FeedsProcessor.processFeeds
+                SourcesRepository.findAll ()
+                |> FeedsProcessor.processFeeds logger
                 |> AsyncSeq.toListAsync
 
             yield newArticles
@@ -23,15 +22,15 @@ let private updatesSequence =
             do! Async.Sleep tenMinutes
     }
 
-let backgroundProcessing =
+let backgroundProcessing logger =
     AsyncSeq.iter
-        Repository.updateAll
-        updatesSequence
+        ArticlesRepository.updateAll
+        (updatesSequence logger)
 
 let handler: HttpHandler =
     choose
         [ GET >=> route "/" >=> redirectTo false "/About,Social,Blog"
-          GET >=> routef "/%s" (ArticlesHandler.list Repository.findAll)
+          GET >=> routef "/%s" (ArticlesHandler.list ArticlesRepository.findAllBySources)
           setStatusCode 404 >=> text "Not Found" ]
 
 let errorHandler (ex: Exception) (logger: ILogger): HttpHandler =

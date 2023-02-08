@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:webfeeds="http://webfeeds.org/rss/1.0" xmlns:media="http://search.yahoo.com/mrss/">
+  <channel>
+    <title>Damien Le Berrigaud [IC]</title>
+    <description>Public posts from @dam5s@mastodon.kleph.eu</description>
+    <link>https://mastodon.kleph.eu/@dam5s</link>
+    <image>
+      <url>https://mastodon.kleph.eu/system/accounts/avatars/000/013/342/original/d31240ad9842b6cb.jpg</url>
+      <title>Damien Le Berrigaud [IC]</title>
+      <link>https://mastodon.kleph.eu/@dam5s</link>
+    </image>
+    <lastBuildDate>Wed, 01 Feb 2023 21:39:44 +0000</lastBuildDate>
+    <webfeeds:icon>https://mastodon.kleph.eu/system/accounts/avatars/000/013/342/original/d31240ad9842b6cb.jpg</webfeeds:icon>
+    <generator>Mastodon v4.0.2</generator>
+    <item>
+      <guid isPermaLink="true">https://mastodon.kleph.eu/@dam5s/109791647108368266</guid>
+      <link>https://mastodon.kleph.eu/@dam5s/109791647108368266</link>
+      <pubDate>Wed, 01 Feb 2023 21:39:44 +0000</pubDate>
+      <description>&lt;p&gt;As a programmer that writes code in many different languages and has grown used to the tooling offered by Jetbrains to help write and maintain code while following good conventions,&lt;/p&gt;&lt;p&gt;I believe a new programming language would not only need a great compiler and some good ecosystem/base frameworks, but it needs great tooling too.&lt;/p&gt;&lt;p&gt;Having good language server support is the bare minimum. Solid debugging capability, a test runner, ideally all should be made available through an IDE.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.kleph.eu/@dam5s/109787282578245387</guid>
+      <link>https://mastodon.kleph.eu/@dam5s/109787282578245387</link>
+      <pubDate>Wed, 01 Feb 2023 03:09:46 +0000</pubDate>
+      <description>&lt;p&gt;John Cena’s comedic talent is wildly underrated.&lt;/p&gt;&lt;p&gt;Re-watching Peacemaker season 1 on HBO. I cannot wait for a season 2!&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.kleph.eu/@dam5s/109763966019010024</guid>
+      <link>https://mastodon.kleph.eu/@dam5s/109763966019010024</link>
+      <pubDate>Sat, 28 Jan 2023 00:20:04 +0000</pubDate>
+      <description>&lt;p&gt;I ordered a new MacBook Pro and a proper Crêpe Maker like we have them in Brittany. &lt;/p&gt;&lt;p&gt;I think I’m more excited about the Crêpe Maker (a.k.a. Billig in Breton language)&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.kleph.eu/@dam5s/109701410025964225</guid>
+      <link>https://mastodon.kleph.eu/@dam5s/109701410025964225</link>
+      <pubDate>Mon, 16 Jan 2023 23:11:15 +0000</pubDate>
+      <description>&lt;p&gt;This is why I usually fly Lufthansa to get to Denver from Frankfurt directly.&lt;/p&gt;&lt;p&gt;The way to Europe is way easier regardless, but the way back is so much easier when landing directly at the final destination, especially since Denver is such an easy airport to navigate.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.kleph.eu/@dam5s/109701409998065986</guid>
+      <link>https://mastodon.kleph.eu/@dam5s/109701409998065986</link>
+      <pubDate>Mon, 16 Jan 2023 23:11:15 +0000</pubDate>
+      <description>&lt;p&gt;Went through Chicago airport on my way back to Denver from Paris.&lt;/p&gt;&lt;p&gt;This was the worst transfer experience I’ve had so far, and I have been through LAX in the past.&lt;/p&gt;&lt;p&gt;From landing, going through border security, finding our checked bag to have to recheck it, then going to another terminal, and through security again to finally get to the gate when most people had already boarded.&lt;/p&gt;&lt;p&gt;That took more than 2 hours and 20 minutes. Without time for any break.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.kleph.eu/@dam5s/109327781110637924</guid>
+      <link>https://mastodon.kleph.eu/@dam5s/109327781110637924</link>
+      <pubDate>Fri, 11 Nov 2022 23:32:30 +0000</pubDate>
+      <description>&lt;p&gt;Kevin Conroy passed away. 😢 He voiced Batman in Batman the Animated Series and some of the more recent games.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.kleph.eu/@dam5s/109311665632914421</guid>
+      <link>https://mastodon.kleph.eu/@dam5s/109311665632914421</link>
+      <pubDate>Wed, 09 Nov 2022 03:14:07 +0000</pubDate>
+      <description>&lt;p&gt;Lines of code is as useful of a quality metric as coverage is to tests, that is not at all.&lt;/p&gt;&lt;p&gt;On my previous project, we ended up rewriting an entire codebase that had test coverage metrics but terrible tests.&lt;/p&gt;&lt;p&gt;We ended up with more features, more reliable and thoroughly tested (test driven) code and yet fewer lines of code 🤷🏻&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.kleph.eu/@dam5s/108320112248478802</guid>
+      <link>https://mastodon.kleph.eu/@dam5s/108320112248478802</link>
+      <pubDate>Wed, 18 May 2022 00:29:04 +0000</pubDate>
+      <description>&lt;p&gt;When practicing TDD, do not add a test that will not fail with your current implementation.&lt;/p&gt;&lt;p&gt;That is assuming you wrote the simplest code to make your tests pass, and you do not have an important documentation need that this test would fulfill.&lt;/p&gt;&lt;p&gt;&lt;a href="https://mastodon.kleph.eu/tags/TDD" class="mention hashtag" rel="tag"&gt;#&lt;span&gt;TDD&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;</description>
+      <category>tdd</category>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.kleph.eu/@dam5s/108301674253112060</guid>
+      <link>https://mastodon.kleph.eu/@dam5s/108301674253112060</link>
+      <pubDate>Sat, 14 May 2022 18:20:02 +0000</pubDate>
+      <description>&lt;p&gt;F# is one of those languages where I can easily get back into a codebase one year later, do a change in 10-15minutes, and be done.&lt;/p&gt;&lt;p&gt;Just improved performance loading disk space usage info in my cross-platform desktop app.&lt;/p&gt;&lt;p&gt;&lt;a href="https://github.com/dam5s/disk-space-usage" target="_blank" rel="nofollow noopener noreferrer"&gt;&lt;span class="invisible"&gt;https://&lt;/span&gt;&lt;span class="ellipsis"&gt;github.com/dam5s/disk-space-us&lt;/span&gt;&lt;span class="invisible"&gt;age&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Constructs for asynchronous programming in F# are really pleasant to work with.&lt;/p&gt;&lt;p&gt;Example of introducing an Async Sequence to parallelize processing:&lt;/p&gt;&lt;p&gt;&lt;a href="https://github.com/dam5s/disk-space-usage/commit/3a8386197de2863edb7d381d9cac25f2f59c6154" target="_blank" rel="nofollow noopener noreferrer"&gt;&lt;span class="invisible"&gt;https://&lt;/span&gt;&lt;span class="ellipsis"&gt;github.com/dam5s/disk-space-us&lt;/span&gt;&lt;span class="invisible"&gt;age/commit/3a8386197de2863edb7d381d9cac25f2f59c6154&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;A directory that took 16 seconds to read before the commit now takes 3 less.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.kleph.eu/@dam5s/108227635446651207</guid>
+      <link>https://mastodon.kleph.eu/@dam5s/108227635446651207</link>
+      <pubDate>Sun, 01 May 2022 16:31:00 +0000</pubDate>
+      <description>&lt;p&gt;Trying out Jetbrains Gateway with WSL.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.kleph.eu/@dam5s/108226978204205269</guid>
+      <link>https://mastodon.kleph.eu/@dam5s/108226978204205269</link>
+      <pubDate>Sun, 01 May 2022 13:43:51 +0000</pubDate>
+      <description>&lt;p&gt;Every morning we have a bird knocking at our window trying to steal our basil plant that&amp;#39;s sitting right by it.&lt;/p&gt;&lt;p&gt;Every. Morning. The window is never opened.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.kleph.eu/@dam5s/108223594177406148</guid>
+      <link>https://mastodon.kleph.eu/@dam5s/108223594177406148</link>
+      <pubDate>Sat, 30 Apr 2022 23:23:15 +0000</pubDate>
+      <description>&lt;p&gt;I think The Batman might be my favorite Batman movie yet.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.kleph.eu/@dam5s/108207098836780467</guid>
+      <link>https://mastodon.kleph.eu/@dam5s/108207098836780467</link>
+      <pubDate>Thu, 28 Apr 2022 01:28:16 +0000</pubDate>
+      <description>&lt;p&gt;A few kilometers later&lt;/p&gt;</description>
+      <media:content url="https://mastodon.kleph.eu/system/media_attachments/files/108/207/096/409/833/836/original/fa23ddbfb88bb841.jpg" type="image/jpeg" fileSize="444646" medium="image">
+        <media:rating scheme="urn:simple">nonadult</media:rating>
+        <media:description type="plain">Bicycle in the foreground, distant mountains and the sun still setting</media:description>
+      </media:content>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.kleph.eu/@dam5s/108207043106063110</guid>
+      <link>https://mastodon.kleph.eu/@dam5s/108207043106063110</link>
+      <pubDate>Thu, 28 Apr 2022 01:14:05 +0000</pubDate>
+      <description>&lt;p&gt;Evening commute.&lt;/p&gt;</description>
+      <media:content url="https://mastodon.kleph.eu/system/media_attachments/files/108/207/041/262/751/249/original/1e8a0ccac5f59165.jpg" type="image/jpeg" fileSize="503918" medium="image">
+        <media:rating scheme="urn:simple">nonadult</media:rating>
+        <media:description type="plain">Mountain landscape at sunset with bicycle on the foreground.</media:description>
+      </media:content>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.kleph.eu/@dam5s/108195631237529212</guid>
+      <link>https://mastodon.kleph.eu/@dam5s/108195631237529212</link>
+      <pubDate>Tue, 26 Apr 2022 00:51:54 +0000</pubDate>
+      <description>&lt;p&gt;So I&amp;#39;ve been doing a lot of Typescript lately for my customers.&lt;/p&gt;&lt;p&gt;On my free time I make sure to capture some of the patterns I want to keep re-using in apps I built.&lt;/p&gt;&lt;p&gt;It&amp;#39;s all on my Github.&lt;/p&gt;&lt;p&gt;&lt;a href="https://github.com/dam5s/typescript-monorepo-starter" target="_blank" rel="nofollow noopener noreferrer"&gt;&lt;span class="invisible"&gt;https://&lt;/span&gt;&lt;span class="ellipsis"&gt;github.com/dam5s/typescript-mo&lt;/span&gt;&lt;span class="invisible"&gt;norepo-starter&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Patterns for anti-corruption layers, validations, networking, testing... This helps me a lot with kick-starting projects, specially since I will avoid bringing in libraries.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.kleph.eu/@dam5s/103999318505214845</guid>
+      <link>https://mastodon.kleph.eu/@dam5s/103999318505214845</link>
+      <pubDate>Tue, 14 Apr 2020 22:34:23 +0000</pubDate>
+      <description>&lt;p&gt;&lt;a href="https://www.youtube.com/watch?v=e0-2XxgHIXk" target="_blank" rel="nofollow noopener noreferrer"&gt;&lt;span class="invisible"&gt;https://www.&lt;/span&gt;&lt;span class="ellipsis"&gt;youtube.com/watch?v=e0-2XxgHIX&lt;/span&gt;&lt;span class="invisible"&gt;k&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.kleph.eu/@dam5s/103808013024927973</guid>
+      <link>https://mastodon.kleph.eu/@dam5s/103808013024927973</link>
+      <pubDate>Thu, 12 Mar 2020 03:42:53 +0000</pubDate>
+      <description>&lt;p&gt;It&amp;#39;s alive!&lt;/p&gt;</description>
+      <media:content url="https://mastodon.kleph.eu/system/media_attachments/files/000/055/873/original/5e0f96ce884f31d7.jpg" type="image/jpeg" fileSize="277545" medium="image">
+        <media:rating scheme="urn:simple">nonadult</media:rating>
+      </media:content>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.kleph.eu/@dam5s/103801264228622338</guid>
+      <link>https://mastodon.kleph.eu/@dam5s/103801264228622338</link>
+      <pubDate>Tue, 10 Mar 2020 23:06:35 +0000</pubDate>
+      <description>&lt;p&gt;My side project -&lt;/p&gt;</description>
+      <media:content url="https://mastodon.kleph.eu/system/media_attachments/files/000/055/839/original/4874168bf454bddb.jpg" type="image/jpeg" fileSize="251429" medium="image">
+        <media:rating scheme="urn:simple">nonadult</media:rating>
+      </media:content>
+    </item>
+    <item>
+      <guid isPermaLink="true">https://mastodon.kleph.eu/@dam5s/103722200688805191</guid>
+      <link>https://mastodon.kleph.eu/@dam5s/103722200688805191</link>
+      <pubDate>Tue, 25 Feb 2020 23:59:41 +0000</pubDate>
+      <description>&lt;p&gt;Beer O&amp;#39;clock&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

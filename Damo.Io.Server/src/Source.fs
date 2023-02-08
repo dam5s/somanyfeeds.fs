@@ -1,4 +1,4 @@
-module DamoIoFrontend.Source
+module DamoIoServer.Source
 
 type Source =
     | About
@@ -8,9 +8,10 @@ type Source =
 
 [<RequireQualifiedAccess>]
 module Source =
-    let all = [ About; Social; Code; Blog ]
+    let all =
+        [ About; Social; Code; Blog ]
 
-    let fromString value =
+    let tryFromString value =
         match value with
         | "About" -> Some About
         | "Social" -> Some Social
@@ -19,4 +20,4 @@ module Source =
         | _ -> None
 
     let toString (source: Source) =
-        sprintf "%A" source
+        $"%A{source}"

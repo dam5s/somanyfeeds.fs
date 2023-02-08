@@ -16,6 +16,16 @@ module Result
         | _, Error e -> Error e
         | Error e, _ -> Error e
 
+    let onOk func result =
+        match result with
+        | Ok x -> func x; Ok x
+        | Error e -> Error e
+
+    let onError func result =
+        match result with
+        | Ok x -> Ok x
+        | Error e -> func e; Error e
+
     module Operators =
         let (<!>) = Result.map
         let (<*>) = apply

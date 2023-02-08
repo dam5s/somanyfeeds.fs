@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# 
+#
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Damo.Io.Server", "Damo.Io.Server\Damo.Io.Server.fsproj", "{A7157346-F377-4B8A-8CF2-1DB962115171}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Build", "Build\Build.fsproj", "{48AB536C-C4D7-4A79-88CD-92DB6CCB3A95}"
@@ -11,11 +11,7 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FeedsProcessing.Tests", "Fe
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Prelude", "Prelude\Prelude.fsproj", "{3ECDD435-CF99-49FA-A0CE-DB5C7A643B2E}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Damo.Io.Frontend", "Damo.Io.Frontend\Damo.Io.Frontend.fsproj", "{D43AB091-A72A-4CDA-B2DE-7FDE18C2EC75}"
-EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Damo.Io.Blog", "Damo.Io.Blog\Damo.Io.Blog.fsproj", "{5B4B3346-32F8-41B2-8851-9927D9C5223E}"
-EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Frontend.Shared", "Frontend.Shared\Frontend.Shared.fsproj", "{CFEA14CA-291E-42FC-BD3E-2CABC7C57BFD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,18 +95,6 @@ Global
 		{3ECDD435-CF99-49FA-A0CE-DB5C7A643B2E}.Release|x64.Build.0 = Release|Any CPU
 		{3ECDD435-CF99-49FA-A0CE-DB5C7A643B2E}.Release|x86.ActiveCfg = Release|Any CPU
 		{3ECDD435-CF99-49FA-A0CE-DB5C7A643B2E}.Release|x86.Build.0 = Release|Any CPU
-		{D43AB091-A72A-4CDA-B2DE-7FDE18C2EC75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D43AB091-A72A-4CDA-B2DE-7FDE18C2EC75}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D43AB091-A72A-4CDA-B2DE-7FDE18C2EC75}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{D43AB091-A72A-4CDA-B2DE-7FDE18C2EC75}.Debug|x64.Build.0 = Debug|Any CPU
-		{D43AB091-A72A-4CDA-B2DE-7FDE18C2EC75}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{D43AB091-A72A-4CDA-B2DE-7FDE18C2EC75}.Debug|x86.Build.0 = Debug|Any CPU
-		{D43AB091-A72A-4CDA-B2DE-7FDE18C2EC75}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D43AB091-A72A-4CDA-B2DE-7FDE18C2EC75}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D43AB091-A72A-4CDA-B2DE-7FDE18C2EC75}.Release|x64.ActiveCfg = Release|Any CPU
-		{D43AB091-A72A-4CDA-B2DE-7FDE18C2EC75}.Release|x64.Build.0 = Release|Any CPU
-		{D43AB091-A72A-4CDA-B2DE-7FDE18C2EC75}.Release|x86.ActiveCfg = Release|Any CPU
-		{D43AB091-A72A-4CDA-B2DE-7FDE18C2EC75}.Release|x86.Build.0 = Release|Any CPU
 		{5B4B3346-32F8-41B2-8851-9927D9C5223E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5B4B3346-32F8-41B2-8851-9927D9C5223E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B4B3346-32F8-41B2-8851-9927D9C5223E}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -123,17 +107,5 @@ Global
 		{5B4B3346-32F8-41B2-8851-9927D9C5223E}.Release|x64.Build.0 = Release|Any CPU
 		{5B4B3346-32F8-41B2-8851-9927D9C5223E}.Release|x86.ActiveCfg = Release|Any CPU
 		{5B4B3346-32F8-41B2-8851-9927D9C5223E}.Release|x86.Build.0 = Release|Any CPU
-		{CFEA14CA-291E-42FC-BD3E-2CABC7C57BFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CFEA14CA-291E-42FC-BD3E-2CABC7C57BFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CFEA14CA-291E-42FC-BD3E-2CABC7C57BFD}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{CFEA14CA-291E-42FC-BD3E-2CABC7C57BFD}.Debug|x64.Build.0 = Debug|Any CPU
-		{CFEA14CA-291E-42FC-BD3E-2CABC7C57BFD}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{CFEA14CA-291E-42FC-BD3E-2CABC7C57BFD}.Debug|x86.Build.0 = Debug|Any CPU
-		{CFEA14CA-291E-42FC-BD3E-2CABC7C57BFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CFEA14CA-291E-42FC-BD3E-2CABC7C57BFD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CFEA14CA-291E-42FC-BD3E-2CABC7C57BFD}.Release|x64.ActiveCfg = Release|Any CPU
-		{CFEA14CA-291E-42FC-BD3E-2CABC7C57BFD}.Release|x64.Build.0 = Release|Any CPU
-		{CFEA14CA-291E-42FC-BD3E-2CABC7C57BFD}.Release|x86.ActiveCfg = Release|Any CPU
-		{CFEA14CA-291E-42FC-BD3E-2CABC7C57BFD}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

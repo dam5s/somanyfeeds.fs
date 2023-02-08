@@ -43,7 +43,7 @@ module private Rss =
 
     let private itemToArticle (item: RssProvider.Item) =
         Article.create
-          (Some item.Title)
+          item.Title
           item.Link
           (item.Encoded |> Option.orElse item.Description)
           (Some item.PubDate)

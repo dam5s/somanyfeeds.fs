@@ -2,16 +2,13 @@ module ``Xml Processor Tests``
 
 open FeedsProcessing
 open FeedsProcessing.Article
-open FeedsProcessing.Download
 open FeedsProcessing.Xml
 open FeedsProcessingTests.DownloadSupport
 open FsUnit
 open FsUnitTyped
 open NUnit.Framework
 open System
-open System.IO
 open Time
-
 
 [<Test>]
 let ``with unsupported XML`` () =
@@ -96,6 +93,19 @@ let ``with RSS XML`` () =
         Article.link secondArticle |> should equal (Some "https://medium.com/@its_damo/second")
         Article.content secondArticle |> should equal "<p>This is the content in description tag</p>"
         Article.date secondArticle |> should equal (Some expectedTimeUtc)
+
+[<Test>]
+let ``with mastodon RSS`` () =
+    let downloadedFeed =
+        "../../../../FeedsProcessing.Tests/resources/test-samples/mastodon.xml"
+        |> Download.fromFilePath
+
+    let result = processFeed downloadedFeed
+
+    match result with
+    | Error _ -> Assert.Fail "Expected success"
+    | Ok records ->
+        List.length records |> should equal 19
 
 
 [<Test>]
