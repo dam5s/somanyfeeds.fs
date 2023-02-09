@@ -2,14 +2,11 @@ module Program
 
 open DamoIoServer
 open Giraffe
-open Giraffe.Serialization.Json
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Logging
-open Microsoft.FSharpLu.Json
-open Newtonsoft.Json
 open System
 open System.IO
 
@@ -32,12 +29,9 @@ let private configureApp (app: IApplicationBuilder) =
         .UseGiraffe(App.handler)
 
 let private configureServices (services: IServiceCollection) =
-    services .AddGiraffe() |> ignore
-
-    let customSettings = JsonSerializerSettings()
-    customSettings.Converters.Add(CompactUnionJsonConverter(true))
-
-    services.AddSingleton<IJsonSerializer>(NewtonsoftJsonSerializer(customSettings)) |> ignore
+    services
+        .AddGiraffe()
+        |> ignore
 
 let private configureLogging (builder: ILoggingBuilder) =
     builder

@@ -1,9 +1,8 @@
 module DamoIoServer.ArticlesHandler
 
-open Giraffe
 open System
 open Time
-open FSharp.Control.Tasks.V2.ContextInsensitive
+open FSharp.Control.Tasks
 open DamoIoServer.Article
 open DamoIoServer.Source
 
@@ -11,6 +10,9 @@ let private sourcesFromPath (path: string) =
     path.Split(",")
     |> Array.toList
     |> List.choose Source.tryFromString
+
+open Giraffe
+open Giraffe.Htmx
 
 let list (findArticlesBySources: Source list -> Article list) path: HttpHandler =
     fun next ctx ->
@@ -23,11 +25,18 @@ let list (findArticlesBySources: Source list -> Article list) path: HttpHandler 
                 |> findArticlesBySources
                 |> List.sortByDescending (fun r -> Option.defaultValue now r.Date)
 
-            let html =
+            let isHxRequest =
+                ctx.Request.Headers.HxRequest
+                |> Option.defaultValue false
+
+            let articlesView =
                 (articles, sources)
                 ||> ArticleListTemplate.render
-                |> LayoutTemplate.render
-                |> GiraffeViewEngine.renderHtmlDocument
 
-            return! htmlString html next ctx
+            let view =
+                if isHxRequest
+                    then articlesView
+                    else LayoutTemplate.render articlesView
+
+            return! htmlView view next ctx
         }

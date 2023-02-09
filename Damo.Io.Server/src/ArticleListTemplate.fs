@@ -16,7 +16,8 @@ let private sourceToggleHref selectedSources source =
     |> String.concat ","
     |> sprintf "/%s"
 
-open Giraffe.GiraffeViewEngine
+open Giraffe.ViewEngine
+open Giraffe.ViewEngine.Htmx
 
 let private sourceLink selectedSources source =
     let path = sourceToggleHref selectedSources source
@@ -26,7 +27,10 @@ let private sourceLink selectedSources source =
             else ""
 
     li [ _class selectedClass ]
-        [ a [ _href path ] [ str (Source.toString source) ] ]
+        [ a
+              [ _href path; _hxGet path; _hxTrigger "click"; _hxTarget "body"; _hxSwap "innerHTML"  ]
+              [ str (Source.toString source) ]
+        ]
 
 let render (articles: Article list) (sources: Source list): XmlNode =
     let sourceLinks =

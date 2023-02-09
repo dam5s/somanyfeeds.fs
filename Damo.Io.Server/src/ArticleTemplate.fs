@@ -29,7 +29,7 @@ let private dateToString posix =
 
     $"%s{month} %s{day} '%s{year} @ %s{time}"
 
-open Giraffe.GiraffeViewEngine
+open Giraffe.ViewEngine
 
 let private articleTitle (article: Article) title =
     match article.Link with

@@ -1,7 +1,7 @@
 [<RequireQualifiedAccess>]
 module DamoIoServer.LayoutTemplate
 
-open Giraffe.GiraffeViewEngine
+open Giraffe.ViewEngine
 
 let render innerTemplate =
     html [ _lang "en" ]
@@ -11,6 +11,7 @@ let render innerTemplate =
                 link [ _rel "stylesheet"; _type "text/css"; _href "/styles/reset.css" ]
                 link [ _rel "stylesheet"; _type "text/css"; _href "/styles/fonts.css" ]
                 link [ _rel "stylesheet"; _type "text/css"; _href "/styles/app.css" ]
+                script [ _src "/javascript/htmx-1.8.5.min.js" ] []
                 title [] [ str "damo.io - Damien Le Berrigaud's feeds." ]
               ]
           body [] [ innerTemplate ]

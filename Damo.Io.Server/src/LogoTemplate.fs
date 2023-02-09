@@ -1,7 +1,7 @@
 [<RequireQualifiedAccess>]
 module DamoIoServer.LogoTemplate
 
-open Giraffe.GiraffeViewEngine
+open Giraffe.ViewEngine
 
 let private svg = tag "svg"
 let private circle = tag "circle"

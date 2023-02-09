@@ -29,7 +29,7 @@ module private Processor =
         (toMetadata: Url -> 'a -> FeedMetadata option) =
 
         let safeParse (download: Download) =
-            Try.value (sprintf "%s parse" name) (fun _ -> unsafeParse download.Content)
+            Try.value $"%s{name} parse" (fun _ -> unsafeParse download.Content)
 
         { Process = fun download -> safeParse download |> Result.bind toArticles
           TryGetMetadata = fun download -> safeParse download
