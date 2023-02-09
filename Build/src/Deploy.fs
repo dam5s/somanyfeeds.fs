@@ -14,7 +14,7 @@ let private herokuBinary =
         else "heroku"
 
 let private deploy project herokuApp _ =
-    let publishDir = $"%s{project}/bin/Release/net6.0/linux-x64/publish"
+    let publishDir = $"%s{project}/bin/Release/net7.0/linux-x64/publish"
 
     DotNet.release project ()
 
@@ -28,6 +28,6 @@ let private deploy project herokuApp _ =
         $"builds:create -a %s{herokuApp}"
 
 let loadTasks _ =
-    Target.create "deploy:damo-io" (deploy "Damo.Io.Server" "damo-io")
+    Target.create "deploy" (deploy "Damo.Io.Server" "damo-io")
 
-    "deploy:damo-io" |> dependsOn [ "release" ]
+    "deploy" |> dependsOn [ "release" ]

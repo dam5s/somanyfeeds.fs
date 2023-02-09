@@ -17,7 +17,6 @@
     <PackageReference Include="Fake.IO.FileSystem" Version="5.21.1" />
 
     <Compile Include="src/Support.fs" />
-    <Compile Include="src/Frontend.fs" />
     <Compile Include="src/DotNet.fs" />
     <Compile Include="src/Deploy.fs" />
     <Compile Include="src/Program.fs" />

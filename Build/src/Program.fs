@@ -9,8 +9,6 @@ let main args =
     use ctxt = fakeExecutionContext (Array.toList args)
     Context.setExecutionContext (Context.RuntimeContext.Fake ctxt)
 
-    Frontend.loadTasks()
-
     Target.create "clean" DotNet.clean
     Target.create "build" (fun _ ->
         DotNet.build ()
@@ -22,11 +20,7 @@ let main args =
         DotNet.release "Damo.Io.Server" ()
     )
 
-    "clean" |> dependsOn [ "frontend:clean" ]
-    "build" |> dependsOn [ "frontend:build" ]
-
     "build" |> mustRunAfter "clean"
-
     "test" |> dependsOn [ "build" ]
     "release" |> dependsOn [ "test"; "build"; "clean" ]
 
