@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="WebRoot/**/*">
+    <Content Include="www/**/*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

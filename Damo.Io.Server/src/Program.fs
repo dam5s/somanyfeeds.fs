@@ -42,7 +42,7 @@ let private configureLogging (builder: ILoggingBuilder) =
 let webHostBuilder () =
     let serverPort = Env.varDefault "PORT" (always "9000")
     let contentRoot = Env.varDefault "CONTENT_ROOT" Directory.GetCurrentDirectory
-    let webRoot = Path.Combine(contentRoot, "WebRoot")
+    let webRoot = Path.Combine(contentRoot, "www")
 
     WebHostBuilder()
         .UseKestrel()
