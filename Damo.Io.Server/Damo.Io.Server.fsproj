@@ -8,14 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
     <PackageReference Include="Giraffe" Version="5.0.0" />
     <PackageReference Include="Giraffe.Htmx" Version="1.8.5" />
     <PackageReference Include="Giraffe.ViewEngine.Htmx" Version="1.8.5" />
     <PackageReference Include="FSharp.Control.AsyncSeq" Version="3.0.2" />
+    <PackageReference Include="LigerShark.WebOptimizer.Core" Version="3.0.372" />
 
     <ProjectReference Include="..\Prelude\Prelude.fsproj" />
     <ProjectReference Include="..\FeedsProcessing\FeedsProcessing.fsproj" />
+    <Compile Include="src\AppConfig.fs" />
     <Compile Include="src\LayoutTemplate.fs" />
     <Compile Include="src\LogoTemplate.fs" />
     <Compile Include="src\Source.fs" />

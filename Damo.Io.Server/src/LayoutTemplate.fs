@@ -1,20 +1,16 @@
 [<RequireQualifiedAccess>]
 module DamoIoServer.LayoutTemplate
 
-open System
 open Giraffe.ViewEngine
 
 let render innerTemplate =
     let cssLink name =
         link [ _rel "stylesheet"; _type "text/css"; _href $"/styles/%s{name}" ]
 
-    let disabledMinifiedAssets =
-        Environment.GetEnvironmentVariable("DISABLE_MINIFIED_ASSETS") = "true"
-
     let stylesheets =
-        if disabledMinifiedAssets
-            then [ cssLink "reset.css"; cssLink "fonts.css"; cssLink "app.css" ]
-            else [ cssLink "app.min.css" ]
+        if AppConfig.assetMinificationEnabled
+            then [ cssLink "app.min.css" ]
+            else [ cssLink "reset.css"; cssLink "fonts.css"; cssLink "app.css" ]
 
     html [ _lang "en" ]
         [ head [] ([

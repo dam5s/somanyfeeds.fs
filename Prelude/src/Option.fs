@@ -15,6 +15,11 @@ module Option
         | Some f, Some a -> Some (f a)
         | _, _ -> None
 
+    let hasValue value opt =
+        match opt with
+        | Some v -> v = value
+        | None -> false
+
     module Operators =
         let (<!>) = Option.map
         let (<*>) = apply
