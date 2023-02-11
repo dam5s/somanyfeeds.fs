@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -16,13 +16,13 @@
 
     <ProjectReference Include="..\Prelude\Prelude.fsproj" />
     <ProjectReference Include="..\FeedsProcessing\FeedsProcessing.fsproj" />
+
     <Compile Include="src\AppConfig.fs" />
+    <Compile Include="src\AssetHashBuilder.fs" />
     <Compile Include="src\LayoutTemplate.fs" />
     <Compile Include="src\LogoTemplate.fs" />
     <Compile Include="src\Source.fs" />
-
     <Compile Include="src\SourcesRepository.fs" />
-
     <Compile Include="src\Article.fs" />
     <Compile Include="src\ArticlesRepository.fs" />
     <Compile Include="src\ArticleTemplate.fs" />

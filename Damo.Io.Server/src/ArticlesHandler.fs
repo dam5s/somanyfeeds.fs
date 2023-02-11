@@ -36,7 +36,7 @@ let list (findArticlesBySources: Source list -> Article list) path: HttpHandler 
             let view =
                 if isHxRequest
                     then articlesView
-                    else LayoutTemplate.render articlesView
+                    else LayoutTemplate.render ctx articlesView
 
             return! htmlView view next ctx
         }

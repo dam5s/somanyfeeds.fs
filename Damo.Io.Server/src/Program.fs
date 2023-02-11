@@ -1,6 +1,7 @@
 module Program
 
 open DamoIoServer
+open DamoIoServer.AssetHashBuilder
 open Giraffe
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
@@ -27,10 +28,10 @@ let private configureAssetPipeline (pipeline: IAssetPipeline) =
     |> ignore
 
 let private configureServices (services: IServiceCollection) =
-
     services
         .AddGiraffe()
         .AddWebOptimizer(configureAssetPipeline)
+        .AddSingleton<AssetHashBuilder>()
         |> ignore
 
 let private configureLogging (builder: ILoggingBuilder) =
