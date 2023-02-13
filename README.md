@@ -4,7 +4,6 @@
 
 ### Dependencies
  1. .NET 7
- 1. Node JS (LTS or latest)
 
 ### Setup your environment variables.
 
