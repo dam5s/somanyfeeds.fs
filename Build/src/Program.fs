@@ -10,15 +10,9 @@ let main args =
     Context.setExecutionContext (Context.RuntimeContext.Fake ctxt)
 
     Target.create "clean" DotNet.clean
-    Target.create "build" (fun _ ->
-        DotNet.build ()
-    )
-    Target.create "test" (fun _ ->
-        DotNet.test ""
-    )
-    Target.create "release" (fun _ ->
-        DotNet.release "Damo.Io.Server" ()
-    )
+    Target.create "build" DotNet.build
+    Target.create "test" (fun _ -> DotNet.test "")
+    Target.create "release" (DotNet.release "Damo.Io.Server")
 
     "build" |> mustRunAfter "clean"
     "test" |> dependsOn [ "build" ]
