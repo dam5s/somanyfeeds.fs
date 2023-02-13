@@ -22,10 +22,15 @@ let private deploy project herokuApp _ =
         $"%s{publishDir}/Procfile"
         $"web: chmod 755 %s{project} && ./%s{project}"
 
+    let buildOptions =
+        if Environment.isMacOS
+            then "--tar /opt/homebrew/bin/gtar"
+            else ""
+
     runCmd
         herokuBinary
         publishDir
-        $"builds:create -a %s{herokuApp}"
+        $"builds:create -a %s{herokuApp} %s{buildOptions}"
 
 let loadTasks _ =
     Target.create "deploy" (deploy "Damo.Io.Server" "damo-io")
