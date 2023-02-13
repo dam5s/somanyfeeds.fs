@@ -47,12 +47,7 @@ let private articleHeader (article: Article) =
         )
 
 let render (a: Article): XmlNode =
-    let className =
-        a.Title
-        |> Option.map (always "with-title")
-        |> Option.defaultValue "no-title"
-
-    article [ _class className ]
+    article [ _class $"%A{a.Source}" ]
         [ articleHeader a
           section [] [ rawText a.Content ]
         ]
