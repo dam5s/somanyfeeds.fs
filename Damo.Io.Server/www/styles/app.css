@@ -4,7 +4,7 @@ html {
 
 body {
     margin: 0;
-    background-color: #f6f6f6;
+    background-color: #464646;
     font-size: 1.7rem;
     font-family: 'Merriweather', 'Georgia', serif;
     font-weight: 300;
@@ -17,26 +17,22 @@ body {
 }
 
 .top-level {
-    padding: 1.6rem;
-    max-width: 1200px;
-    position: relative;
+    background-color: #f6f6f6;
 }
 
 .top-level > main {
-    width: 60%;
-    height: calc(100vh - 3.2rem);
-    overflow-y: auto;
-    margin-left: 40%;
-    padding-right: 1.6rem;
+    max-width: 72rem;
+    margin-left: 40rem;
+    padding: 1.6rem;
 }
 
 .top-level > aside {
-    position: absolute;
+    background-color: #464646;
+    position: fixed;
     left: 0;
     top: 0;
     bottom: 0;
-    width: calc(40% - 1.6rem);
-    background-color: rgba(50, 50, 50, .9);
+    width: 40rem;
     text-align: center;
     box-shadow: 2px 0 2px rgba(0, 0, 0, 0.3);
 }
@@ -51,10 +47,8 @@ body {
 
 @media (max-width: 900px) {
     .top-level > main {
-        width: 100%;
-        height: auto;
         margin: 12.4rem 0 1.6rem;
-        padding: 0;
+        max-width: none;
     }
 
     .top-level > aside {
