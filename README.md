@@ -7,7 +7,8 @@
 
 ### Setup your environment variables.
 
-The file `.env.example` (or `.env.ps1.example` if you use PowerShell) contains the list of necessary variables for the whole build.
+The file `.env.example` (or `.env.ps1.example` if you use PowerShell) contains the list of 
+necessary variables for the whole build.
 
  * `ENABLE_EXCEPTION_PAGE` is used by Giraffe when running `Damo.Io.Server` locally.
 
