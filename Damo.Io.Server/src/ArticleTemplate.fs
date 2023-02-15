@@ -46,8 +46,21 @@ let private articleHeader (article: Article) =
               Option.map articleDate article.Date ]
         )
 
-let render (a: Article): XmlNode =
-    article [ _class $"%A{a.Source}" ]
-        [ articleHeader a
-          section [] [ rawText a.Content ]
+let private trySourceLink (article: Article): XmlNode option =
+    match (article.Title, article.Link) with
+    | None, Some url -> Some (nav [] [ a [ _href url; _target "_blank" ] [ str "Source" ] ])
+    | _, _ -> None
+
+let render (article: Article): XmlNode =
+    let articleHeader = articleHeader article
+    let articleContent = section [] [ rawText article.Content ]
+    let maybeSourceLink = trySourceLink article
+
+    HtmlElements.article [ _class $"%A{article.Source}" ]
+        [ yield articleHeader
+          yield articleContent
+
+          match maybeSourceLink with
+          | Some sourceLink -> yield sourceLink
+          | _ -> ()
         ]

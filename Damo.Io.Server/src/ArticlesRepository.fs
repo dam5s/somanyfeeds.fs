@@ -46,7 +46,7 @@ let private about: Article =
       Content = aboutContent
       Date = None
       Source = About }
-    
+
 let mutable private allRecords: Article list = []
 
 let findAll() =
