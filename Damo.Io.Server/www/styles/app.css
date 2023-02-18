@@ -4,11 +4,11 @@ html {
 
 body {
     margin: 0;
-    background-color: #464646;
+    background-color: #333;
     font-size: 1.7rem;
     font-family: 'Merriweather', 'Georgia', serif;
     font-weight: 300;
-    color: #888;
+    color: #eee;
     word-break: break-word;
 }
 
@@ -17,7 +17,7 @@ body {
 }
 
 .top-level {
-    background-color: #f6f6f6;
+    background-color: #333;
 }
 
 .top-level > main {
@@ -27,7 +27,7 @@ body {
 }
 
 .top-level > aside {
-    background-color: #464646;
+    background-color: rgba(255, 255, 255, 0.1);
     position: fixed;
     left: 0;
     top: 0;
@@ -47,7 +47,9 @@ body {
 
 @media (max-width: 1000px) {
     .top-level > main {
-        margin: 12.4rem 0 1.6rem;
+        padding-top: 14rem;
+        padding-bottom: 1.6rem;
+        margin: 0;
         max-width: none;
     }
 
@@ -70,7 +72,7 @@ body {
 
 h1, h2, h3, h4 {
     line-height: 130%;
-    color: #444;
+    color: rgba(255, 255, 255, 0.5);
     font-family: 'Merriweather Sans', 'Helvetica Neue', sans-serif;
     font-weight: 400;
     margin: 0 0 1.6rem;
@@ -118,7 +120,7 @@ em, strong {
 }
 
 article {
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0.1);
     padding: 1.6rem;
     margin: 0 0 1.6rem 0;
     border-radius: 4px;
@@ -139,14 +141,14 @@ article header h2 {
 }
 
 article h1 a:link, article h1 a:visited {
-    color: #444;
+    color: rgba(255, 255, 255, 0.5);
 }
 
 article header h2 {
     float: right;
     font-size: 1.2rem;
-    letter-spacing: -0.5px;
-    color: #666;
+    letter-spacing: -0.2px;
+    color: rgba(255, 255, 255, 0.25);
 }
 
 article img {
