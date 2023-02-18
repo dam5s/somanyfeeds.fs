@@ -21,7 +21,7 @@ body {
 }
 
 .top-level > main {
-    max-width: 72rem;
+    max-width: 80rem;
     margin-left: 40rem;
     padding: 1.6rem;
 }
@@ -34,18 +34,18 @@ body {
     bottom: 0;
     width: 40rem;
     text-align: center;
-    box-shadow: 2px 0 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 2px 0 2px rgba(0, 0, 0, 0.2);
 }
 
 .top-level > aside svg {
     width: 28rem;
     height: 10rem;
     padding-left: 2.8rem;
-    filter: drop-shadow(3px 3px 5px rgba(0, 0, 0, 0.9));
+    filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.8));
     margin: 1.6rem 0 3.2rem;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1000px) {
     .top-level > main {
         margin: 12.4rem 0 1.6rem;
         max-width: none;
@@ -58,7 +58,7 @@ body {
         right: 0;
         width: 100%;
         height: 12.4rem;
-        box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
     }
 
     .top-level > aside svg {
@@ -121,8 +121,8 @@ article {
     background-color: #fff;
     padding: 1.6rem;
     margin: 0 0 1.6rem 0;
-    border-radius: 8px;
-    box-shadow: inset 1px 1px 0 rgba(0, 0, 0, .1), inset 0 -1px 0 rgba(0, 0, 0, .07);
+    border-radius: 4px;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 article:last-child {
@@ -182,7 +182,7 @@ article nav {
     width: calc(100% - 3.2rem);
     padding: 1.6rem;
     margin: 0 auto 1.6rem;
-    border-radius: 8px;
+    border-radius: 4px;
 }
 
 .main-menu a:hover {
@@ -197,7 +197,7 @@ article nav {
     background-color: rgba(0, 188, 212, .3);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1000px) {
     .main-menu {
         display: flex;
         gap: 0.8rem;

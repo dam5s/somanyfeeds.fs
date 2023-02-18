@@ -7,7 +7,7 @@ open DamoIoServer.Article
 let private aboutContent =
     """
     <p>
-      I'm <strong>Damien Le Berrigaud</strong>, Lead Developer at
+      I'm <strong>Damien Le Berrigaud</strong>, Lead Developer and Co-Founder at
       <a href="https://initialcapacity.io">initialCapacity[]</a>.
 
       I like working with
@@ -32,7 +32,7 @@ let private aboutContent =
       In order to keep up-to-date, I keep rebuilding this website.
     </p>
     <p>
-      This version is written in <em>F#</em> for the frontend and for the backend running on the <em>.NET</em> platform.
+      This version is written in <em>F#</em> running on the <em>.NET</em> platform.
       The source code is entirely available <a href="https://github.com/dam5s/somanyfeeds.fs">on my github</a>.
     </p>
     <p>
