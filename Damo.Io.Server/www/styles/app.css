@@ -1,14 +1,27 @@
+:root {
+    --bg-color: #333;
+    --card-bg-color: rgba(0, 0, 0, 0.2);
+    --text-color: #ddd;
+    --title-text-color: #FFE553;
+    --code-bg-color: rgba(255, 255, 255, 0.05);
+    --link-text-color: #a271ec;
+    --article-date-text-color: rgba(255, 255, 255, 0.25);
+    --selected-menu-item-bg-color: rgba(162, 113, 236, .1);
+    --hover-menu-item-color: rgba(162, 113, 236, .2);
+    --hover-selected-menu-item-color: rgba(162, 113, 236, .2);
+}
+
 html {
     font-size: 62.5%;
 }
 
 body {
     margin: 0;
-    background-color: #333;
+    background-color: var(--bg-color);
     font-size: 1.7rem;
     font-family: 'Merriweather', 'Georgia', serif;
     font-weight: 300;
-    color: #eee;
+    color: var(--text-color);
     word-break: break-word;
 }
 
@@ -17,17 +30,18 @@ body {
 }
 
 .top-level {
-    background-color: #333;
+    background-color: var(--bg-color);
 }
 
 .top-level > main {
     max-width: 80rem;
     margin-left: 40rem;
     padding: 1.6rem;
+    min-height: 100vh;
 }
 
 .top-level > aside {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: var(--card-bg-color);
     position: fixed;
     left: 0;
     top: 0;
@@ -72,7 +86,7 @@ body {
 
 h1, h2, h3, h4 {
     line-height: 130%;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--title-text-color);
     font-family: 'Merriweather Sans', 'Helvetica Neue', sans-serif;
     font-weight: 400;
     margin: 0 0 1.6rem;
@@ -91,11 +105,28 @@ h4 {
     font-size: 2rem;
 }
 
+ul {
+    list-style-type: disc;
+}
+
+ol {
+    list-style-type: lower-alpha;
+}
+
+ul, ol {
+    margin-bottom: 1.6rem;
+}
+
+ul li, ol li {
+    margin-left: 3.2rem;
+    margin-bottom: .4rem;
+}
+
 pre {
-    display: none;
     overflow-x: auto;
-    background-color: #f6f9f9;
+    background-color: var(--code-bg-color);
     padding: 1.6rem;
+    margin-bottom: 1.6rem;
 }
 
 pre + h4 {
@@ -108,7 +139,7 @@ pre + p {
 
 a:link, a:hover, a:visited, a:active {
     text-decoration: none;
-    color: #00bcd4;
+    color: var(--link-text-color);
 }
 
 p {
@@ -120,7 +151,7 @@ em, strong {
 }
 
 article {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: var(--card-bg-color);
     padding: 1.6rem;
     margin: 0 0 1.6rem 0;
     border-radius: 4px;
@@ -141,14 +172,14 @@ article header h2 {
 }
 
 article h1 a:link, article h1 a:visited {
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--title-text-color);
 }
 
 article header h2 {
     float: right;
     font-size: 1.2rem;
     letter-spacing: -0.2px;
-    color: rgba(255, 255, 255, 0.25);
+    color: var(--article-date-text-color);
 }
 
 article img {
@@ -179,6 +210,14 @@ article nav {
     justify-content: end;
 }
 
+.main-menu {
+    list-style-type: none;
+}
+
+.main-menu li {
+    margin: 0;
+}
+
 .main-menu a {
     display: block;
     width: calc(100% - 3.2rem);
@@ -187,16 +226,21 @@ article nav {
     border-radius: 4px;
 }
 
+.main-menu a:active {
+    position: relative;
+    top: 2px;
+}
+
 .main-menu a:hover {
-    background-color: rgba(0, 188, 212, .2);
+    background-color: var(--hover-menu-item-color);
 }
 
 .main-menu .selected a {
-    background-color: rgba(0, 188, 212, .1);
+    background-color: var(--selected-menu-item-bg-color);
 }
 
 .main-menu .selected a:hover {
-    background-color: rgba(0, 188, 212, .3);
+    background-color: var(--hover-selected-menu-item-color);
 }
 
 @media (max-width: 1000px) {

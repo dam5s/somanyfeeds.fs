@@ -12,7 +12,7 @@ let render: XmlNode =
         [ circle [ attr "cx" "668"
                    attr "cy" "92"
                    attr "r" "140"
-                   attr "fill" "#00bcd4"
+                   attr "fill" "#a271ec"
                  ]
                  []
           text [ attr "x" "0"

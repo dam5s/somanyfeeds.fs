@@ -28,7 +28,7 @@ let private sourceLink selectedSources source =
 
     li [ _class selectedClass ]
         [ a
-              [ _href path; _hxGet path; _hxTrigger "click"; _hxTarget "#template"; _hxSwap "innerHTML"  ]
+              [ _href path; _hxGet path; _hxTrigger "click"; _hxTarget "#template"; _hxSwap "innerHTML"; _hxPushUrl "true"  ]
               [ str (Source.toString source) ]
         ]
 
