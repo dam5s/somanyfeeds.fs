@@ -1,11 +1,11 @@
-﻿module BlogGenerator.Tasks
+﻿module BlogGenerator.Build
 
 open BlogGenerator.Html
 open BlogGenerator.Rss
 open BlogGenerator.Config
 
 [<RequireQualifiedAccess>]
-module Tasks =
+module Build =
     open Fake.IO
     open Fake.IO.Globbing.Operators
     open BlogGenerator.Posts
@@ -86,7 +86,7 @@ module Tasks =
         """{"root": "public/"}"""
         |> File.writeString false $"%s{buildPath}/static.json"
 
-    let build _ =
+    let run _ =
         cleanupBuildDir ()
         copyResources ()
 

@@ -8,9 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Fake.IO.FileSystem" Version="5.23.1" />
-    <PackageReference Include="FSharp.Formatting" Version="17.2.2" />
-    <PackageReference Include="FSharp.Data" Version="4.2.10" />
+    <PackageReference Include="Fake.IO.FileSystem" Version="6.0.0" />
+    <PackageReference Include="FSharp.Formatting" Version="17.4.0" />
+    <PackageReference Include="FSharp.Data" Version="6.0.1-beta002" />
     <PackageReference Include="Fable.React" Version="9.2.0" />
 
     <Compile Include="src\BlogGenerator\Prelude.fs" />
@@ -20,7 +20,7 @@
     <Compile Include="src\BlogGenerator\Posts.fs" />
     <Compile Include="src\BlogGenerator\Html.fs" />
     <Compile Include="src\BlogGenerator\Rss.fs" />
-    <Compile Include="src\BlogGenerator\Tasks.fs" />
+    <Compile Include="src\BlogGenerator\Build.fs" />
     <Compile Include="src\Program.fs" />
   </ItemGroup>
 

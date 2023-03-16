@@ -1,6 +1,6 @@
-open BlogGenerator.Tasks
+open BlogGenerator.Build
 
 [<EntryPoint>]
 let main argv =
-    Tasks.build ()
+    Build.run ()
     0
