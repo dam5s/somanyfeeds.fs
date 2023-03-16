@@ -9,14 +9,12 @@
 
   <ItemGroup>
     <PackageReference Include="Fake.IO.FileSystem" Version="5.23.1" />
-    <PackageReference Include="SharpScss" Version="2.0.0" />
     <PackageReference Include="FSharp.Formatting" Version="17.2.2" />
     <PackageReference Include="FSharp.Data" Version="4.2.10" />
     <PackageReference Include="Fable.React" Version="9.2.0" />
 
     <Compile Include="src\BlogGenerator\Prelude.fs" />
     <Compile Include="src\BlogGenerator\Config.fs" />
-    <Compile Include="src\BlogGenerator\Scss.fs" />
     <Compile Include="src\BlogGenerator\Metadata.fs" />
     <Compile Include="src\BlogGenerator\Markdown.fs" />
     <Compile Include="src\BlogGenerator\Posts.fs" />

@@ -1,6 +1,5 @@
 ﻿module BlogGenerator.Tasks
 
-open System.IO
 open BlogGenerator.Html
 open BlogGenerator.Rss
 open BlogGenerator.Config
@@ -10,7 +9,6 @@ module Tasks =
     open Fake.IO
     open Fake.IO.Globbing.Operators
     open BlogGenerator.Posts
-    open BlogGenerator.Scss
 
     let private config: Config =
         { Url = "https://blog.damo.io"
@@ -28,10 +26,10 @@ module Tasks =
         Shell.mkdir buildPath
         Shell.mkdir publicPath
 
-    let private generateScss _ =
-        $"%s{resourcesPath}/app.scss"
-        |> Scss.convert
-        |> fun css -> File.WriteAllText($"%s{publicPath}/app.css", css)
+    let private copyResources _ =
+        let resourceFiles = !! $"%s{resourcesPath}/*"
+
+        Shell.copy publicPath resourceFiles
 
     let private generatePost post =
         let postDirPath = $"%s{publicPath}/posts/%s{post.Slug}"
@@ -90,7 +88,7 @@ module Tasks =
 
     let build _ =
         cleanupBuildDir ()
-        generateScss ()
+        copyResources ()
 
         Posts.loadFrom config postsPath
         |> generatePosts

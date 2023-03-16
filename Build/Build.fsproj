@@ -9,7 +9,6 @@
   <ItemGroup>
     <PackageReference Include="Evolve" Version="2.4.0" />
     <PackageReference Include="Npgsql" Version="5.0.0" />
-    <PackageReference Include="SharpScss" Version="2.0.0" />
 
     <PackageReference Include="dotnet-fake" Version="5.19.0" />
     <PackageReference Include="Fake.Core.Target" Version="5.21.1" />

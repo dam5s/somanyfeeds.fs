@@ -27,9 +27,8 @@ let private sourceLink selectedSources source =
             else ""
 
     li [ _class selectedClass ]
-        [ a
-              [ _href path; _hxGet path; _hxTrigger "click"; _hxTarget "#template"; _hxSwap "innerHTML"; _hxPushUrl "true"  ]
-              [ str (Source.toString source) ]
+        [ a [ _href path; _hxGet path; _hxTrigger "click"; _hxTarget "#template"; _hxSwap "innerHTML"; _hxPushUrl "true"  ]
+            [ str (Source.toString source) ]
         ]
 
 let render (articles: Article list) (sources: Source list): XmlNode =

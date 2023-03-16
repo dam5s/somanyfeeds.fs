@@ -1,0 +1,144 @@
+@import '/normalize.css';
+
+:root {
+    --link: #037F8C;
+    --linkDark: #205459;
+    --linkDark-alpha-20: rgba(32, 84, 89, .2);
+    --linkDark-alpha-10: rgba(32, 84, 89, .1);
+    --background: #F2E7C4;
+    --background-alpha-10: rgba(242, 231, 196, .1);
+    --foreground: #211;
+    --foreground-alpha-40: rgba(34, 17, 17, .4);
+    --primary: #F28F38;
+    --primaryDark: #F25757;
+
+    --spacing: .8rem;
+    --spacing-2: 1.6rem;
+    --border-radius: 2px;
+
+    --serif: 'Cambria', 'Palatino', serif;
+    --sans-serif: -apple-system, 'Calibri', 'Helvetica Neue', sans-serif;
+    --monospace: 'JetBrains Mono', 'SFMono-Regular', 'Consolas', 'Liberation Mono', 'Menlo', monospace;
+}
+
+html {
+    font-size: 62.5%;
+}
+
+body {
+    font-family: var(--serif);
+    font-size: 1.7rem;
+    background: var(--foreground);
+    color: var(--foreground);
+    word-wrap: break-word;
+}
+
+a:link, a:visited {
+    color: var(--link);
+}
+
+a:hover {
+    color: var(--linkDark);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 0;
+    font-family: var(--sans-serif);
+}
+
+h1 {
+    font-size: 3.4rem;
+}
+
+h2 {
+    color: var(--primaryDark);
+    font-size: 2.6rem;
+}
+
+h3, h4, h5, h6 {
+    font-size: 1.7rem;
+}
+
+p {
+    margin: 0 0 1.6rem;
+    line-height: 1.25;
+}
+
+img {
+    max-width: 100%;
+}
+
+pre {
+    overflow-x: auto;
+    overflow-y: hidden;
+    color: var(--background);
+    background: var(--foreground-alpha-40);
+    padding: var(--spacing);
+    border-radius: var(--border-radius);
+    line-height: 1.25;
+}
+
+code {
+    font-size: 1.5rem;
+    font-family: var(--monospace);
+}
+
+header {
+    color: var(--primary);
+    padding: var(--spacing-2);
+}
+
+header h1 {
+    font-family: var(--serif);
+    margin: 0;
+}
+
+header a:link, header a:visited {
+    color: var(--background);
+}
+
+header a:hover {
+    color: var(--background-alpha-10);
+}
+
+aside {
+    text-align: right;
+    margin-bottom: var(--spacing-2);
+    padding-bottom: var(--spacing);
+    border-bottom: 1px solid var(--foreground);
+}
+
+main {
+    background: var(--background);
+    padding: var(--spacing-2);
+    min-height: 80vh;
+    box-sizing: border-box;
+}
+
+main > * {
+    max-width: 70rem;
+}
+
+main nav {
+    margin-bottom: var(--spacing);
+}
+
+main nav a:link, main nav a:hover, main nav a:visited {
+    display: inline-block;
+    padding: var(--spacing) var(--spacing-2);
+    color: var(--background);
+    background: var(--linkDark-alpha-20);
+    border-radius: var(--border-radius);
+    margin-right: 1rem;
+    margin-bottom: var(--spacing);
+}
+
+main nav a:hover {
+    background: var(--linkDark-alpha-10);
+}
+
+footer {
+    padding: var(--spacing-2);
+    color: var(--background);
+    font-size: 1.4rem;
+}
