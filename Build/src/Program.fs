@@ -3,11 +3,10 @@
 open Fake.Core
 open Support
 
-
 [<EntryPoint>]
 let main args =
-    use ctxt = fakeExecutionContext (Array.toList args)
-    Context.setExecutionContext (Context.RuntimeContext.Fake ctxt)
+    use context = fakeExecutionContext (Array.toList args)
+    Context.setExecutionContext (Context.RuntimeContext.Fake context)
 
     Target.create "clean" DotNet.clean
     Target.create "build" DotNet.build

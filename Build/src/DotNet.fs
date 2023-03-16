@@ -1,14 +1,11 @@
 module DotNet
 
-
 open System.IO
 open Fake.DotNet
-
 
 let private dotnet command args =
     let result = DotNet.exec id command args
     Support.ensureSuccessExitCode result.ExitCode
-
 
 let restore _ =
     dotnet "restore" ""
@@ -24,7 +21,6 @@ let run project _ =
 
 let release project _ =
     dotnet "publish" $"%s{project} -c Release -r linux-x64 --self-contained"
-
 
 let solutionProjects =
     File.ReadAllLines("SoManyFeeds.sln")
