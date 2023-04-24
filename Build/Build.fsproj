@@ -7,9 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Evolve" Version="2.4.0" />
-    <PackageReference Include="Npgsql" Version="5.0.0" />
-
     <PackageReference Include="Fake.Core.Target" Version="6.0.0" />
     <PackageReference Include="Fake.DotNet.Cli" Version="6.0.0" />
     <PackageReference Include="Fake.IO.FileSystem" Version="6.0.0" />
