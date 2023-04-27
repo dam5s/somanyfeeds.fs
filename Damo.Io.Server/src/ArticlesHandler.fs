@@ -13,7 +13,7 @@ let private sourcesFromPath (path: string) =
 open Giraffe
 open Giraffe.Htmx
 
-let list (findArticlesBySources: Source list -> Article list) path: HttpHandler =
+let list (findArticlesBySources: ArticlesRepository.FindAllBySources) path: HttpHandler =
     fun next ctx ->
         task {
             let now = Posix.fromDateTimeOffset DateTimeOffset.UtcNow

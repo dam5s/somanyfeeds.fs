@@ -52,9 +52,13 @@ let mutable private allRecords: Article list = []
 let findAll() =
     about :: allRecords
 
-let findAllBySources (sources: Source list) =
-    findAll()
-    |> List.filter (fun r -> List.contains r.Source sources)
+type FindAllBySources =
+    Source list -> Article list
+
+let findAllBySources: FindAllBySources =
+    fun sources ->
+        findAll()
+        |> List.filter (fun r -> List.contains r.Source sources)
 
 let updateAll newRecords =
     allRecords <- newRecords
