@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <RootNamespace>Feeds.Processing</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FSharp.Data" Version="6.1.1-beta" />
-    <PackageReference Include="HtmlSanitizer" Version="5.0.404" />
+    <PackageReference Include="FSharp.Data" Version="6.3.0" />
+    <PackageReference Include="HtmlSanitizer" Version="8.0.838" />
 
     <ProjectReference Include="..\Prelude\Prelude.fsproj" />
 

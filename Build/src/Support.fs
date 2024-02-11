@@ -1,31 +1,42 @@
+[<AutoOpen>]
 module Support
 
-open Fake.Core.Context
+open Fake.Core
 open Fake.Core.TargetOperators
 open Fake.IO
 open System.IO
 
 exception ProcessException
 
-let ensureSuccessExitCode exitCode =
-    match exitCode with
-    | 0 -> ()
-    | _ -> raise ProcessException
+module Proc =
+    let ensureSuccessExitCode exitCode =
+        match exitCode with
+        | 0 -> ()
+        | _ -> raise ProcessException
 
-let writeToFile filePath content =
-    Directory.GetParent(filePath).Create()
-    File.writeString false filePath content
+module File =
+    let write filePath content =
+        Directory.GetParent(filePath).Create()
+        File.writeString false filePath content
 
-let fakeExecutionContext args =
-    let fakeArgs =
-        match args with
-        | [] -> []
-        | x :: _ -> [ "--target"; x ]
+module Fake =
+    let initialize () =
+        let ctx = Context.FakeExecutionContext.Create false "Program.fs" []
+        Context.setExecutionContext (Context.RuntimeContext.Fake ctx)
 
-    FakeExecutionContext.Create false "Program.fs" fakeArgs
+    let runWithDefault defaultTarget args =
+        try
+            match args with
+            | [| target |] -> Target.runOrDefault target
+            | _ -> Target.runOrDefault defaultTarget
+            0
+        with e ->
+            printfn $"%A{e}"
+            1
 
-let dependsOn dependencies task =
-    task <== dependencies
+module Target =
+    let dependsOn dependencies task =
+        task <== dependencies
 
-let mustRunAfter afterTask beforeTask =
-    beforeTask <=? afterTask |> ignore
+    let mustRunAfter afterTask beforeTask =
+        beforeTask <=? afterTask |> ignore

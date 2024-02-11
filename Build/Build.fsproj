@@ -1,14 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <OutputType>Exe</OutputType>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Fake.Core.Target" Version="6.0.0" />
-    <PackageReference Include="Fake.DotNet.Cli" Version="6.0.0" />
     <PackageReference Include="Fake.IO.FileSystem" Version="6.0.0" />
 
     <Compile Include="src/Support.fs" />

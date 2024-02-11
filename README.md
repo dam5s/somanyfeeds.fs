@@ -3,7 +3,7 @@
 ## Local Setup
 
 ### Dependencies
- 1. .NET 7
+ 1. .NET 8
 
 ### Setup your environment variables.
 
@@ -14,12 +14,6 @@ necessary variables for the whole build.
 
 ### Running the build
 
-With Bash -
 ```
-./build.sh
-```
-
-With PowerShell -
-```
-./build.ps1
+dotnet run -p Build
 ```

@@ -1,11 +1,16 @@
 module DotNet
 
 open System.IO
-open Fake.DotNet
+open Fake.Core
+
+
+let private runCmd cmd args =
+    { Program = cmd; WorkingDir = "."; CommandLine = args; Args = [] }
+    |> Process.shellExec
+    |> Proc.ensureSuccessExitCode
 
 let private dotnet command args =
-    let result = DotNet.exec id command args
-    Support.ensureSuccessExitCode result.ExitCode
+    runCmd "dotnet" $"%s{command} %s{args}"
 
 let restore _ =
     dotnet "restore" ""
@@ -39,5 +44,6 @@ let clean _ =
 
     binFolders @ objFolders
     |> List.filter (fun dir -> dir.Exists)
+    |> List.filter (fun dir -> dir.Parent.Name <> "Build")
     |> List.map (fun dir -> dir.Delete true)
     |> ignore

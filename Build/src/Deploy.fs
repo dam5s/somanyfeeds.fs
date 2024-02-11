@@ -6,7 +6,7 @@ open Support
 let private runCmd cmd workingDir args =
     { Program = cmd; WorkingDir = workingDir; CommandLine = args; Args = [] }
     |> Process.shellExec
-    |> ensureSuccessExitCode
+    |> Proc.ensureSuccessExitCode
 
 let private herokuBinary =
     if Environment.isWindows
@@ -14,11 +14,11 @@ let private herokuBinary =
         else "heroku"
 
 let private deploy project herokuApp _ =
-    let publishDir = $"%s{project}/bin/Release/net7.0/linux-x64/publish"
+    let publishDir = $"%s{project}/bin/Release/net8.0/linux-x64/publish"
 
     DotNet.release project ()
 
-    writeToFile
+    File.write
         $"%s{publishDir}/Procfile"
         $"web: chmod 755 %s{project} && ./%s{project}"
 
@@ -35,4 +35,4 @@ let private deploy project herokuApp _ =
 let loadTasks _ =
     Target.create "deploy" (deploy "Damo.Io.Server" "damo-io")
 
-    "deploy" |> dependsOn [ "release" ]
+    "deploy" |> Target.dependsOn [ "release" ]

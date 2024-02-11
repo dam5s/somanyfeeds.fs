@@ -1,6 +1,6 @@
 module FeedsProcessing.Html
 
-open Ganss.XSS
+open Ganss.Xss
 
 let private disallow attr (s: HtmlSanitizer) =
     s.AllowedAttributes.Remove(attr) |> ignore
