@@ -16,5 +16,6 @@
     <Compile Include="src/Deploy.fs" />
     <Compile Include="src/Program.fs" />
     <None Include="../Makefile" />
+    <None Include="../README.md" />
   </ItemGroup>
 </Project>
