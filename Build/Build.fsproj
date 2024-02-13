@@ -12,7 +12,9 @@
 
     <Compile Include="src/Support.fs" />
     <Compile Include="src/DotNet.fs" />
+    <Compile Include="src/Fantomas.fs" />
     <Compile Include="src/Deploy.fs" />
     <Compile Include="src/Program.fs" />
+    <None Include="../Makefile" />
   </ItemGroup>
 </Project>

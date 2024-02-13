@@ -10,13 +10,13 @@ exception ProcessException
 
 [<RequireQualifiedAccess>]
 type Proc private () =
-    static member exec (cmd: string, ?pwd: string) =
+    static member exec(cmd: string, ?pwd: string) =
         let (program: string, commandLine: string) =
-            match Array.toList(cmd.Split " ") with
-            | [program] -> program, ""
+            match Array.toList (cmd.Split " ") with
+            | [ program ] -> program, ""
             | program :: args -> program, String.concat " " args
             | _ -> "", ""
-    
+
         let exitCode: int =
             Process.shellExec
                 { Program = program
@@ -24,9 +24,7 @@ type Proc private () =
                   CommandLine = commandLine
                   Args = [] }
 
-        if exitCode <> 0
-        then raise ProcessException
-        else ()
+        if exitCode <> 0 then raise ProcessException else ()
 
 [<RequireQualifiedAccess>]
 module File =
@@ -45,6 +43,7 @@ module Fake =
             match args with
             | [| target |] -> Target.runOrDefault target
             | _ -> Target.runOrDefault defaultTarget
+
             0
         with e ->
             printfn $"%A{e}"
@@ -52,8 +51,6 @@ module Fake =
 
 [<RequireQualifiedAccess>]
 module Target =
-    let dependsOn dependencies task =
-        task <== dependencies
+    let dependsOn dependencies task = task <== dependencies
 
-    let mustRunAfter afterTask beforeTask =
-        beforeTask <=? afterTask |> ignore
+    let mustRunAfter afterTask beforeTask = beforeTask <=? afterTask |> ignore
