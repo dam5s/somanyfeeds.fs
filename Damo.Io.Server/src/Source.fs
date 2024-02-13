@@ -8,8 +8,7 @@ type Source =
 
 [<RequireQualifiedAccess>]
 module Source =
-    let all =
-        [ About; Social; Code; Blog ]
+    let all = [ About; Social; Code; Blog ]
 
     let tryFromString value =
         match value with
@@ -19,5 +18,4 @@ module Source =
         | "Blog" -> Some Blog
         | _ -> None
 
-    let toString (source: Source) =
-        $"%A{source}"
+    let toString (source: Source) = $"%A{source}"

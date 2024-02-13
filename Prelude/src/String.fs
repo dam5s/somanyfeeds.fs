@@ -1,18 +1,15 @@
 [<RequireQualifiedAccess>]
 module String
-    let isEmpty value =
-        match value with
-        | "" -> true
-        | _ -> false
 
-    let contains (subString: string) (it: string) =
-        it.Contains(subString)
+let isEmpty value =
+    match value with
+    | "" -> true
+    | _ -> false
 
-    let equals other (it: string) =
-        it.Equals(other)
+let contains (subString: string) (it: string) = it.Contains(subString)
 
-    let trim (it: string) =
-        it.Trim()
+let equals other (it: string) = it.Equals(other)
 
-    let toLowerInvariant (it: string) =
-        it.ToLowerInvariant()
+let trim (it: string) = it.Trim()
+
+let toLowerInvariant (it: string) = it.ToLowerInvariant()

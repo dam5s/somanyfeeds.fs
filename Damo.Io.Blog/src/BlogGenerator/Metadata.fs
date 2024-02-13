@@ -13,16 +13,16 @@ module Metadata =
     open OptionBuilder
 
     [<Literal>]
-    let private example = """
+    let private example =
+        """
         { "posted": "2021-05-04T23:59:59Z", "tags": [ "fsharp", "elm" ] }
     """
 
     type private MetadataProvider = JsonProvider<example>
 
-    let private load (file: FileInfo) =
-        MetadataProvider.Load (file.OpenText ())
+    let private load (file: FileInfo) = MetadataProvider.Load(file.OpenText())
 
-    let tryGet (dir: DirectoryInfo): Metadata option =
+    let tryGet (dir: DirectoryInfo) : Metadata option =
         option {
             let path = $"%s{dir.FullName}/metadata.json"
             let! file = FileInfo.tryGet path

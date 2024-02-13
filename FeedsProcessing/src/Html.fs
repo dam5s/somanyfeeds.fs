@@ -12,10 +12,11 @@ let private allow attr (s: HtmlSanitizer) =
 
 let private removeUrlsContaining (substring: string) (s: HtmlSanitizer) =
     s.FilterUrl.Add(fun (e: FilterUrlEventArgs) ->
-        if e.OriginalUrl.Contains(substring)
-        then e.SanitizedUrl <- null
-        else ()
-    )
+        if e.OriginalUrl.Contains(substring) then
+            e.SanitizedUrl <- null
+        else
+            ())
+
     s
 
 let private sanitizer =
@@ -26,5 +27,4 @@ let private sanitizer =
     |> disallow "style"
     |> removeUrlsContaining "/tracking"
 
-let sanitize =
-    sanitizer.Sanitize
+let sanitize = sanitizer.Sanitize

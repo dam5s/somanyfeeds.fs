@@ -14,19 +14,17 @@ module OptionBuilder =
 [<RequireQualifiedAccess>]
 module Try =
     let toOption f a =
-        try Some (f a)
-        with _ -> None
+        try
+            Some(f a)
+        with _ ->
+            None
 
 [<RequireQualifiedAccess>]
 module FileInfo =
     open System.IO
 
     let tryGet path =
-        if File.Exists(path)
-        then Some (FileInfo path)
-        else None
+        if File.Exists(path) then Some(FileInfo path) else None
 
     let readAll (file: FileInfo) =
-        file.FullName
-        |> File.ReadLines
-        |> String.concat "\n"
+        file.FullName |> File.ReadLines |> String.concat "\n"

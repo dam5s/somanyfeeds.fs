@@ -7,12 +7,13 @@ open DamoIoServer.Article
 let private sourceToggleHref selectedSources source =
     Source.all
     |> List.choose (fun s ->
-               let selected = List.contains s selectedSources
-               let sourceStr = Source.toString s
-               if s = source
-                   then (if selected then None else Some sourceStr)
-                   else (if selected then Some sourceStr else None)
-           )
+        let selected = List.contains s selectedSources
+        let sourceStr = Source.toString s
+
+        if s = source then
+            (if selected then None else Some sourceStr)
+        else
+            (if selected then Some sourceStr else None))
     |> String.concat ","
     |> sprintf "/%s"
 
@@ -21,26 +22,30 @@ open Giraffe.ViewEngine.Htmx
 
 let private sourceLink selectedSources source =
     let path = sourceToggleHref selectedSources source
+
     let selectedClass =
-        if List.contains source selectedSources
-            then "selected"
-            else ""
+        if List.contains source selectedSources then
+            "selected"
+        else
+            ""
 
-    li [ _class selectedClass ]
-        [ a [ _href path; _hxGet path; _hxTrigger "click"; _hxTarget "#template"; _hxSwap "innerHTML"; _hxPushUrl "true"  ]
-            [ str (Source.toString source) ]
-        ]
+    li
+        [ _class selectedClass ]
+        [ a
+              [ _href path
+                _hxGet path
+                _hxTrigger "click"
+                _hxTarget "#template"
+                _hxSwap "innerHTML"
+                _hxPushUrl "true" ]
+              [ str (Source.toString source) ] ]
 
-let render (articles: Article list) (sources: Source list): XmlNode =
-    let sourceLinks =
-        Source.all
-        |> List.map (sourceLink sources)
+let render (articles: Article list) (sources: Source list) : XmlNode =
+    let sourceLinks = Source.all |> List.map (sourceLink sources)
 
-    let articleList =
-        articles
-        |> List.map ArticleTemplate.render
+    let articleList = articles |> List.map ArticleTemplate.render
 
-    div [ _class "top-level" ]
+    div
+        [ _class "top-level" ]
         [ main [] articleList
-          aside [] [ LogoTemplate.render; ul [ _class "main-menu" ] sourceLinks ]
-        ]
+          aside [] [ LogoTemplate.render; ul [ _class "main-menu" ] sourceLinks ] ]

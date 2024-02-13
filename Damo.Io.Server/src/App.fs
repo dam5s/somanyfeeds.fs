@@ -23,9 +23,7 @@ let private updatesSequence logger =
     }
 
 let backgroundProcessing logger =
-    AsyncSeq.iter
-        ArticlesRepository.updateAll
-        (updatesSequence logger)
+    AsyncSeq.iter ArticlesRepository.updateAll (updatesSequence logger)
 
 let handler: HttpHandler =
     choose
@@ -33,6 +31,6 @@ let handler: HttpHandler =
           GET >=> routef "/%s" (ArticlesHandler.list ArticlesRepository.findAllBySources)
           setStatusCode 404 >=> text "Not Found" ]
 
-let errorHandler (ex: Exception) (logger: ILogger): HttpHandler =
+let errorHandler (ex: Exception) (logger: ILogger) : HttpHandler =
     logger.LogError(ex, "An unhandled exception has occurred while executing the request.")
     clearResponse >=> setStatusCode 500 >=> text ex.Message

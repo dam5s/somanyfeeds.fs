@@ -5,5 +5,4 @@ open FeedsProcessing.Download
 
 type FeedName = FeedName of string
 
-type Feed =
-    | Xml of FeedName * Url
+type Feed = Xml of FeedName * Url

@@ -7,7 +7,7 @@ let var name =
     Environment.GetEnvironmentVariable(name) |> Option.ofObj
 
 let varDefault name producer =
-    var name |> Option.defaultValue (producer())
+    var name |> Option.defaultValue (producer ())
 
 let requireVar name =
     match var name with

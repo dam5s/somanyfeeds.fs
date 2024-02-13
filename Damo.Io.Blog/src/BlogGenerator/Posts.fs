@@ -17,8 +17,7 @@ type Post =
 
 [<RequireQualifiedAccess>]
 module Post =
-    let path post =
-        $"/posts/%s{post.Slug}"
+    let path post = $"/posts/%s{post.Slug}"
 
     let displayDate post =
         let date = post.Posted.DateTime
@@ -54,12 +53,7 @@ module Posts =
         let dir = DirectoryInfo(dirPath)
         let dirs = dir.GetDirectories()
 
-        dirs
-        |> Array.choose (tryReadFromDir config)
-        |> Array.toList
+        dirs |> Array.choose (tryReadFromDir config) |> Array.toList
 
     let tags posts =
-        posts
-        |> List.map (fun p -> p.Tags)
-        |> List.concat
-        |> Set.ofList
+        posts |> List.map (fun p -> p.Tags) |> List.concat |> Set.ofList

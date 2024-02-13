@@ -8,5 +8,4 @@ type Article =
       Link: string option
       Content: string
       Date: Posix option
-      Source: Source
-    }
+      Source: Source }

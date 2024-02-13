@@ -43,8 +43,12 @@ let ``with github Atom XML`` () =
             |> DateTimeOffset
             |> Posix.fromDateTimeOffset
 
-        Article.title article |> should equal (Some "dam5s pushed to master in dam5s/somanyfeeds.fs")
-        Article.link article |> should equal (Some "https://github.com/dam5s/somanyfeeds.fs")
+        Article.title article
+        |> should equal (Some "dam5s pushed to master in dam5s/somanyfeeds.fs")
+
+        Article.link article
+        |> should equal (Some "https://github.com/dam5s/somanyfeeds.fs")
+
         Article.content article |> should equal "<p>Hello from the content</p>"
         Article.date article |> should equal (Some expectedTimeUtc)
 
@@ -59,8 +63,7 @@ let ``with Dualshock Atom XML`` () =
 
     match result with
     | Error _ -> Assert.Fail "Expected success"
-    | Ok records ->
-        List.length records |> should equal 10
+    | Ok records -> List.length records |> should equal 10
 
 
 [<Test>]
@@ -84,14 +87,24 @@ let ``with RSS XML`` () =
             |> Posix.fromDateTimeOffset
 
         Article.title firstArticle |> should equal (Some "First title!")
-        Article.link firstArticle |> should equal (Some "https://medium.com/@its_damo/first")
-        Article.content firstArticle |> should equal "<p>This is the content in encoded tag</p>"
+
+        Article.link firstArticle
+        |> should equal (Some "https://medium.com/@its_damo/first")
+
+        Article.content firstArticle
+        |> should equal "<p>This is the content in encoded tag</p>"
+
         Article.date firstArticle |> should equal (Some expectedTimeUtc)
 
         let secondArticle = List.item 1 records
         Article.title secondArticle |> should equal (Some "Second title!")
-        Article.link secondArticle |> should equal (Some "https://medium.com/@its_damo/second")
-        Article.content secondArticle |> should equal "<p>This is the content in description tag</p>"
+
+        Article.link secondArticle
+        |> should equal (Some "https://medium.com/@its_damo/second")
+
+        Article.content secondArticle
+        |> should equal "<p>This is the content in description tag</p>"
+
         Article.date secondArticle |> should equal (Some expectedTimeUtc)
 
 [<Test>]
@@ -104,8 +117,7 @@ let ``with mastodon RSS`` () =
 
     match result with
     | Error _ -> Assert.Fail "Expected success"
-    | Ok records ->
-        List.length records |> should equal 19
+    | Ok records -> List.length records |> should equal 19
 
 
 [<Test>]
@@ -128,7 +140,16 @@ let ``processFeed with slashdot RDF XML`` () =
             |> DateTimeOffset
             |> Posix.fromDateTimeOffset
 
-        Article.title article |> should equal (Some "Netflix Permanently Pulls iTunes Billing For New and Returning Users")
-        Article.link article |> should equal (Some "https://news.slashdot.org/story/18/12/28/2054254/netflix-permanently-pulls-itunes-billing-for-new-and-returning-users?utm_source=rss1.0mainlinkanon&utm_medium=feed")
-        Article.content article |> should equal "An anonymous reader shares a report: Netflix is further distancing itself..."
+        Article.title article
+        |> should equal (Some "Netflix Permanently Pulls iTunes Billing For New and Returning Users")
+
+        Article.link article
+        |> should
+            equal
+            (Some
+                "https://news.slashdot.org/story/18/12/28/2054254/netflix-permanently-pulls-itunes-billing-for-new-and-returning-users?utm_source=rss1.0mainlinkanon&utm_medium=feed")
+
+        Article.content article
+        |> should equal "An anonymous reader shares a report: Netflix is further distancing itself..."
+
         Article.date article |> should equal (Some expectedTimeUtc)

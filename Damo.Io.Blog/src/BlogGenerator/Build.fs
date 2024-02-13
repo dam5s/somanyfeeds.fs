@@ -43,12 +43,11 @@ module Build =
         |> File.writeString false $"%s{publicPath}/posts/%s{post.Slug}/index.html"
 
     let private generatePosts posts =
-        posts
-        |> List.iter generatePost
-        |> always posts
+        posts |> List.iter generatePost |> always posts
 
     let private generateTagPage posts tag =
         let tagPath = $"%s{publicPath}/tags/%s{tag}"
+
         let tagPosts =
             posts
             |> List.filter (fun p -> p.Tags |> List.contains tag)
@@ -66,9 +65,7 @@ module Build =
 
         Shell.mkdir tagsPath
 
-        tags
-        |> Set.iter (generateTagPage posts)
-        |> always posts
+        tags |> Set.iter (generateTagPage posts) |> always posts
 
     let private generateIndex posts =
         posts
@@ -83,8 +80,7 @@ module Build =
         |> always posts
 
     let private generateHerokuConfig _ =
-        """{"root": "public/"}"""
-        |> File.writeString false $"%s{buildPath}/static.json"
+        """{"root": "public/"}""" |> File.writeString false $"%s{buildPath}/static.json"
 
     let run _ =
         cleanupBuildDir ()

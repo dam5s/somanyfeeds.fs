@@ -12,9 +12,10 @@ open System.IO
 open WebOptimizer
 
 let private configureErrorHandling (app: IApplicationBuilder) =
-    if AppConfig.enableExceptionPage
-        then app.UseDeveloperExceptionPage()
-        else app.UseGiraffeErrorHandler App.errorHandler
+    if AppConfig.enableExceptionPage then
+        app.UseDeveloperExceptionPage()
+    else
+        app.UseGiraffeErrorHandler App.errorHandler
 
 let private configureApp (app: IApplicationBuilder) =
     (configureErrorHandling app)
@@ -24,7 +25,7 @@ let private configureApp (app: IApplicationBuilder) =
         .UseGiraffe(App.handler)
 
 let private configureAssetPipeline (pipeline: IAssetPipeline) =
-    pipeline.AddCssBundle("/styles/app.min.css", [|"/styles/reset.css"; "/styles/fonts.css"; "/styles/app.css"|])
+    pipeline.AddCssBundle("/styles/app.min.css", [| "/styles/reset.css"; "/styles/fonts.css"; "/styles/app.css" |])
     |> ignore
 
 let private configureServices (services: IServiceCollection) =
@@ -32,13 +33,10 @@ let private configureServices (services: IServiceCollection) =
         .AddGiraffe()
         .AddWebOptimizer(configureAssetPipeline)
         .AddSingleton<AssetHashBuilder>()
-        |> ignore
+    |> ignore
 
 let private configureLogging (builder: ILoggingBuilder) =
-    builder
-        .ClearProviders()
-        .AddConsole()
-        |> ignore
+    builder.ClearProviders().AddConsole() |> ignore
 
 let webHostBuilder () =
     let webRoot = Path.Combine(AppConfig.contentRoot, "www")
@@ -59,7 +57,7 @@ let main _ =
 
     let loggerProvider = webHost.Services.GetRequiredService<ILoggerProvider>()
     let processorLogger = loggerProvider.CreateLogger("Damo.Io.Server.FeedsProcessor")
-    Async.Start (App.backgroundProcessing processorLogger)
+    Async.Start(App.backgroundProcessing processorLogger)
 
     webHost.Run()
     0

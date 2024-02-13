@@ -9,9 +9,13 @@ module Try =
         Error.create msg ex
 
     let value description func =
-        try func() |> Ok
-        with ex -> error description ex
+        try
+            func () |> Ok
+        with ex ->
+            error description ex
 
     let result description func =
-        try func()
-        with ex -> error description ex
+        try
+            func ()
+        with ex ->
+            error description ex

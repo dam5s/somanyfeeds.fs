@@ -16,8 +16,7 @@ let ``with an xml feed`` () =
     let result = search download
 
     match result with
-    | WebPageMatch _ ->
-        Assert.Fail "should be a feed match"
+    | WebPageMatch _ -> Assert.Fail "should be a feed match"
     | FeedMatch metadata ->
         metadata.Title |> should equal "dam5s’s Activity"
         metadata.Description |> should equal ""
@@ -25,7 +24,9 @@ let ``with an xml feed`` () =
 
 [<Test>]
 let ``with unsupported HTML`` () =
-    let download = { Url = Url "file://some/where"; Content = "not quite html" }
+    let download =
+        { Url = Url "file://some/where"
+          Content = "not quite html" }
 
     let result = search download
 
@@ -42,7 +43,4 @@ let ``with HTML from Le Monde`` () =
 
     match result with
     | FeedMatch _ -> failwith "Expected a web page match"
-    | WebPageMatch urls ->
-        urls
-        |> Seq.toList
-        |> should equal [ Url "https://www.lemonde.fr/rss/une.xml" ]
+    | WebPageMatch urls -> urls |> Seq.toList |> should equal [ Url "https://www.lemonde.fr/rss/une.xml" ]

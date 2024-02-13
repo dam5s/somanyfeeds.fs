@@ -9,8 +9,7 @@ open WebOptimizer
 
 type AssetHashBuilder(assetPipeline: IAssetPipeline) =
 
-    let hashesByRoute =
-        ConcurrentDictionary<string, string>()
+    let hashesByRoute = ConcurrentDictionary<string, string>()
 
     let tryGetCachedHash (route: string) =
         match hashesByRoute.TryGetValue route with
@@ -30,13 +29,13 @@ type AssetHashBuilder(assetPipeline: IAssetPipeline) =
         Convert.ToBase64String(MD5.HashData(bytes)).Replace("=", "")
 
     let computeAndCacheRouteHash (ctx: HttpContext) (assetRoute: string) =
-        let found, asset =
-            assetPipeline.TryGetAssetFromRoute(assetRoute)
+        let found, asset = assetPipeline.TryGetAssetFromRoute(assetRoute)
 
         let newHash =
-            if found
-                then computeAssetVersionHash ctx asset
-                else "no-version"
+            if found then
+                computeAssetVersionHash ctx asset
+            else
+                "no-version"
 
         addHashToCache (assetRoute, newHash)
 

@@ -15,7 +15,7 @@ let private monthDisplayName month =
     | 7 -> "July"
     | 8 -> "August"
     | 9 -> "September"
-    | 10  -> "October"
+    | 10 -> "October"
     | 11 -> "November"
     | 12 -> "December"
     | x -> failwithf $"Not a valid month rank: %i{x}"
@@ -40,27 +40,28 @@ let private articleDate (date: Posix) =
     h2 [ _class "date" ] [ str (dateToString date) ]
 
 let private articleHeader (article: Article) =
-    header []
-        (List.choose id
+    header
+        []
+        (List.choose
+            id
             [ Option.map (articleTitle article) article.Title
-              Option.map articleDate article.Date ]
-        )
+              Option.map articleDate article.Date ])
 
-let private trySourceLink (article: Article): XmlNode option =
+let private trySourceLink (article: Article) : XmlNode option =
     match (article.Title, article.Link) with
-    | None, Some url -> Some (nav [] [ a [ _href url; _target "_blank" ] [ str "Source" ] ])
+    | None, Some url -> Some(nav [] [ a [ _href url; _target "_blank" ] [ str "Source" ] ])
     | _, _ -> None
 
-let render (article: Article): XmlNode =
+let render (article: Article) : XmlNode =
     let articleHeader = articleHeader article
     let articleContent = section [] [ rawText article.Content ]
     let maybeSourceLink = trySourceLink article
 
-    HtmlElements.article [ _class $"%A{article.Source}" ]
+    HtmlElements.article
+        [ _class $"%A{article.Source}" ]
         [ yield articleHeader
           yield articleContent
 
           match maybeSourceLink with
           | Some sourceLink -> yield sourceLink
-          | _ -> ()
-        ]
+          | _ -> () ]
