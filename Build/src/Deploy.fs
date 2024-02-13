@@ -1,12 +1,8 @@
+[<RequireQualifiedAccess>]
 module Deploy
 
 open Fake.Core
 open Support
-
-let private runCmd cmd workingDir args =
-    { Program = cmd; WorkingDir = workingDir; CommandLine = args; Args = [] }
-    |> Process.shellExec
-    |> Proc.ensureSuccessExitCode
 
 let private herokuBinary =
     if Environment.isWindows
@@ -27,10 +23,10 @@ let private deploy project herokuApp _ =
             then "--tar /opt/homebrew/bin/gtar"
             else ""
 
-    runCmd
-        herokuBinary
-        publishDir
-        $"builds:create -a %s{herokuApp} %s{buildOptions}"
+    Proc.exec(
+        cmd = $"%s{herokuBinary} builds:create -a %s{herokuApp} %s{buildOptions}",
+        pwd = publishDir
+    )
 
 let loadTasks _ =
     Target.create "deploy" (deploy "Damo.Io.Server" "damo-io")

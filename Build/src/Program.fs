@@ -6,7 +6,7 @@ Fake.initialize ()
 
 Target.create "clean" DotNet.clean
 Target.create "build" DotNet.build
-Target.create "test" (fun _ -> DotNet.test "")
+Target.create "test" DotNet.test
 Target.create "release" (DotNet.release "Damo.Io.Server")
 
 "build" |> Target.mustRunAfter "clean"

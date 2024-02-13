@@ -5,7 +5,7 @@ open System
 
 module Try =
     let private error description (ex: Exception) =
-        let msg = sprintf "%s error: %s" description (ex.Message.Trim())
+        let msg = $"%s{description} error: %s{ex.Message.Trim()}"
         Error.create msg ex
 
     let value description func =

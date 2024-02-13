@@ -1,6 +1,5 @@
 [<RequireQualifiedAccess>]
 module String
-
     let isEmpty value =
         match value with
         | "" -> true
