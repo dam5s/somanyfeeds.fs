@@ -1,8 +1,6 @@
 ﻿[<RequireQualifiedAccess>]
 module Fantomas
 
-let format _ =
-    Proc.exec $"dotnet fantomas --recurse ."
+let format _ = Proc.exec "dotnet fantomas ."
 
-let check _ =
-    Proc.exec $"dotnet fantomas --recurse --check ."
+let check _ = Proc.exec "dotnet fantomas --check ."
