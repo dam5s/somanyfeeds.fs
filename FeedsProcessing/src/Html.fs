@@ -15,7 +15,8 @@ let private removeUrlsContaining (substring: string) (s: HtmlSanitizer) =
         if e.OriginalUrl.Contains(substring) then
             e.SanitizedUrl <- null
         else
-            ())
+            ()
+    )
 
     s
 

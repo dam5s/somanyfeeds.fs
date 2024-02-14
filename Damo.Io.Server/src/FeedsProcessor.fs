@@ -32,12 +32,14 @@ let private downloadAndProcessFeed (logger: ILogger) feed : Async<ProcessingResu
                 |> Result.bind processFeed
                 |> Result.onOk (fun articles ->
                     let count = List.length articles
-                    logger.LogInformation($"Parsed feed %A{url}, found %d{count} article(s)"))
+                    logger.LogInformation($"Parsed feed %A{url}, found %d{count} article(s)")
+                )
                 |> Result.onError (fun explanation ->
                     logger.LogError($"Error processing feed %A{url}")
 
                     for ex in explanation.Exceptions do
-                        logger.LogError(ex, ex.Message))
+                        logger.LogError(ex, ex.Message)
+                )
         }
 
 let processFeeds (logger: ILogger) (sources: SourcesRepository.SourceFeed list) : AsyncSeq<ArticleRecord> =

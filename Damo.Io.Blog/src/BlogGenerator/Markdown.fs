@@ -46,7 +46,8 @@ module Markdown =
         |> List.filter (fun p ->
             match tryGetTitle p with
             | Some t -> t <> title
-            | _ -> true)
+            | _ -> true
+        )
 
     let prefixImageUrl prefix (span: MarkdownSpan) =
         match span with

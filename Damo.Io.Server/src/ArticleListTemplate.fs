@@ -13,7 +13,8 @@ let private sourceToggleHref selectedSources source =
         if s = source then
             (if selected then None else Some sourceStr)
         else
-            (if selected then Some sourceStr else None))
+            (if selected then Some sourceStr else None)
+    )
     |> String.concat ","
     |> sprintf "/%s"
 

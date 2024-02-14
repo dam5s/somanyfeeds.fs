@@ -69,10 +69,13 @@ module private Atom =
             (Some entry.Published)
 
     let private toArticles (atom: AtomProvider.Feed) =
-        Try.result "Atom to articles" (fun _ ->
-            match atom.Entries with
-            | [||] -> Error.ofMessage "Expected at least one atom entry"
-            | entries -> entries |> Seq.map entryToArticle |> Seq.toList |> Ok)
+        Try.result
+            "Atom to articles"
+            (fun _ ->
+                match atom.Entries with
+                | [||] -> Error.ofMessage "Expected at least one atom entry"
+                | entries -> entries |> Seq.map entryToArticle |> Seq.toList |> Ok
+            )
 
     let private toMetadata (url: Url) (atom: AtomProvider.Feed) =
         try
@@ -94,10 +97,13 @@ module private Rdf =
         Article.create (Some item.Title) item.Link (Some item.Description) (Some item.Date)
 
     let private toArticles (rdf: RdfProvider.Rdf) : Result<Article list, Explanation> =
-        Try.result "Rdf to articles" (fun _ ->
-            match rdf.Items with
-            | [||] -> Error.ofMessage "Expected at least one rdf item"
-            | items -> items |> Seq.map itemToArticle |> Seq.toList |> Ok)
+        Try.result
+            "Rdf to articles"
+            (fun _ ->
+                match rdf.Items with
+                | [||] -> Error.ofMessage "Expected at least one rdf item"
+                | items -> items |> Seq.map itemToArticle |> Seq.toList |> Ok
+            )
 
     let private toMetadata (url: Url) (rdf: RdfProvider.Rdf) =
         try

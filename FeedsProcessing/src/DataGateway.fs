@@ -23,43 +23,52 @@ let private basicAuthHeader username password =
     |> BasicAuthHeader
 
 let private parseToken jsonString =
-    Try.result "Parse token json" (fun _ ->
-        let responseJson = JsonValue.Parse jsonString
+    Try.result
+        "Parse token json"
+        (fun _ ->
+            let responseJson = JsonValue.Parse jsonString
 
-        let accessTokenOption =
-            responseJson.TryGetProperty "access_token" |> Option.map (fun p -> p.AsString())
+            let accessTokenOption =
+                responseJson.TryGetProperty "access_token" |> Option.map (fun p -> p.AsString())
 
-        match accessTokenOption with
-        | None ->
-            jsonString
-            |> sprintf "Could not parse access_token from json %s"
-            |> Error.ofMessage
-        | Some accessToken -> Ok(BearerToken accessToken))
+            match accessTokenOption with
+            | None ->
+                jsonString
+                |> sprintf "Could not parse access_token from json %s"
+                |> Error.ofMessage
+            | Some accessToken -> Ok(BearerToken accessToken)
+        )
 
 let private requestToken (BasicAuthHeader authHeader) =
-    Try.result "Request token" (fun _ ->
-        let responseString =
-            Http.RequestString(
-                "https://api.twitter.com/oauth2/token",
-                httpMethod = "POST",
-                body = HttpRequestBody.TextRequest "grant_type=client_credentials",
-                headers =
-                    [ Authorization authHeader
-                      ContentType "application/x-www-form-urlencoded;charset=UTF-8" ]
-            )
+    Try.result
+        "Request token"
+        (fun _ ->
+            let responseString =
+                Http.RequestString(
+                    "https://api.twitter.com/oauth2/token",
+                    httpMethod = "POST",
+                    body = HttpRequestBody.TextRequest "grant_type=client_credentials",
+                    headers =
+                        [ Authorization authHeader
+                          ContentType "application/x-www-form-urlencoded;charset=UTF-8" ]
+                )
 
-        parseToken responseString)
+            parseToken responseString
+        )
 
 let downloadContent (Url url) : DownloadResult =
     async {
         return
-            Try.value "Download content" (fun _ ->
-                let content =
-                    Http.RequestString(
-                        url,
-                        headers = [ "User-Agent", "somanyfeeds.com" ],
-                        responseEncodingOverride = "utf-8"
-                    )
+            Try.value
+                "Download content"
+                (fun _ ->
+                    let content =
+                        Http.RequestString(
+                            url,
+                            headers = [ "User-Agent", "somanyfeeds.com" ],
+                            responseEncodingOverride = "utf-8"
+                        )
 
-                { Url = (Url url); Content = content })
+                    { Url = (Url url); Content = content }
+                )
     }
