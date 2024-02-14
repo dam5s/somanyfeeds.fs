@@ -29,23 +29,22 @@ let private sourceLink selectedSources source =
         else
             ""
 
-    li
-        [ _class selectedClass ]
-        [ a
-              [ _href path
-                _hxGet path
-                _hxTrigger "click"
-                _hxTarget "#template"
-                _hxSwap "innerHTML"
-                _hxPushUrl "true" ]
-              [ str (Source.toString source) ] ]
+    let attrs =
+        [ _href path
+          _class selectedClass
+          _hxGet path
+          _hxTrigger "click"
+          _hxTarget "#template"
+          _hxSwap "outerHTML"
+          _hxPushUrl "true" ]
+
+    li [] [ a attrs [ str (Source.toString source) ] ]
 
 let render (articles: Article list) (sources: Source list) : XmlNode =
     let sourceLinks = Source.all |> List.map (sourceLink sources)
-
     let articleList = articles |> List.map ArticleTemplate.render
 
-    div
-        [ _class "top-level" ]
-        [ main [] articleList
-          aside [] [ LogoTemplate.render; ul [ _class "main-menu" ] sourceLinks ] ]
+    let logo = h1 [] [ str "damo.io" ]
+    let menu = ul [ _class "main-menu" ] sourceLinks
+
+    div [ _id "template" ] [ aside [] [ logo; menu ]; main [] articleList ]

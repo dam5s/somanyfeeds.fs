@@ -25,7 +25,7 @@ let private configureApp (app: IApplicationBuilder) =
         .UseGiraffe(App.handler)
 
 let private configureAssetPipeline (pipeline: IAssetPipeline) =
-    pipeline.AddCssBundle("/styles/app.min.css", [| "/styles/reset.css"; "/styles/fonts.css"; "/styles/app.css" |])
+    pipeline.AddCssBundle("/styles/app.min.css", [| "/styles/reset.css"; "/styles/app.css" |])
     |> ignore
 
 let private configureServices (services: IServiceCollection) =

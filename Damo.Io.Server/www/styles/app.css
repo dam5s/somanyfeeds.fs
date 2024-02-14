@@ -1,25 +1,39 @@
 :root {
     --bg-color: #333;
-    --card-bg-color: rgba(0, 0, 0, 0.2);
-    --text-color: #ddd;
-    --title-text-color: #FFE553;
+    --fg-color: #ddd;
+    --card-color: rgba(0, 0, 0, 0.2);
+    --primary-color: #c055c0;
+    --secondary-color: #1180b0;
+
+    --text-color: var(--fg-color);
+    --title-color: color-mix(in srgb, var(--secondary-color), var(--fg-color) 20%);
+
     --code-bg-color: rgba(255, 255, 255, 0.05);
-    --link-text-color: #a271ec;
+    --link-color: var(--primary-color);
+
     --article-date-text-color: rgba(255, 255, 255, 0.25);
-    --selected-menu-item-bg-color: rgba(162, 113, 236, .1);
-    --hover-menu-item-color: rgba(162, 113, 236, .2);
-    --hover-selected-menu-item-color: rgba(162, 113, 236, .2);
+
+    --menu-item-bg-not-selected: color-mix(in srgb, var(--primary-color), transparent 90%);
+    --menu-item-bg-selected: color-mix(in srgb, var(--primary-color), transparent 80%);
+    --menu-item-bg-hover: color-mix(in srgb, var(--primary-color), transparent 70%);
+
+    --serif: 'Cambria', 'Palatino', serif;
+    --sans-serif: -apple-system, 'Calibri', 'Helvetica Neue', sans-serif;
+    --monospace: 'JetBrains Mono', 'SFMono-Regular', 'Consolas', 'Liberation Mono', 'Menlo', monospace;
+
+    --card-shadow: 2px 0 2px rgba(0, 0, 0, 0.3);
+    --emphasis-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
 }
 
 html {
     font-size: 62.5%;
+    background-color: var(--bg-color);
 }
 
 body {
     margin: 0;
-    background-color: var(--bg-color);
-    font-size: 1.7rem;
-    font-family: 'Merriweather', 'Georgia', serif;
+    font-size: 1.8rem;
+    font-family: var(--serif);
     font-weight: 300;
     color: var(--text-color);
     word-break: break-word;
@@ -29,74 +43,71 @@ body {
     box-sizing: border-box;
 }
 
-.top-level {
-    background-color: var(--bg-color);
-}
-
-.top-level > main {
+#template > main {
     max-width: 80rem;
     margin-left: 40rem;
-    padding: 1.6rem;
+    padding: 2.4rem;
     min-height: 100vh;
 }
 
-.top-level > aside {
-    background-color: var(--card-bg-color);
+#template > aside {
+    background-color: var(--card-color);
     position: fixed;
     left: 0;
     top: 0;
     bottom: 0;
     width: 40rem;
+    padding: 2.4rem 4.8rem;
     text-align: center;
-    box-shadow: 2px 0 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 2px 0 2px rgba(0, 0, 0, 0.3);
 }
 
-.top-level > aside svg {
-    width: 28rem;
-    height: 10rem;
-    padding-left: 2.8rem;
-    filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.8));
-    margin: 1.6rem 0 3.2rem;
+#template > aside h1 {
+    font-family: var(--serif);
+    color: var(--text-color);
+    font-weight: 600;
+    letter-spacing: -2px;
+    margin: 2.4rem 0;
 }
 
 @media (max-width: 1000px) {
-    .top-level > main {
+    #template > main {
         padding-top: 14rem;
         padding-bottom: 1.6rem;
         margin: 0;
         max-width: none;
     }
 
-    .top-level > aside {
+    #template > aside {
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
         width: 100%;
         height: 12.4rem;
-        box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
-    }
-
-    .top-level > aside svg {
-        width: 20rem;
-        height: 7rem;
-        margin: 0;
+        box-shadow: var(--card-shadow);
     }
 }
 
 h1, h2, h3, h4 {
-    line-height: 130%;
-    color: var(--title-text-color);
-    font-family: 'Merriweather Sans', 'Helvetica Neue', sans-serif;
-    font-weight: 400;
-    margin: 0 0 1.6rem;
+    line-height: 1.5;
+    color: var(--title-color);
+    font-family: var(--sans-serif);
+    font-weight: 600;
+    letter-spacing: -1px;
+    margin: 0 0 2.4rem;
+    filter: drop-shadow(var(--emphasis-shadow));
 }
 
 h1 {
-    font-size: 3.2rem;
+    font-size: 4.8rem;
 }
 
 h2 {
+    font-size: 3.6rem;
+}
+
+h3 {
     font-size: 2.4rem;
 }
 
@@ -125,8 +136,13 @@ ul li, ol li {
 pre {
     overflow-x: auto;
     background-color: var(--code-bg-color);
-    padding: 1.6rem;
-    margin-bottom: 1.6rem;
+    padding: 2.4rem;
+    margin-bottom: 2.4rem;
+    border-radius: 1rem;
+
+    font-family: var(--monospace);
+    font-size: 1.4rem;
+    line-height: 1.3;
 }
 
 pre + h4 {
@@ -134,16 +150,16 @@ pre + h4 {
 }
 
 pre + p {
-    padding-top: 1.6rem;
+    padding-top: 2.4rem;
 }
 
 a:link, a:hover, a:visited, a:active {
     text-decoration: none;
-    color: var(--link-text-color);
+    color: var(--link-color);
 }
 
 p {
-    margin: 0 0 1.6rem;
+    margin: 0 0 2.4rem;
 }
 
 em, strong {
@@ -151,11 +167,11 @@ em, strong {
 }
 
 article {
-    background-color: var(--card-bg-color);
-    padding: 1.6rem;
-    margin: 0 0 1.6rem 0;
-    border-radius: 4px;
-    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    background-color: var(--card-color);
+    padding: 2.4rem 4.8rem;
+    margin: 0 0 2.4rem 0;
+    border-radius: 3rem;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 article:last-child {
@@ -169,17 +185,15 @@ article header {
 
 article header h2 {
     margin: 0;
+    float: right;
+    font-size: 1.7rem;
+    font-weight: normal;
+    letter-spacing: -0.1px;
+    color: var(--article-date-text-color);
 }
 
 article h1 a:link, article h1 a:visited {
-    color: var(--title-text-color);
-}
-
-article header h2 {
-    float: right;
-    font-size: 1.2rem;
-    letter-spacing: -0.2px;
-    color: var(--article-date-text-color);
+    color: var(--title-color);
 }
 
 article img {
@@ -220,10 +234,11 @@ article nav {
 
 .main-menu a {
     display: block;
-    width: calc(100% - 3.2rem);
     padding: 1.6rem;
-    margin: 0 auto 1.6rem;
-    border-radius: 4px;
+    margin: 0 0 0.8rem;
+    border-radius: 3rem;
+    background-color: var(--menu-item-bg-not-selected);
+    filter: drop-shadow(var(--emphasis-shadow));
 }
 
 .main-menu a:active {
@@ -231,16 +246,13 @@ article nav {
     top: 2px;
 }
 
+.main-menu a.selected {
+    background-color: var(--menu-item-bg-selected);
+    box-shadow: var(--card-shadow);
+}
+
 .main-menu a:hover {
-    background-color: var(--hover-menu-item-color);
-}
-
-.main-menu .selected a {
-    background-color: var(--selected-menu-item-bg-color);
-}
-
-.main-menu .selected a:hover {
-    background-color: var(--hover-selected-menu-item-color);
+    background-color: var(--menu-item-bg-hover);
 }
 
 @media (max-width: 1000px) {
