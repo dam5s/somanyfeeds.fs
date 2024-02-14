@@ -79,9 +79,6 @@ module Build =
         |> (fun xml -> xml.Save $"%s{publicPath}/rss.xml")
         |> always posts
 
-    let private generateHerokuConfig _ =
-        """{"root": "public/"}""" |> File.writeString false $"%s{buildPath}/static.json"
-
     let run _ =
         cleanupBuildDir ()
         copyResources ()
@@ -91,4 +88,4 @@ module Build =
         |> generateTagPages
         |> generateIndex
         |> generateRssFeed
-        |> generateHerokuConfig
+        |> ignore

@@ -3,4 +3,5 @@
 .idea
 bin
 obj
+build
 *.DotSettings.user

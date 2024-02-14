@@ -33,6 +33,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="deployment\**\*" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="www\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

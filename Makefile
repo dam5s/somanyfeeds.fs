@@ -1,17 +1,24 @@
-.PHONY: restore build lint format
+.PHONY: restore clean check format damo.io.server.container damo.io.blog.container dev
 
 restore:
 	dotnet tool restore
 	dotnet restore
 
-build:
-	dotnet run --project Build
+clean:
+	dotnet clean
 
-lint:
-	dotnet run --project Build lint
+check:
+	dotnet fantomas --check .
+	dotnet test
 
 format:
-	dotnet run --project Build format
+	dotnet fantomas .
+
+damo.io.server.container:
+	docker build -t damo.io.server -f Damo.Io.Server/deployment/Dockerfile .
+
+damo.io.blog.container:
+	docker build -t damo.io.blog -f Damo.Io.Blog/deployment/Dockerfile .
 
 dev:
 	dotnet watch run --project Damo.Io.Server

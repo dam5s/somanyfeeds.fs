@@ -26,10 +26,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="posts/**/*">
+    <None Include="deployment\**\*"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="posts\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources/**/*">
+    <Content Include="resources\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
