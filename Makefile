@@ -5,10 +5,13 @@ restore:
 	dotnet restore
 
 build:
-	dotnet run --project ./Build
+	dotnet run --project Build
 
 lint:
-	dotnet run --project ./Build lint
+	dotnet run --project Build lint
 
 format:
-	dotnet run --project ./Build format
+	dotnet run --project Build format
+
+dev:
+	dotnet watch run --project Damo.Io.Server
