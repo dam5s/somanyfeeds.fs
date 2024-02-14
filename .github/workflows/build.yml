@@ -1,0 +1,46 @@
+﻿name: Build app
+
+on: push
+
+jobs:
+  build:
+    env:
+      PROJECT_ID: ${{ secrets.GCLOUD_PROJECT_ID }}
+      SERVICE_ACCOUNT_KEY: ${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY }}
+      REGION: us-central1
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Check out code'
+        uses: actions/checkout@v4
+
+      - name: 'Install .NET'
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: 'Test and build container'
+        run: |
+          make restore
+          make check
+          make damo.io.server.container
+
+      - name: 'GCloud Auth'
+        uses: google-github-actions/auth@v2
+        with:
+          project_id: ${{ env.PROJECT_ID }}
+          credentials_json: ${{ env.SERVICE_ACCOUNT_KEY }}
+
+      - name: 'Set up GCloud SDK'
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          version: '>= 363.0.0'
+
+      - name: 'Upload image to GCloud'
+        run: |
+          gcloud auth configure-docker ${REGION}-docker.pkg.dev
+          docker tag damo.io.server ${REGION}-docker.pkg.dev/${PROJECT_ID}/docker-images/damo.io.server:latest
+          docker push ${REGION}-docker.pkg.dev/${PROJECT_ID}/docker-images/damo.io.server:latest
+
+      - name: 'Deploy to GCloud'
+        run: |
+          gcloud run deploy damo-io-server --region ${REGION} --image ${REGION}-docker.pkg.dev/${PROJECT_ID}/docker-images/damo.io.server:latest
