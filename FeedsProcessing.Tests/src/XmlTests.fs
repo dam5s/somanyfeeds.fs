@@ -1,6 +1,5 @@
 module ``Xml Processor Tests``
 
-open FeedsProcessing
 open FeedsProcessing.Article
 open FeedsProcessing.Xml
 open FeedsProcessingTests.DownloadSupport
