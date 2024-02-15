@@ -85,6 +85,10 @@ body {
     font-weight: 600;
     letter-spacing: -2px;
     margin: 2.4rem 0;
+    background: url("/favicon.svg") no-repeat left center;
+    background-size: 5rem 5rem;
+    padding-left: 6rem;
+    display: inline-block;
 }
 
 @media (max-width: 1000px) {
