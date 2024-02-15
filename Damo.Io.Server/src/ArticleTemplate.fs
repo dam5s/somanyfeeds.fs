@@ -31,7 +31,7 @@ let private dateToString posix =
 
 open Giraffe.ViewEngine
 
-let private articleTitle (article: Article) title =
+let private articleTitle (article: ArticleRecord) title =
     match article.Link with
     | Some link -> h1 [] [ a [ _href link ] [ str title ] ]
     | None -> h1 [] [ str title ]
@@ -39,7 +39,7 @@ let private articleTitle (article: Article) title =
 let private articleDate (date: Posix) =
     h2 [ _class "date" ] [ str (dateToString date) ]
 
-let private articleHeader (article: Article) =
+let private articleHeader (article: ArticleRecord) =
     header
         []
         (List.choose
@@ -47,12 +47,18 @@ let private articleHeader (article: Article) =
             [ Option.map (articleTitle article) article.Title
               Option.map articleDate article.Date ])
 
-let private trySourceLink (article: Article) : XmlNode option =
+let private trySourceLink (article: ArticleRecord) : XmlNode option =
     match (article.Title, article.Link) with
     | None, Some url -> Some(nav [] [ a [ _href url; _target "_blank" ] [ str "Source" ] ])
     | _, _ -> None
 
-let render (article: Article) : XmlNode =
+let private renderMedia (media: MediaRecord) : XmlNode =
+    figure
+        []
+        [ img [ _src media.Url; _alt media.Description ]
+          figcaption [] [ str media.Description ] ]
+
+let render (article: ArticleRecord) : XmlNode =
     let articleHeader = articleHeader article
     let articleContent = section [] [ rawText article.Content ]
     let maybeSourceLink = trySourceLink article
@@ -62,6 +68,10 @@ let render (article: Article) : XmlNode =
         [ yield articleHeader
           yield articleContent
 
+          match article.Media with
+          | Some media -> yield renderMedia media
+          | None -> ()
+
           match maybeSourceLink with
           | Some sourceLink -> yield sourceLink
-          | _ -> () ]
+          | None -> () ]

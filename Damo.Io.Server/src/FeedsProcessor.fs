@@ -1,7 +1,7 @@
 module DamoIoServer.FeedsProcessor
 
+open DamoIoServer.Article
 open FSharp.Control
-open FeedsProcessing
 open FeedsProcessing.Article
 open FeedsProcessing.DataGateway
 open FeedsProcessing.Feeds
@@ -9,12 +9,11 @@ open FeedsProcessing.ProcessingResult
 open FeedsProcessing.Xml
 open Microsoft.Extensions.Logging
 
-type ArticleRecord = DamoIoServer.Article.Article
-
 let private articleToRecord sourceType (article: Article) : ArticleRecord =
     { Title = Article.title article
       Link = Article.link article
       Content = Article.content article
+      Media = Article.media article |> Option.map MediaRecord.ofMedia
       Date = Article.date article
       Source = sourceType }
 

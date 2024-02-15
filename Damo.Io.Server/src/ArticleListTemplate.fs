@@ -41,10 +41,9 @@ let private sourceLink selectedSources source =
 
     li [] [ a attrs [ str (Source.toString source) ] ]
 
-let render (articles: Article list) (sources: Source list) : XmlNode =
+let render (articles: ArticleRecord list) (sources: Source list) : XmlNode =
     let sourceLinks = Source.all |> List.map (sourceLink sources)
     let articleList = articles |> List.map ArticleTemplate.render
-
     let logo = h1 [] [ str "damo.io" ]
     let menu = ul [ _class "main-menu" ] sourceLinks
 

@@ -116,8 +116,24 @@ let ``with mastodon RSS`` () =
 
     match result with
     | Error _ -> Assert.Fail "Expected success"
-    | Ok records -> List.length records |> should equal 19
+    | Ok records ->
+        List.length records |> should equal 19
 
+        let mediaAt index =
+            records |> List.item index |> Article.media
+
+        let expectedMediaNoDescription =
+            { Url = "https://mastodon.kleph.eu/system/media_attachments/files/000/055/839/original/4874168bf454bddb.jpg"
+              Description = "" }
+
+        mediaAt 17 |> should equal (Some expectedMediaNoDescription)
+
+        let expectedMediaAndDescription =
+            { Url =
+                "https://mastodon.kleph.eu/system/media_attachments/files/108/207/041/262/751/249/original/1e8a0ccac5f59165.jpg"
+              Description = "Mountain landscape at sunset with bicycle on the foreground." }
+
+        mediaAt 13 |> should equal (Some expectedMediaAndDescription)
 
 [<Test>]
 let ``processFeed with slashdot RDF XML`` () =

@@ -40,18 +40,19 @@ let private aboutContent =
     </p>
     """
 
-let private about: Article =
+let private about: ArticleRecord =
     { Title = Some "About"
       Link = None
       Content = aboutContent
+      Media = None
       Date = None
       Source = About }
 
-let mutable private allRecords: Article list = []
+let mutable private allRecords: ArticleRecord list = []
 
 let findAll () = about :: allRecords
 
-type FindAllBySources = Source list -> Article list
+type FindAllBySources = Source list -> ArticleRecord list
 
 let findAllBySources: FindAllBySources =
     fun sources -> findAll () |> List.filter (fun r -> List.contains r.Source sources)

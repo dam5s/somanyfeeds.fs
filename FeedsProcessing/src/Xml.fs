@@ -39,8 +39,19 @@ module private Rss =
 
     type private RssProvider = XmlProvider<"../FeedsProcessing/resources/samples/rss.sample.xml">
 
+    let private descriptionToString (description: RssProvider.Description) = description.Value
+
+    let private contentToMedia (content: RssProvider.Content) =
+        { Url = content.Url
+          Description = content.Description |> Option.map descriptionToString |> Option.defaultValue "" }
+
     let private itemToArticle (item: RssProvider.Item) =
-        Article.create item.Title item.Link (item.Encoded |> Option.orElse item.Description) (Some item.PubDate)
+        Article.create
+            item.Title
+            item.Link
+            (item.Encoded |> Option.orElse item.Description)
+            (item.Content |> Option.map contentToMedia)
+            (Some item.PubDate)
 
     let private toArticles (rss: RssProvider.Rss) =
         Try.value "Rss to articles" (fun _ -> rss.Channel.Items |> Seq.map itemToArticle |> Seq.toList)
@@ -66,6 +77,7 @@ module private Atom =
             (Some entry.Title.Value)
             (entry.Links |> Array.head |> (fun l -> l.Href))
             (Some entry.Content.Value)
+            None
             (Some entry.Published)
 
     let private toArticles (atom: AtomProvider.Feed) =
@@ -94,7 +106,7 @@ module private Rdf =
     type private RdfProvider = XmlProvider<"../FeedsProcessing/resources/samples/rdf.sample.xml">
 
     let private itemToArticle (item: RdfProvider.Item) =
-        Article.create (Some item.Title) item.Link (Some item.Description) (Some item.Date)
+        Article.create (Some item.Title) item.Link (Some item.Description) None (Some item.Date)
 
     let private toArticles (rdf: RdfProvider.Rdf) : Result<Article list, Explanation> =
         Try.result

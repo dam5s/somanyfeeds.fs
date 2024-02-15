@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/"
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" 
+     xmlns:content="http://purl.org/rss/1.0/modules/content/"
+     xmlns:media="http://search.yahoo.com/mrss/"
      xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title><![CDATA[Stories by Damien Le Berrigaud on Medium]]></title>
@@ -23,6 +25,10 @@
             <pubDate>Tue, 20 Sep 2016 12:54:44 GMT</pubDate>
             <atom:updated>2016-09-20T12:54:44.561Z</atom:updated>
             <content:encoded><![CDATA[<p>This is the content in encoded tag</p>]]></content:encoded>
+            <media:content url="https://mastodon.kleph.eu/system/media_attachments/files/108/207/041/262/751/249/original/1e8a0ccac5f59165.jpg" type="image/jpeg" fileSize="503918" medium="image">
+                <media:rating scheme="urn:simple">nonadult</media:rating>
+                <media:description type="plain">Mountain landscape at sunset with bicycle on the foreground.</media:description>
+            </media:content>
         </item>
         <item>
             <title><![CDATA[Second title!]]></title>
@@ -32,6 +38,9 @@
             <pubDate>Tue, 20 Sep 2016 12:54:44 GMT</pubDate>
             <atom:updated>2016-09-20T12:54:44.561Z</atom:updated>
             <description><![CDATA[<p>This is the content in description tag</p>]]></description>
+            <media:content url="https://mastodon.kleph.eu/system/media_attachments/files/000/055/839/original/4874168bf454bddb.jpg" type="image/jpeg" fileSize="251429" medium="image">
+                <media:rating scheme="urn:simple">nonadult</media:rating>
+            </media:content>
         </item>
         <atom:link href="http://medium.superfeedr.com" rel="hub"/>
         <item>
