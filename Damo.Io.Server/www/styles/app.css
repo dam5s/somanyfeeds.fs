@@ -25,6 +25,23 @@
     --emphasis-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
 }
 
+@media (prefers-color-scheme: light) {
+    :root {
+        --bg-color: #eee;
+        --fg-color: #444;
+        --card-color: rgba(0, 0, 0, 0.05);
+
+        --menu-item-bg-not-selected: color-mix(in srgb, var(--primary-color), transparent 90%);
+        --menu-item-bg-selected: color-mix(in srgb, var(--primary-color), transparent 80%);
+        --menu-item-bg-hover: color-mix(in srgb, var(--primary-color), transparent 70%);
+
+        --article-date-text-color: rgba(0, 0, 0, 0.5);
+
+        --card-shadow: 1px 0 1px rgba(0, 0, 0, 0.15);
+        --emphasis-shadow: 1px 0 1px rgba(0, 0, 0, 0.3);
+    }
+}
+
 html {
     font-size: 62.5%;
     background-color: var(--bg-color);
@@ -156,6 +173,11 @@ pre + p {
 a:link, a:hover, a:visited, a:active {
     text-decoration: none;
     color: var(--link-color);
+}
+
+a:active {
+    position: relative;
+    top: 1px;
 }
 
 p {
