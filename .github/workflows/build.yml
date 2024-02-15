@@ -1,6 +1,9 @@
 ﻿name: Build app
 
-on: push
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   build:
@@ -18,11 +21,10 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: 'Test and build container'
+      - name: 'Lint and Test'
         run: |
           make restore
           make check
-          make damo.io.server.container
 
       - name: 'GCloud Auth'
         uses: google-github-actions/auth@v2
@@ -35,12 +37,20 @@ jobs:
         with:
           version: '>= 363.0.0'
 
-      - name: 'Upload image to GCloud'
+      - name: 'Docker GCloud Auth'
         run: |
           gcloud auth configure-docker ${REGION}-docker.pkg.dev
+
+      - name: 'Build and deploy damo.io'
+        run: |
+          make damo.io.server.container
           docker tag damo.io.server ${REGION}-docker.pkg.dev/${PROJECT_ID}/docker-images/damo.io.server:latest
           docker push ${REGION}-docker.pkg.dev/${PROJECT_ID}/docker-images/damo.io.server:latest
-
-      - name: 'Deploy to GCloud'
-        run: |
           gcloud run deploy damo-io-server --region ${REGION} --image ${REGION}-docker.pkg.dev/${PROJECT_ID}/docker-images/damo.io.server:latest
+
+      - name: 'Build and deploy blog.damo.io'
+        run: |
+          make damo.io.blog.container
+          docker tag damo.io.blog ${REGION}-docker.pkg.dev/${PROJECT_ID}/docker-images/damo.io.blog:latest
+          docker push ${REGION}-docker.pkg.dev/${PROJECT_ID}/docker-images/damo.io.blog:latest
+          gcloud run deploy damo-io-blog --region ${REGION} --image ${REGION}-docker.pkg.dev/${PROJECT_ID}/docker-images/damo.io.blog:latest
