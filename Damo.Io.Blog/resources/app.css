@@ -1,19 +1,19 @@
-@import '/normalize.css';
+@import '/reset.css';
 
 :root {
     --link: #037F8C;
     --linkDark: #205459;
-    --linkDark-alpha-20: rgba(32, 84, 89, .2);
-    --linkDark-alpha-10: rgba(32, 84, 89, .1);
+    --linkDark-alpha-60: color-mix(in srgb, var(--linkDark), transparent 40%);
+    --linkDark-alpha-80: color-mix(in srgb, var(--linkDark), transparent 20%);
     --background: #F2E7C4;
-    --background-alpha-10: rgba(242, 231, 196, .1);
+    --background-alpha-80: color-mix(in srgb, var(--background), transparent 20%);
     --foreground: #211;
-    --foreground-alpha-40: rgba(34, 17, 17, .4);
+    --foreground-alpha-40: color-mix(in srgb, var(--foreground), transparent 60%);
     --primary: #F28F38;
     --primaryDark: #F25757;
 
-    --spacing: .8rem;
-    --spacing-2: 1.6rem;
+    --spacing: 1.2rem;
+    --spacing-2: 2.4rem;
     --border-radius: 2px;
 
     --serif: 'Cambria', 'Palatino', serif;
@@ -23,13 +23,13 @@
 
 html {
     font-size: 62.5%;
+    background: var(--foreground);
+    color: var(--foreground);
 }
 
 body {
     font-family: var(--serif);
-    font-size: 1.7rem;
-    background: var(--foreground);
-    color: var(--foreground);
+    font-size: 1.8rem;
     word-wrap: break-word;
 }
 
@@ -41,27 +41,32 @@ a:hover {
     color: var(--linkDark);
 }
 
+a:active {
+    position: relative;
+    top: 1px;
+}
+
 h1, h2, h3, h4, h5, h6 {
     margin-top: 0;
     font-family: var(--sans-serif);
 }
 
 h1 {
-    font-size: 3.4rem;
+    font-size: 4.8rem;
 }
 
 h2 {
     color: var(--primaryDark);
-    font-size: 2.6rem;
+    font-size: 3.6rem;
 }
 
 h3, h4, h5, h6 {
-    font-size: 1.7rem;
+    font-size: 2.4rem;
 }
 
 p {
-    margin: 0 0 1.6rem;
-    line-height: 1.25;
+    margin: 0 0 var(--spacing-2);
+    line-height: 180%;
 }
 
 img {
@@ -75,12 +80,29 @@ pre {
     background: var(--foreground-alpha-40);
     padding: var(--spacing);
     border-radius: var(--border-radius);
-    line-height: 1.25;
+    line-height: 180%;
 }
 
 code {
-    font-size: 1.5rem;
+    font-size: 1.7rem;
     font-family: var(--monospace);
+}
+
+ul {
+    list-style-type: disc;
+}
+
+ol {
+    list-style-type: lower-alpha;
+}
+
+ul, ol {
+    margin-bottom: var(--spacing-2);
+}
+
+ul li, ol li {
+    margin-left:  var(--spacing-2);
+    margin-bottom: .4rem;
 }
 
 header {
@@ -98,7 +120,7 @@ header a:link, header a:visited {
 }
 
 header a:hover {
-    color: var(--background-alpha-10);
+    color: var(--background-alpha-80);
 }
 
 aside {
@@ -116,7 +138,7 @@ main {
 }
 
 main > * {
-    max-width: 70rem;
+    max-width: 80rem;
 }
 
 main nav {
@@ -127,18 +149,18 @@ main nav a:link, main nav a:hover, main nav a:visited {
     display: inline-block;
     padding: var(--spacing) var(--spacing-2);
     color: var(--background);
-    background: var(--linkDark-alpha-20);
+    background: var(--linkDark-alpha-60);
     border-radius: var(--border-radius);
     margin-right: 1rem;
     margin-bottom: var(--spacing);
 }
 
 main nav a:hover {
-    background: var(--linkDark-alpha-10);
+    background: var(--linkDark-alpha-80);
 }
 
 footer {
     padding: var(--spacing-2);
     color: var(--background);
-    font-size: 1.4rem;
+    font-size: 1.5rem;
 }
