@@ -2,11 +2,11 @@
      fill="#000000">
     <style>
         rect, path {
-            fill: #444;
+            fill: #ddd;
         }
-        @media (prefers-color-scheme: dark) {
+        @media (prefers-color-scheme: light) {
             rect, path {
-                fill: #ddd;
+                fill: #444;
             }
         }
     </style>
