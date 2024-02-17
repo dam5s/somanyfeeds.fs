@@ -13,9 +13,9 @@
 
     --article-date-text-color: rgba(255, 255, 255, 0.25);
 
-    --menu-item-bg-not-selected: color-mix(in srgb, var(--primary-color), transparent 90%);
-    --menu-item-bg-selected: color-mix(in srgb, var(--primary-color), transparent 80%);
-    --menu-item-bg-hover: color-mix(in srgb, var(--primary-color), transparent 70%);
+    --menu-item-bg-not-selected: color-mix(in srgb, var(--primary-color), transparent 95%);
+    --menu-item-bg-selected: color-mix(in srgb, var(--primary-color), transparent 70%);
+    --menu-item-bg-hover: color-mix(in srgb, var(--primary-color), transparent 80%);
 
     --serif: 'Cambria', 'Palatino', serif;
     --sans-serif: -apple-system, 'Calibri', 'Helvetica Neue', sans-serif;
@@ -31,7 +31,7 @@
         --fg-color: #444;
         --card-color: rgba(255, 255, 255, 0.7);
 
-        --menu-item-bg-not-selected: color-mix(in srgb, var(--primary-color), transparent 80%);
+        --menu-item-bg-not-selected: color-mix(in srgb, var(--primary-color), transparent 90%);
         --menu-item-bg-selected: color-mix(in srgb, var(--primary-color), transparent 70%);
         --menu-item-bg-hover: color-mix(in srgb, var(--primary-color), transparent 60%);
 
@@ -125,11 +125,11 @@ ol {
 
 ul, ol {
     margin-bottom: 1.6rem;
-}
-
-ul li, ol li {
-    margin-left: 3.2rem;
-    margin-bottom: .4rem;
+    
+    li {
+        margin-left: 3.2rem;
+        margin-bottom: .4rem;
+    }
 }
 
 pre {
@@ -167,7 +167,7 @@ p {
 }
 
 em, strong {
-    font-weight: 700;
+    font-weight: 600;
 }
     
 figure {
@@ -190,36 +190,41 @@ article {
     margin: 0 0 2.4rem 0;
     border-radius: 1rem;
     box-shadow: var(--card-shadow);
+    
+    header {
+        margin-bottom: 1.6rem;
+        overflow: hidden;
+    }
+    
+    header h2 {
+        margin: 0;
+        float: right;
+        font-size: 1.7rem;
+        font-weight: normal;
+        letter-spacing: -0.1px;
+        color: var(--article-date-text-color);
+    }
+    
+    h1 a:link, h1 a:visited {
+        color: var(--title-color);
+    }
+    
+    img {
+        max-width: 100%;
+    }
+    
+    section {
+        line-height: 180%;
+    }
+    
+    nav {
+        display: flex;
+        justify-content: end;
+    }
 }
 
 article:last-child {
     margin-bottom: 0;
-}
-
-article header {
-    margin-bottom: 1.6rem;
-    overflow: hidden;
-}
-
-article header h2 {
-    margin: 0;
-    float: right;
-    font-size: 1.7rem;
-    font-weight: normal;
-    letter-spacing: -0.1px;
-    color: var(--article-date-text-color);
-}
-
-article h1 a:link, article h1 a:visited {
-    color: var(--title-color);
-}
-
-article img {
-    max-width: 100%;
-}
-
-article section {
-    line-height: 180%;
 }
 
 article.Social {
@@ -227,50 +232,46 @@ article.Social {
     background-repeat: no-repeat;
     background-position: 4.8rem 2.4rem;
     background-size: 4.8rem 4.8rem;
-}
-
-article.Social section {
-    padding-top: 3.6rem;
-    line-height: 130%;
-    font-size: 2.4rem;
-    text-align: center;
-    margin-bottom: 1.6rem;
-}
-
-article nav {
-    display: flex;
-    justify-content: end;
+    
+    section {
+        padding-top: 3.6rem;
+        line-height: 130%;
+        font-size: 2.4rem;
+        text-align: center;
+        margin-bottom: 1.6rem;
+    }
 }
 
 .main-menu {
     list-style-type: none;
-}
 
-.main-menu li {
-    margin: 0;
-}
-
-.main-menu a {
-    display: block;
-    padding: 1.6rem;
-    margin: 0 0 0.8rem;
-    border-radius: 3rem;
-    background-color: var(--menu-item-bg-not-selected);
-    box-shadow: var(--card-shadow);
-}
-
-.main-menu a:active {
-    position: relative;
-    top: 2px;
-}
-
-.main-menu a.selected {
-    background-color: var(--menu-item-bg-selected);
-    box-shadow: var(--card-shadow);
-}
-
-.main-menu a:hover {
-    background-color: var(--menu-item-bg-hover);
+    li {
+        margin: 0;
+    }
+    
+    a {
+        display: block;
+        padding: 1.6rem;
+        margin: 0 0 0.8rem;
+        border-radius: 3rem;
+        background-color: var(--menu-item-bg-not-selected);
+        box-shadow: var(--card-shadow);
+    }
+    
+    a:active {
+        position: relative;
+        top: 2px;
+    }
+    
+    a.selected {
+        background-color: var(--menu-item-bg-selected);
+        box-shadow: var(--card-shadow);
+        color: var(--text-color);
+    }
+    
+    a:hover {
+        background-color: var(--menu-item-bg-hover);
+    }
 }
 
 @media (max-width: 1000px) {
@@ -292,10 +293,10 @@ article nav {
         gap: 0.8rem;
         justify-content: center;
         margin: 0;
-    }
-
-    .main-menu a {
-        width: auto;
-        padding: 1.2rem 2.4rem;
+        
+        a {
+            width: auto;
+            padding: 1.2rem 2.4rem;
+        }
     }
 }
