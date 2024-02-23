@@ -17,4 +17,5 @@ type ArticleRecord =
       Content: string
       Media: MediaRecord option
       Date: Posix option
-      Source: Source }
+      SourceType: Source
+      SourceName: string }

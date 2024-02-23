@@ -46,7 +46,8 @@ let private about: ArticleRecord =
       Content = aboutContent
       Media = None
       Date = None
-      Source = About }
+      SourceType = About
+      SourceName = "About" }
 
 let mutable private allRecords: ArticleRecord list = []
 
@@ -55,6 +56,6 @@ let findAll () = about :: allRecords
 type FindAllBySources = Source list -> ArticleRecord list
 
 let findAllBySources: FindAllBySources =
-    fun sources -> findAll () |> List.filter (fun r -> List.contains r.Source sources)
+    fun sources -> findAll () |> List.filter (fun r -> List.contains r.SourceType sources)
 
 let updateAll newRecords = allRecords <- newRecords

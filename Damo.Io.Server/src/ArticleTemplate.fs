@@ -63,8 +63,12 @@ let render (article: ArticleRecord) : XmlNode =
     let articleContent = section [] [ rawText article.Content ]
     let maybeSourceLink = trySourceLink article
 
+    let sourceNameClass = article.SourceName.Replace(" ", "")
+    let sourceTypeClass = article.SourceType.ToString()
+    let cssClasses = $"{sourceNameClass} {sourceTypeClass}"
+
     HtmlElements.article
-        [ _class $"%A{article.Source}" ]
+        [ _class cssClasses ]
         [ yield articleHeader
           yield articleContent
 

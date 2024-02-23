@@ -2,6 +2,7 @@ module DamoIoServer.App
 
 open System
 open DamoIoServer
+open DamoIoServer.SourcesRepository
 open FSharp.Control
 open Giraffe
 open Microsoft.Extensions.Logging

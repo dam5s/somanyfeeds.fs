@@ -1,6 +1,7 @@
 module DamoIoServer.FeedsProcessor
 
 open DamoIoServer.Article
+open DamoIoServer.SourcesRepository
 open FSharp.Control
 open FeedsProcessing.Article
 open FeedsProcessing.DataGateway
@@ -9,20 +10,21 @@ open FeedsProcessing.ProcessingResult
 open FeedsProcessing.Xml
 open Microsoft.Extensions.Logging
 
-let private articleToRecord sourceType (article: Article) : ArticleRecord =
+let private articleToRecord (sourceFeed: SourceFeed) (article: Article) : ArticleRecord =
     { Title = Article.title article
       Link = Article.link article
       Content = Article.content article
       Media = Article.media article |> Option.map MediaRecord.ofMedia
       Date = Article.date article
-      Source = sourceType }
+      SourceType = sourceFeed.Type
+      SourceName = sourceFeed.Name }
 
-let private resultToList sourceType (result: ProcessingResult) =
-    List.map (articleToRecord sourceType) (Result.defaultValue [] result)
+let private resultToList (sourceFeed: SourceFeed) (result: ProcessingResult) =
+    List.map (articleToRecord sourceFeed) (Result.defaultValue [] result)
 
-let private downloadAndProcessFeed (logger: ILogger) feed : Async<ProcessingResult> =
-    match feed with
-    | Xml(_, url) ->
+let private downloadAndProcessFeed (logger: ILogger) (sourceFeed: SourceFeed) : Async<ProcessingResult> =
+    match sourceFeed.Feed with
+    | Xml(url) ->
         async {
             let! download = downloadContent url
 
@@ -43,9 +45,9 @@ let private downloadAndProcessFeed (logger: ILogger) feed : Async<ProcessingResu
 
 let processFeeds (logger: ILogger) (sources: SourcesRepository.SourceFeed list) : AsyncSeq<ArticleRecord> =
     asyncSeq {
-        for sourceType, feed in sources do
-            let! processingResult = downloadAndProcessFeed logger feed
-            let articles = processingResult |> resultToList sourceType
+        for sourceFeed in sources do
+            let! processingResult = downloadAndProcessFeed logger sourceFeed
+            let articles = processingResult |> resultToList sourceFeed
 
             for a in articles do
                 yield a
