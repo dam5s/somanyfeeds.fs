@@ -243,8 +243,7 @@ article:last-child {
 
 article.Social {
     background-repeat: no-repeat;
-    background-position-x: right var(--spacing-4);
-    background-position-y: var(--spacing-2);
+    background-position: top var(--spacing-2) right var(--spacing-4);
     background-size: var(--spacing-4) var(--spacing-4);
 
     header {
