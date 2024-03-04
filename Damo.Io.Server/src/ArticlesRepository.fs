@@ -1,4 +1,3 @@
-[<RequireQualifiedAccess>]
 module DamoIoServer.ArticlesRepository
 
 open DamoIoServer.Source
@@ -51,11 +50,15 @@ let private about: ArticleRecord =
 
 let mutable private allRecords: ArticleRecord list = []
 
-let findAll () = about :: allRecords
+[<RequireQualifiedAccess>]
+module ArticlesRepository =
+    let findAll () = about :: allRecords
 
-type FindAllBySources = Source list -> ArticleRecord list
+    type FindAllBySources = Source list -> ArticleRecord list
 
-let findAllBySources: FindAllBySources =
-    fun sources -> findAll () |> List.filter (fun r -> List.contains r.SourceType sources)
+    let findAllBySources: FindAllBySources =
+        fun sources -> findAll () |> List.filter (fun r -> List.contains r.SourceType sources)
 
-let updateAll newRecords = allRecords <- newRecords
+    type UpdateArticles = ArticleRecord list -> unit
+
+    let updateAll: UpdateArticles = fun newRecords -> allRecords <- newRecords

@@ -1,7 +1,5 @@
 module Program
 
-open DamoIoServer
-open DamoIoServer.AssetHashBuilder
 open Giraffe
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
@@ -10,6 +8,12 @@ open Microsoft.Extensions.Logging
 open System
 open System.IO
 open WebOptimizer
+
+open DamoIoServer.App
+open DamoIoServer.AppConfig
+open DamoIoServer.ArticlesRepository
+open DamoIoServer.BackgroundProcessor
+open DamoIoServer.AssetHashBuilder
 
 let private configureErrorHandling (app: IApplicationBuilder) =
     if AppConfig.enableExceptionPage then
@@ -56,8 +60,10 @@ let main _ =
     let webHost = webHostBuilder().Build()
 
     let loggerProvider = webHost.Services.GetRequiredService<ILoggerProvider>()
-    let processorLogger = loggerProvider.CreateLogger("Damo.Io.Server.FeedsProcessor")
-    Async.Start(App.backgroundProcessing processorLogger)
+    let logger = loggerProvider.CreateLogger("Damo.Io.Server.FeedsProcessor")
+    let processor = BackgroundProcessor(logger, ArticlesRepository.updateAll)
+
+    processor.StartProcessing()
 
     webHost.Run()
     0

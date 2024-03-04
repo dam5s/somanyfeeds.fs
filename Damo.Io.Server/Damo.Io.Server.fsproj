@@ -28,6 +28,7 @@
     <Compile Include="src\ArticleListTemplate.fs" />
     <Compile Include="src\ArticlesHandler.fs" />
     <Compile Include="src\FeedsProcessor.fs" />
+    <Compile Include="src\BackgroundProcessor.fs" />
     <Compile Include="src\App.fs" />
     <Compile Include="src\Program.fs" />
   </ItemGroup>
