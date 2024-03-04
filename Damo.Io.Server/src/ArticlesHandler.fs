@@ -4,6 +4,7 @@ open System
 open Time
 open DamoIoServer.Article
 open DamoIoServer.Source
+open DamoIoServer.ArticlesRepository
 
 let private sourcesFromPath (path: string) =
     path.Split(",") |> Array.toList |> List.choose Source.tryFromString

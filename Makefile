@@ -9,6 +9,7 @@ clean:
 
 check:
 	dotnet fantomas --check .
+	dotnet build
 	dotnet test
 
 format:
