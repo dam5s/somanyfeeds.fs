@@ -1,8 +1,8 @@
-[<RequireQualifiedAccess>]
 module DamoIoServer.ArticleListTemplate
 
 open DamoIoServer.Source
 open DamoIoServer.Article
+open DamoIoServer.ArticleTemplate
 
 let private sourceToggleHref selectedSources source =
     Source.all
@@ -41,10 +41,12 @@ let private sourceLink selectedSources source =
 
     li [] [ a attrs [ str (Source.toString source) ] ]
 
-let render (articles: ArticleRecord list) (sources: Source list) : XmlNode =
-    let sourceLinks = Source.all |> List.map (sourceLink sources)
-    let articleList = articles |> List.map ArticleTemplate.render
-    let logo = h1 [] [ str "damo.io" ]
-    let menu = ul [ _class "main-menu" ] sourceLinks
+[<RequireQualifiedAccess>]
+module ArticleListTemplate =
+    let render (articles: ArticleRecord list) (sources: Source list) : XmlNode =
+        let sourceLinks = Source.all |> List.map (sourceLink sources)
+        let articleList = articles |> List.map ArticleTemplate.render
+        let logo = h1 [] [ str "damo.io" ]
+        let menu = ul [ _class "main-menu" ] sourceLinks
 
-    div [ _id "template" ] [ aside [] [ logo; menu ]; main [] articleList ]
+        div [ _id "template" ] [ aside [] [ logo; menu ]; main [] articleList ]

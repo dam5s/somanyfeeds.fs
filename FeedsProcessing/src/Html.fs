@@ -28,4 +28,6 @@ let private sanitizer =
     |> disallow "style"
     |> removeUrlsContaining "/tracking"
 
-let sanitize = sanitizer.Sanitize
+[<RequireQualifiedAccess>]
+module Html =
+    let sanitize = sanitizer.Sanitize

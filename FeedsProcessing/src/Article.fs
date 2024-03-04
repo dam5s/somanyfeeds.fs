@@ -1,8 +1,9 @@
 module FeedsProcessing.Article
 
-open FeedsProcessing
 open System
 open Time
+
+open FeedsProcessing.Html
 
 let private stringToOption text =
     if String.IsNullOrWhiteSpace text then None else Some text

@@ -2,9 +2,10 @@ module FeedsProcessing.DataGateway
 
 open FSharp.Data
 open FSharp.Data.HttpRequestHeaders
-open FeedsProcessing.Download
 open System
 open System.Web
+
+open FeedsProcessing.Download
 
 type private BasicAuthHeader = BasicAuthHeader of string
 type private BearerToken = BearerToken of string
@@ -56,19 +57,21 @@ let private requestToken (BasicAuthHeader authHeader) =
             parseToken responseString
         )
 
-let downloadContent (Url url) : DownloadResult =
-    async {
-        return
-            Try.value
-                "Download content"
-                (fun _ ->
-                    let content =
-                        Http.RequestString(
-                            url,
-                            headers = [ "User-Agent", "somanyfeeds.com" ],
-                            responseEncodingOverride = "utf-8"
-                        )
+[<RequireQualifiedAccess>]
+module DataGateway =
+    let download (Url url) : DownloadResult =
+        async {
+            return
+                Try.value
+                    "Download content"
+                    (fun _ ->
+                        let content =
+                            Http.RequestString(
+                                url,
+                                headers = [ "User-Agent", "somanyfeeds.com" ],
+                                responseEncodingOverride = "utf-8"
+                            )
 
-                    { Url = (Url url); Content = content }
-                )
-    }
+                        { Url = (Url url); Content = content }
+                    )
+        }

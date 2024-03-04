@@ -2,9 +2,10 @@
 
 open System
 open System.IO
-open Metadata
-open Markdown
-open Config
+
+open BlogGenerator.Metadata
+open BlogGenerator.Markdown
+open BlogGenerator.Config
 
 type Post =
     { Title: string

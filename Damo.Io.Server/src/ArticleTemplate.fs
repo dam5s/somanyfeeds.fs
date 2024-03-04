@@ -1,7 +1,7 @@
-[<RequireQualifiedAccess>]
 module DamoIoServer.ArticleTemplate
 
 open Time
+
 open DamoIoServer.Article
 
 let private monthDisplayName month =
@@ -58,24 +58,26 @@ let private renderMedia (media: MediaRecord) : XmlNode =
         [ img [ _src media.Url; _alt media.Description ]
           figcaption [] [ str media.Description ] ]
 
-let render (article: ArticleRecord) : XmlNode =
-    let articleHeader = articleHeader article
-    let articleContent = section [] [ rawText article.Content ]
-    let maybeSourceLink = trySourceLink article
+[<RequireQualifiedAccess>]
+module ArticleTemplate =
+    let render (article: ArticleRecord) : XmlNode =
+        let articleHeader = articleHeader article
+        let articleContent = section [] [ rawText article.Content ]
+        let maybeSourceLink = trySourceLink article
 
-    let sourceNameClass = article.SourceName.Replace(" ", "")
-    let sourceTypeClass = article.SourceType.ToString()
-    let cssClasses = $"{sourceNameClass} {sourceTypeClass}"
+        let sourceNameClass = article.SourceName.Replace(" ", "")
+        let sourceTypeClass = article.SourceType.ToString()
+        let cssClasses = $"{sourceNameClass} {sourceTypeClass}"
 
-    HtmlElements.article
-        [ _class cssClasses ]
-        [ yield articleHeader
-          yield articleContent
+        HtmlElements.article
+            [ _class cssClasses ]
+            [ yield articleHeader
+              yield articleContent
 
-          match article.Media with
-          | Some media -> yield renderMedia media
-          | None -> ()
+              match article.Media with
+              | Some media -> yield renderMedia media
+              | None -> ()
 
-          match maybeSourceLink with
-          | Some sourceLink -> yield sourceLink
-          | None -> () ]
+              match maybeSourceLink with
+              | Some sourceLink -> yield sourceLink
+              | None -> () ]

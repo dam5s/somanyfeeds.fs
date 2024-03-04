@@ -1,6 +1,7 @@
 ﻿module BlogGenerator.Html
 
 open System
+
 open BlogGenerator.Posts
 open BlogGenerator.Config
 

@@ -1,14 +1,15 @@
 module DamoIoServer.FeedsProcessor
 
-open DamoIoServer.Article
-open DamoIoServer.SourcesRepository
 open FSharp.Control
+open Microsoft.Extensions.Logging
+
 open FeedsProcessing.Article
 open FeedsProcessing.DataGateway
 open FeedsProcessing.Feeds
 open FeedsProcessing.ProcessingResult
 open FeedsProcessing.Xml
-open Microsoft.Extensions.Logging
+open DamoIoServer.Article
+open DamoIoServer.SourcesRepository
 
 let private articleToRecord (sourceFeed: SourceFeed) (article: Article) : ArticleRecord =
     { Title = Article.title article
@@ -26,11 +27,11 @@ let private downloadAndProcessFeed (logger: ILogger) (sourceFeed: SourceFeed) : 
     match sourceFeed.Feed with
     | Xml(url) ->
         async {
-            let! download = downloadContent url
+            let! download = DataGateway.download url
 
             return
                 download
-                |> Result.bind processFeed
+                |> Result.bind Xml.processFeed
                 |> Result.onOk (fun articles ->
                     let count = List.length articles
                     logger.LogInformation($"Parsed feed %A{url}, found %d{count} article(s)")
@@ -43,12 +44,14 @@ let private downloadAndProcessFeed (logger: ILogger) (sourceFeed: SourceFeed) : 
                 )
         }
 
-let processFeeds (logger: ILogger) (sources: SourcesRepository.SourceFeed list) : AsyncSeq<ArticleRecord> =
-    asyncSeq {
-        for sourceFeed in sources do
-            let! processingResult = downloadAndProcessFeed logger sourceFeed
-            let articles = processingResult |> resultToList sourceFeed
+[<RequireQualifiedAccess>]
+module FeedsProcessor =
+    let processFeeds (logger: ILogger) (sources: SourcesRepository.SourceFeed list) : AsyncSeq<ArticleRecord> =
+        asyncSeq {
+            for sourceFeed in sources do
+                let! processingResult = downloadAndProcessFeed logger sourceFeed
+                let articles = processingResult |> resultToList sourceFeed
 
-            for a in articles do
-                yield a
-    }
+                for a in articles do
+                    yield a
+        }

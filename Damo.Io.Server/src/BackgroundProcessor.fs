@@ -5,6 +5,7 @@ open Microsoft.Extensions.Logging
 
 open DamoIoServer.SourcesRepository
 open DamoIoServer.ArticlesRepository
+open DamoIoServer.FeedsProcessor
 
 [<RequireQualifiedAccess>]
 type BackgroundProcessor(logger: ILogger, updateArticles: ArticlesRepository.UpdateArticles) =

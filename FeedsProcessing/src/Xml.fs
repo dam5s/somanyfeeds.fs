@@ -1,10 +1,11 @@
 module FeedsProcessing.Xml
 
 open FSharp.Data
+open System
+
 open FeedsProcessing.Article
 open FeedsProcessing.Download
 open FeedsProcessing.ProcessingResult
-open System
 
 let private stringToOption text =
     if String.IsNullOrWhiteSpace text then None else Some text
@@ -141,10 +142,12 @@ let private tryProcessor downloaded (previousState: ProcessingResult) (processor
 let private processors: Processor list =
     [ Rss.processor; Atom.processor; Rdf.processor ]
 
-let processFeed (download: Download) : ProcessingResult =
-    (Error.ofMessage "", processors)
-    ||> List.fold (tryProcessor download)
-    |> Result.mapError (Explanation.wrapMessage (sprintf "Failed all the parsers: %s"))
+[<RequireQualifiedAccess>]
+module Xml =
+    let processFeed (download: Download) : ProcessingResult =
+        (Error.ofMessage "", processors)
+        ||> List.fold (tryProcessor download)
+        |> Result.mapError (Explanation.wrapMessage (sprintf "Failed all the parsers: %s"))
 
-let tryGetMetadata (download: Download) : FeedMetadata option =
-    processors |> List.choose (fun p -> p.TryGetMetadata download) |> List.tryHead
+    let tryGetMetadata (download: Download) : FeedMetadata option =
+        processors |> List.choose (fun p -> p.TryGetMetadata download) |> List.tryHead

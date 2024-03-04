@@ -1,7 +1,7 @@
 module FeedsProcessing.Search
 
 open FSharp.Data
-open FeedsProcessing
+
 open FeedsProcessing.Download
 open FeedsProcessing.Xml
 

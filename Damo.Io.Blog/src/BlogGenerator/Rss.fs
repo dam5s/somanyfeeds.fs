@@ -2,6 +2,7 @@
 
 open System
 open System.Xml.Linq
+
 open BlogGenerator.Posts
 open BlogGenerator.Config
 

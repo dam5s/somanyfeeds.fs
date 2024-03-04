@@ -1,6 +1,6 @@
 open BlogGenerator.Build
 
 [<EntryPoint>]
-let main argv =
+let main _ =
     Build.run ()
     0

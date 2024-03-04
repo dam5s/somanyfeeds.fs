@@ -1,6 +1,5 @@
 module FeedsProcessing.Download
 
-
 type Url = Url of string
 
 [<RequireQualifiedAccess>]

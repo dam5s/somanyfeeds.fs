@@ -1,7 +1,8 @@
 module DamoIoServer.Article
 
-open FeedsProcessing.Article
 open Time
+
+open FeedsProcessing.Article
 open DamoIoServer.Source
 
 type MediaRecord = { Url: string; Description: string }

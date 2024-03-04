@@ -1,8 +1,8 @@
 module DamoIoServer.SourcesRepository
 
-open DamoIoServer.Source
 open FeedsProcessing.Download
 open FeedsProcessing.Feeds
+open DamoIoServer.Source
 
 type SourceFeed =
     { Type: Source

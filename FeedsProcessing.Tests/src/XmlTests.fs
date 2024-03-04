@@ -1,19 +1,20 @@
 module ``Xml Processor Tests``
 
-open FeedsProcessing.Article
-open FeedsProcessing.Xml
-open FeedsProcessingTests.DownloadSupport
 open FsUnit
 open FsUnitTyped
 open NUnit.Framework
 open System
 open Time
 
+open FeedsProcessing.Article
+open FeedsProcessing.Xml
+open FeedsProcessingTests.DownloadSupport
+
 [<Test>]
 let ``with unsupported XML`` () =
     let download = Download.fromContent "<foo>Not quite expected xml content</foo>"
 
-    let result = processFeed download
+    let result = Xml.processFeed download
 
     match result with
     | Ok _ -> Assert.Fail "Expected failure"
@@ -28,7 +29,7 @@ let ``with github Atom XML`` () =
         "../../../../FeedsProcessing.Tests/resources/test-samples/github.xml"
         |> Download.fromFilePath
 
-    let result = processFeed download
+    let result = Xml.processFeed download
 
     match result with
     | Error _ -> Assert.Fail "Expected success"
@@ -58,7 +59,7 @@ let ``with Dualshock Atom XML`` () =
         "../../../../FeedsProcessing.Tests/resources/test-samples/dualshock.xml"
         |> Download.fromFilePath
 
-    let result = processFeed downloaded
+    let result = Xml.processFeed downloaded
 
     match result with
     | Error _ -> Assert.Fail "Expected success"
@@ -71,7 +72,7 @@ let ``with RSS XML`` () =
         "../../../../FeedsProcessing/resources/samples/rss.sample.xml"
         |> Download.fromFilePath
 
-    let result = processFeed downloadedFeed
+    let result = Xml.processFeed downloadedFeed
 
     match result with
     | Error _ -> Assert.Fail "Expected success"
@@ -112,7 +113,7 @@ let ``with mastodon RSS`` () =
         "../../../../FeedsProcessing.Tests/resources/test-samples/mastodon.xml"
         |> Download.fromFilePath
 
-    let result = processFeed downloadedFeed
+    let result = Xml.processFeed downloadedFeed
 
     match result with
     | Error _ -> Assert.Fail "Expected success"
@@ -141,7 +142,7 @@ let ``processFeed with slashdot RDF XML`` () =
         "../../../../FeedsProcessing.Tests/resources/test-samples/slashdot.xml"
         |> Download.fromFilePath
 
-    let result = processFeed downloadedFeed
+    let result = Xml.processFeed downloadedFeed
 
     match result with
     | Error _ -> Assert.Fail "Expected success"

@@ -2,7 +2,6 @@ module DamoIoServer.AssetHashBuilder
 
 open System
 open System.Security.Cryptography
-
 open System.Collections.Concurrent
 open Microsoft.AspNetCore.Http
 open WebOptimizer
