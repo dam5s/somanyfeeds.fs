@@ -1,6 +1,8 @@
 module DamoIoServer.App
 
 open System
+open Damo.Io.Server.IHttpHandler
+open DamoIoServer.ArticlesHandler
 open Giraffe
 open Microsoft.Extensions.Logging
 
@@ -8,7 +10,7 @@ open Microsoft.Extensions.Logging
 module App =
     let handler: HttpHandler =
         choose
-            [ GET >=> route "/" >=> ArticlesHandler.list
+            [ GET >=> route "/" >=> handler<ListArticlesHandler>
               setStatusCode 404 >=> text "Not Found" ]
 
     let errorHandler (ex: Exception) (logger: ILogger) : HttpHandler =

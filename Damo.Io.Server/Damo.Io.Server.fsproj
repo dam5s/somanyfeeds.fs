@@ -10,7 +10,7 @@
 
     <ProjectReference Include="..\Prelude\Prelude.fsproj" />
     <ProjectReference Include="..\FeedsProcessing\FeedsProcessing.fsproj" />
-
+    <Compile Include="src\IHttpHandler.fs" />
     <Compile Include="src\AppConfig.fs" />
     <Compile Include="src\AssetHashBuilder.fs" />
     <Compile Include="src\LayoutTemplate.fs" />

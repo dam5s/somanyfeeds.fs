@@ -1,6 +1,7 @@
 module DamoIoServer.ArticlesHandler
 
 open System
+open Damo.Io.Server.IHttpHandler
 open Time
 
 open DamoIoServer.LayoutTemplate
@@ -10,20 +11,18 @@ open DamoIoServer.ArticleListTemplate
 
 open Giraffe
 
-let list: HttpHandler =
-    fun next ctx ->
-        task {
-            let articlesRepo = ctx.GetService<ArticlesRepository>()
-            let layoutTemplate = ctx.GetService<LayoutTemplate>()
+type ListArticlesHandler(articlesRepo: ArticlesRepository, layoutTemplate: LayoutTemplate) =
+    interface IHttpHandler with
+        member _.Handle(next, ctx) =
+            task {
+                let! articles = articlesRepo.FindAllAsync()
 
-            let! articles = articlesRepo.FindAllAsync()
+                let now = Posix.fromDateTimeOffset DateTimeOffset.UtcNow
 
-            let now = Posix.fromDateTimeOffset DateTimeOffset.UtcNow
+                let sortedArticles =
+                    articles |> List.sortByDescending (fun r -> Option.defaultValue now r.Date)
 
-            let sortedArticles =
-                articles |> List.sortByDescending (fun r -> Option.defaultValue now r.Date)
+                let! view = ArticleListTemplate.render sortedArticles |> layoutTemplate.RenderAsync
 
-            let! view = ArticleListTemplate.render sortedArticles |> layoutTemplate.RenderAsync
-
-            return! htmlView view next ctx
-        }
+                return! htmlView view next ctx
+            }

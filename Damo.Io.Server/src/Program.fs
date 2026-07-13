@@ -1,6 +1,7 @@
 module Program
 
 open DamoIoServer.App
+open DamoIoServer.ArticlesHandler
 open DamoIoServer.ArticlesRepository
 open DamoIoServer.FeedsProcessor
 open DamoIoServer.FeedsRepository
@@ -41,10 +42,13 @@ let private configureServices (builder: WebApplicationBuilder) =
         .AddGiraffe()
         .AddWebOptimizer(configureAssetPipeline)
         .AddHttpContextAccessor()
-        .AddSingleton<AssetHashBuilder>()
-        .AddSingleton<LayoutTemplate>()
         .AddSingleton<ArticlesRepository>()
         .AddSingleton<FeedsRepository>()
+
+        .AddSingleton<AssetHashBuilder>()
+        .AddSingleton<LayoutTemplate>()
+        .AddSingleton<ListArticlesHandler>()
+
         .AddSingleton<FeedsProcessor>()
         .AddSingleton<IHostedService, FeedsProcessorHostedService>()
     |> always builder
