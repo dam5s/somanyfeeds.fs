@@ -3,15 +3,21 @@ module DamoIoServer.BackgroundProcessor
 open System
 open System.Threading
 open System.Threading.Tasks
+open DamoIoServer.ArticlesRepository
+open DamoIoServer.FeedsRepository
 open FSharp.Control
 open Microsoft.Extensions.Hosting
 open Microsoft.Extensions.Logging
 
-open DamoIoServer.SourcesRepository
-open DamoIoServer.ArticlesRepository
 open DamoIoServer.FeedsProcessor
 
-type FeedsProcessorHostedService(logger: ILogger<FeedsProcessorHostedService>, processor: FeedsProcessor) =
+type FeedsProcessorHostedService
+    (
+        logger: ILogger<FeedsProcessorHostedService>,
+        processor: FeedsProcessor,
+        feedsRepo: FeedsRepository,
+        articlesRepo: ArticlesRepository
+    ) =
 
     let stopRequested = new CancellationTokenSource()
     let stopCompleted = TaskCompletionSource()
@@ -27,9 +33,10 @@ type FeedsProcessorHostedService(logger: ILogger<FeedsProcessorHostedService>, p
                 while not stopRequested.Token.IsCancellationRequested do
                     logger.LogInformation("Periodic source updates starting")
 
-                    let sources = SourcesRepository.findAll ()
-                    let! newArticles = processor.ProcessFeeds(sources, stopRequested.Token) |> TaskSeq.toListAsync
-                    ArticlesRepository.updateAll newArticles
+                    let! feeds = feedsRepo.FindAllAsync()
+                    let! newArticles = processor.ProcessFeeds(feeds, stopRequested.Token) |> TaskSeq.toListAsync
+
+                    do! articlesRepo.UpdateAll newArticles
 
                     logger.LogInformation("Periodic source updates done")
 

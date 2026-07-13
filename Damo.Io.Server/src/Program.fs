@@ -1,7 +1,9 @@
 module Program
 
 open DamoIoServer.App
+open DamoIoServer.ArticlesRepository
 open DamoIoServer.FeedsProcessor
+open DamoIoServer.FeedsRepository
 open Giraffe
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
@@ -38,6 +40,8 @@ let private configureServices (builder: WebApplicationBuilder) =
         .AddGiraffe()
         .AddWebOptimizer(configureAssetPipeline)
         .AddSingleton<AssetHashBuilder>()
+        .AddSingleton<ArticlesRepository>()
+        .AddSingleton<FeedsRepository>()
         .AddSingleton<FeedsProcessor>()
         .AddSingleton<IHostedService, FeedsProcessorHostedService>()
     |> always builder

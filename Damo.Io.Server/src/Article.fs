@@ -3,7 +3,6 @@ module DamoIoServer.Article
 open Time
 
 open FeedsProcessing.Article
-open DamoIoServer.Source
 
 type MediaRecord = { Url: string; Description: string }
 
@@ -18,5 +17,4 @@ type ArticleRecord =
       Content: string
       Media: MediaRecord option
       Date: Posix option
-      SourceType: Source
-      SourceName: string }
+      FeedName: string }

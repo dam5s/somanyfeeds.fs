@@ -1,6 +1,5 @@
 module DamoIoServer.ArticlesRepository
 
-open DamoIoServer.Source
 open DamoIoServer.Article
 
 let private aboutContent =
@@ -45,20 +44,12 @@ let private about: ArticleRecord =
       Content = aboutContent
       Media = None
       Date = None
-      SourceType = About
-      SourceName = "About" }
+      FeedName = "About" }
 
-let mutable private allRecords: ArticleRecord list = []
+type ArticlesRepository() =
 
-[<RequireQualifiedAccess>]
-module ArticlesRepository =
-    let findAll () = about :: allRecords
+    let mutable allRecords: ArticleRecord list = []
 
-    type FindAllBySources = Source list -> ArticleRecord list
+    member _.FindAllAsync() = task { return about :: allRecords }
 
-    let findAllBySources: FindAllBySources =
-        fun sources -> findAll () |> List.filter (fun r -> List.contains r.SourceType sources)
-
-    type UpdateArticles = ArticleRecord list -> unit
-
-    let updateAll: UpdateArticles = fun newRecords -> allRecords <- newRecords
+    member _.UpdateAll(newRecords) = task { allRecords <- newRecords }

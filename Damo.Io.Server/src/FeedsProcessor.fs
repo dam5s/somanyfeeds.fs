@@ -11,27 +11,26 @@ open FeedsProcessing.Feeds
 open FeedsProcessing.ProcessingResult
 open FeedsProcessing.Xml
 open DamoIoServer.Article
-open DamoIoServer.SourcesRepository
+open DamoIoServer.FeedsRepository
 
 type FeedsProcessor(logger: ILogger<FeedsProcessor>) =
 
-    let articleToRecord (sourceFeed: SourceFeed) (article: Article) : ArticleRecord =
+    let articleToRecord (feed: FeedRecord) (article: Article) : ArticleRecord =
         { Title = Article.title article
           Link = Article.link article
           Content = Article.content article
           Media = Article.media article |> Option.map MediaRecord.ofMedia
           Date = Article.date article
-          SourceType = sourceFeed.Type
-          SourceName = sourceFeed.Name }
+          FeedName = feed.Name }
 
-    let resultToList (sourceFeed: SourceFeed) (result: ProcessingResult) =
+    let resultToList (sourceFeed: FeedRecord) (result: ProcessingResult) =
         List.map (articleToRecord sourceFeed) (Result.defaultValue [] result)
 
     let downloadAndProcessFeed
-        (sourceFeed: SourceFeed)
+        (feed: FeedRecord)
         (cancellationToken: CancellationToken)
         : Task<ProcessingResult> =
-        match sourceFeed.Feed with
+        match feed.Feed with
         | Xml(url) ->
             task {
                 let! download = DataGateway.download url
@@ -53,11 +52,11 @@ type FeedsProcessor(logger: ILogger<FeedsProcessor>) =
                     )
             }
 
-    member this.ProcessFeeds(sources: SourceFeed list, cancellationToken: CancellationToken) : TaskSeq<ArticleRecord> =
+    member _.ProcessFeeds(feeds: FeedRecord list, cancellationToken: CancellationToken) : TaskSeq<ArticleRecord> =
         taskSeq {
-            for sourceFeed in sources do
-                let! processingResult = downloadAndProcessFeed sourceFeed cancellationToken
-                let articles = processingResult |> resultToList sourceFeed
+            for feed in feeds do
+                let! processingResult = downloadAndProcessFeed feed cancellationToken
+                let articles = processingResult |> resultToList feed
 
                 for a in articles do
                     yield a

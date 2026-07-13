@@ -14,8 +14,7 @@
     <Compile Include="src\AppConfig.fs" />
     <Compile Include="src\AssetHashBuilder.fs" />
     <Compile Include="src\LayoutTemplate.fs" />
-    <Compile Include="src\Source.fs" />
-    <Compile Include="src\SourcesRepository.fs" />
+    <Compile Include="src\FeedsRepository.fs" />
     <Compile Include="src\Article.fs" />
     <Compile Include="src\ArticlesRepository.fs" />
     <Compile Include="src\ArticleTemplate.fs" />

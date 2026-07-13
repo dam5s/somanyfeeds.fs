@@ -4,13 +4,11 @@ open System
 open Giraffe
 open Microsoft.Extensions.Logging
 
-open DamoIoServer.ArticlesRepository
-
 [<RequireQualifiedAccess>]
 module App =
     let handler: HttpHandler =
         choose
-            [ GET >=> route "/" >=> (ArticlesHandler.list ArticlesRepository.findAllBySources)
+            [ GET >=> route "/" >=> ArticlesHandler.list
               setStatusCode 404 >=> text "Not Found" ]
 
     let errorHandler (ex: Exception) (logger: ILogger) : HttpHandler =

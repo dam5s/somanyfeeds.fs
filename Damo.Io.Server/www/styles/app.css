@@ -235,7 +235,7 @@ article:last-child {
     margin-bottom: 0;
 }
 
-article.Social {
+article.Mastodon, article.Bluesky {
     background-repeat: no-repeat;
     background-position: top var(--spacing-4) right var(--spacing-4);
     background-size: var(--spacing-4) var(--spacing-4);

@@ -3,7 +3,6 @@ module DamoIoServer.ArticlesHandler
 open System
 open Time
 
-open DamoIoServer.Source
 open DamoIoServer.LayoutTemplate
 open DamoIoServer.Article
 open DamoIoServer.ArticlesRepository
@@ -11,17 +10,19 @@ open DamoIoServer.ArticleListTemplate
 
 open Giraffe
 
-let list (findArticlesBySources: ArticlesRepository.FindAllBySources) : HttpHandler =
+let list: HttpHandler =
     fun next ctx ->
         task {
+            let articlesRepo = ctx.GetService<ArticlesRepository>()
+
+            let! articles = articlesRepo.FindAllAsync()
+
             let now = Posix.fromDateTimeOffset DateTimeOffset.UtcNow
 
-            let articles =
-                Source.all
-                |> findArticlesBySources
-                |> List.sortByDescending (fun r -> Option.defaultValue now r.Date)
+            let sortedArticles =
+                articles |> List.sortByDescending (fun r -> Option.defaultValue now r.Date)
 
-            let view = ArticleListTemplate.render articles |> LayoutTemplate.render ctx
+            let view = ArticleListTemplate.render sortedArticles |> LayoutTemplate.render ctx
 
             return! htmlView view next ctx
         }

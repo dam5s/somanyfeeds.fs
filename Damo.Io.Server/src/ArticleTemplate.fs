@@ -64,10 +64,7 @@ module ArticleTemplate =
         let articleHeader = articleHeader article
         let articleContent = section [] [ rawText article.Content ]
         let maybeSourceLink = trySourceLink article
-
-        let sourceNameClass = article.SourceName.Replace(" ", "")
-        let sourceTypeClass = article.SourceType.ToString()
-        let cssClasses = $"{sourceNameClass} {sourceTypeClass}"
+        let cssClasses = article.FeedName.Replace(" ", "")
 
         HtmlElements.article
             [ _class cssClasses ]
