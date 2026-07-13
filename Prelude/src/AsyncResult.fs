@@ -2,12 +2,13 @@
 module AsyncResult
 
 open System
+open System.Threading.Tasks
 
 type Explanation =
     { Message: string
       Exceptions: Exception list }
 
-type AsyncResult<'a> = Async<Result<'a, Explanation>>
+type AsyncResult<'a> = Task<Result<'a, Explanation>>
 
 [<RequireQualifiedAccess>]
 module Explanation =
@@ -32,35 +33,35 @@ module Error =
 [<RequireQualifiedAccess>]
 module AsyncResult =
 
-    let result value : AsyncResult<'a> = async { return Ok value }
+    let result value : AsyncResult<'a> = task { return Ok value }
 
-    let error (msg: string) : AsyncResult<'a> = async { return Error.ofMessage msg }
+    let error (msg: string) : AsyncResult<'a> = task { return Error.ofMessage msg }
 
-    let fromResult result : AsyncResult<'a> = async { return result }
+    let fromResult result : AsyncResult<'a> = task { return result }
 
     let map mapping (result: AsyncResult<'a>) : AsyncResult<'b> =
-        async {
+        task {
             match! result with
             | Ok value -> return Ok(mapping value)
             | Error err -> return Error err
         }
 
     let bind (mapping: 'a -> AsyncResult<'b>) (result: AsyncResult<'a>) : AsyncResult<'b> =
-        async {
+        task {
             match! result with
             | Ok value -> return! mapping value
             | Error err -> return Error err
         }
 
     let mapError mapping (result: AsyncResult<'a>) : AsyncResult<'a> =
-        async {
+        task {
             match! result with
             | Ok value -> return Ok value
             | Error err -> return Error(mapping err)
         }
 
     let defaultValue value (result: AsyncResult<'a>) =
-        async {
+        task {
             match! result with
             | Ok x -> return x
             | Error _ -> return value
@@ -78,7 +79,7 @@ module AsyncResult =
 
 type AsyncResultBuilder() =
     member x.Bind(result, mapping) = AsyncResult.bind mapping result
-    member x.Return(value) = async { return Ok value }
+    member x.Return(value) = task { return Ok value }
     member x.ReturnFrom(result) = result
     member x.Using(resource, func) = AsyncResult.using resource func
 

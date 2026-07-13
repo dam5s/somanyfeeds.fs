@@ -3,7 +3,8 @@
 ## Local Setup
 
 ### Dependencies
- 1. .NET 8
+ * [.NET 10](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
+ * [Just](https://github.com/just-buildsystem/justbuild) 
 
 ### Setup your environment variables.
 
@@ -15,9 +16,9 @@ necessary variables for the whole build.
 ### Running the build
 
 ```
-make check
-make damo.io.server.container
-make damo.io.blog.container
+just check
+just damo.io.server.container
+just damo.io.blog.container
 ```
 
 ## GCloud

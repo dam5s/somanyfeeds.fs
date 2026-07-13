@@ -21,4 +21,4 @@ module LayoutTemplate =
                     title [] [ str "damo.io - Damien Le Berrigaud's feeds" ]
                     link [ _rel "stylesheet"; _type "text/css"; _assetHref "/styles/app.min.css" ]
                     link [ _rel "icon"; _type "image/svg+xml"; _sizes "any"; _href "/favicon.svg" ] ]
-              body [] [ innerTemplate; script [ _src "/javascript/htmx-1.8.5.min.js" ] [] ] ]
+              body [] [ header [] [ h1 [] [ str "damo.io" ] ]; main [] innerTemplate ] ]

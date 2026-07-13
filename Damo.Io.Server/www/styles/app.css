@@ -13,10 +13,6 @@
 
     --article-date-text-color: rgba(255, 255, 255, 0.25);
 
-    --menu-item-bg-not-selected: color-mix(in srgb, var(--primary-color), transparent 95%);
-    --menu-item-bg-selected: color-mix(in srgb, var(--primary-color), transparent 70%);
-    --menu-item-bg-hover: color-mix(in srgb, var(--primary-color), transparent 80%);
-
     --serif: 'Cambria', 'Palatino', serif;
     --sans-serif: -apple-system, 'Calibri', 'Helvetica Neue', sans-serif;
     --monospace: 'JetBrains Mono', 'SFMono-Regular', 'Consolas', 'Liberation Mono', 'Menlo', monospace;
@@ -28,18 +24,14 @@
     --card-shadow: 2px 2px 1px rgba(0, 0, 0, 0.3);
     --emphasis-shadow: 1px 1px 0 rgba(0, 0, 0, 0.8);
 
-    --mobile-header-height: 15rem;
+    --mobile-header-height: 9rem;
 }
 
 @media (prefers-color-scheme: light) {
     :root {
         --bg-color: #ddd;
         --fg-color: #444;
-        --card-color: #f5f5f5;
-
-        --menu-item-bg-not-selected: color-mix(in srgb, var(--primary-color), transparent 90%);
-        --menu-item-bg-selected: color-mix(in srgb, var(--primary-color), transparent 70%);
-        --menu-item-bg-hover: color-mix(in srgb, var(--primary-color), transparent 60%);
+        --card-color: rgba(245, 245, 245, 0.8);
 
         --article-date-text-color: rgba(0, 0, 0, 0.5);
         --emphasis-shadow: 0 1px 0 rgba(0, 0, 0, 0.8);
@@ -70,14 +62,14 @@ body {
     box-sizing: border-box;
 }
 
-#template > main {
+body > main {
     max-width: 80rem;
     margin-left: 40rem;
     padding: var(--spacing-2);
     min-height: 100vh;
 }
 
-#template > aside {
+body > header {
     background-color: var(--card-color);
     position: fixed;
     left: 0;
@@ -87,19 +79,20 @@ body {
     padding: var(--spacing-2) var(--spacing-4);
     text-align: center;
     box-shadow: var(--card-shadow);
+
+    h1 {
+        font-family: var(--serif);
+        color: var(--text-color);
+        font-weight: 600;
+        letter-spacing: -2px;
+        margin: var(--spacing-2) 0;
+        background: url("/favicon.svg") no-repeat left center;
+        background-size: 5rem 5rem;
+        padding-left: 6rem;
+        display: inline-block;
+    }
 }
 
-#template > aside h1 {
-    font-family: var(--serif);
-    color: var(--text-color);
-    font-weight: 600;
-    letter-spacing: -2px;
-    margin: var(--spacing-2) 0;
-    background: url("/favicon.svg") no-repeat left center;
-    background-size: 5rem 5rem;
-    padding-left: 6rem;
-    display: inline-block;
-}
 
 h1, h2, h3, h4 {
     line-height: 1.1;
@@ -220,6 +213,7 @@ article {
             font-weight: normal;
             letter-spacing: -0.1px;
             color: var(--article-date-text-color);
+            filter: none;
         }
     }
 
@@ -270,46 +264,14 @@ article.Bluesky {
     background-image: url('data:image/svg+xml;utf8,%3Csvg%20width%3D%22100%25%22%20height%3D%22100%25%22%20viewBox%3D%220%200%2092%2082%22%20version%3D%221.1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20xml%3Aspace%3D%22preserve%22%20xmlns%3Aserif%3D%22http%3A%2F%2Fwww.serif.com%2F%22%20style%3D%22fill-rule%3Aevenodd%3Bclip-rule%3Aevenodd%3Bstroke-linejoin%3Around%3Bstroke-miterlimit%3A2%3B%22%3E%3Cpath%20d%3D%22M19.942%2C5.501C30.489%2C13.446%2041.836%2C29.553%2046%2C38.197L46%2C61.027C46%2C60.541%2045.813%2C61.091%2045.411%2C62.274C43.237%2C68.679%2034.747%2C93.679%2015.334%2C73.693C5.112%2C63.171%209.844%2C52.648%2028.451%2C49.471C17.806%2C51.288%205.839%2C48.285%202.556%2C36.512C1.61%2C33.125%200%2C12.264%200%2C9.447C0%2C-4.667%2012.332%2C-0.23%2019.942%2C5.501ZM72.058%2C5.501C61.511%2C13.446%2050.164%2C29.553%2046%2C38.197L46%2C61.027C46%2C60.541%2046.187%2C61.091%2046.589%2C62.274C48.763%2C68.679%2057.253%2C93.679%2076.666%2C73.693C86.888%2C63.171%2082.156%2C52.648%2063.549%2C49.471C74.194%2C51.288%2086.161%2C48.285%2089.444%2C36.512C90.39%2C33.125%2092%2C12.264%2092%2C9.447C92%2C-4.667%2079.669%2C-0.23%2072.058%2C5.501Z%22%20style%3D%22fill%3Argb(136%2C136%2C136)%3Bfill-rule%3Anonzero%3B%22%2F%3E%3C%2Fsvg%3E%0A')
 }
 
-.main-menu {
-    list-style-type: none;
-
-    li {
-        margin: 0;
-    }
-
-    a {
-        display: block;
-        padding: var(--spacing) var(--spacing-2);
-        margin: 0 0 var(--spacing);
-        border-radius: 3rem;
-        background-color: var(--menu-item-bg-not-selected);
-        box-shadow: var(--card-shadow);
-    }
-
-    a:active {
-        position: relative;
-        top: 2px;
-    }
-
-    a.selected {
-        background-color: var(--menu-item-bg-selected);
-        box-shadow: var(--card-shadow);
-        color: var(--text-color);
-    }
-
-    a:hover {
-        background-color: var(--menu-item-bg-hover);
-    }
-}
-
 @media (max-width: 1000px) {
-    #template > main {
+    body > main {
         margin: 0;
         max-width: none;
         padding-top: calc(var(--mobile-header-height) + var(--spacing-2));
     }
 
-    #template > aside {
+    body > header {
         width: auto;
         height: var(--mobile-header-height);
         padding: 0;
@@ -319,17 +281,6 @@ article.Bluesky {
         z-index: 1;
         backdrop-filter: blur(10px);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3)
-    }
-
-    .main-menu {
-        display: flex;
-        gap: calc(var(--spacing) / 2);
-        justify-content: center;
-        margin: 0;
-
-        a {
-            width: auto;
-        }
     }
 
     article header {

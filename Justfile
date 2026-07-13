@@ -1,5 +1,3 @@
-.PHONY: restore clean check format damo.io.server.container damo.io.blog.container dev
-
 restore:
 	dotnet tool restore
 	dotnet restore
@@ -15,10 +13,10 @@ check:
 format:
 	dotnet fantomas .
 
-damo.io.server.container:
+damo-io-server-container:
 	docker build -t damo.io.server -f Damo.Io.Server/deployment/Dockerfile .
 
-damo.io.blog.container:
+damo-io-blog-container:
 	docker build -t damo.io.blog -f Damo.Io.Blog/deployment/Dockerfile .
 
 dev:

@@ -10,8 +10,7 @@ open DamoIoServer.ArticlesRepository
 module App =
     let handler: HttpHandler =
         choose
-            [ GET >=> route "/" >=> redirectTo false "/About,Social,Blog"
-              GET >=> routef "/%s" (ArticlesHandler.list ArticlesRepository.findAllBySources)
+            [ GET >=> route "/" >=> (ArticlesHandler.list ArticlesRepository.findAllBySources)
               setStatusCode 404 >=> text "Not Found" ]
 
     let errorHandler (ex: Exception) (logger: ILogger) : HttpHandler =

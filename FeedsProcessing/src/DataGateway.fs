@@ -1,5 +1,6 @@
 module FeedsProcessing.DataGateway
 
+open System.Threading.Tasks
 open FSharp.Data
 open FSharp.Data.HttpRequestHeaders
 open System
@@ -59,19 +60,18 @@ let private requestToken (BasicAuthHeader authHeader) =
 
 [<RequireQualifiedAccess>]
 module DataGateway =
-    let download (Url url) : DownloadResult =
-        async {
-            return
-                Try.value
-                    "Download content"
-                    (fun _ ->
-                        let content =
-                            Http.RequestString(
-                                url,
-                                headers = [ "User-Agent", "somanyfeeds.com" ],
-                                responseEncodingOverride = "utf-8"
-                            )
-
-                        { Url = (Url url); Content = content }
+    let downloadSync (Url url) =
+        Try.value
+            "Download content"
+            (fun _ ->
+                let content =
+                    Http.RequestString(
+                        url,
+                        headers = [ "User-Agent", "somanyfeeds.com" ],
+                        responseEncodingOverride = "utf-8"
                     )
-        }
+
+                { Url = (Url url); Content = content }
+            )
+
+    let download url : DownloadResult = Task.Run(fun () -> downloadSync url)

@@ -9,32 +9,19 @@ open DamoIoServer.Article
 open DamoIoServer.ArticlesRepository
 open DamoIoServer.ArticleListTemplate
 
-let private sourcesFromPath (path: string) =
-    path.Split(",") |> Array.toList |> List.choose Source.tryFromString
-
 open Giraffe
-open Giraffe.Htmx
 
-let list (findArticlesBySources: ArticlesRepository.FindAllBySources) path : HttpHandler =
+let list (findArticlesBySources: ArticlesRepository.FindAllBySources) : HttpHandler =
     fun next ctx ->
         task {
             let now = Posix.fromDateTimeOffset DateTimeOffset.UtcNow
-            let sources = sourcesFromPath path
 
             let articles =
-                sources
+                Source.all
                 |> findArticlesBySources
                 |> List.sortByDescending (fun r -> Option.defaultValue now r.Date)
 
-            let isHxRequest = ctx.Request.Headers.HxRequest |> Option.defaultValue false
-
-            let articlesView = (articles, sources) ||> ArticleListTemplate.render
-
-            let view =
-                if isHxRequest then
-                    articlesView
-                else
-                    LayoutTemplate.render ctx articlesView
+            let view = ArticleListTemplate.render articles |> LayoutTemplate.render ctx
 
             return! htmlView view next ctx
         }

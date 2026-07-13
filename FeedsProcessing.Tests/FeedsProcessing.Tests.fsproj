@@ -1,18 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <GenerateProgramFile>false</GenerateProgramFile>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <RootNamespace>Feeds.Processing.Tests</RootNamespace>
-  </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
-    <PackageReference Include="NUnit" Version="4.0.1" />
-    <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
-    <PackageReference Include="FsUnit" Version="6.0.0" />
-
     <ProjectReference Include="..\FeedsProcessing\FeedsProcessing.fsproj" />
 
     <Compile Include="src\DownloadSupport.fs" />

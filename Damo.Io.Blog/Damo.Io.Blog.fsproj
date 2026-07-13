@@ -1,18 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
     <OutputType>Exe</OutputType>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <RootNamespace>DamoIoBlog</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="8.0.100" />
-    <PackageReference Include="Fake.IO.FileSystem" Version="6.0.0" />
-    <PackageReference Include="FSharp.Formatting" Version="20.0.0-beta-002" />
-    <PackageReference Include="FSharp.Data" Version="6.3.0" />
-    <PackageReference Include="Fable.React" Version="9.3.0" />
+    <PackageReference Include="Fake.IO.FileSystem" />
+    <PackageReference Include="FSharp.Formatting" />
+    <PackageReference Include="FSharp.Data" />
+    <PackageReference Include="Fable.React" />
 
     <Compile Include="src\BlogGenerator\Prelude.fs" />
     <Compile Include="src\BlogGenerator\Config.fs" />

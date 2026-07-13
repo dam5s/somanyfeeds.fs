@@ -1,69 +1,69 @@
 module Program
 
+open DamoIoServer.App
+open DamoIoServer.FeedsProcessor
 open Giraffe
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.DependencyInjection
+open Microsoft.Extensions.Hosting
 open Microsoft.Extensions.Logging
-open System
 open System.IO
 open WebOptimizer
 
-open DamoIoServer.App
 open DamoIoServer.AppConfig
-open DamoIoServer.ArticlesRepository
 open DamoIoServer.BackgroundProcessor
 open DamoIoServer.AssetHashBuilder
 
-let private configureErrorHandling (app: IApplicationBuilder) =
+let private configureErrorHandling (app: WebApplication) =
     if AppConfig.enableExceptionPage then
         app.UseDeveloperExceptionPage()
     else
         app.UseGiraffeErrorHandler App.errorHandler
 
-let private configureApp (app: IApplicationBuilder) =
+let private configureApp (app: WebApplication) : WebApplication =
     (configureErrorHandling app)
         .UseHttpsRedirection()
         .UseWebOptimizer()
         .UseStaticFiles()
         .UseGiraffe(App.handler)
+    |> always app
 
 let private configureAssetPipeline (pipeline: IAssetPipeline) =
     pipeline.AddCssBundle("/styles/app.min.css", [| "/styles/reset.css"; "/styles/app.css" |])
     |> ignore
 
-let private configureServices (services: IServiceCollection) =
-    services
+let private configureServices (builder: WebApplicationBuilder) =
+    builder.Services
         .AddGiraffe()
         .AddWebOptimizer(configureAssetPipeline)
         .AddSingleton<AssetHashBuilder>()
-    |> ignore
+        .AddSingleton<FeedsProcessor>()
+        .AddSingleton<IHostedService, FeedsProcessorHostedService>()
+    |> always builder
 
 let private configureLogging (builder: ILoggingBuilder) =
     builder.ClearProviders().AddConsole() |> ignore
 
-let webHostBuilder () =
-    let webRoot = Path.Combine(AppConfig.contentRoot, "www")
-
-    WebHostBuilder()
+let private configureWebHost (builder: WebApplicationBuilder) =
+    builder.WebHost
         .UseKestrel()
-        .UseContentRoot(AppConfig.contentRoot)
         .UseIISIntegration()
-        .UseWebRoot(webRoot)
         .UseUrls($"http://0.0.0.0:%s{AppConfig.serverPort}")
-        .Configure(Action<IApplicationBuilder> configureApp)
-        .ConfigureServices(configureServices)
         .ConfigureLogging(configureLogging)
+    |> always builder
 
 [<EntryPoint>]
-let main _ =
-    let webHost = webHostBuilder().Build()
+let main args =
+    let webRoot = Path.Combine(AppConfig.contentRoot, "www")
 
-    let loggerProvider = webHost.Services.GetRequiredService<ILoggerProvider>()
-    let logger = loggerProvider.CreateLogger("Damo.Io.Server.FeedsProcessor")
-    let processor = BackgroundProcessor(logger, ArticlesRepository.updateAll)
+    let options =
+        WebApplicationOptions(Args = args, ContentRootPath = AppConfig.contentRoot, WebRootPath = webRoot)
 
-    processor.StartProcessing()
+    let builder =
+        WebApplication.CreateBuilder(options) |> configureWebHost |> configureServices
 
-    webHost.Run()
+    let app = builder.Build() |> configureApp
+
+    app.Run()
     0
