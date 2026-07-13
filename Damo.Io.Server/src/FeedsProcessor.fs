@@ -26,10 +26,7 @@ type FeedsProcessor(logger: ILogger<FeedsProcessor>) =
     let resultToList (sourceFeed: FeedRecord) (result: ProcessingResult) =
         List.map (articleToRecord sourceFeed) (Result.defaultValue [] result)
 
-    let downloadAndProcessFeed
-        (feed: FeedRecord)
-        (cancellationToken: CancellationToken)
-        : Task<ProcessingResult> =
+    let downloadAndProcessFeed (feed: FeedRecord) (cancellationToken: CancellationToken) : Task<ProcessingResult> =
         match feed.Feed with
         | Xml(url) ->
             task {

@@ -14,6 +14,7 @@ let list: HttpHandler =
     fun next ctx ->
         task {
             let articlesRepo = ctx.GetService<ArticlesRepository>()
+            let layoutTemplate = ctx.GetService<LayoutTemplate>()
 
             let! articles = articlesRepo.FindAllAsync()
 
@@ -22,7 +23,7 @@ let list: HttpHandler =
             let sortedArticles =
                 articles |> List.sortByDescending (fun r -> Option.defaultValue now r.Date)
 
-            let view = ArticleListTemplate.render sortedArticles |> LayoutTemplate.render ctx
+            let! view = ArticleListTemplate.render sortedArticles |> layoutTemplate.RenderAsync
 
             return! htmlView view next ctx
         }

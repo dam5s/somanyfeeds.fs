@@ -4,6 +4,7 @@ open DamoIoServer.App
 open DamoIoServer.ArticlesRepository
 open DamoIoServer.FeedsProcessor
 open DamoIoServer.FeedsRepository
+open DamoIoServer.LayoutTemplate
 open Giraffe
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
@@ -39,7 +40,9 @@ let private configureServices (builder: WebApplicationBuilder) =
     builder.Services
         .AddGiraffe()
         .AddWebOptimizer(configureAssetPipeline)
+        .AddHttpContextAccessor()
         .AddSingleton<AssetHashBuilder>()
+        .AddSingleton<LayoutTemplate>()
         .AddSingleton<ArticlesRepository>()
         .AddSingleton<FeedsRepository>()
         .AddSingleton<FeedsProcessor>()

@@ -6,7 +6,7 @@ open System.Collections.Concurrent
 open Microsoft.AspNetCore.Http
 open WebOptimizer
 
-type AssetHashBuilder(assetPipeline: IAssetPipeline) =
+type AssetHashBuilder(ctxAccessor: IHttpContextAccessor, assetPipeline: IAssetPipeline) =
 
     let hashesByRoute = ConcurrentDictionary<string, string>()
 
@@ -19,29 +19,37 @@ type AssetHashBuilder(assetPipeline: IAssetPipeline) =
         hashesByRoute.[route] <- hash
         hash
 
-    let computeAssetVersionHash (ctx: HttpContext) (asset: IAsset) =
-        let bytes =
-            asset.ExecuteAsync(ctx, WebOptimizerOptions())
-            |> Async.AwaitTask
-            |> Async.RunSynchronously
+    let computeAssetVersionHash (asset: IAsset) =
+        task {
+            let! bytes = asset.ExecuteAsync(ctxAccessor.HttpContext, WebOptimizerOptions())
 
-        Convert.ToBase64String(MD5.HashData(bytes)).Replace("=", "")
+            return Convert.ToBase64String(MD5.HashData(bytes)).Replace("=", "")
+        }
 
-    let computeAndCacheRouteHash (ctx: HttpContext) (assetRoute: string) =
-        let found, asset = assetPipeline.TryGetAssetFromRoute(assetRoute)
+    let fallbackAssetVersionHash () = task { return "no-version" }
 
-        let newHash =
-            if found then
-                computeAssetVersionHash ctx asset
-            else
-                "no-version"
+    let computeAndCacheRouteHash (assetRoute: string) =
+        task {
+            let found, asset = assetPipeline.TryGetAssetFromRoute(assetRoute)
 
-        addHashToCache (assetRoute, newHash)
+            let! newHash =
+                if found then
+                    computeAssetVersionHash asset
+                else
+                    fallbackAssetVersionHash ()
 
-    let routeVersionHash (ctx: HttpContext) assetRoute =
-        match tryGetCachedHash assetRoute with
-        | Some hash -> hash
-        | None -> computeAndCacheRouteHash ctx assetRoute
+            return addHashToCache (assetRoute, newHash)
+        }
 
-    member this.Path (ctx: HttpContext) (assetRoute: string) =
-        $"%s{assetRoute}?v=%s{routeVersionHash ctx assetRoute}"
+    let routeVersionHash assetRoute =
+        task {
+            match tryGetCachedHash assetRoute with
+            | Some hash -> return hash
+            | None -> return! computeAndCacheRouteHash assetRoute
+        }
+
+    member _.GetPathAsync(assetRoute: string) =
+        task {
+            let! computedHash = routeVersionHash assetRoute
+            return $"%s{assetRoute}?v=%s{computedHash}"
+        }
