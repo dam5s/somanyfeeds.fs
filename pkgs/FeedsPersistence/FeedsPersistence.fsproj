@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <ProjectReference Include="../Prelude/Prelude.fsproj"/>
+        <ProjectReference Include="../FeedsProcessing/FeedsProcessing.fsproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Include="src/FeedsRepository.fs"/>
+        <Compile Include="src/ArticleRecord.fs"/>
+        <Compile Include="src/ArticlesRepository.fs"/>
+    </ItemGroup>
+
+</Project>

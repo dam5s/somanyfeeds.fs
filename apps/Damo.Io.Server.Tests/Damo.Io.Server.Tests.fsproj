@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <ItemGroup>
+        <ProjectReference Include="../Damo.Io.Server/Damo.Io.Server.fsproj"/>
+        <Compile Include="src/ListArticlesTests.fs"/>
+    </ItemGroup>
+</Project>

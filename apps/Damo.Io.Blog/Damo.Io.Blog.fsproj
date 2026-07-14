@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Fake.IO.FileSystem"/>
+        <PackageReference Include="FSharp.Formatting"/>
+        <PackageReference Include="FSharp.Data"/>
+        <PackageReference Include="Fable.React"/>
+
+        <Compile Include="src/BlogGenerator/Prelude.fs"/>
+        <Compile Include="src/BlogGenerator/Config.fs"/>
+        <Compile Include="src/BlogGenerator/Metadata.fs"/>
+        <Compile Include="src/BlogGenerator/Markdown.fs"/>
+        <Compile Include="src/BlogGenerator/Posts.fs"/>
+        <Compile Include="src/BlogGenerator/Html.fs"/>
+        <Compile Include="src/BlogGenerator/Rss.fs"/>
+        <Compile Include="src/BlogGenerator/Build.fs"/>
+        <Compile Include="src/Program.fs"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="deployment/**/*"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="posts\**\*">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="resources\**\*">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+</Project>

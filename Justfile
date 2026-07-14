@@ -21,10 +21,10 @@ format:
 	dotnet fantomas .
 
 damo-io-server-container:
-	docker build -t damo.io.server -f Damo.Io.Server/deployment/Dockerfile .
+	docker build -t damo.io.server -f apps/Damo.Io.Server/deployment/Dockerfile .
 
 damo-io-blog-container:
-	docker build -t damo.io.blog -f Damo.Io.Blog/deployment/Dockerfile .
+	docker build -t damo.io.blog -f apps/Damo.Io.Blog/deployment/Dockerfile .
 
 dev:
-	dotnet watch run --project Damo.Io.Server
+	dotnet watch run --project apps/Damo.Io.Server

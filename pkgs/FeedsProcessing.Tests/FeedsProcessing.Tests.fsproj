@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <ItemGroup>
+        <ProjectReference Include="../FeedsProcessing/FeedsProcessing.fsproj"/>
+
+        <Compile Include="src/DownloadSupport.fs"/>
+        <Compile Include="src/XmlTests.fs"/>
+        <Compile Include="src/SearchTests.fs"/>
+
+        <Resources Include="resources/**"/>
+    </ItemGroup>
+
+    <Target Name="CopyResources" AfterTargets="Publish">
+        <Copy SourceFiles="@(resources)" DestinationFiles="@(resources->'$(PublishDir)/resources/%(RecursiveDir)%(Filename)%(Extension)')"/>
+    </Target>
+</Project>

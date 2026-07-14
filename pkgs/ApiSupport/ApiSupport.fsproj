@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <PackageReference Include="Giraffe"/>
+        <PackageReference Include="LigerShark.WebOptimizer.Core"/>
+
+        <Compile Include="src/AssetHashBuilder.fs"/>
+        <Compile Include="src/IHttpHandler.fs"/>
+        <Compile Include="src/AssetPipelineExtensions.fs"/>
+    </ItemGroup>
+
+</Project>

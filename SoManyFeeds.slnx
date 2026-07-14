@@ -1,8 +1,14 @@
 <Solution>
-  <Project Path="Damo.Io.Blog/Damo.Io.Blog.fsproj" />
-  <Project Path="Damo.Io.Server.Tests/Damo.Io.Server.Tests.fsproj" />
-  <Project Path="Damo.Io.Server/Damo.Io.Server.fsproj" />
-  <Project Path="FeedsProcessing.Tests/FeedsProcessing.Tests.fsproj" />
-  <Project Path="FeedsProcessing/FeedsProcessing.fsproj" />
-  <Project Path="Prelude/Prelude.fsproj" />
+    <Folder Name="/apps/">
+        <Project Path="apps/Damo.Io.Blog/Damo.Io.Blog.fsproj"/>
+        <Project Path="apps/Damo.Io.Server.Tests/Damo.Io.Server.Tests.fsproj"/>
+        <Project Path="apps/Damo.Io.Server/Damo.Io.Server.fsproj"/>
+    </Folder>
+    <Folder Name="/pkgs/">
+        <Project Path="pkgs/ApiSupport/ApiSupport.fsproj"/>
+        <Project Path="pkgs/FeedsPersistence/FeedsPersistence.fsproj"/>
+        <Project Path="pkgs/FeedsProcessing.Tests/FeedsProcessing.Tests.fsproj"/>
+        <Project Path="pkgs/FeedsProcessing/FeedsProcessing.fsproj"/>
+        <Project Path="pkgs/Prelude/Prelude.fsproj"/>
+    </Folder>
 </Solution>
