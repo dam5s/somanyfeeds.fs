@@ -73,13 +73,27 @@ module private Atom =
 
     type private AtomProvider = XmlProvider<"../FeedsProcessing/resources/samples/atom.sample.xml">
 
+    let tryParseDateTimeOffset (text: String) : DateTimeOffset option =
+        let normalized = text.Replace(" UTC", "+00:00")
+
+        match DateTimeOffset.TryParse(normalized) with
+        | true, dateTimeOffset -> Some dateTimeOffset
+        | _ -> None
+
+    let publishedDateTimeOffset (published: AtomProvider.Published) : DateTimeOffset option =
+        match (published.DateTime, published.String) with
+        | Some dateTimeOffset, _ -> Some dateTimeOffset
+        | _, Some string -> tryParseDateTimeOffset string
+        | None, None -> None
+
+
     let private entryToArticle (entry: AtomProvider.Entry) =
         Article.create
             (Some entry.Title.Value)
             (entry.Links |> Array.head |> (fun l -> l.Href))
             (Some entry.Content.Value)
             None
-            (Some entry.Published)
+            (publishedDateTimeOffset entry.Published)
 
     let private toArticles (atom: AtomProvider.Feed) =
         Try.result

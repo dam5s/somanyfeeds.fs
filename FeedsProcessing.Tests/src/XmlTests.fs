@@ -43,8 +43,7 @@ let ``with github Atom XML`` () =
             |> DateTimeOffset
             |> Posix.fromDateTimeOffset
 
-        Article.title article
-        |> should equal (Some "dam5s pushed to master in dam5s/somanyfeeds.fs")
+        Article.title article |> should equal (Some "dam5s pushed somanyfeeds.fs")
 
         Article.link article
         |> should equal (Some "https://github.com/dam5s/somanyfeeds.fs")
