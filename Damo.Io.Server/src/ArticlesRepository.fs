@@ -1,6 +1,6 @@
-module DamoIoServer.ArticlesRepository
+module Damo.Io.Server.ArticlesRepository
 
-open DamoIoServer.Article
+open Damo.Io.Server.Article
 
 let private aboutContent =
     """

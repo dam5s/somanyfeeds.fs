@@ -1,4 +1,4 @@
-module DamoIoServer.AppConfig
+module Damo.Io.Server.AppConfig
 
 open System.IO
 

@@ -1,11 +1,11 @@
 module Program
 
-open DamoIoServer.App
-open DamoIoServer.ArticlesHandler
-open DamoIoServer.ArticlesRepository
-open DamoIoServer.FeedsProcessor
-open DamoIoServer.FeedsRepository
-open DamoIoServer.LayoutTemplate
+open Damo.Io.Server.App
+open Damo.Io.Server.ArticlesHandler
+open Damo.Io.Server.ArticlesRepository
+open Damo.Io.Server.FeedsProcessor
+open Damo.Io.Server.FeedsRepository
+open Damo.Io.Server.LayoutTemplate
 open Giraffe
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
@@ -15,9 +15,9 @@ open Microsoft.Extensions.Logging
 open System.IO
 open WebOptimizer
 
-open DamoIoServer.AppConfig
-open DamoIoServer.BackgroundProcessor
-open DamoIoServer.AssetHashBuilder
+open Damo.Io.Server.AppConfig
+open Damo.Io.Server.BackgroundProcessor
+open Damo.Io.Server.AssetHashBuilder
 
 let private configureErrorHandling (app: WebApplication) =
     if AppConfig.enableExceptionPage then

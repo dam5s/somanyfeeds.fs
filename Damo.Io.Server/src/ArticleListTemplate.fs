@@ -1,7 +1,7 @@
-module DamoIoServer.ArticleListTemplate
+module Damo.Io.Server.ArticleListTemplate
 
-open DamoIoServer.Article
-open DamoIoServer.ArticleTemplate
+open Damo.Io.Server.Article
+open Damo.Io.Server.ArticleTemplate
 
 open Giraffe.ViewEngine
 

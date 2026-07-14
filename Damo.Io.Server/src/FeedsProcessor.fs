@@ -1,4 +1,4 @@
-module DamoIoServer.FeedsProcessor
+module Damo.Io.Server.FeedsProcessor
 
 open System.Threading
 open System.Threading.Tasks
@@ -10,8 +10,8 @@ open FeedsProcessing.DataGateway
 open FeedsProcessing.Feeds
 open FeedsProcessing.ProcessingResult
 open FeedsProcessing.Xml
-open DamoIoServer.Article
-open DamoIoServer.FeedsRepository
+open Damo.Io.Server.Article
+open Damo.Io.Server.FeedsRepository
 
 type FeedsProcessor(logger: ILogger<FeedsProcessor>) =
 

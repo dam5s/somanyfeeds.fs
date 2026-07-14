@@ -1,4 +1,4 @@
-module DamoIoServer.AssetHashBuilder
+module Damo.Io.Server.AssetHashBuilder
 
 open System
 open System.Security.Cryptography

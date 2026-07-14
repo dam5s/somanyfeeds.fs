@@ -1,7 +1,7 @@
-module DamoIoServer.LayoutTemplate
+module Damo.Io.Server.LayoutTemplate
 
 open Giraffe.ViewEngine
-open DamoIoServer.AssetHashBuilder
+open Damo.Io.Server.AssetHashBuilder
 
 type LayoutTemplate(hashBuilder: AssetHashBuilder) =
     member _.RenderAsync(innerTemplate) =

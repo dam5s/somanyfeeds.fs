@@ -1,4 +1,4 @@
-module DamoIoServer.Article
+module Damo.Io.Server.Article
 
 open Time
 

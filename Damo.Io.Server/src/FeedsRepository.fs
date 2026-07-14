@@ -1,4 +1,4 @@
-module DamoIoServer.FeedsRepository
+module Damo.Io.Server.FeedsRepository
 
 open System.Threading.Tasks
 open FeedsProcessing.Download

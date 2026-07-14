@@ -1,8 +1,8 @@
-module DamoIoServer.App
+module Damo.Io.Server.App
 
 open System
 open Damo.Io.Server.IHttpHandler
-open DamoIoServer.ArticlesHandler
+open Damo.Io.Server.ArticlesHandler
 open Giraffe
 open Microsoft.Extensions.Logging
 

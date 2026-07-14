@@ -1,15 +1,15 @@
-module DamoIoServer.BackgroundProcessor
+module Damo.Io.Server.BackgroundProcessor
 
 open System
 open System.Threading
 open System.Threading.Tasks
-open DamoIoServer.ArticlesRepository
-open DamoIoServer.FeedsRepository
+open Damo.Io.Server.ArticlesRepository
+open Damo.Io.Server.FeedsRepository
 open FSharp.Control
 open Microsoft.Extensions.Hosting
 open Microsoft.Extensions.Logging
 
-open DamoIoServer.FeedsProcessor
+open Damo.Io.Server.FeedsProcessor
 
 type FeedsProcessorHostedService
     (

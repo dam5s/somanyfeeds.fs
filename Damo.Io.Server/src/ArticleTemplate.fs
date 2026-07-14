@@ -1,8 +1,8 @@
-module DamoIoServer.ArticleTemplate
+module Damo.Io.Server.ArticleTemplate
 
 open Time
 
-open DamoIoServer.Article
+open Damo.Io.Server.Article
 
 let private monthDisplayName month =
     match month with

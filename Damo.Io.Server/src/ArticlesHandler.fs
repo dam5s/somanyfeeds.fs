@@ -1,13 +1,13 @@
-module DamoIoServer.ArticlesHandler
+module Damo.Io.Server.ArticlesHandler
 
 open System
 open Damo.Io.Server.IHttpHandler
 open Time
 
-open DamoIoServer.LayoutTemplate
-open DamoIoServer.Article
-open DamoIoServer.ArticlesRepository
-open DamoIoServer.ArticleListTemplate
+open Damo.Io.Server.LayoutTemplate
+open Damo.Io.Server.Article
+open Damo.Io.Server.ArticlesRepository
+open Damo.Io.Server.ArticleListTemplate
 
 open Giraffe
 
