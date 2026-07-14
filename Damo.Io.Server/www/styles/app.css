@@ -51,7 +51,7 @@ html {
 
 body {
     margin: 0;
-    font-size: 1.8rem;
+    font-size: 1.9rem;
     font-family: var(--serif);
     font-weight: 300;
     color: var(--text-color);
@@ -86,8 +86,8 @@ body > header {
         font-weight: 600;
         letter-spacing: -2px;
         margin: var(--spacing-2) 0;
-        background: url("/favicon.svg") no-repeat left center;
-        background-size: 5rem 5rem;
+        background: url("/favicon.svg") no-repeat left .1em;
+        background-size: 1.1em;
         padding-left: 6rem;
         display: inline-block;
     }
