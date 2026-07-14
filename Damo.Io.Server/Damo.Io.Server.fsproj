@@ -19,6 +19,7 @@
     <Compile Include="src\ArticlesRepository.fs" />
     <Compile Include="src\ArticleTemplate.fs" />
     <Compile Include="src\ArticleListTemplate.fs" />
+    <Compile Include="src\ListArticles.fs" />
     <Compile Include="src\ArticlesHandler.fs" />
     <Compile Include="src\FeedsProcessor.fs" />
     <Compile Include="src\FeedsProcessorHostedService.fs" />

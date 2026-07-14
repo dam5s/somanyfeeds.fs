@@ -115,6 +115,22 @@
           "FSharp.Data.Runtime.Utilities": "8.1.14"
         }
       },
+      "FSharp.SystemTextJson": {
+        "type": "Transitive",
+        "resolved": "1.3.13",
+        "contentHash": "znp8odpdkVGKVX0AvbhiXdmeMi0KJ+A4AyAQWSkfAEAe4Z4clRE+rVhrLnAGrFD1VEIUX2lsQ4o84ywpWZUSGw==",
+        "dependencies": {
+          "FSharp.Core": "4.7.0"
+        }
+      },
+      "Giraffe.ViewEngine": {
+        "type": "Transitive",
+        "resolved": "1.4.0",
+        "contentHash": "gWzlp8KGDLaPHMm/xGzfLT1e9wZaJhBKhEuMsPRBSn7wAMkSgMcaqJlWl8mFGCcOOx0r9UyDJvCJJQyljYmo+g==",
+        "dependencies": {
+          "FSharp.Core": "5.0.0"
+        }
+      },
       "Microsoft.ApplicationInsights": {
         "type": "Transitive",
         "resolved": "2.23.0",
@@ -129,6 +145,11 @@
         "type": "Transitive",
         "resolved": "18.7.0",
         "contentHash": "+wFfx9s7D9wegM0RziXMj2kvYDT4qcqXXtyjiQwSZOGQ2wwcOAJQcD6eQXk02jt0MvRNawtp8TJxTrV+wD8X1g=="
+      },
+      "Microsoft.IO.RecyclableMemoryStream": {
+        "type": "Transitive",
+        "resolved": "3.0.1",
+        "contentHash": "s/s20YTVY9r9TPfTrN5g8zPF1YhwxyqO6PxUkrYTGI2B+OGPe9AdajWZrLhFqXIvqIW23fnUE4+ztrUWNU1+9g=="
       },
       "Microsoft.Testing.Extensions.Telemetry": {
         "type": "Transitive",
@@ -183,6 +204,11 @@
         "type": "Transitive",
         "resolved": "13.0.3",
         "contentHash": "HrC5BXdl00IP9zeV+0Z848QWPAoCr9P3bDEZguI+gkLcBKAOxix/tLEAAHC+UvDNPv4a2d18lOReHMOagPa+zQ=="
+      },
+      "NUglify": {
+        "type": "Transitive",
+        "resolved": "1.21.15",
+        "contentHash": "Vxwg0EjbM/gmILPtzfmzlf0MDu9a17OQb8b57oTgoHoRsZNHWIFQFa00Izcvuam3Hbw2eH272TfczDRHSXgSlA=="
       },
       "xunit.analyzers": {
         "type": "Transitive",
@@ -251,6 +277,17 @@
           "xunit.v3.runner.common": "[3.2.2]"
         }
       },
+      "damo.io.server": {
+        "type": "Project",
+        "dependencies": {
+          "FSharp.Control.TaskSeq": "[1.1.1, )",
+          "FSharp.Core": "[10.1.204, )",
+          "FeedsProcessing": "[1.0.0, )",
+          "Giraffe": "[8.2.0, )",
+          "LigerShark.WebOptimizer.Core": "[3.0.477, )",
+          "Prelude": "[1.0.0, )"
+        }
+      },
       "feedsprocessing": {
         "type": "Project",
         "dependencies": {
@@ -264,6 +301,15 @@
         "type": "Project",
         "dependencies": {
           "FSharp.Core": "[10.1.204, )"
+        }
+      },
+      "FSharp.Control.TaskSeq": {
+        "type": "CentralTransitive",
+        "requested": "[1.1.1, )",
+        "resolved": "1.1.1",
+        "contentHash": "PFD+urrVJxtoetvkc4xV7ZOYGYoVZWv7n1DPgz2UbxL7v98SIk6plWOBdwihepUnnGnQltJtciZBSwo9+UTGfA==",
+        "dependencies": {
+          "FSharp.Core": "6.0.1"
         }
       },
       "FSharp.Data": {
@@ -282,6 +328,18 @@
           "FSharp.Data.Xml.Core": "8.1.14"
         }
       },
+      "Giraffe": {
+        "type": "CentralTransitive",
+        "requested": "[8.2.0, )",
+        "resolved": "8.2.0",
+        "contentHash": "GlrgfkGKnKbbLfPBpXVBXBEca0wwz+iI9Ba74j3Hcx/rMXLFLqs0WjDhNVfsU7FB585e3VxEcb12XoyOFrsklA==",
+        "dependencies": {
+          "FSharp.Core": "6.0.0",
+          "FSharp.SystemTextJson": "1.3.13",
+          "Giraffe.ViewEngine": "1.4.0",
+          "Microsoft.IO.RecyclableMemoryStream": "3.0.1"
+        }
+      },
       "HtmlSanitizer": {
         "type": "CentralTransitive",
         "requested": "[9.0.892, )",
@@ -290,6 +348,15 @@
         "dependencies": {
           "AngleSharp": "[0.17.1]",
           "AngleSharp.Css": "[0.17.0]"
+        }
+      },
+      "LigerShark.WebOptimizer.Core": {
+        "type": "CentralTransitive",
+        "requested": "[3.0.477, )",
+        "resolved": "3.0.477",
+        "contentHash": "md8zBJMIur8Hnb5jn7krSfe9I0BZUGqCxwh2A5Y1MTR7wtY6v9gYuyW5EFNCYzQCvaaAZxlTynUk8ZsIsrBXsg==",
+        "dependencies": {
+          "NUglify": "1.21.15"
         }
       }
     }

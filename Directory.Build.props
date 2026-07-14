@@ -17,13 +17,11 @@
     <GenerateProgramFile>false</GenerateProgramFile>
     <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
     <TestingPlatformShowTestsFailure>true</TestingPlatformShowTestsFailure>
-    <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
   </PropertyGroup>
 
   <ItemGroup Condition="$(MSBuildProjectName.Contains('.Tests'))">
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
-    <PackageReference Include="NUnit" />
-    <PackageReference Include="NUnit3TestAdapter" />
-    <PackageReference Include="FsUnit" />
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="xunit.v3.runner.msbuild" />
   </ItemGroup>
 </Project>

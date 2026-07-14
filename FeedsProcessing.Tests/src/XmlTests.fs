@@ -1,8 +1,6 @@
 module ``Xml Processor Tests``
 
-open FsUnit
-open FsUnitTyped
-open NUnit.Framework
+open Xunit
 open System
 open Time
 
@@ -10,20 +8,19 @@ open FeedsProcessing.Article
 open FeedsProcessing.Xml
 open FeedsProcessingTests.DownloadSupport
 
-[<Test>]
+[<Fact>]
 let ``with unsupported XML`` () =
     let download = Download.fromContent "<foo>Not quite expected xml content</foo>"
 
     let result = Xml.processFeed download
 
     match result with
-    | Ok _ -> Assert.Fail "Expected failure"
+    | Ok _ -> failwith "Expected failure"
     | Error err ->
-        String.length err.Message |> shouldBeGreaterThan 0
-        List.length err.Exceptions |> shouldEqual 1
+        Assert.NotEqual(0, String.length err.Message)
+        Assert.Equal(1, List.length err.Exceptions)
 
-
-[<Test>]
+[<Fact>]
 let ``with github Atom XML`` () =
     let download =
         "../../../../FeedsProcessing.Tests/resources/test-samples/github.xml"
@@ -32,9 +29,9 @@ let ``with github Atom XML`` () =
     let result = Xml.processFeed download
 
     match result with
-    | Error _ -> Assert.Fail "Expected success"
+    | Error _ -> failwith "Expected success"
     | Ok records ->
-        List.length records |> should equal 7
+        Assert.Equal(7, List.length records)
 
         let article = List.head records
 
@@ -43,16 +40,15 @@ let ``with github Atom XML`` () =
             |> DateTimeOffset
             |> Posix.fromDateTimeOffset
 
-        Article.title article |> should equal (Some "dam5s pushed somanyfeeds.fs")
+        Assert.Equal(Some "dam5s pushed somanyfeeds.fs", Article.title article)
 
-        Article.link article
-        |> should equal (Some "https://github.com/dam5s/somanyfeeds.fs")
+        Assert.Equal(Some "https://github.com/dam5s/somanyfeeds.fs", Article.link article)
 
-        Article.content article |> should equal "<p>Hello from the content</p>"
-        Article.date article |> should equal (Some expectedTimeUtc)
+        Assert.Equal("<p>Hello from the content</p>", Article.content article)
+        Assert.Equal(Some expectedTimeUtc, Article.date article)
 
 
-[<Test>]
+[<Fact>]
 let ``with Dualshock Atom XML`` () =
     let downloaded =
         "../../../../FeedsProcessing.Tests/resources/test-samples/dualshock.xml"
@@ -61,11 +57,11 @@ let ``with Dualshock Atom XML`` () =
     let result = Xml.processFeed downloaded
 
     match result with
-    | Error _ -> Assert.Fail "Expected success"
-    | Ok records -> List.length records |> should equal 10
+    | Error _ -> failwith "Expected success"
+    | Ok records -> Assert.Equal(10, List.length records)
 
 
-[<Test>]
+[<Fact>]
 let ``with RSS XML`` () =
     let downloadedFeed =
         "../../../../FeedsProcessing/resources/samples/rss.sample.xml"
@@ -74,9 +70,9 @@ let ``with RSS XML`` () =
     let result = Xml.processFeed downloadedFeed
 
     match result with
-    | Error _ -> Assert.Fail "Expected success"
+    | Error _ -> failwith "Expected success"
     | Ok records ->
-        List.length records |> should equal 6
+        Assert.Equal(6, List.length records)
 
         let firstArticle = List.head records
 
@@ -85,28 +81,24 @@ let ``with RSS XML`` () =
             |> DateTimeOffset
             |> Posix.fromDateTimeOffset
 
-        Article.title firstArticle |> should equal (Some "First title!")
+        Assert.Equal(Some "First title!", Article.title firstArticle)
 
-        Article.link firstArticle
-        |> should equal (Some "https://medium.com/@its_damo/first")
+        Assert.Equal(Some "https://medium.com/@its_damo/first", Article.link firstArticle)
 
-        Article.content firstArticle
-        |> should equal "<p>This is the content in encoded tag</p>"
+        Assert.Equal("<p>This is the content in encoded tag</p>", Article.content firstArticle)
 
-        Article.date firstArticle |> should equal (Some expectedTimeUtc)
+        Assert.Equal(Some expectedTimeUtc, Article.date firstArticle)
 
         let secondArticle = List.item 1 records
-        Article.title secondArticle |> should equal (Some "Second title!")
+        Assert.Equal(Some "Second title!", Article.title secondArticle)
 
-        Article.link secondArticle
-        |> should equal (Some "https://medium.com/@its_damo/second")
+        Assert.Equal(Some "https://medium.com/@its_damo/second", Article.link secondArticle)
 
-        Article.content secondArticle
-        |> should equal "<p>This is the content in description tag</p>"
+        Assert.Equal("<p>This is the content in description tag</p>", Article.content secondArticle)
 
-        Article.date secondArticle |> should equal (Some expectedTimeUtc)
+        Assert.Equal(Some expectedTimeUtc, Article.date secondArticle)
 
-[<Test>]
+[<Fact>]
 let ``with mastodon RSS`` () =
     let downloadedFeed =
         "../../../../FeedsProcessing.Tests/resources/test-samples/mastodon.xml"
@@ -115,9 +107,9 @@ let ``with mastodon RSS`` () =
     let result = Xml.processFeed downloadedFeed
 
     match result with
-    | Error _ -> Assert.Fail "Expected success"
+    | Error _ -> failwith "Expected success"
     | Ok records ->
-        List.length records |> should equal 19
+        Assert.Equal(19, List.length records)
 
         let mediaAt index =
             records |> List.item index |> Article.media
@@ -126,16 +118,16 @@ let ``with mastodon RSS`` () =
             { Url = "https://mastodon.kleph.eu/system/media_attachments/files/000/055/839/original/4874168bf454bddb.jpg"
               Description = "" }
 
-        mediaAt 17 |> should equal (Some expectedMediaNoDescription)
+        Assert.Equal(Some expectedMediaNoDescription, mediaAt 17)
 
         let expectedMediaAndDescription =
             { Url =
                 "https://mastodon.kleph.eu/system/media_attachments/files/108/207/041/262/751/249/original/1e8a0ccac5f59165.jpg"
               Description = "Mountain landscape at sunset with bicycle on the foreground." }
 
-        mediaAt 13 |> should equal (Some expectedMediaAndDescription)
+        Assert.Equal(Some expectedMediaAndDescription, mediaAt 13)
 
-[<Test>]
+[<Fact>]
 let ``processFeed with slashdot RDF XML`` () =
     let downloadedFeed =
         "../../../../FeedsProcessing.Tests/resources/test-samples/slashdot.xml"
@@ -144,9 +136,9 @@ let ``processFeed with slashdot RDF XML`` () =
     let result = Xml.processFeed downloadedFeed
 
     match result with
-    | Error _ -> Assert.Fail "Expected success"
+    | Error _ -> failwith "Expected success"
     | Ok records ->
-        List.length records |> should equal 15
+        Assert.Equal(15, List.length records)
 
         let article = List.head records
 
@@ -155,16 +147,17 @@ let ``processFeed with slashdot RDF XML`` () =
             |> DateTimeOffset
             |> Posix.fromDateTimeOffset
 
-        Article.title article
-        |> should equal (Some "Netflix Permanently Pulls iTunes Billing For New and Returning Users")
+        Assert.Equal(Some "Netflix Permanently Pulls iTunes Billing For New and Returning Users", Article.title article)
 
-        Article.link article
-        |> should
-            equal
-            (Some
-                "https://news.slashdot.org/story/18/12/28/2054254/netflix-permanently-pulls-itunes-billing-for-new-and-returning-users?utm_source=rss1.0mainlinkanon&utm_medium=feed")
+        Assert.Equal(
+            Some
+                "https://news.slashdot.org/story/18/12/28/2054254/netflix-permanently-pulls-itunes-billing-for-new-and-returning-users?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+            Article.link article
+        )
 
-        Article.content article
-        |> should equal "An anonymous reader shares a report: Netflix is further distancing itself..."
+        Assert.Equal(
+            "An anonymous reader shares a report: Netflix is further distancing itself...",
+            Article.content article
+        )
 
-        Article.date article |> should equal (Some expectedTimeUtc)
+        Assert.Equal(Some expectedTimeUtc, Article.date article)

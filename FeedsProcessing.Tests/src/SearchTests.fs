@@ -3,11 +3,9 @@ module ``Search Tests``
 open FeedsProcessingTests.DownloadSupport
 open FeedsProcessing.Search
 open FeedsProcessing.Download
-open FeedsProcessing.Xml
-open FsUnit
-open NUnit.Framework
+open Xunit
 
-[<Test>]
+[<Fact>]
 let ``with an xml feed`` () =
     let download =
         "../../../../FeedsProcessing.Tests/resources/test-samples/github.xml"
@@ -16,13 +14,12 @@ let ``with an xml feed`` () =
     let result = search download
 
     match result with
-    | WebPageMatch _ -> Assert.Fail "should be a feed match"
+    | WebPageMatch _ -> failwith "should be a feed match"
     | FeedMatch metadata ->
-        metadata.Title |> should equal "dam5s’s Activity"
-        metadata.Description |> should equal ""
+        Assert.Equal("GitHub Public Timeline Feed", metadata.Title)
+        Assert.Equal("", metadata.Description)
 
-
-[<Test>]
+[<Fact>]
 let ``with unsupported HTML`` () =
     let download =
         { Url = Url "file://some/where"
@@ -30,10 +27,9 @@ let ``with unsupported HTML`` () =
 
     let result = search download
 
-    result |> should equal (WebPageMatch [])
+    Assert.Equal(WebPageMatch [], result)
 
-
-[<Test>]
+[<Fact>]
 let ``with HTML from Le Monde`` () =
     let download =
         "../../../../FeedsProcessing.Tests/resources/test-samples/le-monde.html"
@@ -43,4 +39,4 @@ let ``with HTML from Le Monde`` () =
 
     match result with
     | FeedMatch _ -> failwith "Expected a web page match"
-    | WebPageMatch urls -> urls |> Seq.toList |> should equal [ Url "https://www.lemonde.fr/rss/une.xml" ]
+    | WebPageMatch urls -> Assert.Equal<Url>([ Url "https://www.lemonde.fr/rss/une.xml" ], Seq.toList urls)

@@ -5,8 +5,7 @@
     <Compile Include="src\DownloadSupport.fs" />
     <Compile Include="src\XmlTests.fs" />
     <Compile Include="src\SearchTests.fs" />
-    <Compile Include="src\Program.fs" />
-  </ItemGroup>
+   </ItemGroup>
 
   <ItemGroup>
     <Resources Include="resources/**" />
