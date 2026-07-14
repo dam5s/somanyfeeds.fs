@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="Damo.Io.Blog/Damo.Io.Blog.fsproj" />
+  <Project Path="Damo.Io.Server/Damo.Io.Server.fsproj" />
+  <Project Path="FeedsProcessing.Tests/FeedsProcessing.Tests.fsproj" />
+  <Project Path="FeedsProcessing/FeedsProcessing.fsproj" />
+  <Project Path="Prelude/Prelude.fsproj" />
+</Solution>
