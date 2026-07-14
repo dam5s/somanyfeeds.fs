@@ -33,9 +33,6 @@ let private aboutContent =
       This version is written in <em>F#</em> running on the <em>.NET</em> platform.
       The source code is entirely available <a href="https://github.com/dam5s/somanyfeeds.fs">on my github</a>.
     </p>
-    <p>
-      You can choose to follow multiple of my feeds, on a single page, by using the menu at the top of the page.
-    </p>
     """
 
 let private about: ArticleRecord =
