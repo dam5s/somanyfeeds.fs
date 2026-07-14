@@ -86,7 +86,7 @@ body > header {
         font-weight: 600;
         letter-spacing: -2px;
         margin: var(--spacing-2) 0;
-        background: url("/favicon.svg") no-repeat left .1em;
+        background: url("/favicon.svg") no-repeat left;
         background-size: 1.1em;
         padding-left: 6rem;
         display: inline-block;
