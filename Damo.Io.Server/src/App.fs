@@ -4,16 +4,17 @@ open Giraffe
 open Microsoft.Extensions.Logging
 open System
 
-open Damo.Io.Server.IHttpHandler
 open Damo.Io.Server.ArticlesHandler
+open Damo.Io.Server.ErrorPageHandler
+open Damo.Io.Server.IHttpHandler
 
 [<RequireQualifiedAccess>]
 module App =
     let handler: HttpHandler =
         choose
             [ GET >=> route "/" >=> handler<ListArticlesHandler>
-              setStatusCode 404 >=> text "Not Found" ]
+              ErrorPageHandler.notFound ]
 
     let errorHandler (ex: Exception) (logger: ILogger) : HttpHandler =
         logger.LogError(ex, "An unhandled exception has occurred while executing the request.")
-        clearResponse >=> setStatusCode 500 >=> text ex.Message
+        ErrorPageHandler.serverError
