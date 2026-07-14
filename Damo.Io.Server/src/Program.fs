@@ -26,7 +26,7 @@ let private configureErrorHandling (app: WebApplication) =
         app.UseGiraffeErrorHandler App.errorHandler
 
 let private configureApp (app: WebApplication) : WebApplication =
-    (configureErrorHandling app)
+    (configureErrorHandling app) //
         .UseHttpsRedirection()
         .UseWebOptimizer()
         .UseStaticFiles()
