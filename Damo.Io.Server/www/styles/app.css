@@ -235,6 +235,49 @@ article:last-child {
     margin-bottom: 0;
 }
 
+article.Github {
+    h1 {
+        font-size: 2.4rem;
+    }
+
+    .width-full, .color-fg-muted {
+        width: 100%;
+    }
+
+    .avatar {
+        width: 1.2em;
+        height: 1.2em;
+        border-radius: 50%;
+        position: relative;
+        top: .2em;
+    }
+
+    .list-style-none {
+        list-style: none;
+
+        li {
+            margin: 0;
+        }
+    }
+
+    .d-flex {
+        display: flex;
+        gap: 1rem;
+
+        > span {
+            display: none;
+        }
+
+        > code {
+            font-size: 1.5rem;
+        }
+    }
+
+    .flex-column {
+        flex-direction: column;
+    }
+}
+
 article.Mastodon, article.Bluesky {
     background-repeat: no-repeat;
     background-position: top var(--spacing-4) right var(--spacing-4);
