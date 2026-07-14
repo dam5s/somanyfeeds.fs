@@ -1,3 +1,10 @@
+alias b := build
+alias c := check
+alias f := format
+alias d := dev
+
+build: clean restore check
+
 restore:
 	dotnet tool restore
 	dotnet restore
