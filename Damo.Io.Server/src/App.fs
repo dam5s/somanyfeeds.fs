@@ -1,10 +1,11 @@
 module Damo.Io.Server.App
 
-open System
-open Damo.Io.Server.IHttpHandler
-open Damo.Io.Server.ArticlesHandler
 open Giraffe
 open Microsoft.Extensions.Logging
+open System
+
+open Damo.Io.Server.IHttpHandler
+open Damo.Io.Server.ArticlesHandler
 
 [<RequireQualifiedAccess>]
 module App =

@@ -1,11 +1,5 @@
 module Program
 
-open Damo.Io.Server.App
-open Damo.Io.Server.ArticlesHandler
-open Damo.Io.Server.ArticlesRepository
-open Damo.Io.Server.FeedsProcessor
-open Damo.Io.Server.FeedsRepository
-open Damo.Io.Server.LayoutTemplate
 open Giraffe
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
@@ -15,6 +9,12 @@ open Microsoft.Extensions.Logging
 open System.IO
 open WebOptimizer
 
+open Damo.Io.Server.App
+open Damo.Io.Server.ArticlesHandler
+open Damo.Io.Server.ArticlesRepository
+open Damo.Io.Server.FeedsProcessor
+open Damo.Io.Server.FeedsRepository
+open Damo.Io.Server.LayoutTemplate
 open Damo.Io.Server.AppConfig
 open Damo.Io.Server.BackgroundProcessor
 open Damo.Io.Server.AssetHashBuilder

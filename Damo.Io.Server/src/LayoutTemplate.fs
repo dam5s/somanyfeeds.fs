@@ -1,6 +1,7 @@
 module Damo.Io.Server.LayoutTemplate
 
 open Giraffe.ViewEngine
+
 open Damo.Io.Server.AssetHashBuilder
 
 type LayoutTemplate(hashBuilder: AssetHashBuilder) =

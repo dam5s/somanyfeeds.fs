@@ -1,9 +1,9 @@
 module Damo.Io.Server.AssetHashBuilder
 
-open System
-open System.Security.Cryptography
-open System.Collections.Concurrent
 open Microsoft.AspNetCore.Http
+open System
+open System.Collections.Concurrent
+open System.Security.Cryptography
 open WebOptimizer
 
 type AssetHashBuilder(ctxAccessor: IHttpContextAccessor, assetPipeline: IAssetPipeline) =

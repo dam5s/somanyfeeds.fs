@@ -1,9 +1,9 @@
 module Damo.Io.Server.ArticleListTemplate
 
+open Giraffe.ViewEngine
+
 open Damo.Io.Server.Article
 open Damo.Io.Server.ArticleTemplate
-
-open Giraffe.ViewEngine
 
 [<RequireQualifiedAccess>]
 module ArticleListTemplate =

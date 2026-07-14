@@ -1,17 +1,17 @@
 module Damo.Io.Server.FeedsProcessor
 
-open System.Threading
-open System.Threading.Tasks
 open FSharp.Control
 open Microsoft.Extensions.Logging
+open System.Threading
+open System.Threading.Tasks
 
+open Damo.Io.Server.Article
+open Damo.Io.Server.FeedsRepository
 open FeedsProcessing.Article
 open FeedsProcessing.DataGateway
 open FeedsProcessing.Feeds
 open FeedsProcessing.ProcessingResult
 open FeedsProcessing.Xml
-open Damo.Io.Server.Article
-open Damo.Io.Server.FeedsRepository
 
 type FeedsProcessor(logger: ILogger<FeedsProcessor>) =
 

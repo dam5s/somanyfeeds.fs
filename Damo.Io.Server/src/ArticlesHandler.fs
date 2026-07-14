@@ -1,15 +1,14 @@
 module Damo.Io.Server.ArticlesHandler
 
+open Giraffe
 open System
-open Damo.Io.Server.IHttpHandler
 open Time
 
-open Damo.Io.Server.LayoutTemplate
 open Damo.Io.Server.Article
-open Damo.Io.Server.ArticlesRepository
 open Damo.Io.Server.ArticleListTemplate
-
-open Giraffe
+open Damo.Io.Server.ArticlesRepository
+open Damo.Io.Server.IHttpHandler
+open Damo.Io.Server.LayoutTemplate
 
 type ListArticlesHandler(articlesRepo: ArticlesRepository, layoutTemplate: LayoutTemplate) =
     interface IHttpHandler with
