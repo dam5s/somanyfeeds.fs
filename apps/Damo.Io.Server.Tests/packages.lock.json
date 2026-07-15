@@ -146,6 +146,11 @@
         "resolved": "18.7.0",
         "contentHash": "+wFfx9s7D9wegM0RziXMj2kvYDT4qcqXXtyjiQwSZOGQ2wwcOAJQcD6eQXk02jt0MvRNawtp8TJxTrV+wD8X1g=="
       },
+      "Microsoft.Extensions.DependencyInjection.Abstractions": {
+        "type": "Transitive",
+        "resolved": "10.0.10",
+        "contentHash": "z/2xXlFw2aLGjHyEm6E0tQ+In6VfzQzTrtArbQ2c0TQE16ZbyDCMGPvaUT9I0s8rgy9sRWlU2P9waW37qV04qA=="
+      },
       "Microsoft.IO.RecyclableMemoryStream": {
         "type": "Transitive",
         "resolved": "3.0.1",
@@ -294,7 +299,6 @@
           "FeedsPersistence": "[1.0.0, )",
           "FeedsProcessing": "[1.0.0, )",
           "Giraffe": "[8.2.0, )",
-          "LigerShark.WebOptimizer.Core": "[3.0.477, )",
           "Prelude": "[1.0.0, )"
         }
       },
@@ -312,13 +316,15 @@
           "FSharp.Core": "[10.1.204, )",
           "FSharp.Data": "[8.1.14, )",
           "HtmlSanitizer": "[9.0.892, )",
+          "Microsoft.Extensions.Logging.Abstractions": "[10.0.10, )",
           "Prelude": "[1.0.0, )"
         }
       },
       "prelude": {
         "type": "Project",
         "dependencies": {
-          "FSharp.Core": "[10.1.204, )"
+          "FSharp.Core": "[10.1.204, )",
+          "Microsoft.Extensions.Logging.Abstractions": "[10.0.10, )"
         }
       },
       "FSharp.Control.TaskSeq": {
@@ -375,6 +381,15 @@
         "contentHash": "md8zBJMIur8Hnb5jn7krSfe9I0BZUGqCxwh2A5Y1MTR7wtY6v9gYuyW5EFNCYzQCvaaAZxlTynUk8ZsIsrBXsg==",
         "dependencies": {
           "NUglify": "1.21.15"
+        }
+      },
+      "Microsoft.Extensions.Logging.Abstractions": {
+        "type": "CentralTransitive",
+        "requested": "[10.0.10, )",
+        "resolved": "10.0.10",
+        "contentHash": "zkFxGYUvdxAvIKTyXHrmW+Sux53D4SezD9dMyZ6hrwwzPQJNuwCRy1f5W7AvYTqacEGhWF2XderRQG1OvbV8og==",
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.10"
         }
       }
     }

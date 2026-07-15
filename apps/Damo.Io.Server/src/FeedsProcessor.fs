@@ -1,19 +1,17 @@
 module Damo.Io.Server.FeedsProcessor
 
 open FSharp.Control
+open FeedsProcessing.DataGateway
+open FeedsProcessing.XmlFeedDecoder
 open Microsoft.Extensions.Logging
 open System.Threading
-open System.Threading.Tasks
 
 open FeedsPersistence.ArticleRecord
 open FeedsPersistence.FeedsRepository
 open FeedsProcessing.Article
-open FeedsProcessing.DataGateway
 open FeedsProcessing.Feeds
-open FeedsProcessing.ProcessingResult
-open FeedsProcessing.Xml
 
-type FeedsProcessor(logger: ILogger<FeedsProcessor>) =
+type FeedsProcessor(logger: ILogger<FeedsProcessor>, dataGateway: DataGateway, xmlDecoder: XmlFeedDecoder) =
 
     let articleToRecord (feed: FeedRecord) (article: Article) : ArticleRecord =
         { Title = Article.title article
@@ -23,37 +21,30 @@ type FeedsProcessor(logger: ILogger<FeedsProcessor>) =
           Date = Article.date article
           FeedName = feed.Name }
 
-    let resultToList (sourceFeed: FeedRecord) (result: ProcessingResult) =
-        List.map (articleToRecord sourceFeed) (Result.defaultValue [] result)
+    let articlesToList (sourceFeed: FeedRecord) (articles: Article list) =
+        articles |> List.map (articleToRecord sourceFeed)
 
-    let downloadAndProcessFeed (feed: FeedRecord) (cancellationToken: CancellationToken) : Task<ProcessingResult> =
+    let downloadAndProcessFeed (feed: FeedRecord) (cancellationToken: CancellationToken) : TaskResult<Article list> =
         match feed.Feed with
         | Xml(url) ->
-            task {
-                let! download = DataGateway.download url
+            taskResult {
+                let! download = dataGateway.DownloadAsync url
 
                 cancellationToken.ThrowIfCancellationRequested()
 
-                return
-                    download
-                    |> Result.bind Xml.processFeed
-                    |> Result.onOk (fun articles ->
-                        let count = List.length articles
-                        logger.LogInformation($"Parsed feed %A{url}, found %d{count} article(s)")
-                    )
-                    |> Result.onError (fun explanation ->
-                        logger.LogError($"Error processing feed %A{url}")
+                let! articles = xmlDecoder.TryDecodeAsync download
 
-                        for ex in explanation.Exceptions do
-                            logger.LogError(ex, ex.Message)
-                    )
+                let count = List.length articles
+                logger.LogInformation($"Parsed feed %A{url}, found %d{count} article(s)")
+
+                return articles
             }
 
     member _.ProcessFeeds(feeds: FeedRecord list, cancellationToken: CancellationToken) : TaskSeq<ArticleRecord> =
         taskSeq {
             for feed in feeds do
                 let! processingResult = downloadAndProcessFeed feed cancellationToken
-                let articles = processingResult |> resultToList feed
+                let articles = processingResult |> Result.defaultValue [] |> articlesToList feed
 
                 for a in articles do
                     yield a

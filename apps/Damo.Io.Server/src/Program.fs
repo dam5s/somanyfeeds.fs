@@ -1,5 +1,7 @@
 module Program
 
+open FeedsProcessing.DataGateway
+open FeedsProcessing.XmlFeedDecoder
 open Giraffe
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
@@ -48,6 +50,8 @@ let private configureServices (builder: WebApplicationBuilder) =
         .AddSingleton<LayoutTemplate>()
         .AddSingleton<ListArticlesHandler>()
 
+        .AddSingleton<DataGateway>()
+        .AddSingleton<XmlFeedDecoder>()
         .AddSingleton<FeedsProcessor>()
         .AddSingleton<IHostedService, FeedsProcessorHostedService>()
     |> always builder

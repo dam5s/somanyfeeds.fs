@@ -6,7 +6,7 @@
  * [.NET 10](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
  * [Just](https://github.com/just-buildsystem/justbuild) 
 
-### Setup your environment variables.
+### Set up your environment variables.
 
 The file `.env.example` (or `.env.ps1.example` if you use PowerShell) contains the list of 
 necessary variables for the whole build.
