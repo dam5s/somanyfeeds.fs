@@ -8,14 +8,7 @@ type Posix = Posix of milliseconds: int64
 module Posix =
     let fromDateTimeOffset (d: DateTimeOffset) = Posix(d.ToUnixTimeMilliseconds())
 
-    let fromDateTime (d: DateTime) =
-        fromDateTimeOffset (DateTimeOffset(d, TimeSpan.Zero))
-
     let now () = fromDateTimeOffset DateTimeOffset.Now
 
     let toDateTimeOffset (Posix m) =
         DateTimeOffset.FromUnixTimeMilliseconds(int64 m)
-
-    let toDateTime p = (toDateTimeOffset p).DateTime
-
-    let milliseconds (Posix m) = m

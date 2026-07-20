@@ -1,12 +1,13 @@
 module FeedsProcessing.XmlFeedDecoder
 
-open System.Threading.Tasks
 open FSharp.Data
+open Microsoft.Extensions.Logging
 open System
+open System.Threading.Tasks
 
 open FeedsProcessing.Article
 open FeedsProcessing.Download
-open Microsoft.Extensions.Logging
+open Prelude.LoggerExtensions
 
 let private stringToOption text =
     if String.IsNullOrWhiteSpace text then None else Some text

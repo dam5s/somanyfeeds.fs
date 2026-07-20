@@ -8,5 +8,6 @@
         <Compile Include="src/Time.fs"/>
         <Compile Include="src/Env.fs"/>
         <Compile Include="src/TaskResult.fs"/>
+        <Compile Include="src/LoggerExtensions.fs" />
     </ItemGroup>
 </Project>

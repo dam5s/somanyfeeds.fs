@@ -21,7 +21,7 @@ let private monthDisplayName month =
     | x -> failwithf $"Not a valid month rank: %i{x}"
 
 let private dateToString posix =
-    let date = Posix.toDateTime posix
+    let date = Posix.toDateTimeOffset posix
     let month = monthDisplayName date.Month
     let day = date.ToString "dd"
     let year = date.ToString "yy"
