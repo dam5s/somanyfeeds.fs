@@ -1,10 +1,7 @@
 [<AutoOpen>]
 module TaskResult
 
-open System.Linq
-open System.Runtime.CompilerServices
 open System.Threading.Tasks
-open Microsoft.Extensions.Logging
 
 type TaskResult<'a> = Task<Result<'a, exn list>>
 

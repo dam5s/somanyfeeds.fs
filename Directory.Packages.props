@@ -13,7 +13,7 @@
     <PackageVersion Include="FSharp.Formatting" Version="22.1.0" />
     <PackageVersion Include="FSharp.Data" Version="8.1.14" />
     <PackageVersion Include="Fable.React" Version="9.4.0" />
-    <PackageVersion Include="HtmlSanitizer" Version="9.0.892" />
+    <PackageVersion Include="HtmlSanitizer" Version="9.2.995" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.7.0" />
     <PackageVersion Include="xunit.v3" Version="3.2.2" />
     <PackageVersion Include="xunit.v3.runner.msbuild" Version="3.2.2" />

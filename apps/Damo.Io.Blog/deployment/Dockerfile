@@ -6,10 +6,10 @@ COPY . .
 
 RUN dotnet restore
 
-WORKDIR /workspace/Damo.Io.Blog
+WORKDIR /workspace/apps/Damo.Io.Blog
 
 RUN dotnet run
 
 FROM nginx
 
-COPY --from=build /workspace/Damo.Io.Blog/build/public /usr/share/nginx/html
+COPY --from=build /workspace/apps/Damo.Io.Blog/build/public /usr/share/nginx/html

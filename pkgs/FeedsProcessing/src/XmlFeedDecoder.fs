@@ -7,7 +7,7 @@ open System.Threading.Tasks
 
 open FeedsProcessing.Article
 open FeedsProcessing.Download
-open Prelude.LoggerExtensions
+open LoggerExtensions
 
 let private stringToOption text =
     if String.IsNullOrWhiteSpace text then None else Some text

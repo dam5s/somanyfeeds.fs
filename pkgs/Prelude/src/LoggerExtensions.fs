@@ -1,4 +1,4 @@
-module Prelude.LoggerExtensions
+module LoggerExtensions
 
 open System.Linq
 open System.Runtime.CompilerServices
